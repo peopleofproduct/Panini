@@ -16,5 +16,24 @@
   },
   "scripts": {
     "build": "tsc -b"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git",
+    "directory": "packages/standards-schema"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/peopleofproduct/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "upi",
+    "parsing",
+    "account-aggregator",
+    "ocen",
+    "normalization"
+  ]
 }

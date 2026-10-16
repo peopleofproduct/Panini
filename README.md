@@ -8,13 +8,17 @@
 
 > **The First Grammatical Open-Finance Orchestration Core for India's Digital Public Infrastructure (DPI).**
 
-Named after Acharya Pāṇini — the ancient architect of formal rule-based grammar — **Panini** is a zero-runtime-dependency TypeScript engine built to parse, structure, and normalize chaotic financial data ecosystems. It acts as an open-core local sandbox for processing **ReBIT v2.0 Account Aggregator payload schemas** and **OCEN 4.0 lending networks**, coupled with framework-neutral enterprise proxy extensions for commercial TSPs.
+Named after Acharya Pāṇini — the ancient architect of formal rule-based grammar — **Panini** is a zero-runtime-dependency TypeScript engine built to parse, structure, and normalize chaotic financial data ecosystems. It is a **fully free and open-source** local sandbox for processing **ReBIT v2.0 Account Aggregator payload schemas** and **OCEN 4.0 lending networks**, shipped with framework-neutral ops extensions for teams self-hosting at scale.
+
+> Just as Pāṇini's Aṣṭādhyāyī reduced a language to deterministic rules ~2500 years ago, Panini treats bank narrations as a grammar — not an AI problem. Fully free under Apache-2.0, forever.
+
+---
 
 ---
 
 ## 🏗️ Core Architecture & Operational Topology
 
-The platform separates the open-source evaluation core from the enterprise billing and telemetry proxies to guarantee absolute privacy data sandboxing.
+The platform isolates the parsing core from the optional ops layer (rate limiting, metering, telemetry) to guarantee absolute privacy data sandboxing — everything is free and runs in memory on your host.
 
 ```
                  ┌────────────────────────────────────────────────┐
@@ -29,27 +33,27 @@ The platform separates the open-source evaluation core from the enterprise billi
                  │            ▼                                    │
                  │  @panini/standards-schema  (ReBIT / OCEN)      │
                  └───────────┬────────────────────────────────────┘
-                             │  (optional, paid layer)
+                             │  (optional ops layer)
                  ┌───────────▼────────────────────────────────────┐
                  │  EnterpriseProxy + HTTP adapter                 │
-                 │  rate-limit • billing meter • opt-in telemetry  │
+                 │  rate-limit • usage meter • opt-in telemetry    │
                  │  (PII-free by construction — no raw narrations) │
                  └────────────────────────────────────────────────┘
 ```
 
-| Package                    | Role                                                                                                  |
-| -------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer; enterprise proxy & HTTP adapter seams.           |
-| `@panini/rules-engine`     | Community-extendable JSON grammars for Indian banks (SBI, HDFC, ICICI, generic) + archetype rule set. |
-| `@panini/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                 |
-| `@panini/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.         |
+| Package                    | Role                                                                                                             |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer; optional ops layer (rate limiting, metering, HTTP adapter). |
+| `@panini/rules-engine`     | Community-extendable JSON grammars for Indian banks (SBI, HDFC, ICICI, generic) + archetype rule set.            |
+| `@panini/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                            |
+| `@panini/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                    |
 
 ## ✨ Design Guarantees
 
 - **Zero runtime dependencies.** The parsing core is pure TypeScript — deterministic regex grammars and tokenizers only. No network calls, no ML models, no phone-home telemetry. Safe to embed inside on-prem or sandboxed environments.
 - **Rules are data, not code.** Bank-specific grammars live in standalone JSON files loaded at runtime; updating a bank's narration layout never requires touching the TypeScript engine.
 - **Strictly typed.** Strict TypeScript throughout — no `any`, `unknown` at external boundaries, `exactOptionalPropertyTypes` enabled.
-- **PII isolation.** The enterprise telemetry channel is opt-in only and its event type has _structurally no field_ for raw narrations, counterparties, references, VPAs, or amounts.
+- **PII isolation.** The optional telemetry channel is opt-in only and its event type has _structurally no field_ for raw narrations, counterparties, references, VPAs, or amounts.
 
 ## 🚀 Quick Start
 
@@ -106,13 +110,13 @@ npm run simulate -- --count=50 -o mocks.json --pretty
 
 Streams deterministic ReBIT v2.0 FI profiles — including deliberate anomalies (truncated narrations, corrupt timestamps, dropped fields) for exercising client-side error handling.
 
-### Mount the enterprise proxy
+### Self-hostable ops layer
 
 ```ts
 import { createPaniniHttpHandler } from '@panini/core';
 
 app.post('/v1/parse', createPaniniHttpHandler(proxy));
-// bearer token → rate-limit bucket → normalize → billing meter → JSON
+// bearer token → rate-limit bucket → normalize → usage meter → JSON
 ```
 
 ## 🛠️ Development

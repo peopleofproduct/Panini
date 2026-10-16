@@ -1,0 +1,36 @@
+name: Bank grammar request
+description: >-
+  Add or fix grammar coverage for a bank or narration format — this is the
+  fastest way to contribute to Panini.
+labels: [grammar, help wanted, good first issue]
+body:
+  - type: input
+    id: bank
+    attributes:
+      label: Bank / channel
+      placeholder: 'Punjab National Bank, Kotak 811, PhonePe UPI...'
+    validations:
+      required: true
+  - type: textarea
+    id: samples
+    attributes:
+      label: Anonymized narration samples (one per line)
+      description: >-
+        Replace account numbers, names, refs, and amounts with XXX.
+        More samples = better grammar coverage.
+      placeholder: |
+        UPI/20261015/DR/XXXXXXXXXXXX/MERCHANT/okbank/
+        NEFT-XXXXXXXXXX-REFUND-AMAZON PAY
+    validations:
+      required: true
+  - type: textarea
+    id: mapping
+    attributes:
+      label: What should each field map to?
+      placeholder: 'First number is UPI ref, DEBIT after DR, etc.'
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I'd like to write the grammar JSON myself (see CONTRIBUTING.md)

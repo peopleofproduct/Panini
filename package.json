@@ -2,7 +2,7 @@
   "name": "panini",
   "version": "0.1.0",
   "private": true,
-  "description": "Open-core, zero-dependency financial document and transaction string normalization engine for the Indian FinTech ecosystem.",
+  "description": "Free and open-source, zero-dependency financial document and transaction narration normalization engine for the Indian FinTech ecosystem. Maintained by People of Product.",
   "license": "Apache-2.0",
   "author": "Kapil",
   "workspaces": [
@@ -33,5 +33,21 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/peopleofproduct/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "upi",
+    "parsing",
+    "account-aggregator",
+    "ocen",
+    "dpi",
+    "open-source"
+  ]
 }

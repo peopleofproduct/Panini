@@ -1,0 +1,30 @@
+name: Bug report
+description: Something parsed incorrectly or crashed
+labels: [bug]
+body:
+  - type: textarea
+    id: narration
+    attributes:
+      label: Narration / input that fails
+      description: >-
+        Anonymize it — replace account numbers, names, and refs with XXX.
+        Never paste real financial data.
+      placeholder: 'UPI/20261015/DR/XXXXXXXXXXXX/MERCHANT/okbank/Memo/'
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual output
+      placeholder: 'Expected channel=UPI type=DEBIT; got channel=UNKNOWN...'
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Package + version
+      placeholder: '@panini/rules-engine@0.1.0'
+  - type: textarea
+    id: warnings
+    attributes:
+      label: Warnings / error output (if any)
