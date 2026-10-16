@@ -14,47 +14,23 @@
  * limitations under the License.
  */
 
-import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { validate, type SchemaNode, type ValidationResult } from './validator';
-
 export type { SchemaNode, ValidationError, ValidationResult } from './validator';
 export { validate } from './validator';
-
-function resolveSchemasDir(): string {
-  // Covers: src/ under ts-jest, dist/ if schemas are copied during build,
-  // and the published layout where src/schemas ships alongside dist/.
-  const candidates = [
-    join(__dirname, 'schemas'),
-    join(__dirname, '..', 'src', 'schemas'),
-    join(__dirname, '..', 'schemas'),
-  ];
-  for (const dir of candidates) {
-    if (existsSync(dir)) return dir;
-  }
-  throw new Error(
-    `@panini/standards-schema: could not locate bundled schemas directory. Checked: ${candidates.join(', ')}`,
-  );
-}
-
-/** Loads a bundled schema by name (without the `.schema.json` suffix). */
-export function loadSchema(name: string): SchemaNode {
-  const file = join(resolveSchemasDir(), `${name}.schema.json`);
-  if (!existsSync(file)) {
-    throw new Error(`@panini/standards-schema: unknown schema '${name}'`);
-  }
-  return JSON.parse(readFileSync(file, 'utf8')) as SchemaNode;
-}
-
-/** Lists the names of all bundled schemas. */
-export function listSchemas(): readonly string[] {
-  return readdirSync(resolveSchemasDir())
-    .filter((f) => f.endsWith('.schema.json'))
-    .map((f) => f.replace(/\.schema\.json$/, ''))
-    .sort();
-}
-
-/** Validates a payload against a bundled schema by name. */
-export function validateAgainst(name: string, value: unknown): ValidationResult {
-  return validate(loadSchema(name), value);
-}
+export { listSchemas, loadSchema, validateAgainst } from './loader';
+export type {
+  AAFIType,
+  AAProfile,
+  AATransaction,
+  AATransactionMode,
+  AATransactionType,
+  OCENDisbursalAccount,
+  OCENLoanApplication,
+  OCENLoanType,
+  OCENMetadata,
+} from './types';
+export {
+  isAAProfile,
+  isOCENLoanApplication,
+  validateAAProfile,
+  validateOCENLoanApplication,
+} from './types';

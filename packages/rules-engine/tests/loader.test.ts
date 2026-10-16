@@ -15,15 +15,11 @@ describe('loadBuiltinRuleSets', () => {
   it('loads all bundled grammar files', () => {
     const sets = loadBuiltinRuleSets();
     const ids = sets.map((s) => s.id);
-    expect(ids).toEqual(
-      expect.arrayContaining(['generic-indian-banks', 'sbi', 'hdfc', 'icici']),
-    );
+    expect(ids).toEqual(expect.arrayContaining(['generic-indian-banks', 'sbi', 'hdfc', 'icici']));
   });
 
   it('produces rule sets that compile into a Normalizer without errors', () => {
-    expect(
-      () => new Normalizer({ ruleSets: loadBuiltinRuleSets() }),
-    ).not.toThrow();
+    expect(() => new Normalizer({ ruleSets: loadBuiltinRuleSets() })).not.toThrow();
   });
 
   it('has unique rule set ids', () => {

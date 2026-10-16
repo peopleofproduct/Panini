@@ -29,12 +29,7 @@ export type TransactionChannel =
   | 'UNKNOWN';
 
 /** Direction of funds. REVERSAL/REFUND indicate a returned transaction. */
-export type TransactionType =
-  | 'DEBIT'
-  | 'CREDIT'
-  | 'REVERSAL'
-  | 'REFUND'
-  | 'UNKNOWN';
+export type TransactionType = 'DEBIT' | 'CREDIT' | 'REVERSAL' | 'REFUND' | 'UNKNOWN';
 
 /** Where the raw text originated. */
 export type InputSource = 'narration' | 'sms' | 'auto';

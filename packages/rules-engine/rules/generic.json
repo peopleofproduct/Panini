@@ -10,7 +10,15 @@
       "channel": "UPI",
       "media": "narration",
       "regex": "^UPI[-/:](?<counterparty>[A-Za-z0-9 .&'_]+?)[-/:](?<txnId>\\d{6,16})(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:[-/:](?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
-      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "RFD": "REFUND", "DEBIT": "DEBIT", "CREDIT": "CREDIT", "DR": "DEBIT", "CR": "CREDIT" }
+      "flags": {
+        "REV": "REVERSAL",
+        "RTN": "REVERSAL",
+        "RFD": "REFUND",
+        "DEBIT": "DEBIT",
+        "CREDIT": "CREDIT",
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
     },
     {
       "name": "upi_slashed_direction",

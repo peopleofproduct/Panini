@@ -7,7 +7,19 @@
   "properties": {
     "channel": {
       "type": "string",
-      "enum": ["UPI", "IMPS", "NEFT", "RTGS", "ACH", "NACH", "ATM", "POS", "CHEQUE", "NETBANKING", "UNKNOWN"]
+      "enum": [
+        "UPI",
+        "IMPS",
+        "NEFT",
+        "RTGS",
+        "ACH",
+        "NACH",
+        "ATM",
+        "POS",
+        "CHEQUE",
+        "NETBANKING",
+        "UNKNOWN"
+      ]
     },
     "counterparty": { "type": ["string", "null"] },
     "transactionId": { "type": ["string", "null"] },

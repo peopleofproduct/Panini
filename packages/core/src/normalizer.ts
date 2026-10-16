@@ -17,12 +17,7 @@
 import { parsePaise } from './amounts';
 import { parseIndianDate } from './dates';
 import { compileRuleSets, type CompiledPattern, type GrammarRuleSet } from './grammar';
-import {
-  CHANNEL_KEYWORDS,
-  DIRECTION_KEYWORDS,
-  tokenize,
-  type Token,
-} from './tokenizer';
+import { CHANNEL_KEYWORDS, DIRECTION_KEYWORDS, tokenize, type Token } from './tokenizer';
 import type {
   InputSource,
   NormalizedTransaction,
@@ -36,6 +31,12 @@ export interface NormalizerOptions {
   readonly ruleSets: readonly GrammarRuleSet[];
   /** Global keyword → category table merged over rule-set categories. */
   readonly categories?: Record<string, string>;
+  /**
+   * Optional display-casing policy applied to extracted counterparty names.
+   * Defaults to plain title-casing; consumers can inject rules such as
+   * acronym preservation (@panini/rules-engine's `preserveAcronymCase`).
+   */
+  readonly displayCase?: (value: string) => string;
 }
 
 const SMS_SIGNAL = /\b(debited|credited|avl\s*bal|a\/c\s*(?:no|xx|\*+))/i;
@@ -61,18 +62,25 @@ interface CategoryRule {
   readonly matcher: RegExp;
 }
 
+// eslint-disable-next-line no-control-regex
+const CONTROL_CHARS = /[\x00-\x1F\x7F]/g;
+
 function sanitize(text: string): string {
   // Strip control bytes, then collapse whitespace.
-  // eslint-disable-next-line no-control-regex
-  return text.replace(/[\x00-\x1F\x7F]/g, ' ').replace(/\s+/g, ' ').trim();
+  return text.replace(CONTROL_CHARS, ' ').replace(/\s+/g, ' ').trim();
 }
 
 function detectSource(text: string): Exclude<InputSource, 'auto'> {
   return SMS_SIGNAL.test(text) ? 'sms' : 'narration';
 }
 
+/**
+ * Default display-casing: title-cases each word of all-caps or all-lower
+ * input, leaves deliberate mixed case untouched. Consumers needing
+ * acronym-aware casing inject a `displayCase` option.
+ */
 function toDisplayCase(value: string): string {
-  if (value !== value.toUpperCase()) return value;
+  if (value !== value.toUpperCase() && value !== value.toLowerCase()) return value;
   return value
     .toLowerCase()
     .split(/\s+/)
@@ -80,14 +88,17 @@ function toDisplayCase(value: string): string {
     .join(' ');
 }
 
-function cleanCounterparty(value: string | undefined): string | null {
+function cleanCounterparty(
+  value: string | undefined,
+  displayCase: (v: string) => string,
+): string | null {
   if (!value) return null;
   const cleaned = value
     .replace(/^(?:(?:M\/S|TO|BY|FROM|AT|THE|UPI|IMPS|NEFT|RTGS|ECS|ACH|NACH)[\s\-/]+)+/i, '')
     .replace(/[\s\-./]+$/, '')
     .replace(/\s+/g, ' ')
     .trim();
-  return cleaned.length > 0 ? toDisplayCase(cleaned) : null;
+  return cleaned.length > 0 ? displayCase(cleaned) : null;
 }
 
 function escapeRegex(value: string): string {
@@ -161,9 +172,11 @@ function findNarration(payload: Record<string, unknown>): string | undefined {
 export class Normalizer {
   private readonly patterns: readonly CompiledPattern[];
   private readonly categoryRules: readonly CategoryRule[];
+  private readonly displayCase: (value: string) => string;
 
   constructor(options: NormalizerOptions) {
     this.patterns = compileRuleSets(options.ruleSets);
+    this.displayCase = options.displayCase ?? toDisplayCase;
     const merged: Record<string, string> = {};
     for (const rs of options.ruleSets) {
       if (rs.categories) Object.assign(merged, rs.categories);
@@ -227,9 +240,7 @@ export class Normalizer {
     const reference = payload['reference'];
 
     const transactionId =
-      typeof txnId === 'string' || typeof txnId === 'number'
-        ? String(txnId)
-        : base.transactionId;
+      typeof txnId === 'string' || typeof txnId === 'number' ? String(txnId) : base.transactionId;
     if (typeof txnId === 'string' || typeof txnId === 'number') merged++;
 
     let amountPaise = base.amountPaise;
@@ -291,7 +302,18 @@ export class Normalizer {
       warnings.push(`merged ${merged} structured payload field(s)`);
     }
 
-    return { ...base, transactionId, amountPaise, type: txnType, channel, date, balancePaise, confidence, metadata, warnings };
+    return {
+      ...base,
+      transactionId,
+      amountPaise,
+      type: txnType,
+      channel,
+      date,
+      balancePaise,
+      confidence,
+      metadata,
+      warnings,
+    };
   }
 
   private candidates(
@@ -330,13 +352,14 @@ export class Normalizer {
     }
     if (appliedFlags.length > 0) metadata['flags'] = appliedFlags.join(',');
     if (groups['remarks']) metadata['remarks'] = groups['remarks'].trim();
+    // Rule-authored metadata wins over computed values (e.g. is_salary).
+    Object.assign(metadata, pattern.setMetadata);
 
     const tokens = tokenize(text);
-    const channel =
-      pattern.channel ?? this.channelFromTokens(tokens) ?? 'UNKNOWN';
+    const channel = pattern.channel ?? this.channelFromTokens(tokens) ?? 'UNKNOWN';
     const type = resolveType(pattern.type, groups['direction'], flagTypes);
 
-    const counterparty = cleanCounterparty(groups['counterparty']);
+    const counterparty = cleanCounterparty(groups['counterparty'], this.displayCase);
     const transactionId = groups['txnId']?.trim() ?? null;
 
     let vpaHandle = groups['vpaHandle'] ?? null;
@@ -456,10 +479,9 @@ export class Normalizer {
         DIRECTION_KEYWORDS[t.value.toUpperCase()] === undefined &&
         (channelPosition === undefined || t.position > channelPosition),
     );
-    const counterparty = counterpartyToken ? toDisplayCase(counterpartyToken.value) : null;
+    const counterparty = counterpartyToken ? this.displayCase(counterpartyToken.value) : null;
 
-    const category =
-      this.categorize(`${counterparty ?? ''} ${text}`) ?? 'Uncategorized';
+    const category = this.categorize(`${counterparty ?? ''} ${text}`) ?? 'Uncategorized';
 
     warnings.push('no grammar pattern matched; applied heuristic tokenization');
 

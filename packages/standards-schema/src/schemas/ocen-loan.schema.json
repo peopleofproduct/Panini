@@ -1,0 +1,56 @@
+{
+  "$id": "https://panini.dev/schemas/ocen-loan.schema.json",
+  "description": "OCEN 4.0 asynchronous loan application payload (LSP → Lender): metadata envelope plus application body.",
+  "type": "object",
+  "required": ["metadata", "loanApplicationId", "disbursalAccount", "tenorMonths"],
+  "additionalProperties": true,
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": [
+        "originatorOrgId",
+        "originatorParticipantId",
+        "traceId",
+        "requestId",
+        "loanApplicationId"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "originatorOrgId": { "type": "string", "minLength": 1 },
+        "originatorParticipantId": { "type": "string", "minLength": 1 },
+        "traceId": { "type": "string", "minLength": 1 },
+        "requestId": { "type": "string", "minLength": 1 },
+        "loanApplicationId": { "type": "string", "minLength": 1 },
+        "timestamp": { "type": "string", "format": "date-time" }
+      }
+    },
+    "loanApplicationId": {
+      "type": "string",
+      "minLength": 4,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+    },
+    "disbursalAccount": {
+      "type": "object",
+      "required": ["accountNumber", "ifsc"],
+      "additionalProperties": false,
+      "properties": {
+        "accountNumber": { "type": "string", "pattern": "^\\d{6,18}$" },
+        "ifsc": { "type": "string", "pattern": "^[A-Z]{4}0[A-Z0-9]{6}$" },
+        "vpa": { "type": "string", "pattern": "^[a-zA-Z0-9._-]+@[a-zA-Z]+$" },
+        "accountHolderName": { "type": "string", "minLength": 1 }
+      }
+    },
+    "tenorMonths": { "type": "integer", "minimum": 1, "maximum": 360 },
+    "requestedAmount": { "type": "number", "minimum": 1 },
+    "currency": { "type": "string", "const": "INR" },
+    "loanType": {
+      "type": "string",
+      "enum": ["TERM_LOAN", "BULLET", "EMI", "BULLET_PLUS_LINE", "LINE_OF_CREDIT", "OTHER"]
+    },
+    "interestRatePct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "processingFeePct": { "type": "number", "minimum": 0, "maximum": 100 },
+    "borrowerId": { "type": "string", "minLength": 1 }
+  }
+}

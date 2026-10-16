@@ -42,9 +42,7 @@ describe('bundled grammars — SBI', () => {
   });
 
   it('parses a star-delimited NEFT credit', () => {
-    const txn = normalizer.normalize(
-      'BY TRANSFER-NEFT*HDFC0000240*ACME CORP PVT LTD-SALARY OCT',
-    );
+    const txn = normalizer.normalize('BY TRANSFER-NEFT*HDFC0000240*ACME CORP PVT LTD-SALARY OCT');
     expect(txn.channel).toBe('NEFT');
     expect(txn.counterparty).toBe('Acme Corp Pvt Ltd');
     expect(txn.category).toBe('Income');

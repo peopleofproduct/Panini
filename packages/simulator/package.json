@@ -1,0 +1,25 @@
+{
+  "name": "@panini/simulator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Generative sandbox producing randomized ReBIT v2.0-compliant financial payloads with realistic Indian banking narration noise.",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "panini-simulate": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@panini/standards-schema": "0.1.0"
+  },
+  "devDependencies": {
+    "@panini/core": "0.1.0",
+    "@panini/rules-engine": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  }
+}

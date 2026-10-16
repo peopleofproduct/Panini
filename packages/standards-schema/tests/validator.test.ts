@@ -39,9 +39,7 @@ describe('validate', () => {
   it('reports missing required properties', () => {
     const result = validate(personSchema, { name: 'Priya' });
     expect(result.valid).toBe(false);
-    expect(result.errors).toEqual([
-      { path: '', message: "missing required property 'age'" },
-    ]);
+    expect(result.errors).toEqual([{ path: '', message: "missing required property 'age'" }]);
   });
 
   it('reports type mismatches with paths', () => {

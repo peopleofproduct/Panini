@@ -25,15 +25,34 @@ export { tokenize, CHANNEL_KEYWORDS, DIRECTION_KEYWORDS } from './tokenizer';
 export type { Token, TokenKind } from './tokenizer';
 export { parseIndianDate, isPlausibleDate } from './dates';
 export { parsePaise } from './amounts';
-export {
-  compileRuleSet,
-  compileRuleSets,
-  GrammarError,
-} from './grammar';
-export type {
-  CompiledPattern,
-  GrammarPattern,
-  GrammarRuleSet,
-} from './grammar';
+export { compileRuleSet, compileRuleSets, GrammarError } from './grammar';
+export type { CompiledPattern, GrammarPattern, GrammarRuleSet } from './grammar';
 export { Normalizer } from './normalizer';
 export type { NormalizerOptions } from './normalizer';
+export {
+  CollectingTelemetrySink,
+  EnterpriseProxy,
+  InMemoryBillingMeter,
+  TokenBucketRateLimiter,
+} from './enterpriseProxy';
+export type {
+  BillingMeter,
+  EnterpriseProxyOptions,
+  ParseTelemetryEvent,
+  ProxyError,
+  ProxyOk,
+  ProxyResult,
+  RateLimiter,
+  RateLimitDecision,
+  RequestMeta,
+  TelemetrySink,
+  UsageRecord,
+  UsageSummary,
+} from './enterpriseProxy';
+export { createPaniniHttpHandler } from './adapters/httpAdapter';
+export type {
+  HttpAdapterOptions,
+  HttpLikeRequest,
+  HttpLikeResponse,
+  HttpMiddleware,
+} from './adapters/httpAdapter';

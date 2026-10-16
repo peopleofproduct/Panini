@@ -2,7 +2,17 @@
   "$id": "https://panini.dev/schemas/aa-transaction.schema.json",
   "description": "Account Aggregator (ReBIT FI) transaction record shape, as delivered inside FI data notifications.",
   "type": "object",
-  "required": ["txnId", "amount", "narration", "type", "mode", "valueDate", "transactionTimestamp", "reference", "balance"],
+  "required": [
+    "txnId",
+    "amount",
+    "narration",
+    "type",
+    "mode",
+    "valueDate",
+    "transactionTimestamp",
+    "reference",
+    "balance"
+  ],
   "additionalProperties": true,
   "properties": {
     "txnId": { "type": "string", "minLength": 1 },
@@ -13,7 +23,20 @@
     "type": { "type": "string", "enum": ["DEBIT", "CREDIT", "OTHERS"] },
     "mode": {
       "type": "string",
-      "enum": ["UPI", "IMPS", "NEFT", "RTGS", "ATM", "CARD", "POS", "CASH", "NACH", "ACH", "FT", "OTHERS"]
+      "enum": [
+        "UPI",
+        "IMPS",
+        "NEFT",
+        "RTGS",
+        "ATM",
+        "CARD",
+        "POS",
+        "CASH",
+        "NACH",
+        "ACH",
+        "FT",
+        "OTHERS"
+      ]
     },
     "valueDate": { "type": "string", "format": "date" },
     "transactionTimestamp": { "type": "string", "format": "date-time" },

@@ -1,0 +1,86 @@
+{
+  "$id": "https://panini.dev/schemas/aa-profile.schema.json",
+  "description": "ReBIT Account Aggregator v2.0 FI data payload: FIP/FIU metadata plus the canonical Transaction array.",
+  "type": "object",
+  "required": ["FIPId", "FIUTimestamp", "maskedAccountNumber", "Transaction"],
+  "additionalProperties": true,
+  "properties": {
+    "FIPId": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "FIUTimestamp": { "type": "string", "format": "date-time" },
+    "maskedAccountNumber": {
+      "type": "string",
+      "pattern": "^[Xx*]{0,12}\\d{3,4}$",
+      "description": "Masked account identifier, e.g. 'XXXXXX1234' or '**5678'."
+    },
+    "consentId": { "type": "string", "minLength": 6, "maxLength": 80 },
+    "fiType": {
+      "type": "string",
+      "enum": [
+        "DEPOSIT",
+        "TERM-DEPOSIT",
+        "RECURRING_DEPOSIT",
+        "SIP",
+        "CP",
+        "GOVT_SECURITIES",
+        "EQUITIES",
+        "BONDS",
+        "DEBENTURES",
+        "MUTUAL_FUNDS",
+        "ETF",
+        "IDR",
+        "CIS",
+        "AIF",
+        "INSURANCE_POLICIES",
+        "NPS",
+        "INVIT",
+        "REIT",
+        "OTHER"
+      ]
+    },
+    "Transaction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "txnId",
+          "amount",
+          "narration",
+          "type",
+          "mode",
+          "valueDate",
+          "transactionTimestamp",
+          "reference",
+          "currentBalance"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "txnId": { "type": "string", "minLength": 1 },
+          "amount": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+          "currentBalance": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+          "narration": { "type": "string" },
+          "type": { "type": "string", "enum": ["DEBIT", "CREDIT", "OTHERS"] },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "UPI",
+              "IMPS",
+              "NEFT",
+              "RTGS",
+              "ATM",
+              "CARD",
+              "POS",
+              "CASH",
+              "NACH",
+              "ACH",
+              "FT",
+              "OTHERS"
+            ]
+          },
+          "valueDate": { "type": "string", "format": "date" },
+          "transactionTimestamp": { "type": "string", "format": "date-time" },
+          "reference": { "type": "string" }
+        }
+      }
+    }
+  }
+}

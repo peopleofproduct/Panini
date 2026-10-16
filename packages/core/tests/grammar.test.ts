@@ -47,9 +47,9 @@ describe('compileRuleSet', () => {
   });
 
   it('throws GrammarError when id or bank is missing', () => {
-    expect(() =>
-      compileRuleSet({ id: '', bank: 'GENERIC', version: '1', patterns: [] }),
-    ).toThrow(GrammarError);
+    expect(() => compileRuleSet({ id: '', bank: 'GENERIC', version: '1', patterns: [] })).toThrow(
+      GrammarError,
+    );
   });
 });
 

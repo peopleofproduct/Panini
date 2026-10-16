@@ -52,7 +52,10 @@ export function parseIndianDate(value: string): string | null {
     [/^(\d{2})(\d{2})(\d{2})$/, (m) => [twoDigitYear(Number(m[3])), Number(m[2]), Number(m[1])]], // DDMMYY
     [/^(\d{4})[-/.](\d{2})[-/.](\d{2})$/, (m) => [Number(m[1]), Number(m[2]), Number(m[3])]], // YYYY-MM-DD
     [/^(\d{2})[-/.](\d{2})[-/.](\d{4})$/, (m) => [Number(m[3]), Number(m[2]), Number(m[1])]], // DD-MM-YYYY
-    [/^(\d{2})[-/.](\d{2})[-/.](\d{2})$/, (m) => [twoDigitYear(Number(m[3])), Number(m[2]), Number(m[1])]], // DD-MM-YY
+    [
+      /^(\d{2})[-/.](\d{2})[-/.](\d{2})$/,
+      (m) => [twoDigitYear(Number(m[3])), Number(m[2]), Number(m[1])],
+    ], // DD-MM-YY
   ];
   for (const [re, extract] of attempts) {
     const m = re.exec(v);

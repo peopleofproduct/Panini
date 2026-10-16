@@ -23,7 +23,7 @@ const ruleSets: readonly GrammarRuleSet[] = [
         channel: 'UPI',
         media: 'narration',
         regex:
-          '^UPI[-/:](?<counterparty>[A-Za-z0-9 .&\'_]+?)[-/:](?<txnId>\\d{6,16})(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:[-/:](?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$',
+          "^UPI[-/:](?<counterparty>[A-Za-z0-9 .&'_]+?)[-/:](?<txnId>\\d{6,16})(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:[-/:](?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
         flags: {
           REV: 'REVERSAL',
           RTN: 'REVERSAL',
@@ -157,9 +157,7 @@ describe('Normalizer.normalize — edge cases', () => {
     expect(txn.counterparty).toBe('Swiggy');
     expect(txn.matchedRule).toBeNull();
     expect(txn.confidence).toBeLessThan(0.9);
-    expect(txn.warnings).toContain(
-      'no grammar pattern matched; applied heuristic tokenization',
-    );
+    expect(txn.warnings).toContain('no grammar pattern matched; applied heuristic tokenization');
   });
 
   it('warns on a corrupted date but still parses the rest', () => {

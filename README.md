@@ -17,11 +17,11 @@ structured language grammar and compiles it into clean, typed JSON.
 
 ## Packages
 
-| Package | Purpose |
-| --- | --- |
-| `@panini/core` | Deterministic tokenizer + grammar-driven normalizer |
-| `@panini/rules-engine` | JSON grammar sets for Indian banks (SBI, HDFC, ICICI, generic) + loader |
-| `@panini/standards-schema` | Validation schemas mirroring Account Aggregator / OCEN-style payloads |
+| Package                    | Purpose                                                                 |
+| -------------------------- | ----------------------------------------------------------------------- |
+| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer                     |
+| `@panini/rules-engine`     | JSON grammar sets for Indian banks (SBI, HDFC, ICICI, generic) + loader |
+| `@panini/standards-schema` | Validation schemas mirroring Account Aggregator / OCEN-style payloads   |
 
 ## Quick start
 

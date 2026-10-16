@@ -74,6 +74,11 @@ export const DIRECTION_KEYWORDS: Readonly<Record<string, TransactionType>> = {
   RTN: 'REVERSAL',
   REFUND: 'REFUND',
   RFD: 'REFUND',
+  INBOUND: 'CREDIT',
+  INW: 'CREDIT',
+  INWARD: 'CREDIT',
+  OUTBOUND: 'DEBIT',
+  OUTWARD: 'DEBIT',
 };
 
 const KEYWORD_SET: ReadonlySet<string> = new Set([
@@ -95,7 +100,7 @@ const KEYWORD_SET: ReadonlySet<string> = new Set([
 
 // Commas are NOT delimiters — they appear inside Indian-formatted amounts
 // such as 1,50,000.50 and must keep the token intact.
-const TOKEN_SPLIT = /[\s\-\/|:;]+/;
+const TOKEN_SPLIT = /[\s\-/|:;]+/;
 const AMOUNT_RE = /^(?:\d{1,3}(?:,\d{2,3})+|\d+)(?:\.\d{1,2})?$/;
 const DATE_CANDIDATE_RE = /^(?:\d{6}|\d{8}|\d{2}[-/.]\d{2}[-/.]\d{2,4}|\d{4}[-/.]\d{2}[-/.]\d{2})$/;
 const CURRENCY_PREFIX = /^(?:rs\.?|inr|₹)/i;

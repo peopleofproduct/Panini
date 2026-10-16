@@ -3,6 +3,7 @@
   "references": [
     { "path": "packages/core" },
     { "path": "packages/rules-engine" },
-    { "path": "packages/standards-schema" }
+    { "path": "packages/standards-schema" },
+    { "path": "packages/simulator" }
   ]
 }

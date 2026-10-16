@@ -38,6 +38,8 @@ export interface GrammarPattern {
   readonly confidence?: number;
   /** Maps tokens found in the `tail` group to a transaction type. */
   readonly flags?: Record<string, TransactionType>;
+  /** Static key/value metadata stamped onto results when this pattern matches. */
+  readonly setMetadata?: Record<string, string>;
 }
 
 /** A versioned bank grammar file as loaded from JSON. */
@@ -64,6 +66,7 @@ export interface CompiledPattern {
   readonly priority: number;
   readonly confidence: number;
   readonly flags: Record<string, TransactionType>;
+  readonly setMetadata: Record<string, string>;
 }
 
 export class GrammarError extends Error {
@@ -99,6 +102,7 @@ export function compileRuleSet(ruleSet: GrammarRuleSet): readonly CompiledPatter
       priority: p.priority ?? 0,
       confidence: p.confidence ?? 0.9,
       flags: p.flags ?? {},
+      setMetadata: p.setMetadata ?? {},
     };
   });
 }
