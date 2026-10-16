@@ -1,0 +1,50 @@
+{
+  "id": "icici",
+  "bank": "ICICI",
+  "version": "1.0.0",
+  "description": "ICICI Bank narration quirks: reference-first UPI strings, BIL bill payments, INF/INFT fund transfers, CASHDEP deposits.",
+  "patterns": [
+    {
+      "name": "icici_upi_ref_first",
+      "priority": 30,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI-(?<txnId>\\d{6,16})-(?<counterparty>[A-Za-z0-9 .&']+)(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:-(?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DEBIT": "DEBIT", "CREDIT": "CREDIT", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "icici_bil_payment",
+      "priority": 30,
+      "type": "DEBIT",
+      "category": "Utilities",
+      "media": "narration",
+      "regex": "^BIL[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$"
+    },
+    {
+      "name": "icici_inf_transfer",
+      "priority": 30,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regex": "^INF[\\/]INFT[\\/](?<txnId>\\d{9,16})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "icici_cashdep",
+      "priority": 30,
+      "channel": "ATM",
+      "type": "CREDIT",
+      "category": "Cash Deposit",
+      "media": "narration",
+      "regex": "^CASHDEP[-/](?<counterparty>[^-]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "icici_neft_inward",
+      "priority": 25,
+      "channel": "NEFT",
+      "type": "CREDIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[-/ ](?<bankCode>[A-Z]{4}\\d{7})[-/ ](?<counterparty>[^-/]+)[-/ ](?<txnId>\\d{6,16})$"
+    }
+  ]
+}

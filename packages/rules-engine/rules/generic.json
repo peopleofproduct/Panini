@@ -1,0 +1,129 @@
+{
+  "id": "generic-indian-banks",
+  "bank": "GENERIC",
+  "version": "1.0.0",
+  "description": "Cross-bank narration and SMS patterns common to Indian banks. Bank-specific rule sets override these via priority.",
+  "patterns": [
+    {
+      "name": "upi_dashed_vpa",
+      "priority": 10,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[-/:](?<counterparty>[A-Za-z0-9 .&'_]+?)[-/:](?<txnId>\\d{6,16})(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:[-/:](?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "RFD": "REFUND", "DEBIT": "DEBIT", "CREDIT": "CREDIT", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "upi_slashed_direction",
+      "priority": 12,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^(?:(?:BY|TO)\\s+TRANSFER[-/ ])?UPI[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<bankCode>[A-Z]{2,4}\\d*))?(?:[\\/](?<date>\\d{8}))?(?<tail>[\\/\\- ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL" }
+    },
+    {
+      "name": "upi_slashed_plain",
+      "priority": 8,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[\\/](?<counterparty>(?!DR[\\/]|CR[\\/])[^\\/]+)[\\/](?<txnId>\\d{6,18})(?:[\\/](?<remarks>.*))?$"
+    },
+    {
+      "name": "neft_bankcode",
+      "priority": 8,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<direction>CR|DR|Cr|Dr)?[- ]?(?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[- ](?<remarks>.+))?$"
+    },
+    {
+      "name": "rtgs_bankcode",
+      "priority": 8,
+      "channel": "RTGS",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^RTGS[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[- ](?<remarks>.+))?$"
+    },
+    {
+      "name": "imps_ref_payee",
+      "priority": 8,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[-/](?<txnId>\\d{9,16})[-/](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "atm_withdrawal",
+      "priority": 6,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^(?:ATM[-/ ]?)?(?:CASH[-/ ]?)?WDL\\b(?<tail>.*)$"
+    },
+    {
+      "name": "pos_purchase",
+      "priority": 6,
+      "channel": "POS",
+      "type": "DEBIT",
+      "media": "narration",
+      "regex": "^POS[-/ ](?:(?<cardMask>\\d{4})[-/ ])?(?<counterparty>[^-/]+)(?<tail>\\s*[-/ ].*)?$"
+    },
+    {
+      "name": "nach_emi",
+      "priority": 7,
+      "channel": "NACH",
+      "type": "DEBIT",
+      "category": "Loan & EMI",
+      "media": "narration",
+      "regex": "^(?:NACH|ACH|ECS)[-/ ](?<counterparty>.+?)[-/ ](?:EMI|LOAN)(?<tail>.*)$"
+    },
+    {
+      "name": "salary_credit",
+      "priority": 5,
+      "type": "CREDIT",
+      "category": "Income",
+      "media": "narration",
+      "regex": "^(?<counterparty>.+?)[-/ ]SAL(?:ARY)?\\b(?<tail>.*)$"
+    },
+    {
+      "name": "cheque",
+      "priority": 5,
+      "channel": "CHEQUE",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:CHQ|CHEQUE|CLG)[-/ ](?<txnId>\\d{5,7})(?:[-/ ](?<counterparty>.+))?$"
+    },
+    {
+      "name": "sms_amount_first",
+      "priority": 20,
+      "media": "sms",
+      "regexFlags": "i",
+      "confidence": 0.92,
+      "regex": "(?:Rs\\.?|INR|₹)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?<direction>debited|credited)\\s+from\\s+(?:a\\/c|ac|acct|account)\\s*(?:no\\.?\\s*)?(?:[xX*]+\\s*)?(?<accountMask>\\d{3,4})\\s+on\\s+(?<date>\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}|\\d{8})(?:\\s+at\\s+(?<counterparty>[A-Za-z0-9 .&*-]+?)(?:\\.|\\s+on\\s|\\s+Avl|$))?(?:.*?[Aa]vl\\s*[Bb]al(?:ance)?[:\\s]*(?:Rs\\.?|INR|₹)?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,2})?))?"
+    },
+    {
+      "name": "sms_direction_first",
+      "priority": 20,
+      "media": "sms",
+      "regexFlags": "i",
+      "confidence": 0.92,
+      "regex": "(?:a\\/c|ac|acct|account)\\s*(?:no\\.?\\s*)?(?:[xX*]+\\s*)?(?<accountMask>\\d{3,4})\\s+(?:is\\s+|has\\s+been\\s+)?(?<direction>debited|credited)\\s+(?:by|with|from|for)?\\s*(?:Rs\\.?|INR|₹)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)(?:.*?\\bon\\s*(?<date>\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}|\\d{8}))?(?:.*?(?:at|to|Info:?|towards)\\s+(?<counterparty>[A-Za-z0-9 .&*-]+?)(?:\\.|\\s+Avl|\\s+on\\s|$))?(?:.*?[Aa]vl\\s*[Bb]al(?:ance)?[:\\s]*(?:Rs\\.?|INR|₹)?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,2})?))?"
+    },
+    {
+      "name": "sms_amount_then_direction",
+      "priority": 5,
+      "media": "sms",
+      "regexFlags": "i",
+      "confidence": 0.75,
+      "regex": "(?:Rs\\.?|INR|₹)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?<direction>debited|credited)"
+    },
+    {
+      "name": "sms_direction_then_amount",
+      "priority": 5,
+      "media": "sms",
+      "regexFlags": "i",
+      "confidence": 0.75,
+      "regex": "(?<direction>debited|credited)\\s+(?:by|with|from|for)?\\s*(?:Rs\\.?|INR|₹)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+    }
+  ]
+}

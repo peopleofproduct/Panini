@@ -1,0 +1,19 @@
+{
+  "name": "@panini/standards-schema",
+  "version": "0.1.0",
+  "description": "Strict, zero-dependency validation schemas for Indian DPI data formats (Account Aggregator, OCEN-style payloads).",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src/schemas"
+  ],
+  "devDependencies": {
+    "@panini/core": "0.1.0",
+    "@panini/rules-engine": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  }
+}

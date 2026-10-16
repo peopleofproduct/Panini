@@ -1,0 +1,32 @@
+{
+  "$id": "https://panini.dev/schemas/normalized-transaction.schema.json",
+  "description": "Canonical output of the Panini normalization engine.",
+  "type": "object",
+  "required": ["channel", "type", "category", "currency", "raw", "confidence"],
+  "additionalProperties": true,
+  "properties": {
+    "channel": {
+      "type": "string",
+      "enum": ["UPI", "IMPS", "NEFT", "RTGS", "ACH", "NACH", "ATM", "POS", "CHEQUE", "NETBANKING", "UNKNOWN"]
+    },
+    "counterparty": { "type": ["string", "null"] },
+    "transactionId": { "type": ["string", "null"] },
+    "vpaHandle": { "type": ["string", "null"], "pattern": "^[a-z0-9]+$" },
+    "type": {
+      "type": "string",
+      "enum": ["DEBIT", "CREDIT", "REVERSAL", "REFUND", "UNKNOWN"]
+    },
+    "category": { "type": "string", "minLength": 1 },
+    "date": { "type": ["string", "null"], "format": "date" },
+    "amountPaise": { "type": ["integer", "null"], "minimum": 0 },
+    "balancePaise": { "type": ["integer", "null"], "minimum": 0 },
+    "currency": { "type": "string", "const": "INR" },
+    "accountMask": { "type": ["string", "null"], "pattern": "^\\d{3,4}$" },
+    "raw": { "type": "string" },
+    "matchedRule": { "type": ["string", "null"] },
+    "bank": { "type": ["string", "null"] },
+    "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+    "metadata": { "type": "object" },
+    "warnings": { "type": "array", "items": { "type": "string" } }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/rules-engine" },
+    { "path": "packages/standards-schema" }
+  ]
+}

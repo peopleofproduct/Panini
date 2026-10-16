@@ -1,0 +1,18 @@
+{
+  "name": "@panini/rules-engine",
+  "version": "0.1.0",
+  "description": "Community-extendable JSON grammar sets for Indian bank narration formats (SBI, HDFC, ICICI, generic).",
+  "license": "Apache-2.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "rules"
+  ],
+  "dependencies": {
+    "@panini/core": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -b"
+  }
+}
