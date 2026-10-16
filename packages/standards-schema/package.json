@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Strict, zero-dependency validation schemas for Indian DPI data formats (Account Aggregator, OCEN-style payloads).",
   "license": "Apache-2.0",
+  "author": "Kapil",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [

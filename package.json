@@ -4,6 +4,7 @@
   "private": true,
   "description": "Open-core, zero-dependency financial document and transaction string normalization engine for the Indian FinTech ecosystem.",
   "license": "Apache-2.0",
+  "author": "Kapil",
   "workspaces": [
     "packages/*"
   ],

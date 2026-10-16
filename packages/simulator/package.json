@@ -4,6 +4,7 @@
   "private": true,
   "description": "Generative sandbox producing randomized ReBIT v2.0-compliant financial payloads with realistic Indian banking narration noise.",
   "license": "Apache-2.0",
+  "author": "Kapil",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {

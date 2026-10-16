@@ -1,29 +1,82 @@
-# Project Panini
+# Panini (`@panini/core`)
 
-An open-core, deterministic financial transaction normalization engine for the
-Indian FinTech ecosystem. Named after Acharya Pāṇini, it treats chaotic banking
-data (SMS alerts, statement narrations, Account Aggregator payloads) as a
-structured language grammar and compiles it into clean, typed JSON.
+[![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.base.json)
+[![Runtime deps](https://img.shields.io/badge/runtime%20deps-0-brightgreen)](./package.json)
+[![Tests](https://img.shields.io/badge/tests-158%20passing-brightgreen)](#-development)
+[![Maintained by People of Product™](https://img.shields.io/badge/maintained%20by-People%20of%20Product%E2%84%A2-orange)](#-maintained-by-people-of-product)
 
-## Design principles
+> **The First Grammatical Open-Finance Orchestration Core for India's Digital Public Infrastructure (DPI).**
 
-- **Zero runtime dependencies.** The parsing core is pure TypeScript —
-  deterministic regex grammars and tokenizers only. No network calls, no
-  telemetry, no ML models. Safe to embed in an on-prem or sandboxed server.
-- **Rules are data, not code.** Bank-specific grammars live in standalone JSON
-  files in `@panini/rules-engine`. You can add or tweak a bank's narration
-  layout without touching the parser.
-- **Strictly typed.** Strict TypeScript throughout; no `any`.
+Named after Acharya Pāṇini — the ancient architect of formal rule-based grammar — **Panini** is a zero-runtime-dependency TypeScript engine built to parse, structure, and normalize chaotic financial data ecosystems. It acts as an open-core local sandbox for processing **ReBIT v2.0 Account Aggregator payload schemas** and **OCEN 4.0 lending networks**, coupled with framework-neutral enterprise proxy extensions for commercial TSPs.
 
-## Packages
+---
 
-| Package                    | Purpose                                                                 |
-| -------------------------- | ----------------------------------------------------------------------- |
-| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer                     |
-| `@panini/rules-engine`     | JSON grammar sets for Indian banks (SBI, HDFC, ICICI, generic) + loader |
-| `@panini/standards-schema` | Validation schemas mirroring Account Aggregator / OCEN-style payloads   |
+## 🏗️ Core Architecture & Operational Topology
 
-## Quick start
+The platform separates the open-source evaluation core from the enterprise billing and telemetry proxies to guarantee absolute privacy data sandboxing.
+
+```
+                 ┌────────────────────────────────────────────────┐
+                 │              Client / Host Server              │
+                 │                                                │
+   narrations ──►│  @panini/rules-engine ──► @panini/core          │
+   AA payloads ─►│     (JSON grammars)         (Normalizer)        │
+                 │            │                                    │
+                 │            ▼                                    │
+                 │     NormalizedTransaction / AAProfile          │
+                 │            │                                    │
+                 │            ▼                                    │
+                 │  @panini/standards-schema  (ReBIT / OCEN)      │
+                 └───────────┬────────────────────────────────────┘
+                             │  (optional, paid layer)
+                 ┌───────────▼────────────────────────────────────┐
+                 │  EnterpriseProxy + HTTP adapter                 │
+                 │  rate-limit • billing meter • opt-in telemetry  │
+                 │  (PII-free by construction — no raw narrations) │
+                 └────────────────────────────────────────────────┘
+```
+
+| Package                    | Role                                                                                                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer; enterprise proxy & HTTP adapter seams.           |
+| `@panini/rules-engine`     | Community-extendable JSON grammars for Indian banks (SBI, HDFC, ICICI, generic) + archetype rule set. |
+| `@panini/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                 |
+| `@panini/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.         |
+
+## ✨ Design Guarantees
+
+- **Zero runtime dependencies.** The parsing core is pure TypeScript — deterministic regex grammars and tokenizers only. No network calls, no ML models, no phone-home telemetry. Safe to embed inside on-prem or sandboxed environments.
+- **Rules are data, not code.** Bank-specific grammars live in standalone JSON files loaded at runtime; updating a bank's narration layout never requires touching the TypeScript engine.
+- **Strictly typed.** Strict TypeScript throughout — no `any`, `unknown` at external boundaries, `exactOptionalPropertyTypes` enabled.
+- **PII isolation.** The enterprise telemetry channel is opt-in only and its event type has _structurally no field_ for raw narrations, counterparties, references, VPAs, or amounts.
+
+## 🚀 Quick Start
+
+```bash
+npm install
+npm run build   # tsc -b (project references)
+npm test        # jest — 158 tests across 15 suites
+```
+
+### Parse a narration
+
+```ts
+import { parseBankNarration } from '@panini/rules-engine';
+
+parseBankNarration('NEFT-N3452618902-SALARY-OCTOBER 2026-TCS LTD');
+// {
+//   channel: 'NEFT',
+//   type: 'CREDIT',
+//   ref_no: 'N3452618902',
+//   counterparty: 'TCS Ltd',
+//   is_salary: true,
+//   category: 'Income',
+//   ...
+// }
+```
+
+Or use the raw engine for custom grammars:
 
 ```ts
 import { Normalizer } from '@panini/core';
@@ -33,27 +86,58 @@ const normalizer = new Normalizer({
   ruleSets: loadBuiltinRuleSets(),
   categories: loadCategories(),
 });
-
-const txn = normalizer.normalize('UPI-SWIGGY-826384@okaxis-20261015-REV-DEBIT');
-// {
-//   channel: 'UPI',
-//   counterparty: 'Swiggy',
-//   transactionId: '826384',
-//   vpaHandle: 'okaxis',
-//   type: 'DEBIT',
-//   category: 'Food & Dining',
-//   ...
-// }
+normalizer.normalize('UPI-SWIGGY-826384@okaxis-20261015-REV-DEBIT');
 ```
 
-## Development
+### Validate DPI payloads
+
+```ts
+import { validateAAProfile, isOCENLoanApplication } from '@panini/standards-schema';
+
+const result = validateAAProfile(payload); // { valid, errors[] } — zero deps
+```
+
+### Generate sandbox traffic
 
 ```bash
-npm install
-npm run build   # tsc -b (project references)
-npm test        # jest
+npm run simulate -- --count=50 --seed=7 --anomaly-rate=0.2
+npm run simulate -- --count=50 -o mocks.json --pretty
 ```
+
+Streams deterministic ReBIT v2.0 FI profiles — including deliberate anomalies (truncated narrations, corrupt timestamps, dropped fields) for exercising client-side error handling.
+
+### Mount the enterprise proxy
+
+```ts
+import { createPaniniHttpHandler } from '@panini/core';
+
+app.post('/v1/parse', createPaniniHttpHandler(proxy));
+// bearer token → rate-limit bucket → normalize → billing meter → JSON
+```
+
+## 🛠️ Development
+
+```bash
+npm run build          # strict project-reference build
+npm test               # full monorepo suite
+npm run lint           # eslint flat config
+npm run format         # prettier
+```
+
+A `pre-commit` gate (`scripts/pre-commit.sh`, installed at `.git/hooks/pre-commit`) runs lint + tests before any commit finalizes.
+
+## 🤝 Maintained by People of Product™
+
+**Project Panini** is an open-source initiative by **[People of Product™](https://theproduct.city)** — the team behind **[Product City](https://theproduct.city)**, built to empower professionals with leading tech capabilities and to make India's open-finance infrastructure more open for everyone.
+
+Find us:
+
+- 🌐 Website — [theproduct.city](https://theproduct.city)
+- 💼 LinkedIn — [People of Product](https://www.linkedin.com/company/people-of-product) · [Kapil (founder)](https://www.linkedin.com/in/kapil0/)
+- 🐦 X — [@PeopleOfProduct](https://x.com/PeopleOfProduct) · [@product_city](https://x.com/product_city) · [@Krazzy_Bunny](https://x.com/Krazzy_Bunny)
+
+Contributions welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-Apache-2.0 — see [LICENSE](./LICENSE).
+Apache-2.0 — see [LICENSE](./LICENSE) and [NOTICE](./NOTICE).

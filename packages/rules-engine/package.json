@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Community-extendable JSON grammar sets for Indian bank narration formats (SBI, HDFC, ICICI, generic).",
   "license": "Apache-2.0",
+  "author": "Kapil",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
