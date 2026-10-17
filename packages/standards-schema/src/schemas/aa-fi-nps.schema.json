@@ -1,0 +1,52 @@
+{
+  "$id": "https://panini.dev/schemas/aa-fi-nps.schema.json",
+  "description": "ReBIT AA FI data for NPS: envelope plus a PRAN-keyed Summary and contribution Transactions.",
+  "type": "object",
+  "required": ["FIPId", "FIUTimestamp", "maskedAccountNumber", "Summary"],
+  "additionalProperties": true,
+  "properties": {
+    "FIPId": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "FIUTimestamp": { "type": "string", "format": "date-time" },
+    "maskedAccountNumber": {
+      "type": "string",
+      "pattern": "^[Xx*]{0,12}[A-Z0-9]{3,8}$"
+    },
+    "fiType": { "type": "string", "enum": ["NPS"] },
+    "Summary": {
+      "type": "object",
+      "required": ["pran", "tier"],
+      "additionalProperties": true,
+      "properties": {
+        "pran": {
+          "type": "string",
+          "pattern": "^1\\d{11}$",
+          "description": "Permanent Retirement Account Number — 12 digits starting with 1."
+        },
+        "tier": { "type": "string", "enum": ["I", "II"] },
+        "totalCorpus": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+        "totalContribution": {
+          "type": ["number", "string"],
+          "pattern": "^-?\\d+(\\.\\d{1,2})?$"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["txnId", "amount", "type", "valueDate"],
+        "additionalProperties": true,
+        "properties": {
+          "txnId": { "type": "string", "minLength": 1 },
+          "amount": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+          "units": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,6})?$" },
+          "nav": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,4})?$" },
+          "narration": { "type": "string" },
+          "type": { "type": "string", "enum": ["DEBIT", "CREDIT", "OTHERS"] },
+          "valueDate": { "type": "string", "format": "date" },
+          "transactionTimestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}

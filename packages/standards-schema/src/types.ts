@@ -130,6 +130,60 @@ export function validateAAProfile(value: unknown): ValidationResult {
   return validate(loadSchema('aa-profile'), value);
 }
 
+/** ReBIT consent request (ConsentDetail) payload — `POST /Consent`. */
+export function validateAAConsentRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('aa-consent-request'), value);
+}
+
+/** ReBIT signed consent artefact + ConsentUse — artefact exchange shape. */
+export function validateAAConsentArtefact(value: unknown): ValidationResult {
+  return validate(loadSchema('aa-consent-artefact'), value);
+}
+
+/** FI types sharing the investment (Holdings) payload shape. */
+const INVESTMENT_FI_TYPES = new Set<AAFIType>([
+  'SIP',
+  'CP',
+  'GOVT_SECURITIES',
+  'EQUITIES',
+  'BONDS',
+  'DEBENTURES',
+  'MUTUAL_FUNDS',
+  'ETF',
+  'IDR',
+  'CIS',
+  'AIF',
+  'INVIT',
+  'REIT',
+]);
+
+/**
+ * Validates an FI data payload against the schema for its `fiType` —
+ * DEPOSIT uses the canonical Transaction schema; term/recurring deposits,
+ * investments, insurance policies, and NPS each use their own shape.
+ * Unknown/OTHER types validate against the generic DEPOSIT envelope only
+ * when a Transaction array is present.
+ */
+export function validateFiData(fiType: AAFIType, value: unknown): ValidationResult {
+  switch (fiType) {
+    case 'DEPOSIT':
+      return validateAAProfile(value);
+    case 'TERM-DEPOSIT':
+    case 'RECURRING_DEPOSIT':
+      return validate(loadSchema('aa-fi-deposit'), value);
+    case 'INSURANCE_POLICIES':
+      return validate(loadSchema('aa-fi-insurance'), value);
+    case 'NPS':
+      return validate(loadSchema('aa-fi-nps'), value);
+    default:
+      if (INVESTMENT_FI_TYPES.has(fiType)) {
+        return validate(loadSchema('aa-fi-investment'), value);
+      }
+      // 'OTHER' — no dedicated shape; enforce envelope fields only.
+      return validateAAProfile(value);
+  }
+}
+
 /** Validates an OCEN loan application against the bundled schema. */
 export function validateOCENLoanApplication(value: unknown): ValidationResult {
   return validate(loadSchema('ocen-loan'), value);
@@ -143,4 +197,14 @@ export function isAAProfile(value: unknown): value is AAProfile {
 /** Type guard: validates and narrows to {@link OCENLoanApplication}. */
 export function isOCENLoanApplication(value: unknown): value is OCENLoanApplication {
   return validateOCENLoanApplication(value).valid;
+}
+
+/** Type guard: validates a consent request payload. */
+export function isAAConsentRequest(value: unknown): boolean {
+  return validateAAConsentRequest(value).valid;
+}
+
+/** Type guard: validates a signed consent artefact payload. */
+export function isAAConsentArtefact(value: unknown): boolean {
+  return validateAAConsentArtefact(value).valid;
 }
