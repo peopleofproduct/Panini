@@ -384,14 +384,23 @@ class Normalizer:
 
 # ── dictionaries + facade ────────────────────────────────────────────────────
 
-_RULES_DIR = Path(os.environ.get(
-    "PANINI_RULES_DIR",
-    Path(__file__).resolve().parents[2] / "packages" / "rules-engine" / "rules",
-))
+def _default_rules_dir() -> Path:
+    """Resolution order: PANINI_RULES_DIR env → bundled package data →
+    repo layout (development checkout)."""
+    env = os.environ.get("PANINI_RULES_DIR")
+    if env:
+        return Path(env)
+    bundled = Path(__file__).resolve().parent / "rules"
+    if (bundled / "generic.json").exists():
+        return bundled
+    return Path(__file__).resolve().parents[2] / "packages" / "rules-engine" / "rules"
 
 
-def _load_entities() -> dict[str, Any]:
-    ent = _RULES_DIR / "entities"
+_RULES_DIR = _default_rules_dir()
+
+
+def _load_entities(rules_dir: Path) -> dict[str, Any]:
+    ent = rules_dir / "entities"
     out: dict[str, Any] = {"merchants": [], "vpa-handles": {}, "ifsc-codes": {}}
     for name in ("merchants", "vpa-handles", "ifsc-codes"):
         p = ent / f"{name}.json"
@@ -455,7 +464,7 @@ def parse_narration(input_: str | dict, *, enrich: bool = True,
 
     merchant_entry = vpa_info = ifsc_info = None
     if enrich:
-        entities = _load_entities()
+        entities = _load_entities(rd)
         merchant_entry = _lookup_merchant(txn.counterparty, entities["merchants"])
         if txn.vpa_handle:
             vpa_info = entities["vpa-handles"].get(txn.vpa_handle)

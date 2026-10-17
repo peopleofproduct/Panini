@@ -20,14 +20,15 @@ txn = parse_narration("UPI/20261015/DR/826384910234/SWIGGY@okaxis/Cooking/")
 
 ## Where the grammars live
 
-`panini` loads rule sets from `packages/rules-engine/rules/` (resolved
-relative to the repo root). Override with `PANINI_RULES_DIR`:
+The grammar JSONs ship **inside the wheel** under `panini/rules/` — a
+pip install works standalone with no repo checkout. In a development
+checkout the engine falls back to `packages/rules-engine/rules/`; the
+bundled copy is kept byte-identical and drift is enforced by
+`tests/test_bundled_rules.py`. Resolution order:
 
-```bash
-PANINI_RULES_DIR=/path/to/rules python3 -m unittest discover tests
-```
-
-or pass `rules_dir=Path(...)` to `parse_narration()`.
+1. `PANINI_RULES_DIR` env var or `rules_dir=Path(...)` argument
+2. bundled `panini/rules/` package data
+3. repo path (`packages/rules-engine/rules/`) for dev checkouts
 
 ## Conformance
 
@@ -43,6 +44,6 @@ merchant/vpa/IFSC enrichment, is_salary, date, category.
 ## Status
 
 Alpha scaffold: narration pipeline (tokenizer → grammar match →
-normalize → enrich) is at full corpus parity (71/71). SMS `media`
-routing, `normalizePayload`, and packaged bundling of `rules/` for PyPI
-distribution land next.
+normalize → enrich) is at full corpus parity (76/76) and grammar data
+is bundled for PyPI distribution. SMS `media` routing and
+`normalizePayload` land next.

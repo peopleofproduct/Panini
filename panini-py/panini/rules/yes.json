@@ -1,0 +1,40 @@
+{
+  "id": "yes",
+  "bank": "YES",
+  "version": "1.0.0",
+  "description": "YES Bank narration quirks: ref-first UPI, INB tags, RTGS/NEFT with IFSC fragments.",
+  "patterns": [
+    {
+      "name": "yes_upi_ref_first",
+      "priority": 28,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI-(?<txnId>\\d{6,16})-(?<counterparty>[A-Za-z0-9 .&']+)(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:-(?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "yes_inb_transfer",
+      "priority": 25,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regex": "^(?:INB|IMPSINB)[-/ ](?<txnId>\\d{9,16})[-/ ](?<counterparty>[^-/]+)(?:[-/ ](?<tail>.*))?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "yes_neft_ifsc",
+      "priority": 25,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "yes_rtgs_ifsc",
+      "priority": 25,
+      "channel": "RTGS",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^RTGS[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    }
+  ]
+}

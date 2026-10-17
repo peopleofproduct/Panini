@@ -1,0 +1,405 @@
+{
+  "version": "1.0.0",
+  "description": "Community-maintained merchant dictionary: canonical names, known narration aliases (including legal entity names), spend category, and optional MCC. Extend by PR — no code changes required.",
+  "merchants": [
+    {
+      "canonical": "Swiggy",
+      "aliases": ["SWIGGY", "SWIGGY LIMITED", "BUNDL TECHNOLOGIES", "BUNDL"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "Zomato",
+      "aliases": ["ZOMATO", "ZOMATO LTD", "ZOMATO LIMITED"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "Domino's",
+      "aliases": ["DOMINOS", "DOMINOS PIZZA", "JUBILANT FOODWORKS"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "McDonald's",
+      "aliases": ["MCDONALD", "MCDONALDS", "MCD INDIA"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "KFC",
+      "aliases": ["KFC", "KFC INDIA"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "Burger King",
+      "aliases": ["BURGER KING", "BURGERKING", "BK INDIA"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "Pizza Hut",
+      "aliases": ["PIZZA HUT", "PIZZAHUT"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    { "canonical": "Subway", "aliases": ["SUBWAY"], "category": "Food & Dining", "mcc": "5814" },
+    {
+      "canonical": "Starbucks",
+      "aliases": ["STARBUCKS", "TATA STARBUCKS"],
+      "category": "Food & Dining",
+      "mcc": "5814"
+    },
+    {
+      "canonical": "Cafe Coffee Day",
+      "aliases": ["CCD", "CAFE COFFEE DAY", "COFFEE DAY"],
+      "category": "Food & Dining"
+    },
+    {
+      "canonical": "EatFit",
+      "aliases": ["EATFIT", "CUREFIT", "CULT FIT"],
+      "category": "Food & Dining"
+    },
+    {
+      "canonical": "Behrouz Biryani",
+      "aliases": ["BEHROUZ", "BEHROUZ BIRYANI", "REBEL FOODS"],
+      "category": "Food & Dining"
+    },
+    { "canonical": "Faasos", "aliases": ["FAASOS"], "category": "Food & Dining" },
+    {
+      "canonical": "Haldiram's",
+      "aliases": ["HALDIRAM", "HALDIRAMS"],
+      "category": "Food & Dining"
+    },
+    {
+      "canonical": "Chai Point",
+      "aliases": ["CHAI POINT", "CHAIPOINT"],
+      "category": "Food & Dining"
+    },
+    {
+      "canonical": "Third Wave Coffee",
+      "aliases": ["THIRD WAVE", "THIRDWAVE"],
+      "category": "Food & Dining"
+    },
+    {
+      "canonical": "Blinkit",
+      "aliases": ["BLINKIT", "GROFERS", "BLINK COMMERCE"],
+      "category": "Groceries"
+    },
+    { "canonical": "Zepto", "aliases": ["ZEPTO", "KIRANAKART"], "category": "Groceries" },
+    {
+      "canonical": "BigBasket",
+      "aliases": ["BIGBASKET", "BIG BASKET", "BB DAILY", "INNOVATIVE RETAIL"],
+      "category": "Groceries"
+    },
+    {
+      "canonical": "Swiggy Instamart",
+      "aliases": ["INSTAMART", "SWIGGY INSTAMART"],
+      "category": "Groceries"
+    },
+    {
+      "canonical": "DMart",
+      "aliases": ["DMART", "D MART", "AVENUE SUPERMARTS"],
+      "category": "Groceries"
+    },
+    { "canonical": "JioMart", "aliases": ["JIOMART", "JIO MART"], "category": "Groceries" },
+    {
+      "canonical": "Country Delight",
+      "aliases": ["COUNTRY DELIGHT", "COUNTRYDELIGHT"],
+      "category": "Groceries"
+    },
+    { "canonical": "Milkbasket", "aliases": ["MILKBASKET"], "category": "Groceries" },
+    {
+      "canonical": "Uber",
+      "aliases": ["UBER", "UBER INDIA", "UBER B V"],
+      "category": "Transport",
+      "mcc": "4121"
+    },
+    {
+      "canonical": "Ola",
+      "aliases": ["OLA", "OLA CABS", "ANI TECHNOLOGIES"],
+      "category": "Transport",
+      "mcc": "4121"
+    },
+    {
+      "canonical": "Rapido",
+      "aliases": ["RAPIDO", "ROPEN TRANSPORTATION"],
+      "category": "Transport",
+      "mcc": "4121"
+    },
+    {
+      "canonical": "Namma Yatri",
+      "aliases": ["NAMMA YATRI", "NAMMAYATRI"],
+      "category": "Transport",
+      "mcc": "4121"
+    },
+    {
+      "canonical": "BluSmart",
+      "aliases": ["BLUSMART", "BLU SMART"],
+      "category": "Transport",
+      "mcc": "4121"
+    },
+    {
+      "canonical": "Meru Cabs",
+      "aliases": ["MERU", "MERU CABS"],
+      "category": "Transport",
+      "mcc": "4121"
+    },
+    {
+      "canonical": "HP Petrol",
+      "aliases": ["HP PETROL", "HPCL", "HINDUSTAN PETROLEUM", "HP PETRO"],
+      "category": "Fuel",
+      "mcc": "5541"
+    },
+    {
+      "canonical": "IndianOil",
+      "aliases": ["IOCL", "INDIAN OIL", "INDIANOIL", "IOCL PETROL"],
+      "category": "Fuel",
+      "mcc": "5541"
+    },
+    {
+      "canonical": "BPCL",
+      "aliases": ["BPCL", "BHARAT PETROLEUM", "BP PETROL"],
+      "category": "Fuel",
+      "mcc": "5541"
+    },
+    {
+      "canonical": "Shell",
+      "aliases": ["SHELL", "SHELL PETROL"],
+      "category": "Fuel",
+      "mcc": "5541"
+    },
+    {
+      "canonical": "IRCTC",
+      "aliases": ["IRCTC", "IRCTC LTD"],
+      "category": "Travel",
+      "mcc": "4112"
+    },
+    { "canonical": "RedBus", "aliases": ["REDBUS", "RED BUS"], "category": "Travel" },
+    {
+      "canonical": "MakeMyTrip",
+      "aliases": ["MAKEMYTRIP", "MAKE MY TRIP", "MMT"],
+      "category": "Travel"
+    },
+    { "canonical": "Goibibo", "aliases": ["GOIBIBO", "GO IBIBO"], "category": "Travel" },
+    {
+      "canonical": "OYO",
+      "aliases": ["OYO", "OYOROOMS", "OYO ROOMS", "ORAVEL STAYS"],
+      "category": "Travel"
+    },
+    {
+      "canonical": "IndiGo",
+      "aliases": ["INDIGO", "INTERGLOBE AVIATION"],
+      "category": "Travel",
+      "mcc": "3000"
+    },
+    {
+      "canonical": "Air India",
+      "aliases": ["AIR INDIA", "AIRINDIA", "VISTARA", "AIRASIA INDIA"],
+      "category": "Travel",
+      "mcc": "3001"
+    },
+    {
+      "canonical": "Amazon",
+      "aliases": ["AMAZON", "AMAZON PAY", "AMZN", "AMAZON SELLER SERVICES", "AMAZON PAY INDIA"],
+      "category": "Shopping",
+      "mcc": "5399"
+    },
+    {
+      "canonical": "Flipkart",
+      "aliases": ["FLIPKART", "FKART", "FLIPKART INTERNET"],
+      "category": "Shopping"
+    },
+    { "canonical": "Myntra", "aliases": ["MYNTRA", "MYNTRA DESIGNS"], "category": "Shopping" },
+    {
+      "canonical": "Ajio",
+      "aliases": ["AJIO", "AJIO.COM", "RELIANCE RETAIL AJIO"],
+      "category": "Shopping"
+    },
+    { "canonical": "Meesho", "aliases": ["MEESHO", "FASHNEAR"], "category": "Shopping" },
+    { "canonical": "Nykaa", "aliases": ["NYKAA", "FSN E COMMERCE"], "category": "Shopping" },
+    {
+      "canonical": "Tata CLiQ",
+      "aliases": ["TATACLIQ", "TATA CLIQ", "TATA UNISTORE"],
+      "category": "Shopping"
+    },
+    { "canonical": "Snapdeal", "aliases": ["SNAPDEAL"], "category": "Shopping" },
+    { "canonical": "FirstCry", "aliases": ["FIRSTCRY", "BRAINBEES"], "category": "Shopping" },
+    { "canonical": "Decathlon", "aliases": ["DECATHLON"], "category": "Shopping" },
+    { "canonical": "IKEA", "aliases": ["IKEA"], "category": "Shopping" },
+    {
+      "canonical": "Netflix",
+      "aliases": ["NETFLIX", "NETFLIX.COM"],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    { "canonical": "Spotify", "aliases": ["SPOTIFY"], "category": "Subscriptions", "mcc": "5968" },
+    {
+      "canonical": "JioHotstar",
+      "aliases": ["HOTSTAR", "JIOHOTSTAR", "DISNEY HOTSTAR", "DISNEY+ HOTSTAR"],
+      "category": "Subscriptions"
+    },
+    {
+      "canonical": "Prime Video",
+      "aliases": ["PRIME VIDEO", "AMAZON PRIME"],
+      "category": "Subscriptions"
+    },
+    { "canonical": "ZEE5", "aliases": ["ZEE5"], "category": "Subscriptions" },
+    { "canonical": "Sony LIV", "aliases": ["SONYLIV", "SONY LIV"], "category": "Subscriptions" },
+    {
+      "canonical": "YouTube Premium",
+      "aliases": ["YOUTUBE", "YOUTUBE PREMIUM", "GOOGLE YOUTUBE"],
+      "category": "Subscriptions"
+    },
+    { "canonical": "Gaana", "aliases": ["GAANA"], "category": "Subscriptions" },
+    {
+      "canonical": "BookMyShow",
+      "aliases": ["BOOKMYSHOW", "BMS", "BIGTREE ENTERTAINMENT"],
+      "category": "Entertainment",
+      "mcc": "7832"
+    },
+    {
+      "canonical": "PVR INOX",
+      "aliases": ["PVR", "INOX", "PVR CINEMAS", "PVR INOX"],
+      "category": "Entertainment",
+      "mcc": "7832"
+    },
+    {
+      "canonical": "Paytm Insider",
+      "aliases": ["INSIDER", "PAYTM INSIDER"],
+      "category": "Entertainment"
+    },
+    {
+      "canonical": "Jio",
+      "aliases": ["JIO", "RELIANCE JIO", "JIO PREPAID"],
+      "category": "Telecom",
+      "mcc": "4814"
+    },
+    {
+      "canonical": "Airtel",
+      "aliases": ["AIRTEL", "BHARTI AIRTEL", "AIRTEL PREPAID"],
+      "category": "Telecom",
+      "mcc": "4814"
+    },
+    {
+      "canonical": "Vi",
+      "aliases": ["VI", "VODAFONE", "VODAFONE IDEA", "IDEA CELLULAR"],
+      "category": "Telecom",
+      "mcc": "4814"
+    },
+    { "canonical": "BSNL", "aliases": ["BSNL"], "category": "Telecom", "mcc": "4814" },
+    {
+      "canonical": "BESCOM",
+      "aliases": ["BESCOM", "BANGALORE ELECTRICITY"],
+      "category": "Utilities"
+    },
+    { "canonical": "Tata Power", "aliases": ["TATA POWER", "TATAPOWER"], "category": "Utilities" },
+    {
+      "canonical": "Adani Electricity",
+      "aliases": ["ADANI ELECTRICITY", "ADANI ELEC"],
+      "category": "Utilities"
+    },
+    { "canonical": "Mahanagar Gas", "aliases": ["MAHANAGAR GAS", "MGL"], "category": "Utilities" },
+    {
+      "canonical": "Indraprastha Gas",
+      "aliases": ["IGL", "INDRAPRASTHA GAS"],
+      "category": "Utilities"
+    },
+    {
+      "canonical": "Apollo Pharmacy",
+      "aliases": ["APOLLO", "APOLLO PHARMACY", "APOLLO HOSPITALS"],
+      "category": "Healthcare"
+    },
+    {
+      "canonical": "Tata 1mg",
+      "aliases": ["1MG", "TATA 1MG", "TATA1MG"],
+      "category": "Healthcare"
+    },
+    {
+      "canonical": "PharmEasy",
+      "aliases": ["PHARMEASY", "API HOLDINGS"],
+      "category": "Healthcare"
+    },
+    { "canonical": "Netmeds", "aliases": ["NETMEDS"], "category": "Healthcare" },
+    { "canonical": "MedPlus", "aliases": ["MEDPLUS"], "category": "Healthcare" },
+    { "canonical": "Practo", "aliases": ["PRACTO"], "category": "Healthcare" },
+    {
+      "canonical": "Groww",
+      "aliases": ["GROWW", "NEXTBILLION TECHNOLOGY"],
+      "category": "Investments"
+    },
+    {
+      "canonical": "Zerodha",
+      "aliases": ["ZERODHA", "ZERODHA BROKING"],
+      "category": "Investments"
+    },
+    { "canonical": "Upstox", "aliases": ["UPSTOX", "RKSV SECURITIES"], "category": "Investments" },
+    {
+      "canonical": "Angel One",
+      "aliases": ["ANGEL ONE", "ANGEL BROKING", "ANGELONE"],
+      "category": "Investments"
+    },
+    { "canonical": "ET Money", "aliases": ["ET MONEY", "ETMONEY"], "category": "Investments" },
+    { "canonical": "Kuvera", "aliases": ["KUVERA"], "category": "Investments" },
+    { "canonical": "Paytm Money", "aliases": ["PAYTM MONEY"], "category": "Investments" },
+    {
+      "canonical": "CAMS",
+      "aliases": ["CAMS", "COMPUTER AGE MANAGEMENT"],
+      "category": "Investments"
+    },
+    {
+      "canonical": "LIC",
+      "aliases": ["LIC", "LIFE INSURANCE CORPORATION"],
+      "category": "Insurance"
+    },
+    { "canonical": "HDFC Life", "aliases": ["HDFC LIFE", "HDFCLIFE"], "category": "Insurance" },
+    {
+      "canonical": "ICICI Prudential",
+      "aliases": ["ICICI PRUDENTIAL", "ICICI PRLIFE", "ICICIPRULIFE"],
+      "category": "Insurance"
+    },
+    { "canonical": "Star Health", "aliases": ["STAR HEALTH"], "category": "Insurance" },
+    { "canonical": "Niva Bupa", "aliases": ["NIVA BUPA", "MAX BUPA"], "category": "Insurance" },
+    { "canonical": "ACKO", "aliases": ["ACKO", "ACKO GENERAL"], "category": "Insurance" },
+    {
+      "canonical": "Digit Insurance",
+      "aliases": ["GO DIGIT", "DIGIT INSURANCE"],
+      "category": "Insurance"
+    },
+    {
+      "canonical": "LazyPay",
+      "aliases": ["LAZYPAY", "LAZY PAY", "PAYU LAZYPAY"],
+      "category": "BNPL"
+    },
+    { "canonical": "Simpl", "aliases": ["SIMPL", "GET SIMPL"], "category": "BNPL" },
+    { "canonical": "ZestMoney", "aliases": ["ZESTMONEY", "ZEST MONEY"], "category": "BNPL" },
+    { "canonical": "Uni Cards", "aliases": ["UNI CARDS", "UNICARDS"], "category": "BNPL" },
+    { "canonical": "Slice", "aliases": ["SLICE", "SLICEIT"], "category": "BNPL" },
+    { "canonical": "OneCard", "aliases": ["ONECARD", "ONE CARD"], "category": "BNPL" },
+    { "canonical": "Dream11", "aliases": ["DREAM11", "SPORTA TECHNOLOGIES"], "category": "Gaming" },
+    { "canonical": "MPL", "aliases": ["MPL", "MOBILE PREMIER LEAGUE"], "category": "Gaming" },
+    { "canonical": "Winzo", "aliases": ["WINZO"], "category": "Gaming" },
+    { "canonical": "Unacademy", "aliases": ["UNACADEMY"], "category": "Education" },
+    { "canonical": "upGrad", "aliases": ["UPGRAD", "UPGRAD EDUCATION"], "category": "Education" },
+    { "canonical": "Udemy", "aliases": ["UDEMY"], "category": "Education" },
+    { "canonical": "Coursera", "aliases": ["COURSERA"], "category": "Education" },
+    { "canonical": "Physics Wallah", "aliases": ["PHYSICS WALLAH", "PW"], "category": "Education" },
+    { "canonical": "Razorpay", "aliases": ["RAZORPAY"], "category": "Professional Services" },
+    { "canonical": "Khatabook", "aliases": ["KHATABOOK"], "category": "Professional Services" },
+    {
+      "canonical": "Urban Company",
+      "aliases": ["URBAN COMPANY", "URBANCLAP"],
+      "category": "Personal Care"
+    },
+    { "canonical": "Tira", "aliases": ["TIRA"], "category": "Personal Care" },
+    { "canonical": "Licious", "aliases": ["LICIOUS"], "category": "Groceries" },
+    { "canonical": "FreshToHome", "aliases": ["FRESHTOHOME"], "category": "Groceries" },
+    {
+      "canonical": "Swiggy Genie",
+      "aliases": ["SWIGGY GENIE", "GENIE"],
+      "category": "Professional Services"
+    },
+    { "canonical": "Dunzo", "aliases": ["DUNZO"], "category": "Groceries" }
+  ]
+}

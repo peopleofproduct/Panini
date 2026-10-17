@@ -1,0 +1,55 @@
+{
+  "id": "bob",
+  "bank": "BOB",
+  "version": "1.0.0",
+  "description": "Bank of Baroda narration quirks: BY/TO TRANSFER prefixes, star-delimited NEFT, INB/M-connect tags.",
+  "patterns": [
+    {
+      "name": "bob_neft_star",
+      "priority": 28,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "NEFT\\*(?<bankCode>[A-Z]{4}\\d{7})\\*(?<counterparty>[^*-]+?)(?:[-*](?<remarks>.+))?$"
+    },
+    {
+      "name": "bob_by_transfer",
+      "priority": 20,
+      "type": "CREDIT",
+      "media": "narration",
+      "regex": "^BY\\s+TRANSFER[-/ ](?<counterparty>[^-]+)(?:[-/ ](?<remarks>.+))?$"
+    },
+    {
+      "name": "bob_to_transfer",
+      "priority": 20,
+      "type": "DEBIT",
+      "media": "narration",
+      "regex": "^TO\\s+TRANSFER[-/ ](?<counterparty>[^-]+)(?:[-/ ](?<remarks>.+))?$"
+    },
+    {
+      "name": "bob_inb_transfer",
+      "priority": 25,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regex": "^(?:INB|MCONNECT)[-/ ](?<txnId>\\d{9,16})[-/ ](?<counterparty>[^-/]+)(?:[-/ ](?<tail>.*))?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "bob_imps_slashed",
+      "priority": 25,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[\\/](?<txnId>\\d{9,16})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT", "INW": "CREDIT", "IN": "CREDIT" }
+    },
+    {
+      "name": "bob_cash_wdl",
+      "priority": 25,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^(?:ATM|CASH)[-/ ]WDL[-/ ](?<tail>.*)$"
+    }
+  ]
+}
