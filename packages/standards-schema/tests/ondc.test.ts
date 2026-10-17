@@ -8,7 +8,13 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { validateOndcEnvelope, validateOndcFsSearch } from '../src';
+import {
+  validateOndcEnvelope,
+  validateOndcFsSearch,
+  validateOndcCatalog,
+  validateOndcOrder,
+  validateOcenLifecycle,
+} from '../src';
 
 const envelope = {
   context: {
@@ -87,6 +93,162 @@ describe('ONDC FS search intent', () => {
     expect(
       validateOndcFsSearch({
         intent: { category: { descriptor: { code: 'HOME_LOAN' } }, item: { xinput: { form: {} } } },
+      }).valid,
+    ).toBe(false);
+  });
+});
+
+describe('ONDC on_search catalog', () => {
+  const catalog = {
+    catalog: {
+      descriptor: { name: 'Acme Credit Marketplace' },
+      providers: [
+        {
+          id: 'lender-1',
+          descriptor: { name: 'Acme NBFC' },
+          items: [
+            {
+              id: 'pl-1',
+              descriptor: { name: 'Personal Loan', code: 'PERSONAL_LOAN' },
+              price: { value: '50000', currency: 'INR' },
+              xinput: { form: { id: 'f-loan' }, required: true },
+            },
+          ],
+          payments: [{ id: 'p1', collected_by: 'BPP', type: 'ON_ORDER' }],
+        },
+      ],
+    },
+  };
+
+  it('accepts a valid catalog', () => {
+    expect(validateOndcCatalog(catalog).valid).toBe(true);
+  });
+
+  it('rejects empty providers, missing item descriptor, bad price', () => {
+    expect(
+      validateOndcCatalog({ catalog: { descriptor: { name: 'x' }, providers: [] } }).valid,
+    ).toBe(false);
+    expect(
+      validateOndcCatalog({
+        catalog: {
+          descriptor: { name: 'x' },
+          providers: [{ id: 'p', items: [{ id: 'i' }] }],
+        },
+      }).valid,
+    ).toBe(false);
+    expect(
+      validateOndcCatalog({
+        catalog: {
+          descriptor: { name: 'x' },
+          providers: [
+            { id: 'p', items: [{ id: 'i', descriptor: { name: 'n' }, price: { value: 'abc' } }] },
+          ],
+        },
+      }).valid,
+    ).toBe(false);
+  });
+});
+
+describe('ONDC order lifecycle object', () => {
+  const order = {
+    order: {
+      id: 'ord-1',
+      state: 'IN_PROGRESS',
+      provider: { id: 'lender-1' },
+      items: [{ id: 'pl-1' }],
+      quote: {
+        price: { value: '52000', currency: 'INR' },
+        breakup: [{ title: 'Principal', price: { value: '50000', currency: 'INR' } }],
+      },
+      payments: [{ id: 'p1', type: 'ON_ORDER', status: 'PAID', collected_by: 'BPP' }],
+      fulfillments: [{ id: 'f1', state: { descriptor: { code: 'SANCTIONED' } } }],
+    },
+  };
+
+  it('accepts a valid order across lifecycle states', () => {
+    for (const state of ['CREATED', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']) {
+      expect(validateOndcOrder({ order: { ...order.order, state } }).valid).toBe(true);
+    }
+  });
+
+  it('rejects bad state, empty items, bad payment status', () => {
+    expect(validateOndcOrder({ order: { ...order.order, state: 'LOST' } }).valid).toBe(false);
+    expect(validateOndcOrder({ order: { ...order.order, items: [] } }).valid).toBe(false);
+    expect(
+      validateOndcOrder({ order: { ...order.order, payments: [{ status: 'MAYBE' }] } }).valid,
+    ).toBe(false);
+  });
+});
+
+describe('OCEN loan lifecycle', () => {
+  const meta = {
+    originatorOrgId: 'org-1',
+    originatorParticipantId: 'lsp-1',
+    traceId: 'tr-1',
+    requestId: 'req-1',
+    loanApplicationId: 'la-001',
+    timestamp: '2024-06-01T10:00:00.000Z',
+  };
+  const event = {
+    metadata: meta,
+    loanApplicationId: 'la-001',
+    status: 'DISBURSED',
+    disbursement: {
+      amount: 50000,
+      currency: 'INR',
+      utr: 'UTR123456',
+      disbursementDate: '2024-06-01T12:00:00.000Z',
+      account: { accountNumber: '12345678901', ifsc: 'HDFC0001234' },
+    },
+    repaymentSchedule: [
+      {
+        installmentNo: 1,
+        dueDate: '2024-07-01',
+        amount: { principal: 4000, interest: 500, total: 4500 },
+        status: 'DUE',
+      },
+      { installmentNo: 2, dueDate: '2024-08-01', amount: { total: 4500 } },
+    ],
+    mandate: { type: 'ENACH', status: 'REGISTERED', umn: 'UMN123', amount: 4500 },
+    kfs: { annualPercentageRate: 18.5, coolingOffDays: 3 },
+  };
+
+  it('accepts a full lifecycle event', () => {
+    expect(validateOcenLifecycle(event).valid).toBe(true);
+  });
+
+  it('accepts all lifecycle states', () => {
+    for (const status of [
+      'APPLICATION_SUBMITTED',
+      'OFFER_GENERATED',
+      'OFFER_ACCEPTED',
+      'AGREEMENT_SIGNED',
+      'DISBURSED',
+      'CLOSED',
+      'REJECTED',
+    ]) {
+      expect(validateOcenLifecycle({ ...event, status }).valid).toBe(true);
+    }
+  });
+
+  it('rejects unknown status, bad IFSC, malformed repayment rows', () => {
+    expect(validateOcenLifecycle({ ...event, status: 'APPROVED?' }).valid).toBe(false);
+    expect(
+      validateOcenLifecycle({
+        ...event,
+        disbursement: { amount: 1, account: { ifsc: 'badifsc' } },
+      }).valid,
+    ).toBe(false);
+    expect(
+      validateOcenLifecycle({
+        ...event,
+        repaymentSchedule: [{ installmentNo: 0, dueDate: '2024-07-01', amount: { total: 1 } }],
+      }).valid,
+    ).toBe(false);
+    expect(
+      validateOcenLifecycle({
+        ...event,
+        repaymentSchedule: [{ installmentNo: 1, dueDate: '1 July', amount: { total: 1 } }],
       }).valid,
     ).toBe(false);
   });

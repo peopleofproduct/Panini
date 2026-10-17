@@ -40,4 +40,7 @@ export {
   validateOCENLoanApplication,
   validateOndcEnvelope,
   validateOndcFsSearch,
+  validateOndcCatalog,
+  validateOndcOrder,
+  validateOcenLifecycle,
 } from './types';

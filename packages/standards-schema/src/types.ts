@@ -199,6 +199,21 @@ export function validateOndcFsSearch(value: unknown): ValidationResult {
   return validate(loadSchema('ondc-fs-search'), value);
 }
 
+/** ONDC on_search catalog — providers/items/xinput/payments. */
+export function validateOndcCatalog(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-onsearch-catalog'), value);
+}
+
+/** ONDC order object — select/init/confirm/status lifecycle payloads. */
+export function validateOndcOrder(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-order'), value);
+}
+
+/** OCEN loan lifecycle event — status, disbursement, schedule, mandate, KFS. */
+export function validateOcenLifecycle(value: unknown): ValidationResult {
+  return validate(loadSchema('ocen-lifecycle'), value);
+}
+
 /** Type guard: validates and narrows to {@link AAProfile}. */
 export function isAAProfile(value: unknown): value is AAProfile {
   return validateAAProfile(value).valid;
