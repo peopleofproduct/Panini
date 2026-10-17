@@ -8,6 +8,6 @@ module.exports = {
     '^.+\\.ts$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.test.json' }],
   },
   moduleNameMapper: {
-    '^@panini/(.*)$': '<rootDir>/../$1/src',
+    '^@paniniapi/(.*)$': '<rootDir>/../$1/src',
   },
 };

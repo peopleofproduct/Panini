@@ -8,7 +8,7 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { Normalizer } from '@panini/core';
+import { Normalizer } from '@paniniapi/core';
 import { loadBuiltinRuleSets, loadCategories } from '../src';
 
 const normalizer = new Normalizer({

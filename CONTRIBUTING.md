@@ -24,7 +24,7 @@ cp scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 
 Bank rules are **data, not code** — drop a new JSON rule set into
 `packages/rules-engine/rules/` (see `generic.json` / `sbi.json` for the shape)
-and add fixture tests. No changes to `@panini/core` should be needed.
+and add fixture tests. No changes to `@paniniapi/core` should be needed.
 
 Every grammar must ship **corpus samples** in
 `packages/rules-engine/rules/corpus/<bank>.json` — real-world narration strings
@@ -51,7 +51,7 @@ bank). Add entries by PR; enrichment uses them at parse time via
 
 ## Ground rules
 
-- No runtime dependencies in `@panini/core` or `@panini/standards-schema`.
+- No runtime dependencies in `@paniniapi/core` or `@paniniapi/standards-schema`.
 - Bank/company vocabulary belongs in `rules-engine`, not in core.
 - Deterministic behavior only — no ML, no randomness without a seed.
 

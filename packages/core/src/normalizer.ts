@@ -27,14 +27,14 @@ import type {
 } from './types';
 
 export interface NormalizerOptions {
-  /** Grammar rule sets, e.g. loaded from @panini/rules-engine. */
+  /** Grammar rule sets, e.g. loaded from @paniniapi/rules-engine. */
   readonly ruleSets: readonly GrammarRuleSet[];
   /** Global keyword → category table merged over rule-set categories. */
   readonly categories?: Record<string, string>;
   /**
    * Optional display-casing policy applied to extracted counterparty names.
    * Defaults to plain title-casing; consumers can inject rules such as
-   * acronym preservation (@panini/rules-engine's `preserveAcronymCase`).
+   * acronym preservation (@paniniapi/rules-engine's `preserveAcronymCase`).
    */
   readonly displayCase?: (value: string) => string;
 }

@@ -27,7 +27,9 @@ if (args[0] === '--repl') {
 } else {
   const text = args.join(' ');
   if (text.length === 0) {
-    console.error('usage: npm run parse -- "<narration or sms>"  |  npm run parse -- --repl < input.txt');
+    console.error(
+      'usage: npm run parse -- "<narration or sms>"  |  npm run parse -- --repl < input.txt',
+    );
     process.exit(1);
   }
   console.log(JSON.stringify(parseBankNarration(text), null, 2));

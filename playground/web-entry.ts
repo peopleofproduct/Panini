@@ -7,8 +7,8 @@
  * the browser), and exposes a single `paniniParse` on window.
  */
 
-import type { GrammarRuleSet, InputSource } from '@panini/core';
-import { parseBankNarration, setDictionaries } from '@panini/rules-engine';
+import type { GrammarRuleSet, InputSource } from '@paniniapi/core';
+import { parseBankNarration, setDictionaries } from '@paniniapi/rules-engine';
 
 import archetypes from '../packages/rules-engine/rules/archetypes.json';
 import axis from '../packages/rules-engine/rules/axis.json';
