@@ -9,3 +9,8 @@ coverage/
 
 # Generated playground bundle (rebuild with `npm run playground`)
 playground/panini-web.js
+
+# Python build artifacts
+*.egg-info/
+panini-py/build/
+panini-py/dist/

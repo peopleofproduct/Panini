@@ -1,0 +1,44 @@
+{
+  "id": "idfc",
+  "bank": "IDFC",
+  "version": "1.0.0",
+  "description": "IDFC FIRST Bank narration quirks: DEBIT CARD prefix, standard UPI/IMPS pipelines, NEFT with sender ref.",
+  "patterns": [
+    {
+      "name": "idfc_debit_card",
+      "priority": 28,
+      "channel": "POS",
+      "type": "DEBIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^DEBIT\\s+CARD[-/ ](?:(?<cardMask>[\\dX*]{4,19})[-/ ])?(?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "idfc_upi_pipeline",
+      "priority": 28,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[-/](?<direction>DR|CR)[-/ ](?<txnId>\\d{9,18})[-/](?<counterparty>[^-/@]+?)(?:[@/-](?<vpaHandle>@?[a-z0-9._-]+))?(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "idfc_neft_ref",
+      "priority": 25,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<txnId>[A-Z]{0,3}\\d{6,16})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "idfc_imps",
+      "priority": 24,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[-/](?<txnId>\\d{9,16})[-/](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
+      "flags": {
+        "REV": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
+    }
+  ]
+}

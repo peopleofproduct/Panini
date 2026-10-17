@@ -1,0 +1,37 @@
+{
+  "id": "wallets",
+  "bank": "GENERIC",
+  "version": "1.0.0",
+  "description": "Wallet/PSP app narration prefixes — Paytm, PhonePe, GPay, Amazon Pay, BHIM, MobiKwik, Freecharge — plus wallet load/top-up phrases.",
+  "patterns": [
+    {
+      "name": "wallet_app_prefixed",
+      "priority": 22,
+      "channel": "WALLET",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:PAYTM|PHONEPE|GPAY|GOOGLE ?PAY|AMAZON ?PAY|BHIM|MOBIKWIK|FREECHARGE)[-/ ](?<counterparty>[^-/]+)(?:[-/ ](?<txnId>\\d{6,18}))?(?<tail>[-/:].*)?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT", "REV": "REVERSAL", "RFD": "REFUND" }
+    },
+    {
+      "name": "wallet_add_money",
+      "priority": 22,
+      "channel": "WALLET",
+      "type": "DEBIT",
+      "category": "Wallet Top-up",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:ADD\\s+MONEY|WALLET\\s+(?:LOAD|TOP\\s*UP)|LOAD\\s+WALLET)(?<tail>.*)$"
+    },
+    {
+      "name": "wallet_to_bank",
+      "priority": 22,
+      "channel": "WALLET",
+      "type": "CREDIT",
+      "category": "Transfers",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:WALLET\\s+TO\\s+(?:BANK|SELF)|PAYTM\\s+PAYMENT\\s+BANK)(?<tail>.*)$"
+    }
+  ]
+}
