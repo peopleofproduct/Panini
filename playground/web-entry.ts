@@ -1,63 +1,28 @@
 /**
  * Copyright 2026 Kapil — Project Panini Contributors
- * SPDX-License-Identifier: Apache-2.0
  *
- * Browser entry point for the playground. Bundles every grammar JSON,
- * category table and entity dictionary, injects them (no filesystem in
- * the browser), and exposes a single `paniniParse` on window.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Browser entry point for the playground. Grammar/dictionary data comes
+ * from the browser package's generated module — one source of truth, so
+ * new bank grammars and entity updates flow in automatically (no fs).
  */
 
-import type { GrammarRuleSet, InputSource } from '@paniniapi/core';
+import type { InputSource } from '@paniniapi/core';
 import { parseBankNarration, setDictionaries } from '@paniniapi/rules-engine';
+import { CATEGORIES, DICTIONARIES, RULE_SETS } from '../packages/browser/src/data.gen';
 
-import archetypes from '../packages/rules-engine/rules/archetypes.json';
-import axis from '../packages/rules-engine/rules/axis.json';
-import bob from '../packages/rules-engine/rules/bob.json';
-import canara from '../packages/rules-engine/rules/canara.json';
-import categories from '../packages/rules-engine/rules/categories.json';
-import federal from '../packages/rules-engine/rules/federal.json';
-import generic from '../packages/rules-engine/rules/generic.json';
-import hdfc from '../packages/rules-engine/rules/hdfc.json';
-import icici from '../packages/rules-engine/rules/icici.json';
-import idfc from '../packages/rules-engine/rules/idfc.json';
-import indusind from '../packages/rules-engine/rules/indusind.json';
-import kotak from '../packages/rules-engine/rules/kotak.json';
-import pnb from '../packages/rules-engine/rules/pnb.json';
-import rbl from '../packages/rules-engine/rules/rbl.json';
-import sbi from '../packages/rules-engine/rules/sbi.json';
-import union from '../packages/rules-engine/rules/union.json';
-import wallet from '../packages/rules-engine/rules/wallet.json';
-import yes from '../packages/rules-engine/rules/yes.json';
-
-import merchantsJson from '../packages/rules-engine/rules/entities/merchants.json';
-import vpaJson from '../packages/rules-engine/rules/entities/vpa-handles.json';
-import ifscJson from '../packages/rules-engine/rules/entities/ifsc-codes.json';
-
-const RULE_SETS: readonly GrammarRuleSet[] = [
-  archetypes,
-  axis,
-  bob,
-  canara,
-  federal,
-  generic,
-  hdfc,
-  icici,
-  idfc,
-  indusind,
-  kotak,
-  pnb,
-  rbl,
-  sbi,
-  union,
-  wallet,
-  yes,
-] as unknown as GrammarRuleSet[];
-
-setDictionaries({
-  merchants: merchantsJson.merchants,
-  vpaHandles: vpaJson.handles,
-  ifscBanks: ifscJson.banks,
-});
+setDictionaries(DICTIONARIES);
 
 export interface PaniniWindow {
   paniniParse: (text: string, bankHint?: string, source?: InputSource) => unknown;
@@ -70,5 +35,5 @@ export interface PaniniWindow {
       ...(bankHint !== undefined && bankHint.length > 0 ? { bankHint } : {}),
       ...(source !== undefined ? { source } : {}),
     },
-    { bare: true, ruleSets: RULE_SETS, categories },
+    { bare: true, ruleSets: RULE_SETS, categories: CATEGORIES },
   );
