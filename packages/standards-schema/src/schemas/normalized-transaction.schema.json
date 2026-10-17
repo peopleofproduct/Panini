@@ -18,6 +18,7 @@
         "POS",
         "CHEQUE",
         "NETBANKING",
+        "WALLET",
         "UNKNOWN"
       ]
     },

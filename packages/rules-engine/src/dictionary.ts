@@ -68,9 +68,27 @@ function loadJson<T>(file: string): T {
   return JSON.parse(readFileSync(join(resolveEntitiesDir(), file), 'utf8')) as T;
 }
 
+/** The three community datasets bundled under `rules/entities/`. */
+export interface DictionaryData {
+  readonly merchants: readonly MerchantEntry[];
+  readonly vpaHandles: Readonly<Record<string, VpaHandleInfo>>;
+  readonly ifscBanks: Readonly<Record<string, IfscBankInfo>>;
+}
+
 let merchantsCache: readonly MerchantEntry[] | undefined;
 let vpaCache: Readonly<Record<string, VpaHandleInfo>> | undefined;
 let ifscCache: Readonly<Record<string, IfscBankInfo>> | undefined;
+
+/**
+ * Injects dictionary data without touching the filesystem. Required for
+ * browser/edge runtimes (the playground bundles the JSON at build time);
+ * Node callers can ignore this — the bundled files load lazily.
+ */
+export function setDictionaries(data: DictionaryData): void {
+  merchantsCache = data.merchants;
+  vpaCache = data.vpaHandles;
+  ifscCache = data.ifscBanks;
+}
 
 /** Loads the community merchant dictionary (cached). */
 export function loadMerchants(): readonly MerchantEntry[] {

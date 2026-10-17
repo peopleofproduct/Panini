@@ -3,3 +3,4 @@ dist/
 coverage/
 package-lock.json
 *.tsbuildinfo
+playground/panini-web.js

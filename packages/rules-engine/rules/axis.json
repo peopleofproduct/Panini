@@ -10,7 +10,12 @@
       "channel": "UPI",
       "media": "narration",
       "regex": "^UPI[\\/]P2[AMP][\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/@]+?)(?:@(?<vpaHandle>[A-Za-z0-9._-]+))?(?:[\\/](?<tail>.*))?$",
-      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+      "flags": {
+        "REV": "REVERSAL",
+        "RTN": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
     },
     {
       "name": "axis_atw_withdrawal",
@@ -27,7 +32,10 @@
       "channel": "NETBANKING",
       "media": "narration",
       "regex": "^(?:INB|INET|NEFTINB)[-/ ](?<txnId>\\d{9,16})[-/ ](?<counterparty>[^-/]+)(?:[-/ ](?<tail>.*))?$",
-      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+      "flags": {
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
     },
     {
       "name": "axis_ach_tagged",
@@ -35,7 +43,12 @@
       "channel": "ACH",
       "media": "narration",
       "regex": "^ACH[-/](?<direction>C|D|CR|DR)[-/ ](?<txnId>[A-Z0-9]{6,18})[-/ ](?<counterparty>.+?)\\s*$",
-      "flags": { "C": "CREDIT", "D": "DEBIT", "CR": "CREDIT", "DR": "DEBIT" }
+      "flags": {
+        "C": "CREDIT",
+        "D": "DEBIT",
+        "CR": "CREDIT",
+        "DR": "DEBIT"
+      }
     },
     {
       "name": "axis_pos_card",
@@ -43,7 +56,7 @@
       "channel": "POS",
       "type": "DEBIT",
       "media": "narration",
-      "regex": "^(?:POS|VPS|EDC|ECOM)[-/ ](?:(?<cardMask>\\d{4})[-/ ])?(?<counterparty>[^-/]+)(?<tail>\\s*[-/ ].*)?$"
+      "regex": "^(?:POS|VPS|EDC|ECOM)[-/ ](?:(?<cardMask>[\\dX*]{4,19})[-/ ])?(?<counterparty>[^-/]+)(?<tail>\\s*[-/ ].*)?$"
     }
   ]
 }

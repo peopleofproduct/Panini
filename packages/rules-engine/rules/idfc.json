@@ -11,7 +11,7 @@
       "type": "DEBIT",
       "media": "narration",
       "regexFlags": "i",
-      "regex": "^DEBIT\\s+CARD[-/ ](?:(?<cardMask>\\d{4})[-/ ])?(?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+      "regex": "^DEBIT\\s+CARD[-/ ](?:(?<cardMask>[\\dX*]{4,19})[-/ ])?(?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
     },
     {
       "name": "idfc_upi_pipeline",
@@ -34,7 +34,11 @@
       "channel": "IMPS",
       "media": "narration",
       "regex": "^IMPS[-/](?<txnId>\\d{9,16})[-/](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
-      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+      "flags": {
+        "REV": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
     }
   ]
 }

@@ -22,8 +22,9 @@ export {
   lookupIfscBank,
   lookupMerchant,
   lookupVpaHandle,
+  setDictionaries,
 } from './dictionary';
-export type { IfscBankInfo, MerchantEntry, VpaHandleInfo } from './dictionary';
+export type { DictionaryData, IfscBankInfo, MerchantEntry, VpaHandleInfo } from './dictionary';
 export { checkSample, coverageReport, loadCorpus } from './coverage';
 export type {
   BankCoverage,
@@ -32,10 +33,5 @@ export type {
   CorpusSample,
   ExpectationFailure,
 } from './coverage';
-export {
-  BANK_NARRATION_RULE_SET,
-  BANK_RULE_SETS,
-  parseBankNarration,
-  preserveAcronymCase,
-} from './bankRules';
+export { parseBankNarration, preserveAcronymCase } from './bankRules';
 export type { ParseBankNarrationOptions, ParsedBankNarration } from './bankRules';
