@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { EnterpriseProxy } from '../enterpriseProxy';
+import type { OpsProxy } from '../opsProxy';
 
 /**
  * Minimal structural request shape — satisfied by Node's IncomingMessage
@@ -43,7 +43,7 @@ export type HttpMiddleware = (
 ) => void;
 
 export interface HttpAdapterOptions {
-  readonly proxy: EnterpriseProxy;
+  readonly proxy: OpsProxy;
   /** Route path to intercept. Default '/v1/parse'. */
   readonly path?: string;
   /** Maximum accepted request body size. Default 256 KiB. */
@@ -125,7 +125,7 @@ function sendJson(
 
 /**
  * Creates an Express/Fastify/plain-http compatible middleware that exposes
- * the EnterpriseProxy as a POST endpoint:
+ * the OpsProxy as a POST endpoint:
  *
  *   POST /v1/parse
  *   x-api-key: <key>            (or Authorization: Bearer <key>)

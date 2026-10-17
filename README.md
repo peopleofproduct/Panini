@@ -3,7 +3,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.base.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-0-brightgreen)](./package.json)
-[![Tests](https://img.shields.io/badge/tests-158%20passing-brightgreen)](#-development)
+[![Tests](https://img.shields.io/badge/tests-295%20passing-brightgreen)](#-development)
 [![Maintained by People of Product™](https://img.shields.io/badge/maintained%20by-People%20of%20Product%E2%84%A2-orange)](#-maintained-by-people-of-product)
 
 > **The First Grammatical Open-Finance Orchestration Core for India's Digital Public Infrastructure (DPI).**
@@ -18,7 +18,7 @@ Named after Acharya Pāṇini — the ancient architect of formal rule-based gra
 
 ## 🏗️ Core Architecture & Operational Topology
 
-The platform isolates the parsing core from the optional ops layer (rate limiting, metering, telemetry) to guarantee absolute privacy data sandboxing — everything is free and runs in memory on your host.
+The platform isolates the parsing core from the optional self-hosted ops layer (rate limiting, metering, telemetry) to guarantee absolute privacy data sandboxing — everything is free and runs in memory on your host.
 
 ```
                  ┌────────────────────────────────────────────────┐
@@ -33,20 +33,22 @@ The platform isolates the parsing core from the optional ops layer (rate limitin
                  │            ▼                                    │
                  │  @panini/standards-schema  (ReBIT / OCEN)      │
                  └───────────┬────────────────────────────────────┘
-                             │  (optional ops layer)
+                             │  (optional, self-hosted ops layer)
                  ┌───────────▼────────────────────────────────────┐
-                 │  EnterpriseProxy + HTTP adapter                 │
+                 │  OpsProxy + HTTP adapter                        │
                  │  rate-limit • usage meter • opt-in telemetry    │
                  │  (PII-free by construction — no raw narrations) │
                  └────────────────────────────────────────────────┘
 ```
 
-| Package                    | Role                                                                                                             |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
-| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer; optional ops layer (rate limiting, metering, HTTP adapter). |
-| `@panini/rules-engine`     | Community-extendable JSON grammars for Indian banks (SBI, HDFC, ICICI, generic) + archetype rule set.            |
-| `@panini/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                            |
-| `@panini/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                    |
+| Package                    | Role                                                                                                                                                                                      |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                              |
+| `@panini/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate. |
+| `@panini/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                     |
+| `@panini/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                             |
+| `panini-py/`               | Python port sharing the same grammar JSONs and corpus — 76/76 conformance fixtures, CI-gated.                                                                                             |
+| `playground/`              | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                             |
 
 ## ✨ Design Guarantees
 
@@ -60,7 +62,7 @@ The platform isolates the parsing core from the optional ops layer (rate limitin
 ```bash
 npm install
 npm run build   # tsc -b (project references)
-npm test        # jest — 158 tests across 15 suites
+npm test        # jest — 295 tests across 18 suites
 ```
 
 ### Parse a narration
@@ -76,6 +78,21 @@ parseBankNarration('NEFT-N3452618902-SALARY-OCTOBER 2026-TCS LTD');
 //   counterparty: 'TCS Ltd',
 //   is_salary: true,
 //   category: 'Income',
+//   ...
+// }
+
+parseBankNarration('UPI/20261015/DR/826384910234/SWIGGY@okaxis/Cooking/');
+// {
+//   channel: 'UPI',
+//   type: 'DEBIT',
+//   merchant: 'Swiggy',           // dictionary-canonicalised
+//   counterparty: 'Swiggy',
+//   vpa: 'okaxis',
+//   vpa_app: 'Google Pay',        // enrichment: PSP app behind the handle
+//   vpa_bank: 'Axis Bank',        // enrichment: sponsor bank
+//   merchant_canonical: 'Swiggy',
+//   category: 'Food & Dining',
+//   confidence: 0.95,
 //   ...
 // }
 ```
@@ -110,10 +127,48 @@ npm run simulate -- --count=50 -o mocks.json --pretty
 
 Streams deterministic ReBIT v2.0 FI profiles — including deliberate anomalies (truncated narrations, corrupt timestamps, dropped fields) for exercising client-side error handling.
 
+### Try it in the playground
+
+```bash
+npm run playground          # rebuilds playground/panini-web.js
+# open playground/index.html — fully static, zero network calls
+
+npm run parse -- 'UPI/P2M/123456789012/JOHN DOE@axisb/DR'
+# → channel UPI, vpa axisb → CRED / Axis Bank
+```
+
+### Python port (`panini-py/`)
+
+The Python engine shares the **same grammar JSONs and corpus fixtures** as the
+TypeScript packages — parity is enforced by the conformance suite (76/76),
+not assumed:
+
+```python
+from panini import parse_narration
+
+parse_narration('UPI/20261015/DR/826384910234/SWIGGY@okaxis/Cooking/')
+# → channel UPI, type DEBIT, vpa_app 'Google Pay', vpa_bank 'Axis Bank'
+```
+
+```bash
+cd panini-py && python3 -m unittest discover tests   # corpus conformance gate
+```
+
+### Entity dictionaries & corpus gate
+
+`packages/rules-engine/rules/entities/` holds community-editable datasets —
+merchant canonical names + aliases, 90+ UPI VPA handles → PSP app/sponsor bank
+(PhonePe, GPay, Paytm, CRED, WhatsApp Pay, BHIM, Navi, MobiKwik, super.money,
+Amazon Pay, Flipkart, bank-direct…), and IFSC prefix → bank. Ambiguous handles
+are never guessed — they resolve to `null` instead of a wrong attribution.
+
+`rules/corpus/` holds per-bank narration fixtures; `tests/corpus.test.ts`
+generates one test per sample, so grammar regressions fail CI.
+
 ### Self-hostable ops layer
 
 ```ts
-import { createPaniniHttpHandler } from '@panini/core';
+import { createPaniniHttpHandler, OpsProxy } from '@panini/core';
 
 app.post('/v1/parse', createPaniniHttpHandler(proxy));
 // bearer token → rate-limit bucket → normalize → usage meter → JSON
