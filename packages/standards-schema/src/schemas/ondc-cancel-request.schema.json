@@ -1,0 +1,20 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-cancel-request.schema.json",
+  "description": "ONDC `cancel` request payload — message body. Order cancellation with a network-standard cancellation reason code.",
+  "type": "object",
+  "required": ["order_id", "cancellation_reason_id"],
+  "additionalProperties": true,
+  "properties": {
+    "order_id": { "type": "string", "minLength": 1 },
+    "cancellation_reason_id": { "type": "string", "minLength": 1 },
+    "descriptor": {
+      "type": "object",
+      "required": ["short_desc"],
+      "additionalProperties": true,
+      "properties": {
+        "short_desc": { "type": "string" },
+        "long_desc": { "type": "string" }
+      }
+    }
+  }
+}

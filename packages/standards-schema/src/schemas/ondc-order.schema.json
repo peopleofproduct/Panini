@@ -1,0 +1,159 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-order.schema.json",
+  "description": "ONDC order object — the shared message.order shape across select/on_select, init/on_init, confirm/on_confirm, and status/on_status in FIS domains.",
+  "type": "object",
+  "required": ["order"],
+  "additionalProperties": true,
+  "properties": {
+    "order": {
+      "type": "object",
+      "required": ["provider", "items"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "ref_order_ids": { "type": "array", "items": { "type": "string" } },
+        "state": {
+          "type": "string",
+          "enum": ["CREATED", "ACCEPTED", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
+        },
+        "provider": {
+          "type": "object",
+          "required": ["id"],
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "descriptor": { "type": "object" }
+          }
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": true,
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "descriptor": { "type": "object" },
+              "quantity": {
+                "type": "object",
+                "properties": {
+                  "selected": {
+                    "type": "object",
+                    "properties": { "count": { "type": "integer", "minimum": 1 } }
+                  }
+                }
+              },
+              "price": {
+                "type": "object",
+                "properties": {
+                  "value": { "type": "string", "pattern": "^\\d+(\\.\\d+)?$" },
+                  "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+                }
+              },
+              "xinput": { "type": "object" },
+              "fulfillment_ids": { "type": "array", "items": { "type": "string" } },
+              "payment_ids": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        },
+        "quote": {
+          "type": "object",
+          "properties": {
+            "price": {
+              "type": "object",
+              "properties": {
+                "value": { "type": "string", "pattern": "^\\d+(\\.\\d+)?$" },
+                "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+              }
+            },
+            "breakup": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "price": {
+                    "type": "object",
+                    "properties": {
+                      "value": { "type": "string" },
+                      "currency": { "type": "string" }
+                    }
+                  },
+                  "item": { "type": "object" }
+                }
+              }
+            },
+            "ttl": { "type": "string", "pattern": "^P(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$" }
+          }
+        },
+        "payments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "type": {
+                "type": "string",
+                "enum": ["PRE_FULFILLMENT", "ON_FULFILLMENT", "POST_FULFILLMENT", "ON_ORDER"]
+              },
+              "status": { "type": "string", "enum": ["NOT-PAID", "PAID", "DEFERRED"] },
+              "collected_by": { "type": "string", "enum": ["BAP", "BPP"] },
+              "params": {
+                "type": "object",
+                "properties": {
+                  "amount": { "type": "string" },
+                  "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+                  "transaction_id": { "type": "string" }
+                }
+              },
+              "time": {
+                "type": "object",
+                "properties": {
+                  "range": {
+                    "type": "object",
+                    "properties": {
+                      "start": { "type": "string", "format": "date-time" },
+                      "end": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fulfillments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "type": { "type": "string" },
+              "state": {
+                "type": "object",
+                "properties": {
+                  "descriptor": {
+                    "type": "object",
+                    "properties": { "code": { "type": "string" } }
+                  }
+                }
+              },
+              "customer": {
+                "type": "object",
+                "properties": {
+                  "person": { "type": "object" },
+                  "contact": { "type": "object" }
+                }
+              },
+              "stops": { "type": "array", "items": { "type": "object" } }
+            }
+          }
+        },
+        "cancellation_terms": { "type": "array", "items": { "type": "object" } },
+        "documents": { "type": "array", "items": { "type": "object" } },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" },
+        "tags": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  }
+}

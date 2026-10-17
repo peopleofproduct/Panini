@@ -199,6 +199,41 @@ export function validateOndcFsSearch(value: unknown): ValidationResult {
   return validate(loadSchema('ondc-fs-search'), value);
 }
 
+/** ONDC on_search catalog — providers/items/xinput/payments. */
+export function validateOndcCatalog(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-onsearch-catalog'), value);
+}
+
+/** ONDC order object — select/init/confirm/status lifecycle payloads. */
+export function validateOndcOrder(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-order'), value);
+}
+
+/** OCEN loan lifecycle event — status, disbursement, schedule, mandate, KFS. */
+export function validateOcenLifecycle(value: unknown): ValidationResult {
+  return validate(loadSchema('ocen-lifecycle'), value);
+}
+
+/** ONDC `track` request message — order_id locator. */
+export function validateOndcTrackRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-track-request'), value);
+}
+
+/** ONDC `on_track` response message — tracking url + status. */
+export function validateOndcTrackResponse(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-track-response'), value);
+}
+
+/** ONDC `cancel` request message — order_id + network cancellation reason. */
+export function validateOndcCancelRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-cancel-request'), value);
+}
+
+/** ONDC `update` request message — update_target + partial order. */
+export function validateOndcUpdateRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-update-request'), value);
+}
+
 /** Type guard: validates and narrows to {@link AAProfile}. */
 export function isAAProfile(value: unknown): value is AAProfile {
   return validateAAProfile(value).valid;
