@@ -4,3 +4,4 @@ coverage/
 package-lock.json
 *.tsbuildinfo
 playground/panini-web.js
+packages/browser/src/data.gen.ts

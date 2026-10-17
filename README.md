@@ -82,19 +82,19 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 
 Panini is architected so that **sensitive financial data never has to leave your boundary** — and that isn't a privacy policy promise, it's a code property:
 
-- **Zero network calls, anywhere in the stack.** No `fetch`/`axios`/socket in any library code path — the FIU client's transport is *injected by you*, so every outbound call is one you wrote. A `grep -r "fetch\|http" packages/*/src` is an audit a security team can run in a minute.
+- **Zero network calls, anywhere in the stack.** No `fetch`/`axios`/socket in any library code path — the FIU client's transport is _injected by you_, so every outbound call is one you wrote. A `grep -r "fetch\|http" packages/*/src` is an audit a security team can run in a minute.
 - **Zero runtime dependencies → near-zero supply-chain surface.** No third-party code executes on your data. Every line that touches a bank statement is in this repo, in the open.
 - **In-memory only.** No writes to disk, no caching, no logging of payloads — statement bytes live and die inside your process. The browser bundle literally cannot persist or transmit anything.
-- **Deterministic + auditable.** Same input → same output, always. Every extracted field and every credit-relevant claim carries a rule ID and evidence indices — an auditor can replay *how* a conclusion was reached, not just what it was.
+- **Deterministic + auditable.** Same input → same output, always. Every extracted field and every credit-relevant claim carries a rule ID and evidence indices — an auditor can replay _how_ a conclusion was reached, not just what it was.
 - **Secrets stay out.** The AA directory ships endpoints, never credentials. The sandbox-certification runbook reads everything from environment variables; there is nothing to leak.
 
 ### Why this matters under DPDP 2023
 
-India's Digital Personal Data Protection Act makes the *processor* question expensive: any vendor that touches a bank statement on your behalf sits inside your compliance perimeter — data-processing agreements, purpose-limitation audits, breach-notification chains, cross-border transfer reviews. **A library you run yourself is not a processor.** Panini keeps the entire statement→insight pipeline inside your own infrastructure, so the vendor-data-processing surface simply doesn't exist. For FIUs — entities already carrying fiduciary-grade obligations over AA data — this is not a nice-to-have: it's the difference between "we vetted our vendor" and "there is no vendor."
+India's Digital Personal Data Protection Act makes the _processor_ question expensive: any vendor that touches a bank statement on your behalf sits inside your compliance perimeter — data-processing agreements, purpose-limitation audits, breach-notification chains, cross-border transfer reviews. **A library you run yourself is not a processor.** Panini keeps the entire statement→insight pipeline inside your own infrastructure, so the vendor-data-processing surface simply doesn't exist. For FIUs — entities already carrying fiduciary-grade obligations over AA data — this is not a nice-to-have: it's the difference between "we vetted our vendor" and "there is no vendor."
 
 ### What FIUs get beyond the price
 
-- **Full customization ownership.** Grammar rules, dictionaries, AA directory entries, schema validators — all editable JSON/TS in your fork. When a bank changes a narration format, *you* fix it in 20 minutes instead of filing a vendor ticket and waiting a sprint.
+- **Full customization ownership.** Grammar rules, dictionaries, AA directory entries, schema validators — all editable JSON/TS in your fork. When a bank changes a narration format, _you_ fix it in 20 minutes instead of filing a vendor ticket and waiting a sprint.
 - **Contribution flywheel.** Grammars and layouts you contribute back are maintained by the community forever — a bug fixed by one FIU benefits every FIU. This is how public infrastructure gets better: shared maintenance instead of per-vendor SLAs.
 - **No renegotiation cliff.** Per-call pricing punishes growth; a library's cost curve is flat at any volume. Scale your consent volume 10× — your parsing cost stays ₹0.
 
