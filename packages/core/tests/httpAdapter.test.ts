@@ -10,11 +10,7 @@
 
 import { createPaniniHttpHandler } from '../src/adapters/httpAdapter';
 import type { HttpLikeRequest, HttpLikeResponse } from '../src/adapters/httpAdapter';
-import {
-  EnterpriseProxy,
-  InMemoryBillingMeter,
-  TokenBucketRateLimiter,
-} from '../src/enterpriseProxy';
+import { OpsProxy, InMemoryBillingMeter, TokenBucketRateLimiter } from '../src/opsProxy';
 import { Normalizer } from '../src/normalizer';
 import type { GrammarRuleSet } from '../src/grammar';
 
@@ -83,7 +79,7 @@ function makeRes(): MockRes {
 
 function makeHandler() {
   const billingMeter = new InMemoryBillingMeter();
-  const proxy = new EnterpriseProxy({
+  const proxy = new OpsProxy({
     normalizer: new Normalizer({ ruleSets }),
     billingMeter,
     rateLimiter: new TokenBucketRateLimiter({ capacity: 3, refillPerSecond: 1 }),
@@ -178,7 +174,7 @@ describe('createPaniniHttpHandler', () => {
   });
 
   it('returns 413 for oversized bodies', async () => {
-    const proxy = new EnterpriseProxy({ normalizer: new Normalizer({ ruleSets }) });
+    const proxy = new OpsProxy({ normalizer: new Normalizer({ ruleSets }) });
     const handler = createPaniniHttpHandler({ proxy, maxBodyBytes: 16 });
     const req = makeReq({ chunks: [Buffer.from('UPI-SWIGGY-826384-and-more')] });
     const res = makeRes();

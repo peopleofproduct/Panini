@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `@panini/core` — deterministic tokenizer, Indian date/amount parsers,
   grammar compiler, and `Normalizer` with a configurable display-casing hook;
-  `EnterpriseProxy` ops layer (in-memory rate limiter, usage metering,
+  `OpsProxy` ops layer (in-memory rate limiter, usage metering,
   opt-in PII-free telemetry) and a framework-neutral HTTP adapter.
 - `@panini/rules-engine` — JSON grammar sets for SBI, HDFC, ICICI, and
   generic cross-bank patterns; `BANK_NARRATION_RULE_SET` covering pipeline
