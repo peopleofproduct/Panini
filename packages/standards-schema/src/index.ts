@@ -29,8 +29,13 @@ export type {
   OCENMetadata,
 } from './types';
 export {
+  isAAConsentArtefact,
+  isAAConsentRequest,
   isAAProfile,
   isOCENLoanApplication,
+  validateAAConsentArtefact,
+  validateAAConsentRequest,
   validateAAProfile,
+  validateFiData,
   validateOCENLoanApplication,
 } from './types';

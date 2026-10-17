@@ -47,7 +47,7 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                         |
 | `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                            |
-| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                                                                                |
+| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA payloads — full FI-type matrix (deposit, term/RD, investments, insurance, NPS) + consent request/artefact schemas — and OCEN 4.0 loan applications.                                            |
 | `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (15 banks + generic), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams. |
 | `@paniniapi/insights`         | Deterministic credit-relevant analytics — income/salary detection, recurring obligations, EMI, FOIR, cash-flow summaries, and bounce/round-trip/self-transfer risk signals. Explainable: every claim carries a rule ID + evidence indices.           |
 | `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads **and bank-layout statement files** — feeds the extraction round-trip corpus gate.                                                                                              |
@@ -164,9 +164,17 @@ const report = analyzeTransactions(statement.transactions);
 ### Validate DPI payloads
 
 ```ts
-import { validateAAProfile, isOCENLoanApplication } from '@paniniapi/standards-schema';
+import {
+  validateAAProfile,
+  validateFiData,
+  validateAAConsentRequest,
+  validateAAConsentArtefact,
+  isOCENLoanApplication,
+} from '@paniniapi/standards-schema';
 
 const result = validateAAProfile(payload); // { valid, errors[] } — zero deps
+validateFiData('MUTUAL_FUNDS', mfPayload); // FI-type-aware validation
+validateAAConsentRequest(consentBody);    // ReBIT ConsentDetail envelope
 ```
 
 ### Generate sandbox traffic

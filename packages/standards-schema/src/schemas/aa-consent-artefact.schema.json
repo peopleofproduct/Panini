@@ -1,0 +1,162 @@
+{
+  "$id": "https://panini.dev/schemas/aa-consent-artefact.schema.json",
+  "description": "ReBIT AA consent artefact — the signed consent object returned after customer approval (GET /Consent/{handle} / artefact exchange). Includes ConsentUse telemetry.",
+  "type": "object",
+  "required": [
+    "ver",
+    "txnid",
+    "timestamp",
+    "consentId",
+    "status",
+    "createTimestamp",
+    "signedConsent",
+    "ConsentUse",
+    "ConsentDetail"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "ver": { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
+    "txnid": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "consentId": { "type": "string", "minLength": 6, "maxLength": 80 },
+    "status": {
+      "type": "string",
+      "enum": ["ACTIVE", "PAUSED", "REVOKED", "EXPIRED", "PENDING"]
+    },
+    "createTimestamp": { "type": "string", "format": "date-time" },
+    "signedConsent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Detached JWS signature over the ConsentDetail — opaque to validators."
+    },
+    "ConsentUse": {
+      "type": "object",
+      "required": ["count", "lastUseDateTime"],
+      "additionalProperties": true,
+      "properties": {
+        "count": { "type": "integer", "minimum": 0 },
+        "lastUseDateTime": { "type": "string", "format": "date-time" },
+        "logUri": { "type": "string" }
+      }
+    },
+    "ConsentDetail": {
+      "type": "object",
+      "required": [
+        "consentStart",
+        "consentExpiry",
+        "consentMode",
+        "fetchType",
+        "consentTypes",
+        "fiTypes",
+        "DataConsumer",
+        "Customer",
+        "Purpose",
+        "FIDataRange",
+        "DataLife",
+        "Frequency"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "consentStart": { "type": "string", "format": "date-time" },
+        "consentExpiry": { "type": "string", "format": "date-time" },
+        "consentMode": { "type": "string", "enum": ["VIEW", "STORE", "QUERY", "STREAM"] },
+        "fetchType": { "type": "string", "enum": ["ONETIME", "PERIODIC"] },
+        "consentTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["PROFILE", "SUMMARY", "TRANSACTIONS"] }
+        },
+        "fiTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "DEPOSIT",
+              "TERM-DEPOSIT",
+              "RECURRING_DEPOSIT",
+              "SIP",
+              "CP",
+              "GOVT_SECURITIES",
+              "EQUITIES",
+              "BONDS",
+              "DEBENTURES",
+              "MUTUAL_FUNDS",
+              "ETF",
+              "IDR",
+              "CIS",
+              "AIF",
+              "INSURANCE_POLICIES",
+              "NPS",
+              "INVIT",
+              "REIT",
+              "OTHER"
+            ]
+          }
+        },
+        "DataConsumer": {
+          "type": "object",
+          "required": ["id"],
+          "additionalProperties": true,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "type": "string", "enum": ["FIU", "FIU_REQUESTER"] }
+          }
+        },
+        "DataProvider": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "type": "string", "enum": ["FIP", "AA"] }
+          }
+        },
+        "Customer": {
+          "type": "object",
+          "required": ["id"],
+          "additionalProperties": true,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 }
+          }
+        },
+        "Purpose": {
+          "type": "object",
+          "required": ["code"],
+          "additionalProperties": true,
+          "properties": {
+            "code": { "type": "string", "pattern": "^\\d{3}$" },
+            "refUri": { "type": "string" },
+            "text": { "type": "string" }
+          }
+        },
+        "FIDataRange": {
+          "type": "object",
+          "required": ["from", "to"],
+          "additionalProperties": true,
+          "properties": {
+            "from": { "type": "string", "format": "date-time" },
+            "to": { "type": "string", "format": "date-time" }
+          }
+        },
+        "DataLife": {
+          "type": "object",
+          "required": ["unit", "value"],
+          "additionalProperties": true,
+          "properties": {
+            "unit": { "type": "string", "enum": ["MONTH", "YEAR", "DAY", "INF"] },
+            "value": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "Frequency": {
+          "type": "object",
+          "required": ["unit", "value"],
+          "additionalProperties": true,
+          "properties": {
+            "unit": { "type": "string", "enum": ["HOUR", "DAY", "MONTH", "YEAR", "INF"] },
+            "value": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

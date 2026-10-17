@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `@paniniapi/standards-schema` — full ReBIT FI-type matrix:
+  `validateFiData(fiType, payload)` dispatches to per-shape schemas —
+  deposit summary (TERM-/RECURRING_DEPOSIT), holdings matrix
+  (EQUITIES/MF/ETF/BONDS/SIP/AIF/REIT/…), insurance policies, and NPS
+  (PRAN-validated); plus the consent lifecycle:
+  `validateAAConsentRequest` (ConsentDetail envelope) and
+  `validateAAConsentArtefact` (signed artefact + ConsentUse).
 - `@paniniapi/extract` — statement extraction for Indian banking documents.
   Data-driven CSV/Excel layouts for 15 banks (HDFC, ICICI, SBI, Axis, Kotak,
   PNB, BOB, YES, IndusInd, Union, IDFC FIRST, Canara, Federal, RBL, AU SFB)
