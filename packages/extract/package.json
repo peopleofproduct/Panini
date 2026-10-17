@@ -1,7 +1,7 @@
 {
   "name": "@paniniapi/extract",
-  "version": "0.2.1",
-  "description": "Statement extraction for Indian banking documents — CSV/Excel layouts, PDF text-layer, bank SMS, and pluggable OCR/spreadsheet seams. Zero runtime dependencies.",
+  "version": "0.2.2",
+  "description": "Statement extraction for Indian banking documents \u2014 CSV/Excel layouts, PDF text-layer, bank SMS, and pluggable OCR/spreadsheet seams. Zero runtime dependencies.",
   "license": "Apache-2.0",
   "author": "Kapil",
   "main": "dist/index.js",
@@ -11,10 +11,10 @@
     "formats"
   ],
   "dependencies": {
-    "@paniniapi/core": "0.1.1"
+    "@paniniapi/core": "0.1.2"
   },
   "devDependencies": {
-    "@paniniapi/simulator": "0.2.0"
+    "@paniniapi/simulator": "0.2.1"
   },
   "scripts": {
     "build": "tsc -b",

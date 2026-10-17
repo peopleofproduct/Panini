@@ -166,10 +166,13 @@ export function lookupMerchant(counterparty: string | null | undefined): Merchan
   return best;
 }
 
-/** Resolves a VPA handle ('okaxis') to its app/bank, or null. */
+/** Resolves a VPA handle ('okaxis', '@okaxis', 'user@okaxis') to its app/bank, or null. */
 export function lookupVpaHandle(handle: string | null | undefined): VpaHandleInfo | null {
   if (!handle) return null;
-  return loadVpaHandles()[handle.toLowerCase()] ?? null;
+  // Accept the '@handle' and 'user@handle' spellings callers naturally pass;
+  // resolution is on the suffix alone.
+  const suffix = handle.toLowerCase().split('@').pop() ?? '';
+  return loadVpaHandles()[suffix] ?? null;
 }
 
 const IFSC_RE = /([A-Z]{4})0[A-Z0-9]{6}/;

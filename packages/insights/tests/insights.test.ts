@@ -379,3 +379,74 @@ describe('trend analytics', () => {
     expect(r.trends.debitVolatilityPct).toBe(0);
   });
 });
+
+describe('audit-fix regressions', () => {
+  it('closing balance follows the latest date, not input order', () => {
+    const r = analyzeTransactions([
+      txn({ date: '2026-03-01', direction: 'DEBIT', amountPaise: 10, balancePaise: 500 }),
+      txn({ date: '2026-01-01', direction: 'DEBIT', amountPaise: 10, balancePaise: 99_999 }),
+    ]);
+    expect(r.cashflow.closingBalancePaise).toBe(500);
+  });
+
+  it('keeps the last undated balance when no row has a parseable date', () => {
+    const r = analyzeTransactions([
+      txn({ date: null, direction: 'DEBIT', amountPaise: 10, balancePaise: 700 }),
+      txn({ date: null, direction: 'DEBIT', amountPaise: 10, balancePaise: 300 }),
+    ]);
+    expect(r.cashflow.closingBalancePaise).toBe(300);
+  });
+
+  it('non-finite balances never poison min/max/closing', () => {
+    const r = analyzeTransactions([
+      txn({ direction: 'DEBIT', amountPaise: 10, balancePaise: 100 }),
+      txn({ direction: 'DEBIT', amountPaise: 10, balancePaise: Number.NaN }),
+    ]);
+    expect(r.cashflow.minBalancePaise).toBe(100);
+    expect(r.cashflow.maxBalancePaise).toBe(100);
+    expect(r.cashflow.closingBalancePaise).toBe(100);
+  });
+
+  it('parses ISO datetime dates instead of fabricating velocity', () => {
+    const r = analyzeTransactions([
+      {
+        date: '2024-01-01T09:00:00Z',
+        direction: 'DEBIT',
+        amountPaise: 100,
+        balancePaise: 100_000,
+      },
+      {
+        date: '2024-01-11T09:00:00Z',
+        direction: 'DEBIT',
+        amountPaise: 100,
+        balancePaise: 95_000,
+      },
+    ]);
+    expect(r.trends.balanceVelocityPaisePerDay).toBe(-500);
+  });
+
+  it('velocity is order-independent: reversed input matches sorted input', () => {
+    const sorted = [
+      txn({ date: '2024-01-01', direction: 'DEBIT', amountPaise: 1, balancePaise: 90_000 }),
+      txn({ date: '2024-01-11', direction: 'DEBIT', amountPaise: 1, balancePaise: 85_000 }),
+      txn({ date: '2024-01-21', direction: 'DEBIT', amountPaise: 1, balancePaise: 80_000 }),
+    ];
+    expect(analyzeTransactions([...sorted].reverse()).trends.balanceVelocityPaisePerDay).toBe(
+      analyzeTransactions(sorted).trends.balanceVelocityPaisePerDay,
+    );
+  });
+
+  it('counts same-month multiple payments as one obligation at full monthly value', () => {
+    const r = analyzeTransactions([
+      txn({ date: '2026-01-05', direction: 'DEBIT', amountPaise: 5_000_00, counterparty: 'XFIN' }),
+      txn({ date: '2026-01-20', direction: 'DEBIT', amountPaise: 5_000_00, counterparty: 'XFIN' }),
+      txn({ date: '2026-02-05', direction: 'DEBIT', amountPaise: 5_000_00, counterparty: 'XFIN' }),
+      txn({ date: '2026-02-20', direction: 'DEBIT', amountPaise: 5_000_00, counterparty: 'XFIN' }),
+      txn({ date: '2026-03-05', direction: 'DEBIT', amountPaise: 5_000_00, counterparty: 'XFIN' }),
+      txn({ date: '2026-03-20', direction: 'DEBIT', amountPaise: 5_000_00, counterparty: 'XFIN' }),
+    ]);
+    expect(r.obligations.recurring).toHaveLength(1);
+    expect(r.obligations.recurring[0]!.typicalAmountPaise).toBe(10_000_00);
+    expect(r.obligations.monthlyObligationPaise).toBe(10_000_00);
+  });
+});

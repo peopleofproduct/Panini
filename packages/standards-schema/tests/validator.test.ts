@@ -94,4 +94,50 @@ describe('validate', () => {
     expect(validate(schema, '1234').valid).toBe(true);
     expect(validate(schema, '12').valid).toBe(false);
   });
+
+  it('rejects impossible calendar dates (leap-year aware)', () => {
+    const schema: SchemaNode = { type: 'string', format: 'date' };
+    expect(validate(schema, '2024-02-29').valid).toBe(true);
+    expect(validate(schema, '2023-02-29').valid).toBe(false);
+    expect(validate(schema, '2024-13-45').valid).toBe(false);
+    expect(validate(schema, '2024-00-10').valid).toBe(false);
+    expect(validate(schema, '2024-04-31').valid).toBe(false);
+  });
+
+  it('rejects date-times with impossible date components', () => {
+    const schema: SchemaNode = { type: 'string', format: 'date-time' };
+    expect(validate(schema, '2024-01-15T10:00:00Z').valid).toBe(true);
+    expect(validate(schema, '2024-13-15T10:00:00Z').valid).toBe(false);
+  });
+
+  it('prototype-chain properties do not satisfy required', () => {
+    const schema: SchemaNode = { type: 'object', required: ['toString'] };
+    expect(validate(schema, {}).valid).toBe(false);
+  });
+
+  it('prototype-chain properties are additional, not known', () => {
+    const schema: SchemaNode = {
+      type: 'object',
+      properties: { a: { type: 'integer' } },
+      additionalProperties: false,
+    };
+    expect(validate(schema, { a: 1 }).valid).toBe(true);
+    expect(validate(schema, { a: 1, toString: 1 }).valid).toBe(false);
+  });
+
+  it('additionalProperties=false with no properties rejects every property', () => {
+    const schema: SchemaNode = { type: 'object', additionalProperties: false };
+    expect(validate(schema, { x: 1 }).valid).toBe(false);
+    expect(validate(schema, {}).valid).toBe(true);
+  });
+
+  it('caps nesting depth with a clear error instead of a stack overflow', () => {
+    let value: unknown = { leaf: true };
+    let schema: SchemaNode = { type: 'object', properties: { leaf: { type: 'boolean' } } };
+    for (let i = 0; i < 100; i++) {
+      value = { a: value };
+      schema = { type: 'object', properties: { a: schema } };
+    }
+    expect(() => validate(schema, value)).toThrow(/nesting levels/);
+  });
 });

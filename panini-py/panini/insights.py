@@ -180,13 +180,19 @@ def _detect_obligations(usable: list, min_occurrences: int) -> tuple:
     recurring: list = []
     evidence: list = []
     for key, lst in by_key.items():
-        months = {month_key(w["txn"].get("date")) for w in lst}
-        months.discard(None)
-        if len(months) < min_occurrences:
+        # Sum per calendar month first: a counterparty paid twice in one
+        # month is a 2x monthly obligation, not two half-obligations.
+        per_month: dict = {}
+        for w in lst:
+            mk = month_key(w["txn"].get("date"))
+            if mk is None:
+                continue
+            per_month[mk] = per_month.get(mk, 0) + w["txn"]["amountPaise"]
+        if len(per_month) < min_occurrences:
             continue
-        amounts = [w["txn"]["amountPaise"] for w in lst]
-        typical = median(amounts)
-        if not all(_within_tol(a, typical, 0.1) for a in amounts):
+        month_sums = list(per_month.values())
+        typical = median(month_sums)
+        if not all(_within_tol(s, typical, 0.1) for s in month_sums):
             continue
         is_emi = any(
             EMI_KEYWORD_RE.search(w["txn"].get("narration") or "")
@@ -198,7 +204,7 @@ def _detect_obligations(usable: list, min_occurrences: int) -> tuple:
             "counterparty": key,
             "occurrences": [w["index"] for w in lst],
             "typicalAmountPaise": _js_round(typical),
-            "monthsHit": sorted(m for m in months if m is not None),
+            "monthsHit": sorted(per_month.keys()),
             "isEmi": is_emi,
         })
 
@@ -241,6 +247,7 @@ def _compute_foir(income: dict, obligations: dict) -> dict:
 def _summarize_cashflow(usable: list) -> dict:
     credits = debits = 0
     min_bal = max_bal = closing = None
+    closing_day = None
     months = set()
     for w in usable:
         t = w["txn"]
@@ -252,10 +259,18 @@ def _summarize_cashflow(usable: list) -> dict:
         if mk is not None:
             months.add(mk)
         bal = t.get("balancePaise")
-        if bal is not None:
+        if bal is not None and isinstance(bal, (int, float)) and math.isfinite(bal):
             min_bal = bal if min_bal is None else min(min_bal, bal)
             max_bal = bal if max_bal is None else max(max_bal, bal)
-            closing = bal
+            # Closing = balance of the latest dated row (input order breaks
+            # same-day ties); undated rows fall back to last-seen.
+            day = epoch_day(t.get("date"))
+            if day is not None:
+                if closing_day is None or day >= closing_day:
+                    closing = bal
+                    closing_day = day
+            elif closing_day is None:
+                closing = bal
     return {
         "totalCreditsPaise": credits,
         "totalDebitsPaise": debits,
@@ -291,14 +306,25 @@ def _compute_trends(usable: list) -> dict:
         band = max(abs(f), 1) * 0.1
         direction = "improving" if s - f > band else ("declining" if f - s > band else "stable")
 
-    dated = [w for w in usable
-             if w["txn"].get("date") is not None and w["txn"].get("balancePaise") is not None]
+    # Median per-day balance change across consecutive dated balances,
+    # sorted by date so input order cannot fabricate velocity sign/magnitude.
+    dated = []
+    for w in usable:
+        t = w["txn"]
+        day = epoch_day(t.get("date"))
+        bal = t.get("balancePaise")
+        if day is None or bal is None:
+            continue
+        if not isinstance(bal, (int, float)) or not math.isfinite(bal):
+            continue
+        dated.append((day, bal))
+    dated.sort(key=lambda e: e[0])
     velocities = []
     for i in range(1, len(dated)):
-        d2, d1 = epoch_day(dated[i]["txn"]["date"]), epoch_day(dated[i - 1]["txn"]["date"])
+        d2, d1 = dated[i][0], dated[i - 1][0]
         if d2 == d1:
             continue
-        velocities.append((dated[i]["txn"]["balancePaise"] - dated[i - 1]["txn"]["balancePaise"]) / (d2 - d1))
+        velocities.append((dated[i][1] - dated[i - 1][1]) / (d2 - d1))
 
     def volatility(key: str) -> Optional[float]:
         if len(monthly) < 2:

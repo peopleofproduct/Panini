@@ -59,7 +59,10 @@ function monthKey(date: string | null): string | null {
 
 function epochDay(date: string | null): number | null {
   if (date === null) return null;
-  const ms = Date.parse(`${date}T00:00:00Z`);
+  // Accept ISO date-time inputs ('2024-01-15T10:30:00Z', the AA
+  // transactionTimestamp shape) by reducing to their date component.
+  const day = /^\d{4}-\d{2}-\d{2}/.test(date) ? date.slice(0, 10) : date;
+  const ms = Date.parse(`${day}T00:00:00Z`);
   return Number.isNaN(ms) ? null : ms / DAY_MS;
 }
 
@@ -231,11 +234,18 @@ function detectObligations(
   const recurring: RecurringObligation[] = [];
   const evidence: Evidence[] = [];
   for (const [key, list] of byKey) {
-    const months = new Set(list.map((w) => monthKey(w.txn.date)).filter(Boolean));
-    if (months.size < minOccurrences) continue;
-    const amounts = list.map((w) => w.txn.amountPaise!);
-    const typical = median(amounts);
-    if (!amounts.every((a) => withinTolerance(a, typical, 0.1))) continue;
+    // Sum per calendar month first: a counterparty paid twice in one month
+    // is a 2× monthly obligation, not two half-obligations.
+    const perMonth = new Map<string, number>();
+    for (const w of list) {
+      const mk = monthKey(w.txn.date);
+      if (mk === null) continue;
+      perMonth.set(mk, (perMonth.get(mk) ?? 0) + w.txn.amountPaise!);
+    }
+    if (perMonth.size < minOccurrences) continue;
+    const monthSums = [...perMonth.values()];
+    const typical = median(monthSums);
+    if (!monthSums.every((s) => withinTolerance(s, typical, 0.1))) continue;
     const isEmi = list.some(
       (w) =>
         EMI_KEYWORD_RE.test(w.txn.narration ?? '') ||
@@ -246,7 +256,7 @@ function detectObligations(
       counterparty: key,
       occurrences: list.map((w) => w.index),
       typicalAmountPaise: Math.round(typical),
-      monthsHit: [...months].filter((m): m is string => m !== null).sort(),
+      monthsHit: [...perMonth.keys()].sort(),
       isEmi,
     });
   }
@@ -306,6 +316,7 @@ function summarizeCashflow(txns: readonly WorkTxn[]): CashflowSummary {
   let minBal: number | null = null;
   let maxBal: number | null = null;
   let closing: number | null = null;
+  let closingDay: number | null = null;
   const months = new Set<string>();
   for (const w of txns) {
     const t = w.txn;
@@ -313,10 +324,25 @@ function summarizeCashflow(txns: readonly WorkTxn[]): CashflowSummary {
     if (t.direction === 'DEBIT' && t.amountPaise !== null) totalDebits += t.amountPaise;
     const mk = monthKey(t.date);
     if (mk !== null) months.add(mk);
-    if (t.balancePaise !== null && t.balancePaise !== undefined) {
+    if (
+      t.balancePaise !== null &&
+      t.balancePaise !== undefined &&
+      Number.isFinite(t.balancePaise)
+    ) {
       minBal = minBal === null ? t.balancePaise : Math.min(minBal, t.balancePaise);
       maxBal = maxBal === null ? t.balancePaise : Math.max(maxBal, t.balancePaise);
-      closing = t.balancePaise;
+      // Closing = balance of the latest dated row (input order breaks
+      // same-day ties); rows without a parseable date fall back to
+      // last-seen so undated statements still report a closing figure.
+      const day = epochDay(t.date);
+      if (day !== null) {
+        if (closingDay === null || day >= closingDay) {
+          closing = t.balancePaise;
+          closingDay = day;
+        }
+      } else if (closingDay === null) {
+        closing = t.balancePaise;
+      }
     }
   }
   return {
@@ -362,16 +388,23 @@ function computeTrends(txns: readonly WorkTxn[]): TrendSummary {
     netFlowDirection = s - f > band ? 'improving' : f - s > band ? 'declining' : 'stable';
   }
 
-  // Median per-day balance change across consecutive dated balances.
-  const dated = txns.filter(
-    (w): w is WorkTxn & { txn: InsightTransaction & { date: string; balancePaise: number } } =>
-      w.txn.date !== null && w.txn.balancePaise !== null && w.txn.balancePaise !== undefined,
-  );
+  // Median per-day balance change across consecutive dated balances,
+  // sorted by date so input order cannot fabricate velocity sign/magnitude.
+  const dated: { day: number; balancePaise: number }[] = [];
+  for (const w of txns) {
+    const t = w.txn;
+    const day = epochDay(t.date);
+    if (day === null) continue;
+    if (t.balancePaise === null || t.balancePaise === undefined) continue;
+    if (!Number.isFinite(t.balancePaise)) continue;
+    dated.push({ day, balancePaise: t.balancePaise });
+  }
+  dated.sort((a, b) => a.day - b.day);
   const velocities: number[] = [];
   for (let i = 1; i < dated.length; i++) {
-    const dayDiff = epochDay(dated[i]!.txn.date)! - epochDay(dated[i - 1]!.txn.date)!;
+    const dayDiff = dated[i]!.day - dated[i - 1]!.day;
     if (dayDiff === 0) continue;
-    velocities.push((dated[i]!.txn.balancePaise - dated[i - 1]!.txn.balancePaise) / dayDiff);
+    velocities.push((dated[i]!.balancePaise - dated[i - 1]!.balancePaise) / dayDiff);
   }
 
   const volatility = (key: 'creditsPaise' | 'debitsPaise'): number | null => {

@@ -20,17 +20,23 @@ export interface DecodedJws {
   readonly signingInput: string;
 }
 
+const MAX_JWS_LEN = 1_000_000; // consent artefacts are a few KB — 1 MB is adversarial
+
 function b64urlDecode(seg: string, what: string): Buffer {
-  try {
-    return Buffer.from(seg, 'base64url');
-  } catch {
+  // Strict RFC 4648 §5 (unpadded) alphabet — Buffer.from would otherwise
+  // silently drop invalid characters.
+  if (!/^[A-Za-z0-9_-]*$/.test(seg)) {
     throw new FiuError('JWS', `invalid base64url in ${what}`);
   }
+  return Buffer.from(seg, 'base64url');
 }
 
 /** Decode a compact JWS — never throws on signature validity (that is
  *  {@link verifyJws}'s job), only on malformed structure. */
 export function decodeJws(compact: string): DecodedJws {
+  if (compact.length > MAX_JWS_LEN) {
+    throw new FiuError('JWS', `JWS exceeds ${MAX_JWS_LEN} characters`);
+  }
   const parts = compact.split('.');
   if (parts.length !== 3 || parts.some((p) => p.length === 0)) {
     throw new FiuError('JWS', `malformed JWS — expected 3 segments, got ${parts.length}`);
@@ -63,10 +69,15 @@ export function verifyJws(compact: string, key: string | crypto.JsonWebKey): boo
     throw new FiuError('JWS', `refusing to verify JWS with alg=${String(alg)}`);
   }
 
-  const keyObject =
-    typeof key === 'string'
-      ? crypto.createPublicKey(key)
-      : crypto.createPublicKey({ key, format: 'jwk' });
+  let keyObject: crypto.KeyObject;
+  try {
+    keyObject =
+      typeof key === 'string'
+        ? crypto.createPublicKey(key)
+        : crypto.createPublicKey({ key, format: 'jwk' });
+  } catch (e) {
+    throw new FiuError('JWS', 'verification key could not be parsed — invalid PEM/JWK', e);
+  }
 
   if (alg.startsWith('RS') || alg.startsWith('PS')) {
     const hash = `RSA-SHA${alg.slice(2)}`;

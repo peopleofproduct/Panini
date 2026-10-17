@@ -95,7 +95,10 @@ function asFiuError(aaId: string, err: unknown): FiuError {
 export function createMultiFiuClient(config: MultiFiuConfig): MultiFiuClient {
   const directory = config.directory ?? AA_DIRECTORY;
   const clock = config.clock ?? (() => performance.now());
-  const maxConcurrency = Math.max(1, config.maxConcurrency ?? 4);
+  // NaN/Infinity would silently produce an empty worker pool — fall back
+  // to the default instead.
+  const rawConcurrency = config.maxConcurrency ?? 4;
+  const maxConcurrency = Math.max(1, Number.isFinite(rawConcurrency) ? rawConcurrency : 4);
   const clients = new Map<string, FiuClient>();
 
   function clientFor(aaId: string): FiuClient {

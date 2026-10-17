@@ -48,5 +48,10 @@ export function sniffFormat(input: string | Uint8Array): StatementFormat {
   if (lines.length >= 2 && hasDelimiters) return 'csv';
   if (/\b(debited|credited|avl\s*bal|a\/c|spent)\b/i.test(text)) return 'sms';
   if (hasDelimiters) return 'csv';
+  // Weak CSV shape: multiple lines, at least two of which carry a
+  // delimiter — covers two-column exports (a single comma per line)
+  // that the ≥2-delimiter heuristic above would misroute to SMS.
+  const delimLines = lines.filter((l) => /[,;\t|]/.test(l)).length;
+  if (lines.length >= 2 && delimLines >= 2) return 'csv';
   return 'sms';
 }

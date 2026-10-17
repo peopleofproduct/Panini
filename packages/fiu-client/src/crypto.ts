@@ -21,20 +21,23 @@ const GCM_IV_OFFSET = 20;
 const GCM_IV_LEN = 12;
 const GCM_TAG_LEN = 16;
 const SESSION_KEY_LEN = 32;
+const NONCE_LEN = HKDF_SALT_LEN + GCM_IV_LEN; // 32 bytes, per Rahasya
 
 export function xorNonces(fiuNonceB64: string, fipNonceB64: string): Buffer {
   const a = decodeB64(fiuNonceB64, 'FIU nonce');
   const b = decodeB64(fipNonceB64, 'FIP nonce');
-  const len = Math.max(a.length, b.length);
-  const out = Buffer.alloc(len);
-  for (let i = 0; i < len; i++) {
-    out[i] = (a[i % a.length] ?? 0) ^ (b[i % b.length] ?? 0);
-  }
-  if (out.length < GCM_IV_OFFSET + GCM_IV_LEN) {
+  // Both sides must carry the spec-mandated 32-byte nonce; wrapping a
+  // short nonce (the old modulo behaviour) would derive a spec-noncompliant
+  // session key instead of rejecting malformed peer material.
+  if (a.length !== NONCE_LEN || b.length !== NONCE_LEN) {
     throw new FiuError(
       'CRYPTO',
-      `xored nonce too short for GCM IV derivation (${out.length} bytes)`,
+      `nonce length mismatch — expected ${NONCE_LEN} bytes each, got FIU=${a.length}, FIP=${b.length}`,
     );
+  }
+  const out = Buffer.alloc(NONCE_LEN);
+  for (let i = 0; i < NONCE_LEN; i++) {
+    out[i] = (a[i] ?? 0) ^ (b[i] ?? 0);
   }
   return out;
 }
@@ -74,8 +77,14 @@ export function decryptFi(
   fiuNonceB64: string,
 ): Buffer {
   validateKeyMaterial(fipKeyMaterial);
-  if (new Date(fipKeyMaterial.DHPublicKey.expiry).getTime() <= Date.now()) {
-    throw new FiuError('CRYPTO', `FIP public key expired at ${fipKeyMaterial.DHPublicKey.expiry}`);
+  const expiryMs = new Date(fipKeyMaterial.DHPublicKey.expiry).getTime();
+  // NaN (unparseable expiry) previously slipped through the comparison —
+  // treat it as invalid rather than unexpired.
+  if (!Number.isFinite(expiryMs) || expiryMs <= Date.now()) {
+    throw new FiuError(
+      'CRYPTO',
+      `FIP public key has invalid or expired expiry '${fipKeyMaterial.DHPublicKey.expiry}'`,
+    );
   }
   const sharedSecret = deriveSharedSecret(fiuPrivateKeyB64, fipKeyMaterial.DHPublicKey.KeyValue);
   const xored = xorNonces(fiuNonceB64, fipKeyMaterial.Nonce);

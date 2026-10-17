@@ -134,8 +134,21 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
       }
       throw new FiuError('HTTP', `${method} ${path} → HTTP ${res.status}`, detail);
     }
-    return (await res.json()) as T;
+    let parsed: unknown;
+    try {
+      parsed = await res.json();
+    } catch (e) {
+      throw new FiuError(
+        'SCHEMA',
+        `${method} ${path} returned a non-JSON body (HTTP ${res.status})`,
+        e,
+      );
+    }
+    return parsed as T;
   }
+
+  const fetchFi = (sessionId: string): Promise<FiFetchResponse> =>
+    call('GET', `/FI/fetch/${encodeURIComponent(sessionId)}`);
 
   return {
     requestConsent(input) {
@@ -187,7 +200,7 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
     },
 
     fetchFi(sessionId) {
-      return call('GET', `/FI/fetch/${encodeURIComponent(sessionId)}`);
+      return fetchFi(sessionId);
     },
 
     async fetchAndDecryptFi(sessionId, validate, fiType) {
@@ -195,11 +208,22 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
       if (!km) {
         throw new FiuError(
           'STATE',
-          `no key material for session ${sessionId} — only decrypt sessions created by this client's requestFi`,
+          `no key material for session ${sessionId} — only sessions created by this client's requestFi can be decrypted, and key material is discarded after the first decrypt`,
         );
       }
-      const res = await this.fetchFi(sessionId);
+      const res = await fetchFi(sessionId);
+      if (res.sessionStatus === 'FAILED') {
+        // A FAILED session has no data to decrypt — surfacing it as an
+        // empty success would silently mask the failure.
+        sessionKeys.delete(sessionId);
+        throw new FiuError(
+          'STATE',
+          `FI session ${sessionId} FAILED at the AA — no data will follow`,
+        );
+      }
       const blocks = decryptFiResponse(res, km.privateKeyB64, km.nonceB64);
+      // Ephemeral keys live exactly as long as the matching decrypt.
+      sessionKeys.delete(sessionId);
       if (validate && fiType) {
         for (const b of blocks) {
           if (b.isJson) {
@@ -217,7 +241,7 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
       const interval = opts?.intervalMs ?? 2000;
       const maxAttempts = opts?.maxAttempts ?? 15;
       for (let i = 0; i < maxAttempts; i++) {
-        const res = await this.fetchFi(sessionId);
+        const res = await fetchFi(sessionId);
         if (res.sessionStatus === 'COMPLETED' || res.sessionStatus === 'FAILED') return res;
         if (i + 1 < maxAttempts) await new Promise((r) => setTimeout(r, interval));
       }

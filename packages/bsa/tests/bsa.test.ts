@@ -86,7 +86,8 @@ describe('formatInr — Indian digit grouping', () => {
     [123456789, '₹12,34,567.89'],
     [-100050, '-₹1,000.50'],
     [null, '—'],
-  ])('formats %i paise as %s', (paise, expected) => {
+    [Number.NaN, '—'],
+  ])('formats %p paise as %s', (paise, expected) => {
     expect(formatInr(paise)).toBe(expected);
   });
 });

@@ -159,6 +159,9 @@ export function suggestAas(
 ): readonly AaEndpoint[] {
   const norm = handleOrVua.trim().toLowerCase();
   const suffix = norm.includes('@') ? norm.slice(norm.indexOf('@') + 1) : norm;
+  // Empty/blank handles carry no signal — scoring every entry equally and
+  // returning arbitrary suggestions would be noise, not help.
+  if (suffix === '') return [];
   const scored: { entry: AaEndpoint; score: number }[] = [];
   for (const entry of directory) {
     const names = [entry.aaId, ...entry.handles];

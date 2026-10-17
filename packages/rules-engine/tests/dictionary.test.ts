@@ -65,6 +65,11 @@ describe('lookupVpaHandle', () => {
     expect(lookupVpaHandle('nohandle')).toBeNull();
     expect(lookupVpaHandle(null)).toBeNull();
   });
+
+  it('accepts @-prefixed and user@handle spellings', () => {
+    expect(lookupVpaHandle('@okaxis')?.bank).toBe('Axis Bank');
+    expect(lookupVpaHandle('user@ybl')?.app).toBe('PhonePe');
+  });
 });
 
 describe('lookupIfscBank', () => {

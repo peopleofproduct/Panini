@@ -48,7 +48,27 @@ export function loadRuleSets(dir?: string): readonly GrammarRuleSet[] {
   return readdirSync(rulesDir)
     .filter((file) => file.endsWith('.json') && file !== CATEGORIES_FILE)
     .sort()
-    .map((file) => JSON.parse(readFileSync(join(rulesDir, file), 'utf8')) as GrammarRuleSet);
+    .map((file) => {
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(readFileSync(join(rulesDir, file), 'utf8'));
+      } catch (e) {
+        throw new Error(
+          `@paniniapi/rules-engine: '${file}' in ${rulesDir} is not valid JSON: ${(e as Error).message}`,
+          { cause: e },
+        );
+      }
+      if (
+        typeof parsed !== 'object' ||
+        parsed === null ||
+        !Array.isArray((parsed as { patterns?: unknown }).patterns)
+      ) {
+        throw new Error(
+          `@paniniapi/rules-engine: '${file}' in ${rulesDir} is not a grammar rule set (missing patterns array)`,
+        );
+      }
+      return parsed as GrammarRuleSet;
+    });
 }
 
 /** Loads the grammar sets bundled with this package. */

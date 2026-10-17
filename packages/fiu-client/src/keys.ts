@@ -17,13 +17,15 @@ const X25519_PKCS8_PREFIX = Buffer.from('302e020100300506032b656e04220420', 'hex
 const X25519_KEY_LEN = 32;
 const NONCE_LEN = 32;
 
+// Strict RFC 4648 alphabet — Node's Buffer.from(_, 'base64') silently
+// drops invalid characters, so malformed input must be rejected up front.
+const B64_RE = /^[A-Za-z0-9+/]*={0,2}$/;
+
 export function decodeB64(value: string, field: string, expectedLen?: number): Buffer {
-  let buf: Buffer;
-  try {
-    buf = Buffer.from(value, 'base64');
-  } catch {
+  if (typeof value !== 'string' || !B64_RE.test(value)) {
     throw new FiuError('CRYPTO', `${field} is not valid base64`);
   }
+  const buf = Buffer.from(value, 'base64');
   if (expectedLen !== undefined && buf.length !== expectedLen) {
     throw new FiuError('CRYPTO', `${field} must decode to ${expectedLen} bytes, got ${buf.length}`);
   }

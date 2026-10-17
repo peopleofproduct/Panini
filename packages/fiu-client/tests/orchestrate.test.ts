@@ -268,4 +268,58 @@ describe('createMultiFiuClient', () => {
     expect(bad?.ok).toBe(false);
     if (bad && !bad.ok) expect(bad.error.code).toBe('HTTP');
   });
+
+  it('decryptFiAcross surfaces a FAILED session as an error outcome, not an empty success', async () => {
+    const good = makeMockAa({ sessionId: 's-ok' });
+    // The failing AA accepts /FI/request but reports the session FAILED.
+    const multi = createMultiFiuClient({
+      clients: {
+        finvu: { baseUrl: 'https://a.x', dataConsumerId: 'dc', fetch: good.fetch },
+        onemoney: {
+          baseUrl: 'https://b.x',
+          dataConsumerId: 'dc',
+          fetch: async (url) =>
+            url.endsWith('/FI/request')
+              ? { status: 200, json: async () => ({ sessionId: 's-dead' }) }
+              : {
+                  status: 200,
+                  json: async () => ({ ver: '1', txnid: 't', sessionStatus: 'FAILED' }),
+                },
+        },
+      },
+    });
+    const c = multi.clientFor('finvu');
+    const { artefact, signedConsent } = await c.fetchConsentArtefact('c-42');
+    await c.requestFi(artefact, baseInput.fiDataRange, signedConsent);
+    const dead = multi.clientFor('onemoney');
+    const { sessionId } = await dead.requestFi(
+      { ...artefact, consentId: 'c-other' },
+      baseInput.fiDataRange,
+      signedConsent,
+    );
+    expect(sessionId).toBe('s-dead');
+
+    const out = await multi.decryptFiAcross({ finvu: 's-ok', onemoney: 's-dead' });
+    expect(out.find((o) => o.aaId === 'finvu')?.ok).toBe(true);
+    const failed = out.find((o) => o.aaId === 'onemoney');
+    expect(failed?.ok).toBe(false);
+    if (failed && !failed.ok) {
+      expect(failed.error.code).toBe('STATE');
+      expect(failed.error.message).toMatch(/FAILED/);
+    }
+  });
+
+  it('treats NaN maxConcurrency as the default instead of an empty worker pool', async () => {
+    const okFetch = async () => ({ status: 200, json: async () => consentOk('h').body });
+    const multi = createMultiFiuClient({
+      clients: {
+        finvu: { baseUrl: 'https://a.x', dataConsumerId: 'dc', fetch: okFetch },
+        onemoney: { baseUrl: 'https://b.x', dataConsumerId: 'dc', fetch: okFetch },
+      },
+      maxConcurrency: Number.NaN,
+    });
+    const out = await multi.requestConsentAcross(baseInput);
+    expect(out).toHaveLength(2);
+    expect(out.every((o) => o.ok)).toBe(true);
+  });
 });

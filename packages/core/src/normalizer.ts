@@ -150,7 +150,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 const NARRATION_FIELDS = ['narration', 'description', 'remarks', 'remitterNarration'] as const;
 const NESTED_CONTAINERS = ['transaction', 'txn', 'data'] as const;
 
-function findNarration(payload: Record<string, unknown>): string | undefined {
+function findNarration(payload: Record<string, unknown>, depth = 0): string | undefined {
+  // Cap recursion — an adversarial payload nested through the container
+  // keys would otherwise overflow the stack before any type check runs.
+  if (depth > 8) return undefined;
   for (const field of NARRATION_FIELDS) {
     const v = payload[field];
     if (typeof v === 'string' && v.length > 0) return v;
@@ -158,7 +161,7 @@ function findNarration(payload: Record<string, unknown>): string | undefined {
   for (const key of NESTED_CONTAINERS) {
     const nested = payload[key];
     if (isRecord(nested)) {
-      const found = findNarration(nested);
+      const found = findNarration(nested, depth + 1);
       if (found) return found;
     }
   }

@@ -72,12 +72,32 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const DATETIME_RE = /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?$/;
 
+const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+function isRealDate(value: string): boolean {
+  const y = Number(value.slice(0, 4));
+  const m = Number(value.slice(5, 7));
+  const d = Number(value.slice(8, 10));
+  if (m < 1 || m > 12 || d < 1) return false;
+  const leap = (y % 4 === 0 && y % 100 !== 0) || y % 400 === 0;
+  const maxDay = m === 2 && leap ? 29 : DAYS_IN_MONTH[m - 1]!;
+  return d <= maxDay;
+}
+
+// Adversarial payloads can nest arbitrarily deep — cap traversal before
+// the runtime stack does, with a clear error instead of a RangeError.
+const MAX_DEPTH = 64;
+
 function validateNode(
   schema: SchemaNode,
   value: unknown,
   path: string,
   errors: ValidationError[],
+  depth = 0,
 ): void {
+  if (depth > MAX_DEPTH) {
+    throw new Error(`validation input or schema exceeds ${MAX_DEPTH} nesting levels`);
+  }
   const actual = typeOf(value);
 
   if (schema.type !== undefined) {
@@ -106,10 +126,13 @@ function validateNode(
     if (schema.pattern !== undefined && !new RegExp(schema.pattern).test(value)) {
       errors.push({ path, message: `string does not match pattern ${schema.pattern}` });
     }
-    if (schema.format === 'date' && !DATE_RE.test(value)) {
+    if (schema.format === 'date' && (!DATE_RE.test(value) || !isRealDate(value))) {
       errors.push({ path, message: `expected ISO date (YYYY-MM-DD), got '${value}'` });
     }
-    if (schema.format === 'date-time' && !DATETIME_RE.test(value)) {
+    if (
+      schema.format === 'date-time' &&
+      (!DATETIME_RE.test(value) || !isRealDate(value.slice(0, 10)))
+    ) {
       errors.push({ path, message: `expected ISO date-time, got '${value}'` });
     }
   }
@@ -131,26 +154,35 @@ function validateNode(
       errors.push({ path, message: `array longer than maxItems ${schema.maxItems}` });
     }
     if (schema.items !== undefined) {
-      value.forEach((item, i) => validateNode(schema.items!, item, `${path}/${i}`, errors));
+      value.forEach((item, i) =>
+        validateNode(schema.items!, item, `${path}/${i}`, errors, depth + 1),
+      );
     }
   }
 
   if (isRecord(value)) {
     if (schema.required !== undefined) {
       for (const key of schema.required) {
-        if (!(key in value)) {
+        // hasOwnProperty, not `in`: prototype-chain properties (toString,
+        // etc.) must not satisfy `required`.
+        if (!Object.prototype.hasOwnProperty.call(value, key)) {
           errors.push({ path, message: `missing required property '${key}'` });
         }
       }
     }
     if (schema.properties !== undefined) {
       for (const [key, child] of Object.entries(schema.properties)) {
-        if (key in value) validateNode(child, value[key], `${path}/${key}`, errors);
+        if (Object.prototype.hasOwnProperty.call(value, key)) {
+          validateNode(child, value[key], `${path}/${key}`, errors, depth + 1);
+        }
       }
     }
-    if (schema.additionalProperties === false && schema.properties !== undefined) {
+    if (schema.additionalProperties === false) {
       for (const key of Object.keys(value)) {
-        if (!(key in schema.properties)) {
+        const known =
+          schema.properties !== undefined &&
+          Object.prototype.hasOwnProperty.call(schema.properties, key);
+        if (!known) {
           errors.push({ path, message: `unexpected property '${key}'` });
         }
       }

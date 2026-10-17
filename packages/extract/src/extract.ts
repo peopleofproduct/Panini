@@ -59,7 +59,7 @@ function statementFromOcr(
   const meta: Record<string, string> = { ocrProvider: providerName };
   if (ocr.confidence !== undefined) meta['ocrConfidence'] = ocr.confidence.toFixed(3);
 
-  if (ocr.fragments && ocr.fragments.length > 0) {
+  if (Array.isArray(ocr.fragments) && ocr.fragments.length > 0) {
     const frags: PdfFragment[] = ocr.fragments.map((f) => ({
       page: f.page ?? 1,
       x: f.x,
@@ -69,7 +69,7 @@ function statementFromOcr(
     const mined = statementFromFragments(frags, options);
     return { ...mined, format, metadata: { ...mined.metadata, ...meta } };
   }
-  const mined = statementFromRows(linesToRows(ocr.text), layouts, format, options);
+  const mined = statementFromRows(linesToRows(ocr.text ?? ''), layouts, format, options);
   return { ...mined, metadata: { ...mined.metadata, ...meta } };
 }
 
@@ -142,6 +142,11 @@ export async function extractStatement(
       } catch (err) {
         return empty('xlsx', [
           `spreadsheet provider '${options.spreadsheet.name}' failed: ${err instanceof Error ? err.message : String(err)}`,
+        ]);
+      }
+      if (!Array.isArray(rows) || rows.some((r) => !Array.isArray(r))) {
+        return empty('xlsx', [
+          `spreadsheet provider '${options.spreadsheet.name}' returned a non-tabular result`,
         ]);
       }
       const mined = statementFromRows(rows, layouts, 'xlsx', withLayout);

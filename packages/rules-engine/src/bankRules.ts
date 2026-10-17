@@ -161,8 +161,9 @@ export function parseBankNarration(
   const vpaInfo = doEnrich ? lookupVpaHandle(txn.vpaHandle) : null;
   const ifscSource = txn.metadata['bank_code'] ?? (doEnrich ? txn.raw : null);
   const ifscInfo = doEnrich ? lookupIfscBank(ifscSource) : null;
-  // MCC can come from the narration itself ('POS 5411' / 'MCC-5411' tokens)
-  // or from the merchant dictionary entry.
+  // MCC comes from 'MCC-5411'-style tokens in the narration (or the
+  // merchant dictionary entry) — plain 'POS 5411' shapes are not treated
+  // as MCC evidence.
   const mccToken = txn.metadata['mcc'] ?? (doEnrich ? txn.raw : null);
   const mccFromNarration = doEnrich ? lookupMcc(mccToken) : null;
   const mccEntry =

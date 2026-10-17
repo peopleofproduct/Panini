@@ -18,7 +18,7 @@ import type { BsaReport } from './types';
 
 /** Indian digit grouping: 123456789 paise → ₹12,34,567.89. */
 export function formatInr(paise: number | null): string {
-  if (paise === null) return '—';
+  if (paise === null || !Number.isFinite(paise)) return '—';
   const sign = paise < 0 ? '-' : '';
   const abs = Math.abs(paise);
   const rupees = Math.floor(abs / 100);

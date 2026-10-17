@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/core",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Deterministic tokenizer and grammar-driven normalizer for Indian banking transaction strings.",
   "license": "Apache-2.0",
   "author": "Kapil",

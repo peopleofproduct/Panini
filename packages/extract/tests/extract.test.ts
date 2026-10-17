@@ -36,6 +36,18 @@ describe('sniffFormat', () => {
     expect(sniffFormat('')).toBe('unknown');
     expect(sniffFormat(new Uint8Array([0x00, 0x01, 0x02, 0x03]))).toBe('unknown');
   });
+
+  it('sniffs two-column CSVs (one delimiter per line) as csv', () => {
+    expect(sniffFormat('Date,Amount\n2024-01-01,100\n2024-01-02,200')).toBe('csv');
+  });
+
+  it('keeps single-line delimited text on the sms path', () => {
+    expect(sniffFormat('a,b')).toBe('sms');
+  });
+
+  it('keeps SMS-keyword text on the sms path even with delimiters', () => {
+    expect(sniffFormat('a/c debited 100, avl bal 500, ref 9')).toBe('sms');
+  });
 });
 
 describe('extractStatement', () => {

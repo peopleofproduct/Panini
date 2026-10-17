@@ -13,6 +13,7 @@ import {
   buildConsentRequest,
   buildFiRequest,
   createFiuClient,
+  decodeB64,
   decryptFi,
   decryptFiResponse,
   deriveSharedSecret,
@@ -20,8 +21,10 @@ import {
   FiuError,
   generateFiuKeyMaterial,
   parseConsentArtefact,
+  suggestAas,
   toWireKeyMaterial,
   verifyJws,
+  xorNonces,
   type FiFetchResponse,
   type KeyMaterial,
 } from '@paniniapi/fiu-client';
@@ -401,5 +404,72 @@ describe('FiuClient E2E against mock AA', () => {
       fetch: fetchImpl,
     });
     await expect(client.fetchFi('missing')).rejects.toThrow(/HTTP 404/);
+  });
+});
+
+describe('audit-fix regressions', () => {
+  const activeArtefact = {
+    consentId: 'c-audit',
+    status: 'ACTIVE',
+    createTimestamp: new Date().toISOString(),
+  } as const;
+
+  function clientWithFetch(respond: (url: string) => { status: number; body: unknown }) {
+    return createFiuClient({
+      baseUrl: 'https://aa.test',
+      dataConsumerId: 'fiu-1',
+      fetch: async (url) => {
+        const r = respond(url);
+        return { status: r.status, json: async () => r.body };
+      },
+    });
+  }
+
+  it('surfaces a FAILED FI session as an error, never an empty success', async () => {
+    const client = clientWithFetch((url) =>
+      url.endsWith('/FI/request')
+        ? { status: 200, body: { sessionId: 's-fail' } }
+        : { status: 200, body: { ver: '1', txnid: 't', sessionStatus: 'FAILED' } },
+    );
+    const { sessionId } = await client.requestFi(
+      activeArtefact,
+      { from: '2024-01-01', to: '2024-12-31' },
+      'sig',
+    );
+    await expect(client.fetchAndDecryptFi(sessionId)).rejects.toThrow(/FAILED/);
+  });
+
+  it('discards session key material after the first decrypt', async () => {
+    const client = clientWithFetch((url) =>
+      url.endsWith('/FI/request')
+        ? { status: 200, body: { sessionId: 's-once' } }
+        : { status: 200, body: { ver: '1', txnid: 't', sessionStatus: 'COMPLETED', FIData: [] } },
+    );
+    const { sessionId } = await client.requestFi(
+      activeArtefact,
+      { from: '2024-01-01', to: '2024-12-31' },
+      'sig',
+    );
+    await client.fetchAndDecryptFi(sessionId); // first decrypt succeeds
+    await expect(client.fetchAndDecryptFi(sessionId)).rejects.toThrow(/no key material/);
+  });
+
+  it('rejects nonce length mismatches instead of wrapping short nonces', () => {
+    const full = Buffer.alloc(32, 0x41).toString('base64');
+    const short = Buffer.alloc(16, 0x42).toString('base64');
+    expect(() => xorNonces(full, short)).toThrow(/nonce length mismatch/);
+    expect(() => xorNonces(short, full)).toThrow(/nonce length mismatch/);
+  });
+
+  it('rejects non-base64 alphabets strictly (no silent character drops)', () => {
+    expect(() => decodeB64('not!!base64', 'test')).toThrow(/not valid base64/);
+    expect(() => decodeB64('a-b_c', 'test')).toThrow(/not valid base64/);
+    expect(decodeB64('QUJD', 'test').toString()).toBe('ABC');
+  });
+
+  it('suggestAas returns nothing for empty handles', () => {
+    expect(suggestAas('')).toEqual([]);
+    expect(suggestAas('   ')).toEqual([]);
+    expect(suggestAas('@').length).toBe(0);
   });
 });

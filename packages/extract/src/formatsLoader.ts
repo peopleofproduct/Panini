@@ -70,17 +70,30 @@ export function resolveFormatsDir(dir?: string): string {
   );
 }
 
+// The bundled formats directory never changes during a process lifetime —
+// cache its parsed files so per-statement calls don't re-read disk. Explicit
+// caller-supplied dirs stay uncached (tests/dev workflows write them).
+const defaultCache = new Map<string, unknown>();
+
+function loadFormatsJson<T>(name: string, dir: string | undefined): T {
+  if (dir !== undefined) {
+    return JSON.parse(readFileSync(join(dir, name), 'utf8')) as T;
+  }
+  const cached = defaultCache.get(name);
+  if (cached !== undefined) return cached as T;
+  const parsed = JSON.parse(readFileSync(join(resolveFormatsDir(), name), 'utf8')) as T;
+  defaultCache.set(name, parsed);
+  return parsed;
+}
+
 export function loadCsvLayouts(dir?: string): CsvLayoutsFile {
-  const file = join(resolveFormatsDir(dir), 'csv-layouts.json');
-  return JSON.parse(readFileSync(file, 'utf8')) as CsvLayoutsFile;
+  return loadFormatsJson<CsvLayoutsFile>('csv-layouts.json', dir);
 }
 
 export function loadSmsPatterns(dir?: string): SmsPatternsFile {
-  const file = join(resolveFormatsDir(dir), 'sms-patterns.json');
-  return JSON.parse(readFileSync(file, 'utf8')) as SmsPatternsFile;
+  return loadFormatsJson<SmsPatternsFile>('sms-patterns.json', dir);
 }
 
 export function loadPasswordPatterns(dir?: string): PasswordPatternsFile {
-  const file = join(resolveFormatsDir(dir), 'pdf-passwords.json');
-  return JSON.parse(readFileSync(file, 'utf8')) as PasswordPatternsFile;
+  return loadFormatsJson<PasswordPatternsFile>('pdf-passwords.json', dir);
 }
