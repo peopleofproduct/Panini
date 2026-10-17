@@ -16,12 +16,15 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,js,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
-    "simulate": "tsc -b packages/simulator && node packages/simulator/dist/cli.js"
+    "simulate": "tsc -b packages/simulator && node packages/simulator/dist/cli.js",
+    "playground": "esbuild playground/web-entry.ts --bundle --format=iife --target=es2020 --alias:node:fs=./playground/fs-stub.js --alias:node:path=./playground/fs-stub.js --outfile=playground/panini-web.js",
+    "parse": "node playground/parse.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.0",
+    "esbuild": "^0.28.2",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.13.0",

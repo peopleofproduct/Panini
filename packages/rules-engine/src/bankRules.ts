@@ -25,107 +25,6 @@ import { loadBuiltinRuleSets, loadCategories } from './loader';
 import { lookupIfscBank, lookupMerchant, lookupVpaHandle } from './dictionary';
 
 /**
- * High-priority grammar covering the dominant Indian-bank narration
- * archetypes. Patterns run before the bundled bank-specific and generic
- * rule sets (priority > 30).
- *
- * Archetypes covered:
- *  1. Full-pipeline UPI: `UPI/20261015/DR/826384910234/SWIGGY/okaxis/Cooking/`
- *  2. IMPS inbound/outbound: `IMPS-628491047-ZEPTO-HDFC-INBOUND`
- *  3. Salary credits: `NEFT-N3452618902-SALARY-OCTOBER 2026-TCS LTD`
- */
-export const BANK_NARRATION_RULE_SET: GrammarRuleSet = {
-  id: 'bank-narration-archetypes',
-  bank: 'GENERIC',
-  version: '2.0.0',
-  description:
-    'Dominant Indian banking narration archetypes: pipeline UPI, INBOUND/OUTBOUND IMPS, salary NEFT credits, alphanumeric reference rails.',
-  patterns: [
-    {
-      // UPI/<yyyymmdd>/<DR|CR>/<ref>/<merchant>/<vpa>[/<purpose>][/]
-      name: 'upi_full_pipeline',
-      priority: 40,
-      channel: 'UPI',
-      media: 'narration',
-      regexFlags: 'i',
-      confidence: 0.95,
-      regex:
-        '^UPI[\\/](?<date>\\d{8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4})[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{6,18})[\\/](?<counterparty>[^\\/@]+?)(?:(?:@|[\\/])(?<vpaHandle>[a-z0-9._-]+))?(?:[\\/](?<remarks>[^\\/]*))?[\\/]?\\s*$',
-    },
-    {
-      // IMPS-<ref>-<merchant>-<bank>-<INBOUND|OUTBOUND>
-      name: 'imps_directional',
-      priority: 35,
-      channel: 'IMPS',
-      media: 'narration',
-      regexFlags: 'i',
-      confidence: 0.93,
-      regex:
-        '^IMPS[-/](?<txnId>\\d{6,16})[-/](?<counterparty>[^-/]+?)[-/ ](?<bankCode>[A-Z]{4}\\d{0,7})[-/](?<direction>INBOUND|OUTBOUND|INWARD|OUTWARD)\\b(?<tail>.*)$',
-    },
-    {
-      // NEFT-<alnum-ref>-SALARY-<MONTH YEAR>-<employer>
-      name: 'neft_salary_credit',
-      priority: 40,
-      channel: 'NEFT',
-      type: 'CREDIT',
-      category: 'Income',
-      media: 'narration',
-      regexFlags: 'i',
-      confidence: 0.95,
-      regex:
-        '^NEFT[-/](?<txnId>[A-Z]{0,3}\\d{5,16})[-/]SAL(?:ARY)?[-/ ](?<remarks>[A-Za-z]+\\s*\\d{4})[-/](?<counterparty>.+?)\\s*$',
-      setMetadata: { is_salary: 'true' },
-    },
-    {
-      // NEFT-<alnum-ref>-<counterparty>[-<remarks>] — refs like N3452618902
-      name: 'neft_alnum_ref',
-      priority: 30,
-      channel: 'NEFT',
-      media: 'narration',
-      regexFlags: 'i',
-      confidence: 0.85,
-      regex:
-        '^NEFT[-/](?<txnId>[A-Z0-9]{6,18})[-/](?<counterparty>[^-]+)(?:[-/](?<remarks>.+?))?\\s*$',
-    },
-    {
-      // RTGS-<alnum-ref>-<counterparty>
-      name: 'rtgs_alnum_ref',
-      priority: 30,
-      channel: 'RTGS',
-      media: 'narration',
-      regexFlags: 'i',
-      confidence: 0.85,
-      regex:
-        '^RTGS[-/](?<txnId>[A-Z0-9]{6,18})[-/](?<counterparty>[^-]+)(?:[-/](?<remarks>.+?))?\\s*$',
-    },
-    {
-      // ACH/ECS credits (dividends, refunds): ACH-CR-<ref>-<counterparty>
-      name: 'ach_credit',
-      priority: 30,
-      channel: 'ACH',
-      media: 'narration',
-      regexFlags: 'i',
-      regex:
-        '^(?:ACH|ECS)[-/ ](?<direction>CR|DR)[-/ ](?<txnId>[A-Z0-9]{6,18})[-/](?<counterparty>.+?)\\s*$',
-    },
-    {
-      // Bare cash deposit/withdrawal narrations: CASH WDL-SELF / CASH DEP-BRANCH
-      name: 'cash_transaction',
-      priority: 30,
-      channel: 'ATM',
-      media: 'narration',
-      regexFlags: 'i',
-      regex: '^CASH[-/ ](?<direction>WDL|DEP|WITHDRAWAL|DEPOSIT)[-/ ](?<counterparty>.+?)\\s*$',
-      setMetadata: { instrument: 'CASH' },
-    },
-  ],
-};
-
-/** All rule sets a consumer should load for maximum archetype coverage. */
-export const BANK_RULE_SETS: readonly GrammarRuleSet[] = [BANK_NARRATION_RULE_SET];
-
-/**
  * Structured output of {@link parseBankNarration}. Field names follow the
  * downstream enterprise API contract (snake_case) rather than the internal
  * `NormalizedTransaction` shape.
@@ -160,11 +59,11 @@ export interface ParsedBankNarration {
 }
 
 export interface ParseBankNarrationOptions {
-  /** Extra rule sets merged in *after* the archetype + builtin sets. */
+  /** Extra rule sets merged in *after* the bundled grammar sets. */
   readonly ruleSets?: readonly GrammarRuleSet[];
   /** Category keyword table; defaults to the bundled categories.json. */
   readonly categories?: Record<string, string>;
-  /** Skip loading bundled rules — use only archetypes + provided ruleSets. */
+  /** Skip loading bundled rules — use only the provided ruleSets. */
   readonly bare?: boolean;
   /**
    * Dictionary enrichment (canonical merchant, VPA/IFSC resolution,
@@ -222,7 +121,7 @@ let defaultNormalizer: Normalizer | undefined;
 function buildNormalizer(options?: ParseBankNarrationOptions): Normalizer {
   if (options === undefined) {
     defaultNormalizer ??= new Normalizer({
-      ruleSets: [...BANK_RULE_SETS, ...loadBuiltinRuleSets()],
+      ruleSets: loadBuiltinRuleSets(),
       categories: loadCategories(),
       displayCase: preserveAcronymCase,
     });
@@ -230,7 +129,6 @@ function buildNormalizer(options?: ParseBankNarrationOptions): Normalizer {
   }
   return new Normalizer({
     ruleSets: [
-      BANK_NARRATION_RULE_SET,
       ...(options.bare === true ? [] : loadBuiltinRuleSets()),
       ...(options.ruleSets ?? []),
     ],

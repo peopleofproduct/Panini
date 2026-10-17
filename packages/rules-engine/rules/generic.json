@@ -26,7 +26,10 @@
       "channel": "UPI",
       "media": "narration",
       "regex": "^(?:(?:BY|TO)\\s+TRANSFER[-/ ])?UPI[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<bankCode>[A-Z]{2,4}\\d*))?(?:[\\/](?<date>\\d{8}))?(?<tail>[\\/\\- ].*)?$",
-      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL" }
+      "flags": {
+        "REV": "REVERSAL",
+        "RTN": "REVERSAL"
+      }
     },
     {
       "name": "upi_slashed_plain",
@@ -82,7 +85,7 @@
       "channel": "POS",
       "type": "DEBIT",
       "media": "narration",
-      "regex": "^POS[-/ ](?:(?<cardMask>\\d{4})[-/ ])?(?<counterparty>[^-/]+)(?<tail>\\s*[-/ ].*)?$"
+      "regex": "^POS[-/ ](?:(?<cardMask>[\\dX*]{4,19})[-/ ])?(?<counterparty>[^-/]+)(?<tail>\\s*[-/ ].*)?$"
     },
     {
       "name": "nach_emi",
@@ -91,7 +94,7 @@
       "type": "DEBIT",
       "category": "Loan & EMI",
       "media": "narration",
-      "regex": "^(?:NACH|ACH|ECS)[-/ ](?<counterparty>.+?)[-/ ](?:EMI|LOAN)(?<tail>.*)$"
+      "regex": "^(?:NACH|ACH|ECS)[-/ ](?:(?<direction>DR|CR)[-/ ])?(?<counterparty>.+?)[-/ ](?:EMI|LOAN)(?<tail>.*)$"
     },
     {
       "name": "salary_credit",
@@ -107,7 +110,7 @@
       "channel": "CHEQUE",
       "media": "narration",
       "regexFlags": "i",
-      "regex": "^(?:CHQ|CHEQUE|CLG)[-/ ](?<txnId>\\d{5,7})(?:[-/ ](?<counterparty>.+))?$"
+      "regex": "^(?:CHQ|CHEQUE|CLG)[-/ ](?:(?<direction>DEP|DEPOSIT|WDL)[-/ ])?(?<txnId>\\d{4,8})(?:[-/ ](?<counterparty>.+))?$"
     },
     {
       "name": "upi_mandate_autopay",
@@ -117,8 +120,10 @@
       "category": "Subscriptions",
       "media": "narration",
       "regexFlags": "i",
-      "regex": "^(?:UPI[-/ ]?)?(?:AUTO\\s?PAY|MANDATE|E[- ]?MANDATE|UPIAUTOPAY|MANDATE EXECUTION)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
-      "setMetadata": { "mandate": "upi" }
+      "regex": "^(?:UPI[-/ ]?)?(?:AUTO\\s?PAY|MANDATE|E[- ]?MANDATE|UPIAUTOPAY|MANDATE EXECUTION)[-/ ](?:(?<txnId>\\d{5,16})[-/ ])?(?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
+      "setMetadata": {
+        "mandate": "upi"
+      }
     },
     {
       "name": "bank_charges",
@@ -154,7 +159,9 @@
       "media": "narration",
       "regexFlags": "i",
       "regex": "^(?:CHQ|CHEQUE|CLG)[-/ ]?(?:RET(?:URN)?|RTN|BOUNCE|DISH(?:ONOURED|ONORED)?)[-/ ](?<txnId>\\d{4,7})?(?<tail>.*)$",
-      "setMetadata": { "bounce": "true" }
+      "setMetadata": {
+        "bounce": "true"
+      }
     },
     {
       "name": "loan_disbursal",

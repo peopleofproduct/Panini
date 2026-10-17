@@ -1,0 +1,73 @@
+{
+  "id": "bank-narration-archetypes",
+  "bank": "GENERIC",
+  "version": "2.0.0",
+  "description": "Dominant Indian banking narration archetypes: pipeline UPI, INBOUND/OUTBOUND IMPS, salary NEFT credits, alphanumeric reference rails.",
+  "patterns": [
+    {
+      "name": "upi_full_pipeline",
+      "priority": 40,
+      "channel": "UPI",
+      "media": "narration",
+      "regexFlags": "i",
+      "confidence": 0.95,
+      "regex": "^UPI[\\/](?<date>\\d{8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4})[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{6,18})[\\/](?<counterparty>[^\\/@]+?)(?:(?:@|[\\/])(?<vpaHandle>[a-z0-9._-]+))?(?:[\\/](?<remarks>[^\\/]*))?[\\/]?\\s*$"
+    },
+    {
+      "name": "imps_directional",
+      "priority": 35,
+      "channel": "IMPS",
+      "media": "narration",
+      "regexFlags": "i",
+      "confidence": 0.93,
+      "regex": "^IMPS[-/](?<txnId>\\d{6,16})[-/](?<counterparty>[^-/]+?)[-/ ](?<bankCode>[A-Z]{4}\\d{0,7})[-/](?<direction>INBOUND|OUTBOUND|INWARD|OUTWARD)\\b(?<tail>.*)$"
+    },
+    {
+      "name": "neft_salary_credit",
+      "priority": 40,
+      "channel": "NEFT",
+      "type": "CREDIT",
+      "category": "Income",
+      "media": "narration",
+      "regexFlags": "i",
+      "confidence": 0.95,
+      "regex": "^NEFT[-/](?<txnId>[A-Z]{0,3}\\d{5,16})[-/]SAL(?:ARY)?[-/ ](?<remarks>[A-Za-z]+\\s*\\d{4})[-/](?<counterparty>.+?)\\s*$",
+      "setMetadata": { "is_salary": "true" }
+    },
+    {
+      "name": "neft_alnum_ref",
+      "priority": 30,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "confidence": 0.85,
+      "regex": "^NEFT[-/](?<txnId>[A-Z0-9]{6,18})[-/](?<counterparty>[^-]+)(?:[-/](?<remarks>.+?))?\\s*$"
+    },
+    {
+      "name": "rtgs_alnum_ref",
+      "priority": 30,
+      "channel": "RTGS",
+      "media": "narration",
+      "regexFlags": "i",
+      "confidence": 0.85,
+      "regex": "^RTGS[-/](?<txnId>[A-Z0-9]{6,18})[-/](?<counterparty>[^-]+)(?:[-/](?<remarks>.+?))?\\s*$"
+    },
+    {
+      "name": "ach_credit",
+      "priority": 30,
+      "channel": "ACH",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:ACH|ECS)[-/ ](?<direction>CR|DR)[-/ ](?<txnId>[A-Z0-9]{6,18})[-/](?<counterparty>.+?)\\s*$"
+    },
+    {
+      "name": "cash_transaction",
+      "priority": 30,
+      "channel": "ATM",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^CASH[-/ ](?<direction>WDL|DEP|WITHDRAWAL|DEPOSIT)[-/ ](?<counterparty>.+?)\\s*$",
+      "setMetadata": { "instrument": "CASH" }
+    }
+  ]
+}
