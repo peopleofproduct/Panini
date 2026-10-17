@@ -1,0 +1,27 @@
+{
+  "id": "bob_csv",
+  "format": "csv",
+  "description": "Bank of Baroda statement export — 'Narration' header, Withdrawal/Deposit columns, DD/MM/YY dates.",
+  "input": "BANK OF BARODA\nAccount No : XXXXXX8765\nDate,Narration,Chq./Ref.No.,Withdrawal,Deposit,Balance\n15/10/26,UPI/555444333/DR/DMART@okhdfc/,555444333,200.00,,43000.00\n16/10/26,RTGS-UTR789012-SUPPLIER PAYMENT,UTR789012,,25000.00,68000.00",
+  "expect": {
+    "bank": "BOB",
+    "layoutId": "bob_statement",
+    "accountMask": "8765",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 20000,
+        "balancePaise": 4300000,
+        "refNo": "555444333"
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 2500000,
+        "balancePaise": 6800000
+      }
+    ]
+  }
+}

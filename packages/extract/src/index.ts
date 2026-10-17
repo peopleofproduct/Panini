@@ -30,9 +30,28 @@ export type { ColumnField, DetectedTable } from './csv/layouts';
 export { extractSms } from './sms';
 export { extractPdfFragments, extractPdfLines, linesFromFragments } from './pdf/pdfText';
 export type { PdfFragment, PdfLine } from './pdf/pdfText';
-export { extractPdfStatement } from './pdf/pdfStatement';
 export { mapRow, findAccountMask } from './rowMapper';
 export type { SpreadsheetProvider } from './spreadsheet';
-export type { OcrProvider, OcrResult } from './ocr';
-export { loadCsvLayouts, loadSmsPatterns, resolveFormatsDir } from './formatsLoader';
-export type { CsvLayout, CsvLayoutsFile, SmsPattern, SmsPatternsFile } from './formatsLoader';
+export type { OcrFragment, OcrProvider, OcrResult } from './ocr';
+export { createSheetJsProvider, createTesseractProvider } from './providers';
+export type { SheetJsLike, TesseractLike } from './providers';
+export { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement';
+export type { ExtractPdfOptions } from './pdf/pdfStatement';
+export { decryptPdf, passwordCandidates } from './pdf/encryption';
+export type { EncryptionInfo, PdfCredentials, PdfUnlock, StreamCipher } from './pdf/encryption';
+export {
+  loadCsvLayouts,
+  loadPasswordPatterns,
+  loadSmsPatterns,
+  resolveFormatsDir,
+} from './formatsLoader';
+export type {
+  CsvLayout,
+  CsvLayoutsFile,
+  PasswordPattern,
+  PasswordPatternsFile,
+  SmsPattern,
+  SmsPatternsFile,
+} from './formatsLoader';
+export { mineStatementMetadata } from './statementMetadata';
+export { parseStatementDate } from './statementDate';

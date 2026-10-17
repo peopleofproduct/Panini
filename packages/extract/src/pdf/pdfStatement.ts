@@ -16,9 +16,19 @@
 
 import type { CsvLayoutsFile } from '../formatsLoader';
 import { findAccountMask, mapRow } from '../rowMapper';
+import { mineStatementMetadata } from '../statementMetadata';
 import type { ExtractedStatement, ExtractedTransaction } from '../types';
 import { normalizeHeaderCell, type ColumnField } from '../csv/layouts';
 import { extractPdfFragments, type PdfFragment } from './pdfText';
+import { decryptPdf, type PdfCredentials, type PasswordPatternsFile } from './encryption';
+
+export interface ExtractPdfOptions {
+  readonly bankHint?: string;
+  /** Details used to unlock a password-protected statement. */
+  readonly credentials?: PdfCredentials;
+  /** Password template file; defaults to bundled formats/pdf-passwords.json. */
+  readonly passwordPatterns?: PasswordPatternsFile;
+}
 
 const LINE_Y_TOLERANCE = 3;
 
@@ -104,37 +114,28 @@ function fragmentsToCells(
 }
 
 /**
- * Extracts transactions from a digitally-generated statement PDF. The
- * table header is found on each page, column anchors are taken from
- * header fragment x-positions, and rows are assembled by grouping
- * fragments on the same baseline.
+ * Rebuilds statement rows from positioned text fragments — from a PDF
+ * text layer or from an OCR provider that returns word boxes. The table
+ * header is located per page, column anchors come from header x-positions,
+ * and rows are assembled by grouping fragments on the same baseline.
+ *
+ * Continuation lines (a narration that wraps to a second visual line)
+ * produce no date/amount of their own — they are stitched onto the
+ * previous transaction's narration instead of becoming phantom rows.
  */
-export function extractPdfStatement(
-  pdf: Uint8Array,
-  _file: CsvLayoutsFile,
+export function statementFromFragments(
+  fragments: readonly PdfFragment[],
   options?: { bankHint?: string },
 ): ExtractedStatement {
   const warnings: string[] = [];
-  const fragments = extractPdfFragments(pdf);
   const metadata: Record<string, string> = {};
-
-  if (fragments.length === 0) {
-    return {
-      format: 'pdf',
-      bank: options?.bankHint ?? null,
-      layoutId: null,
-      accountMask: null,
-      transactions: [],
-      warnings: ['no text layer found — scanned PDFs need the OCR provider seam'],
-      metadata,
-    };
-  }
 
   const allText = fragments
     .slice(0, 60)
     .map((f) => f.text)
     .join(' ');
   const accountMask = findAccountMask(allText);
+  Object.assign(metadata, mineStatementMetadata(allText));
 
   const byPage = new Map<number, PdfFragment[]>();
   for (const f of fragments) {
@@ -174,6 +175,7 @@ export function extractPdfStatement(
     fieldOrder.forEach((field, idx) => {
       if (columns[field] === undefined) columns[field] = idx;
     });
+    const narrationIdx = columns['narration'];
 
     for (const rowFrags of [...rowLines.values()].sort((a, b) => b[0]!.y - a[0]!.y)) {
       const cells = fragmentsToCells(
@@ -183,8 +185,18 @@ export function extractPdfStatement(
       );
       if (cells.every((c) => c.trim() === '')) continue;
       const txn = mapRow(cells, columns);
-      if (txn.date === null && txn.amountPaise === null && txn.narration === '') {
-        continue; // non-transaction line (page footer, balance summary, ...)
+      if (txn.date === null && txn.amountPaise === null) {
+        // Continuation of a wrapped narration — or a footer/summary line.
+        const extra = narrationIdx !== undefined ? (cells[narrationIdx] ?? '').trim() : '';
+        const last = transactions[transactions.length - 1];
+        if (extra !== '' && last) {
+          transactions[transactions.length - 1] = {
+            ...last,
+            narration: `${last.narration} ${extra}`,
+            raw: `${last.raw} ${txn.raw}`.trim(),
+          };
+        }
+        continue;
       }
       transactions.push(txn);
     }
@@ -203,4 +215,49 @@ export function extractPdfStatement(
     warnings,
     metadata,
   };
+}
+
+/**
+ * Extracts transactions from a digitally-generated statement PDF. When
+ * `credentials` are supplied, Standard-handler encrypted documents are
+ * unlocked first (per-bank password patterns live in
+ * `formats/pdf-passwords.json`); without credentials an encrypted PDF
+ * yields a warning, never a throw.
+ */
+export function extractPdfStatement(
+  pdf: Uint8Array,
+  _file: CsvLayoutsFile,
+  options?: ExtractPdfOptions,
+): ExtractedStatement {
+  const warnings: string[] = [];
+
+  const unlock = decryptPdf(pdf, options?.credentials, options?.passwordPatterns);
+  if (unlock.status === 'encrypted') {
+    return {
+      format: 'pdf',
+      bank: options?.bankHint ?? null,
+      layoutId: null,
+      accountMask: null,
+      transactions: [],
+      warnings: [...unlock.warnings],
+      metadata: { encrypted: 'true' },
+    };
+  }
+  warnings.push(...unlock.warnings);
+
+  const fragments = extractPdfFragments(pdf, unlock.decryptStream);
+  if (fragments.length === 0) {
+    return {
+      format: 'pdf',
+      bank: options?.bankHint ?? null,
+      layoutId: null,
+      accountMask: null,
+      transactions: [],
+      warnings: [...warnings, 'no text layer found — scanned PDFs need the OCR provider seam'],
+      metadata: unlock.status === 'unlocked' ? { unlocked: 'true' } : {},
+    };
+  }
+
+  const result = statementFromFragments(fragments, options);
+  return { ...result, warnings: [...warnings, ...result.warnings] };
 }
