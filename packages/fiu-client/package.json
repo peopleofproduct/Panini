@@ -1,0 +1,36 @@
+{
+  "name": "@paniniapi/fiu-client",
+  "version": "0.1.0",
+  "description": "Open, zero-dependency FIU client for India's Account Aggregator ecosystem — consent lifecycle, X25519/ECDH key exchange, AES-256-GCM FI decryption per the ReBIT spec, and schema validation. Injectable transport; no implicit network calls.",
+  "license": "Apache-2.0",
+  "author": "Kapil",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git",
+    "directory": "packages/fiu-client"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "account-aggregator",
+    "fiu",
+    "rebit",
+    "sahamati",
+    "open-finance",
+    "dpi"
+  ]
+}

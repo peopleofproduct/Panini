@@ -1,0 +1,92 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-beckn-envelope.schema.json",
+  "description": "ONDC Beckn protocol envelope — the context+message wrapper every ONDC financial-services call (search/select/init/confirm/status/on_*) carries.",
+  "type": "object",
+  "required": ["context", "message"],
+  "additionalProperties": true,
+  "properties": {
+    "context": {
+      "type": "object",
+      "required": [
+        "domain",
+        "action",
+        "bap_id",
+        "bap_uri",
+        "transaction_id",
+        "message_id",
+        "timestamp",
+        "ttl"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "domain": {
+          "type": "string",
+          "pattern": "^ONDC:[A-Z0-9]+(\\.[0-9]+)?$",
+          "description": "e.g. ONDC:FIS12 (credit), ONDC:FIS13 (insurance), ONDC:FIS14 (investments)"
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "search",
+            "on_search",
+            "select",
+            "on_select",
+            "init",
+            "on_init",
+            "confirm",
+            "on_confirm",
+            "status",
+            "on_status",
+            "track",
+            "on_track",
+            "cancel",
+            "on_cancel",
+            "update",
+            "on_update",
+            "support",
+            "on_support",
+            "rating",
+            "on_rating"
+          ]
+        },
+        "core_version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "bap_id": { "type": "string", "minLength": 1 },
+        "bap_uri": { "type": "string", "pattern": "^https?://" },
+        "bpp_id": { "type": "string", "minLength": 1 },
+        "bpp_uri": { "type": "string", "pattern": "^https?://" },
+        "transaction_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "message_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "ttl": {
+          "type": "string",
+          "pattern": "^P(\\d+D)?(T(\\d+H)?(\\d+M)?(\\d+S)?)?$",
+          "description": "ISO-8601 duration, e.g. PT30S, PT10M, P1D"
+        },
+        "key": { "type": "string" },
+        "location": {
+          "type": "object",
+          "properties": {
+            "country": {
+              "type": "object",
+              "properties": { "code": { "type": "string", "pattern": "^[A-Z]{3}$" } }
+            },
+            "city": {
+              "type": "object",
+              "properties": { "code": { "type": "string", "pattern": "^std:\\d+$" } }
+            }
+          }
+        }
+      }
+    },
+    "message": { "type": "object" },
+    "error": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    }
+  }
+}

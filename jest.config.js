@@ -6,6 +6,7 @@ module.exports = {
     '<rootDir>/packages/standards-schema',
     '<rootDir>/packages/extract',
     '<rootDir>/packages/insights',
+    '<rootDir>/packages/fiu-client',
     '<rootDir>/packages/simulator',
   ],
   coverageProvider: 'v8',
