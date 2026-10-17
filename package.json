@@ -2,7 +2,7 @@
   "name": "panini",
   "version": "0.1.0",
   "private": true,
-  "description": "Free and open-source, zero-dependency financial data engine for India's fintech ecosystem — statement extraction, narration normalization, credit insights, ReBIT AA/ONDC/OCEN validators, and a multi-AA FIU client. Runs server-side, at the edge, or fully in-browser. Maintained by People of Product.",
+  "description": "Free and open-source, zero-dependency financial data engine for India's fintech ecosystem \u2014 statement extraction, narration normalization, credit insights, ReBIT AA/ONDC/OCEN validators, and a multi-AA FIU client. Runs server-side, at the edge, or fully in-browser. Maintained by People of Product.",
   "license": "Apache-2.0",
   "author": "Kapil",
   "workspaces": [

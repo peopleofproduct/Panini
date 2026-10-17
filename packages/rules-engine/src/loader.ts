@@ -53,10 +53,13 @@ export function loadRuleSets(dir?: string): readonly GrammarRuleSet[] {
       try {
         parsed = JSON.parse(readFileSync(join(rulesDir, file), 'utf8'));
       } catch (e) {
-        throw new Error(
+        // `cause` is assigned property-style so the repo's ES2021 lib
+        // target stays valid (the Error(msg, { cause }) overload is ES2022).
+        const wrapped = new Error(
           `@paniniapi/rules-engine: '${file}' in ${rulesDir} is not valid JSON: ${(e as Error).message}`,
-          { cause: e },
-        );
+        ) as Error & { cause?: unknown };
+        wrapped.cause = e;
+        throw wrapped;
       }
       if (
         typeof parsed !== 'object' ||
