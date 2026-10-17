@@ -94,12 +94,15 @@ export async function extractStatement(
     ...(options.layoutId !== undefined ? { layoutId: options.layoutId } : {}),
   };
   const layouts = loadCsvLayouts(options.formatsDir);
+  // sniffFormat decodes printable-ASCII byte input to decide csv/sms — the
+  // text pipelines then need the decoded string, not the raw bytes.
+  const textInput = input instanceof Uint8Array ? new TextDecoder().decode(input) : input;
 
   switch (format) {
     case 'csv':
-      return extractCsvStatement(input as string, layouts, withLayout);
+      return extractCsvStatement(textInput, layouts, withLayout);
     case 'sms':
-      return extractSms(input as string, loadSmsPatterns(options.formatsDir), hint);
+      return extractSms(textInput, loadSmsPatterns(options.formatsDir), hint);
     case 'pdf': {
       const result = extractPdfStatement(input as Uint8Array, layouts, {
         ...hint,

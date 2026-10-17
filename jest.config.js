@@ -8,6 +8,7 @@ module.exports = {
     '<rootDir>/packages/insights',
     '<rootDir>/packages/fiu-client',
     '<rootDir>/packages/simulator',
+    '<rootDir>/packages/bsa',
   ],
   coverageProvider: 'v8',
 };
