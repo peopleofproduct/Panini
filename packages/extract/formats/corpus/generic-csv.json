@@ -1,0 +1,15 @@
+{
+  "id": "generic_csv",
+  "format": "csv",
+  "description": "Unknown-bank CSV — falls through to the heuristic/generic column mapping.",
+  "input": "Posting Date,Details,Debit,Credit,Running Balance\n2026-10-15,CARD PURCHASE POS 415982XXXXXX0342 ZOMATO,320.50,,44100.00\n2026-10-16,REFUND-AMZN-ORD778899,,320.50,44420.50",
+  "expect": {
+    "bank": null,
+    "layoutId": "generic_heuristic",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 32050 },
+      { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 32050 }
+    ]
+  }
+}

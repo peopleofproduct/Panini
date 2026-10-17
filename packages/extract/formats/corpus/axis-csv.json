@@ -1,0 +1,15 @@
+{
+  "id": "axis_csv",
+  "format": "csv",
+  "description": "Axis Bank export — Tran Date/CHQNO/PARTICULARS/DR/CR/BAL headers.",
+  "input": "Tran Date,CHQNO,PARTICULARS,DR,CR,BAL,SOL\n15-10-2026,,UPI/AMAZON@apl/ORDER,999.00,,12040.10,001\n16-10-2026,,IMPS-628491047-ZEPTO-HDFC-INBOUND,,500.00,12540.10,001",
+  "expect": {
+    "bank": "AXIS",
+    "layoutId": "axis_statement",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 99900 },
+      { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 50000, "balancePaise": 1254010 }
+    ]
+  }
+}

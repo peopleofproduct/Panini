@@ -21,18 +21,20 @@ Named after Acharya Pāṇini — the ancient architect of formal rule-based gra
 The platform isolates the parsing core from the optional self-hosted ops layer (rate limiting, metering, telemetry) to guarantee absolute privacy data sandboxing — everything is free and runs in memory on your host.
 
 ```
-                 ┌────────────────────────────────────────────────┐
-                 │              Client / Host Server              │
-                 │                                                │
-   narrations ──►│  @paniniapi/rules-engine ──► @paniniapi/core          │
-   AA payloads ─►│     (JSON grammars)         (Normalizer)        │
-                 │            │                                    │
-                 │            ▼                                    │
-                 │     NormalizedTransaction / AAProfile          │
-                 │            │                                    │
-                 │            ▼                                    │
-                 │  @paniniapi/standards-schema  (ReBIT / OCEN)      │
-                 └───────────┬────────────────────────────────────┘
+                 ┌─────────────────────────────────────────────────────┐
+                 │                Client / Host Server                 │
+                 │                                                     │
+   statements ──►│  @paniniapi/extract  (CSV · XLSX · PDF · SMS · OCR)  │
+                 │                       │                             │
+   narrations ──►│  @paniniapi/rules-engine ──► @paniniapi/core         │
+   AA payloads ─►│     (JSON grammars)          (Normalizer)            │
+                 │            │                                        │
+                 │            ▼                                        │
+                 │     NormalizedTransaction / AAProfile               │
+                 │            │                                        │
+                 │            ▼                                        │
+                 │  @paniniapi/standards-schema  (ReBIT / OCEN)         │
+                 └───────────┬─────────────────────────────────────────┘
                              │  (optional, self-hosted ops layer)
                  ┌───────────▼────────────────────────────────────┐
                  │  OpsProxy + HTTP adapter                        │
@@ -46,8 +48,9 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 | `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                              |
 | `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate. |
 | `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                     |
+| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (HDFC, ICICI, SBI, Axis, Kotak, generic), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams.            |
 | `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                             |
-| `panini-py/`                  | Python port sharing the same grammar JSONs and corpus — 76/76 conformance fixtures, CI-gated.                                                                                             |
+| `panini-py/`                  | Python port sharing the same grammar JSONs, extraction formats, and corpus — conformance-gated against the TypeScript corpus.                                                             |
 | `playground/`                 | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                             |
 
 ## ✨ Design Guarantees
@@ -62,7 +65,7 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 ```bash
 npm install
 npm run build   # tsc -b (project references)
-npm test        # jest — 295 tests across 18 suites
+npm test        # jest — 329 tests across 22 suites
 ```
 
 ### Parse a narration
@@ -108,6 +111,28 @@ const normalizer = new Normalizer({
   categories: loadCategories(),
 });
 normalizer.normalize('UPI-SWIGGY-826384@okaxis-20261015-REV-DEBIT');
+```
+
+### Extract transactions from a statement
+
+```ts
+import { extractStatement } from '@paniniapi/extract';
+
+const statement = await extractStatement(csvText); // or PDF bytes, XLSX, SMS
+// {
+//   format: 'csv', bank: 'HDFC', layoutId: 'hdfc_statement',
+//   accountMask: '1234',
+//   transactions: [
+//     { date: '2026-10-15', narration: 'UPI/40234...', direction: 'DEBIT',
+//       amountPaise: 125000, balancePaise: 4523050, refNo: '402345678912' },
+//     ...
+//   ]
+// }
+
+// XLSX and scanned input go through provider seams — Panini stays
+// zero-dependency; you plug in SheetJS / Tesseract / cloud OCR:
+await extractStatement(xlsxBytes, { spreadsheet: sheetJsAdapter });
+await extractStatement(scannedPdf, { ocr: tesseractAdapter });
 ```
 
 ### Validate DPI payloads

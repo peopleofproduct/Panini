@@ -1,0 +1,16 @@
+{
+  "id": "icici_csv",
+  "format": "csv",
+  "description": "ICICI Bank statement CSV — S No. column, (INR) amount columns, narrations containing commas inside quotes.",
+  "input": "S No.,Value Date,Transaction Date,Cheque Number,Transaction Remarks,Withdrawal Amount (INR ),Deposit Amount (INR ),Balance (INR )\n1,15/10/2026,15/10/2026,,UPI/SWIGGY BUNDLED,450.00,,99852.00\n2,16/10/2026,16/10/2026,000456,\"NEFT CREDIT, ACME PVT LTD\",,12000.00,111852.00\n3,17/10/2026,17/10/2026,,MANDATE-445566-SIP IN MF,2500.00,,109352.00",
+  "expect": {
+    "bank": "ICICI",
+    "layoutId": "icici_statement",
+    "count": 3,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 45000 },
+      { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 1200000, "refNo": "000456" },
+      { "date": "2026-10-17", "direction": "DEBIT", "amountPaise": 250000 }
+    ]
+  }
+}

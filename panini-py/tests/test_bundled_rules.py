@@ -17,6 +17,8 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SRC = REPO_ROOT / "packages" / "rules-engine" / "rules"
 BUNDLED = Path(__file__).resolve().parents[1] / "panini" / "rules"
+SRC_FORMATS = REPO_ROOT / "packages" / "extract" / "formats"
+BUNDLED_FORMATS = Path(__file__).resolve().parents[1] / "panini" / "formats"
 
 
 class BundledRulesDrift(unittest.TestCase):
@@ -43,6 +45,16 @@ class BundledRulesDrift(unittest.TestCase):
             self.assertEqual(
                 json.loads(path.read_text()), json.loads(bundled.read_text()),
                 f"bundled entities/{path.name} diverged",
+            )
+
+    def test_extract_formats_present_and_identical(self):
+        for name in ("csv-layouts.json", "sms-patterns.json"):
+            bundled = BUNDLED_FORMATS / name
+            self.assertTrue(bundled.exists(), f"missing bundled formats/{name}")
+            self.assertEqual(
+                json.loads((SRC_FORMATS / name).read_text()),
+                json.loads(bundled.read_text()),
+                f"bundled formats/{name} diverged from packages/extract/formats/{name}",
             )
 
 

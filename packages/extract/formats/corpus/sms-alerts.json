@@ -1,0 +1,45 @@
+{
+  "id": "sms_alerts",
+  "format": "sms",
+  "description": "Bank SMS debit/credit alerts across common sender formats.",
+  "samples": [
+    {
+      "input": "A/c XX1234 debited by Rs.1,250.00 on 15-Oct-26 UPI-SWIGGY@okaxis Avl Bal Rs.44,020.50",
+      "expect": {
+        "direction": "DEBIT",
+        "amountPaise": 125000,
+        "balancePaise": 4402050,
+        "accountMask": "1234",
+        "date": "2026-10-15"
+      }
+    },
+    {
+      "input": "Your A/c 5678 is credited with INR 85,000.00 on 16-10-2026. Available Balance: INR 1,30,230.50",
+      "expect": {
+        "direction": "CREDIT",
+        "amountPaise": 8500000,
+        "balancePaise": 13023050,
+        "accountMask": "5678",
+        "date": "2026-10-16"
+      }
+    },
+    {
+      "input": "INR 999.00 spent on your card XX9012 at AMAZON on 17-Oct-26. Avl bal INR 11,041.50",
+      "expect": {
+        "direction": "DEBIT",
+        "amountPaise": 99900,
+        "balancePaise": 1104150,
+        "accountMask": "9012"
+      }
+    },
+    {
+      "input": "Rs 500.00 credited to A/c X3456 via UPI on 18/10/26. Avl Bal: Rs 49,300.75",
+      "expect": {
+        "direction": "CREDIT",
+        "amountPaise": 50000,
+        "balancePaise": 4930075,
+        "accountMask": "3456"
+      }
+    }
+  ]
+}

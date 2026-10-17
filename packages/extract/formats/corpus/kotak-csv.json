@@ -1,0 +1,20 @@
+{
+  "id": "kotak_csv",
+  "format": "csv",
+  "description": "Kotak export — single Amount column with a separate Dr/Cr indicator.",
+  "input": "Date,Description,Chq/Ref No.,Amount,Dr / Cr,Balance\n15/10/2026,UPI/BIGBASKET@okicici/GROCERY,,1450.75,Dr,88000.00\n16/10/2026,SALARY CREDIT EMPLOYER CORP,,62000.00,Cr,150000.00",
+  "expect": {
+    "bank": "KOTAK",
+    "layoutId": "kotak_statement",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 145075 },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 6200000,
+        "balancePaise": 15000000
+      }
+    ]
+  }
+}

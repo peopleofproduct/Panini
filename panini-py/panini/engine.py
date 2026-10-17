@@ -108,7 +108,7 @@ def preserve_acronym_case(value: str) -> str:
 
 _CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f]")
 _SMS_SIGNAL = re.compile(r"\b(debited|credited|avl\s*bal|a/c\s*(?:no|xx|\*+))", re.IGNORECASE)
-_CURRENCY_PREFIX = re.compile(r"^(?:rs\.?|inr|₹)", re.IGNORECASE)
+_CURRENCY_PREFIX = re.compile(r"^(?:rs\.?|inr|₹)\s*", re.IGNORECASE)
 _AMOUNT_BODY = re.compile(r"^\d+(?:\.\d{1,2})?$")
 
 _DIRECTION_TYPES = {"DEBIT", "CREDIT"}
