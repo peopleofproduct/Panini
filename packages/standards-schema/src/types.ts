@@ -234,6 +234,11 @@ export function validateOndcUpdateRequest(value: unknown): ValidationResult {
   return validate(loadSchema('ondc-update-request'), value);
 }
 
+/** AA directory entry — multi-AA routing registry (handles, endpoints, env). */
+export function validateAaDirectoryEntry(value: unknown): ValidationResult {
+  return validate(loadSchema('aa-directory'), value);
+}
+
 /** Type guard: validates and narrows to {@link AAProfile}. */
 export function isAAProfile(value: unknown): value is AAProfile {
   return validateAAProfile(value).valid;

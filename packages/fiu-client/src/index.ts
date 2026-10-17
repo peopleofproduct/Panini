@@ -43,3 +43,16 @@ export { decodeJws, verifyJws, type DecodedJws } from './jws';
 export { buildConsentRequest, parseConsentArtefact } from './consent';
 export { buildFiRequest, decryptFiResponse } from './fi';
 export { createFiuClient, type FiuClient, type FiuClientConfig, type FetchLike } from './client';
+export {
+  AA_DIRECTORY,
+  resolveAaHandle,
+  suggestAas,
+  type AaEndpoint,
+  type AaClientConfig,
+} from './aaDirectory';
+export {
+  createMultiFiuClient,
+  type MultiFiuClient,
+  type MultiFiuConfig,
+  type AaOutcome,
+} from './orchestrate';

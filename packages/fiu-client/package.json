@@ -1,7 +1,7 @@
 {
   "name": "@paniniapi/fiu-client",
-  "version": "0.1.1",
-  "description": "Open, zero-dependency FIU client for India's Account Aggregator ecosystem — consent lifecycle, X25519/ECDH key exchange, AES-256-GCM FI decryption per the ReBIT spec, and schema validation. Injectable transport; no implicit network calls.",
+  "version": "0.2.0",
+  "description": "Open, zero-dependency FIU client for India's Account Aggregator ecosystem — consent lifecycle, X25519/ECDH key exchange, AES-256-GCM FI decryption per the ReBIT spec, multi-AA handle routing and bounded fan-out orchestration, and schema validation. Injectable transport; no implicit network calls.",
   "license": "Apache-2.0",
   "author": "Kapil",
   "main": "dist/index.js",
@@ -12,6 +12,9 @@
   "scripts": {
     "build": "tsc -b",
     "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@paniniapi/standards-schema": "0.3.0"
   },
   "publishConfig": {
     "access": "public"
