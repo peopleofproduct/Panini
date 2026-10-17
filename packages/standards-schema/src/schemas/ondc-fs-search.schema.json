@@ -1,0 +1,123 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-fs-search.schema.json",
+  "description": "ONDC financial-services search intent — message.intent for credit discovery (ONDC:FIS12 domain): loan category, provider hint, payment/collection prefs, and xinput form reference.",
+  "type": "object",
+  "required": ["intent"],
+  "additionalProperties": true,
+  "properties": {
+    "intent": {
+      "type": "object",
+      "required": ["category"],
+      "additionalProperties": true,
+      "properties": {
+        "category": {
+          "type": "object",
+          "required": ["descriptor"],
+          "properties": {
+            "descriptor": {
+              "type": "object",
+              "required": ["code"],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "enum": [
+                    "PERSONAL_LOAN",
+                    "BUSINESS_LOAN",
+                    "HOME_LOAN",
+                    "AUTO_LOAN",
+                    "GOLD_LOAN",
+                    "WORKING_CAPITAL",
+                    "TERM_LOAN",
+                    "INVOICE_BASED_LOAN",
+                    "PURCHASE_FINANCE"
+                  ]
+                },
+                "name": { "type": "string" }
+              }
+            }
+          }
+        },
+        "provider": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "descriptor": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "code": { "type": "string" }
+              }
+            },
+            "tags": { "type": "array", "items": { "type": "object" } }
+          }
+        },
+        "item": {
+          "type": "object",
+          "properties": {
+            "id": { "type": "string" },
+            "descriptor": { "type": "object" },
+            "price": {
+              "type": "object",
+              "properties": {
+                "value": { "type": "string", "pattern": "^\\d+(\\.\\d+)?$" },
+                "currency": { "type": "string", "pattern": "^[A-Z]{3}$" }
+              }
+            },
+            "xinput": {
+              "type": "object",
+              "properties": {
+                "form": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" }
+                  },
+                  "required": ["id"]
+                },
+                "form_response": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "submission_id": { "type": "string" }
+                  }
+                }
+              }
+            },
+            "tags": { "type": "array", "items": { "type": "object" } }
+          }
+        },
+        "payment": {
+          "type": "object",
+          "properties": {
+            "collected_by": { "type": "string", "enum": ["BAP", "BPP"] },
+            "type": { "type": "string" },
+            "time": {
+              "type": "object",
+              "properties": {
+                "range": {
+                  "type": "object",
+                  "properties": {
+                    "start": { "type": "string", "format": "date-time" },
+                    "end": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "fulfillment": {
+          "type": "object",
+          "properties": {
+            "customer": {
+              "type": "object",
+              "properties": {
+                "person": { "type": "object" },
+                "contact": { "type": "object" }
+              }
+            }
+          }
+        },
+        "tags": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  }
+}

@@ -38,4 +38,6 @@ export {
   validateAAProfile,
   validateFiData,
   validateOCENLoanApplication,
+  validateOndcEnvelope,
+  validateOndcFsSearch,
 } from './types';
