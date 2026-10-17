@@ -1,0 +1,20 @@
+{
+  "id": "sbi_csv",
+  "format": "csv",
+  "description": "SBI statement CSV export — Txn Date / Ref No.-Cheque No. headers.",
+  "input": "Txn Date,Value Date,Description,Ref No./Cheque No.,Debit,Credit,Balance\n15 Oct 2026,15 Oct 2026,UPI/912345678901/CR/JOHN DOE@axisb/DR,UPI912345678901,,300.00,50800.75\n18 Oct 2026,18 Oct 2026,ATM WDL-SELF-1234,ATM1234,2000.00,,48800.75",
+  "expect": {
+    "bank": "SBI",
+    "layoutId": "sbi_statement",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "CREDIT",
+        "amountPaise": 30000,
+        "balancePaise": 5080075
+      },
+      { "date": "2026-10-18", "direction": "DEBIT", "amountPaise": 200000 }
+    ]
+  }
+}
