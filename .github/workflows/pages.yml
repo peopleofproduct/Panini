@@ -30,6 +30,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run build
       - name: Build browser bundle
         run: npm run playground
       - name: Stage static site
