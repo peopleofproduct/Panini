@@ -1,0 +1,10 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-track-request.schema.json",
+  "description": "ONDC `track` request payload — message body of a track action. The BAP asks the BPP for live fulfillment status of an order.",
+  "type": "object",
+  "required": ["order_id"],
+  "additionalProperties": true,
+  "properties": {
+    "order_id": { "type": "string", "minLength": 1 }
+  }
+}

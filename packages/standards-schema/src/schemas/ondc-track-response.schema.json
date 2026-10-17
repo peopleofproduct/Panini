@@ -1,0 +1,18 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-track-response.schema.json",
+  "description": "ONDC `on_track` response payload — message body. Carries the tracking locator/status for an order's fulfillment.",
+  "type": "object",
+  "required": ["tracking"],
+  "additionalProperties": true,
+  "properties": {
+    "tracking": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": true,
+      "properties": {
+        "url": { "type": "string", "format": "uri" },
+        "status": { "type": "string", "enum": ["active", "inactive"] }
+      }
+    }
+  }
+}

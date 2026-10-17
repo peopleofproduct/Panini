@@ -301,3 +301,81 @@ describe('robustness', () => {
     expect(a).toEqual(b);
   });
 });
+
+describe('trend analytics', () => {
+  const flow = (month: string, credits: number, debits: number) =>
+    [credits, debits].flatMap((amt, i) => ({
+      date: `${month}-${i === 0 ? '05' : '15'}`,
+      direction: i === 0 ? ('CREDIT' as const) : ('DEBIT' as const),
+      amountPaise: amt,
+      narration: i === 0 ? 'CR' : 'DR',
+    }));
+
+  it('builds chronological monthly flow and detects improving net flow', () => {
+    const txns = [
+      ...flow('2024-01', 100_000, 90_000),
+      ...flow('2024-02', 100_000, 80_000),
+      ...flow('2024-03', 120_000, 60_000),
+      ...flow('2024-04', 140_000, 40_000),
+    ];
+    const r = analyzeTransactions(txns);
+    expect(r.trends.monthly).toHaveLength(4);
+    expect(r.trends.monthly[0]?.month).toBe('2024-01');
+    expect(r.trends.monthly[3]?.netPaise).toBe(100_000);
+    expect(r.trends.netFlowDirection).toBe('improving');
+  });
+
+  it('detects declining flow and insufficient data', () => {
+    const declining = [
+      ...flow('2024-01', 200_000, 20_000),
+      ...flow('2024-02', 180_000, 40_000),
+      ...flow('2024-03', 100_000, 100_000),
+      ...flow('2024-04', 60_000, 140_000),
+    ];
+    expect(analyzeTransactions(declining).trends.netFlowDirection).toBe('declining');
+    expect(analyzeTransactions(flow('2024-01', 100, 50)).trends.netFlowDirection).toBe(
+      'insufficient_data',
+    );
+  });
+
+  it('computes balance velocity and volatility', () => {
+    const txns = [
+      {
+        date: '2024-01-01',
+        direction: 'CREDIT' as const,
+        amountPaise: 10_000,
+        balancePaise: 100_000,
+      },
+      { date: '2024-01-11', direction: 'DEBIT' as const, amountPaise: 5_000, balancePaise: 95_000 },
+      {
+        date: '2024-02-01',
+        direction: 'CREDIT' as const,
+        amountPaise: 10_000,
+        balancePaise: 105_000,
+      },
+      {
+        date: '2024-02-11',
+        direction: 'DEBIT' as const,
+        amountPaise: 5_000,
+        balancePaise: 100_000,
+      },
+      {
+        date: '2024-03-01',
+        direction: 'CREDIT' as const,
+        amountPaise: 10_000,
+        balancePaise: 110_000,
+      },
+      {
+        date: '2024-03-11',
+        direction: 'DEBIT' as const,
+        amountPaise: 5_000,
+        balancePaise: 105_000,
+      },
+    ];
+    const r = analyzeTransactions(txns);
+    // -5000/10d, +10000/21d, -5000/10d, +10000/18d, -5000/10d → median ≈ -500
+    expect(r.trends.balanceVelocityPaisePerDay).toBe(-500);
+    expect(r.trends.creditVolatilityPct).toBe(0); // flat credits → zero volatility
+    expect(r.trends.debitVolatilityPct).toBe(0);
+  });
+});

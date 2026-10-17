@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/insights",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Deterministic, explainable credit-relevant insights over normalized Indian banking transactions — income detection, obligations, FOIR, cash-flow, and risk signals. Zero runtime dependencies.",
   "license": "Apache-2.0",
   "author": "Kapil",

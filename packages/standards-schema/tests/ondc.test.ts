@@ -8,7 +8,17 @@
  *     http://www.apache.org/licenses/LICENSE-2.0
  */
 
-import { validateOndcEnvelope, validateOndcFsSearch } from '../src';
+import {
+  validateOndcEnvelope,
+  validateOndcFsSearch,
+  validateOndcCatalog,
+  validateOndcOrder,
+  validateOcenLifecycle,
+  validateOndcTrackRequest,
+  validateOndcTrackResponse,
+  validateOndcCancelRequest,
+  validateOndcUpdateRequest,
+} from '../src';
 
 const envelope = {
   context: {
@@ -89,5 +99,229 @@ describe('ONDC FS search intent', () => {
         intent: { category: { descriptor: { code: 'HOME_LOAN' } }, item: { xinput: { form: {} } } },
       }).valid,
     ).toBe(false);
+  });
+});
+
+describe('ONDC on_search catalog', () => {
+  const catalog = {
+    catalog: {
+      descriptor: { name: 'Acme Credit Marketplace' },
+      providers: [
+        {
+          id: 'lender-1',
+          descriptor: { name: 'Acme NBFC' },
+          items: [
+            {
+              id: 'pl-1',
+              descriptor: { name: 'Personal Loan', code: 'PERSONAL_LOAN' },
+              price: { value: '50000', currency: 'INR' },
+              xinput: { form: { id: 'f-loan' }, required: true },
+            },
+          ],
+          payments: [{ id: 'p1', collected_by: 'BPP', type: 'ON_ORDER' }],
+        },
+      ],
+    },
+  };
+
+  it('accepts a valid catalog', () => {
+    expect(validateOndcCatalog(catalog).valid).toBe(true);
+  });
+
+  it('rejects empty providers, missing item descriptor, bad price', () => {
+    expect(
+      validateOndcCatalog({ catalog: { descriptor: { name: 'x' }, providers: [] } }).valid,
+    ).toBe(false);
+    expect(
+      validateOndcCatalog({
+        catalog: {
+          descriptor: { name: 'x' },
+          providers: [{ id: 'p', items: [{ id: 'i' }] }],
+        },
+      }).valid,
+    ).toBe(false);
+    expect(
+      validateOndcCatalog({
+        catalog: {
+          descriptor: { name: 'x' },
+          providers: [
+            { id: 'p', items: [{ id: 'i', descriptor: { name: 'n' }, price: { value: 'abc' } }] },
+          ],
+        },
+      }).valid,
+    ).toBe(false);
+  });
+});
+
+describe('ONDC order lifecycle object', () => {
+  const order = {
+    order: {
+      id: 'ord-1',
+      state: 'IN_PROGRESS',
+      provider: { id: 'lender-1' },
+      items: [{ id: 'pl-1' }],
+      quote: {
+        price: { value: '52000', currency: 'INR' },
+        breakup: [{ title: 'Principal', price: { value: '50000', currency: 'INR' } }],
+      },
+      payments: [{ id: 'p1', type: 'ON_ORDER', status: 'PAID', collected_by: 'BPP' }],
+      fulfillments: [{ id: 'f1', state: { descriptor: { code: 'SANCTIONED' } } }],
+    },
+  };
+
+  it('accepts a valid order across lifecycle states', () => {
+    for (const state of ['CREATED', 'ACCEPTED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED']) {
+      expect(validateOndcOrder({ order: { ...order.order, state } }).valid).toBe(true);
+    }
+  });
+
+  it('rejects bad state, empty items, bad payment status', () => {
+    expect(validateOndcOrder({ order: { ...order.order, state: 'LOST' } }).valid).toBe(false);
+    expect(validateOndcOrder({ order: { ...order.order, items: [] } }).valid).toBe(false);
+    expect(
+      validateOndcOrder({ order: { ...order.order, payments: [{ status: 'MAYBE' }] } }).valid,
+    ).toBe(false);
+  });
+});
+
+describe('OCEN loan lifecycle', () => {
+  const meta = {
+    originatorOrgId: 'org-1',
+    originatorParticipantId: 'lsp-1',
+    traceId: 'tr-1',
+    requestId: 'req-1',
+    loanApplicationId: 'la-001',
+    timestamp: '2024-06-01T10:00:00.000Z',
+  };
+  const event = {
+    metadata: meta,
+    loanApplicationId: 'la-001',
+    status: 'DISBURSED',
+    disbursement: {
+      amount: 50000,
+      currency: 'INR',
+      utr: 'UTR123456',
+      disbursementDate: '2024-06-01T12:00:00.000Z',
+      account: { accountNumber: '12345678901', ifsc: 'HDFC0001234' },
+    },
+    repaymentSchedule: [
+      {
+        installmentNo: 1,
+        dueDate: '2024-07-01',
+        amount: { principal: 4000, interest: 500, total: 4500 },
+        status: 'DUE',
+      },
+      { installmentNo: 2, dueDate: '2024-08-01', amount: { total: 4500 } },
+    ],
+    mandate: { type: 'ENACH', status: 'REGISTERED', umn: 'UMN123', amount: 4500 },
+    kfs: { annualPercentageRate: 18.5, coolingOffDays: 3 },
+  };
+
+  it('accepts a full lifecycle event', () => {
+    expect(validateOcenLifecycle(event).valid).toBe(true);
+  });
+
+  it('accepts all lifecycle states', () => {
+    for (const status of [
+      'APPLICATION_SUBMITTED',
+      'OFFER_GENERATED',
+      'OFFER_ACCEPTED',
+      'AGREEMENT_SIGNED',
+      'DISBURSED',
+      'CLOSED',
+      'REJECTED',
+    ]) {
+      expect(validateOcenLifecycle({ ...event, status }).valid).toBe(true);
+    }
+  });
+
+  it('rejects unknown status, bad IFSC, malformed repayment rows', () => {
+    expect(validateOcenLifecycle({ ...event, status: 'APPROVED?' }).valid).toBe(false);
+    expect(
+      validateOcenLifecycle({
+        ...event,
+        disbursement: { amount: 1, account: { ifsc: 'badifsc' } },
+      }).valid,
+    ).toBe(false);
+    expect(
+      validateOcenLifecycle({
+        ...event,
+        repaymentSchedule: [{ installmentNo: 0, dueDate: '2024-07-01', amount: { total: 1 } }],
+      }).valid,
+    ).toBe(false);
+    expect(
+      validateOcenLifecycle({
+        ...event,
+        repaymentSchedule: [{ installmentNo: 1, dueDate: '1 July', amount: { total: 1 } }],
+      }).valid,
+    ).toBe(false);
+  });
+});
+
+describe('ONDC ops flows — track/cancel/update', () => {
+  it('accepts a track request', () => {
+    expect(validateOndcTrackRequest({ order_id: 'ord-1' }).valid).toBe(true);
+  });
+
+  it('rejects a track request without order_id', () => {
+    const r = validateOndcTrackRequest({});
+    expect(r.valid).toBe(false);
+    expect(r.errors.some((e) => e.path === '')).toBe(true);
+  });
+
+  it('accepts an on_track response with url + status', () => {
+    const r = validateOndcTrackResponse({
+      tracking: { url: 'https://bpp.example.com/track/ord-1', status: 'active' },
+    });
+    expect(r.valid).toBe(true);
+  });
+
+  it('rejects on_track with an unknown tracking status', () => {
+    const r = validateOndcTrackResponse({ tracking: { status: 'maybe' } });
+    expect(r.valid).toBe(false);
+    expect(r.errors[0]?.path).toBe('/tracking/status');
+  });
+
+  it('accepts a cancel request with reason + descriptor', () => {
+    const r = validateOndcCancelRequest({
+      order_id: 'ord-1',
+      cancellation_reason_id: '003',
+      descriptor: { short_desc: 'Changed my mind' },
+    });
+    expect(r.valid).toBe(true);
+  });
+
+  it('rejects a cancel request missing the reason id', () => {
+    const r = validateOndcCancelRequest({ order_id: 'ord-1' });
+    expect(r.valid).toBe(false);
+    expect(r.errors.some((e) => e.message.includes('cancellation_reason_id'))).toBe(true);
+  });
+
+  it('accepts an update request targeting fulfillments', () => {
+    const r = validateOndcUpdateRequest({
+      update_target: 'fulfillments',
+      order: {
+        id: 'ord-1',
+        fulfillments: [{ id: 'f1', state: { descriptor: { code: 'UPDATED' } } }],
+      },
+    });
+    expect(r.valid).toBe(true);
+  });
+
+  it('rejects an update request missing update_target or order id', () => {
+    expect(validateOndcUpdateRequest({ order: { id: 'o1' } }).valid).toBe(false);
+    expect(validateOndcUpdateRequest({ update_target: 'payments', order: {} }).valid).toBe(false);
+  });
+
+  it('order lifecycle states still validate for on_cancel/on_update carriers', () => {
+    const order = {
+      order: {
+        id: 'ord-1',
+        state: 'CANCELLED',
+        provider: { id: 'lender-1' },
+        items: [{ id: 'pl-1' }],
+      },
+    };
+    expect(validateOndcOrder(order).valid).toBe(true);
   });
 });

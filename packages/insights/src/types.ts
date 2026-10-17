@@ -112,11 +112,38 @@ export interface RiskSignal {
   readonly evidence: readonly Evidence[];
 }
 
+export interface MonthlyFlow {
+  /** 'YYYY-MM' bucket. */
+  readonly month: string;
+  readonly creditsPaise: number;
+  readonly debitsPaise: number;
+  readonly netPaise: number;
+}
+
+export type TrendDirection = 'improving' | 'stable' | 'declining' | 'insufficient_data';
+
+export interface TrendSummary {
+  /** Chronological per-month flow buckets. */
+  readonly monthly: readonly MonthlyFlow[];
+  /**
+   * Direction of monthly net flow: second-half average vs first-half average,
+   * ±10% band → stable. Requires ≥3 months, else 'insufficient_data'.
+   */
+  readonly netFlowDirection: TrendDirection;
+  /** Median per-day balance change across consecutive dated balances, paise. */
+  readonly balanceVelocityPaisePerDay: number | null;
+  /** Coefficient of variation (stddev/mean ×100) of monthly credits. */
+  readonly creditVolatilityPct: number | null;
+  /** Same for monthly debits. */
+  readonly debitVolatilityPct: number | null;
+}
+
 export interface InsightsReport {
   readonly income: IncomeSummary;
   readonly obligations: ObligationsSummary;
   readonly foir: FoirSummary;
   readonly cashflow: CashflowSummary;
+  readonly trends: TrendSummary;
   readonly signals: readonly RiskSignal[];
   /** Data-quality caveats — never an exception, always a string. */
   readonly warnings: readonly string[];
