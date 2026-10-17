@@ -1,3 +1,6 @@
 # Project Panini is maintained by People of Product™ (https://theproduct.city)
-# If this project helps your team, consider supporting the maintainers.
-custom: ['https://theproduct.city']
+# If Panini saved your team money, consider supporting the maintainers —
+# see SUPPORT.md for details (UPI accepted — no PayPal/Stripe needed).
+custom:
+  - 'https://github.com/peopleofproduct/Panini/blob/master/SUPPORT.md'
+  - 'https://theproduct.city'
