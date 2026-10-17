@@ -15,6 +15,7 @@
  */
 
 import type { OcrProvider } from './ocr';
+import type { PdfCredentials } from './pdf/encryption';
 import type { SpreadsheetProvider } from './spreadsheet';
 
 /** Detected container format of a statement input. */
@@ -77,4 +78,6 @@ export interface ExtractOptions {
   readonly spreadsheet?: SpreadsheetProvider;
   /** Provider for image/scanned input (OCR). */
   readonly ocr?: OcrProvider;
+  /** Credentials for password-protected PDFs (dob/name/pan → per-bank patterns). */
+  readonly credentials?: PdfCredentials;
 }

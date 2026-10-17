@@ -1,0 +1,27 @@
+{
+  "id": "pnb_csv",
+  "format": "csv",
+  "description": "Punjab National Bank statement export — 'Transaction Details' narration, Withdrawal/Deposit columns, DD/MM/YYYY dates.",
+  "input": "PUNJAB NATIONAL BANK\nAccount Number : XXXXXXX5678\nTxn Date,Transaction Details,Ref No.,Withdrawal,Deposit,Balance\n15/10/2026,UPI/402345678912/DR/SWIGGY@okaxis/,402345678912,1250.00,,45230.50\n16/10/2026,NEFT-N3452618902-SALARY-TCS LTD,N3452618902,,85000.00,130230.50",
+  "expect": {
+    "bank": "PNB",
+    "layoutId": "pnb_statement",
+    "accountMask": "5678",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 125000,
+        "balancePaise": 4523050,
+        "refNo": "402345678912"
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 8500000,
+        "balancePaise": 13023050
+      }
+    ]
+  }
+}

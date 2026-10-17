@@ -15,11 +15,13 @@
  */
 
 import { extractCsvStatement, statementFromRows } from './csv/csvStatement';
-import { loadCsvLayouts, loadSmsPatterns } from './formatsLoader';
-import { extractPdfStatement } from './pdf/pdfStatement';
+import { loadCsvLayouts, loadPasswordPatterns, loadSmsPatterns } from './formatsLoader';
+import type { OcrResult } from './ocr';
+import { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement';
+import type { PdfFragment } from './pdf/pdfText';
 import { extractSms } from './sms';
 import { sniffFormat } from './sniff';
-import type { ExtractOptions, ExtractedStatement } from './types';
+import type { ExtractedStatement, ExtractOptions, StatementFormat } from './types';
 
 function empty(format: ExtractedStatement['format'], warnings: string[]): ExtractedStatement {
   return {
@@ -40,6 +42,35 @@ function linesToRows(text: string): string[][] {
     .map((line) => line.trim())
     .filter((line) => line !== '')
     .map((line) => line.split(/\t| {2,}/).map((c) => c.trim()));
+}
+
+/**
+ * OCR output → statement. Word-level boxes take the x-anchored table
+ * pipeline (pixel y grows downward, so it is negated to match PDF's
+ * bottom-up origin); flat text falls back to whitespace-split rows.
+ */
+function statementFromOcr(
+  ocr: OcrResult,
+  layouts: ReturnType<typeof loadCsvLayouts>,
+  format: StatementFormat,
+  providerName: string,
+  options: { bankHint?: string; layoutId?: string },
+): ExtractedStatement {
+  const meta: Record<string, string> = { ocrProvider: providerName };
+  if (ocr.confidence !== undefined) meta['ocrConfidence'] = ocr.confidence.toFixed(3);
+
+  if (ocr.fragments && ocr.fragments.length > 0) {
+    const frags: PdfFragment[] = ocr.fragments.map((f) => ({
+      page: f.page ?? 1,
+      x: f.x,
+      y: -f.y,
+      text: f.text,
+    }));
+    const mined = statementFromFragments(frags, options);
+    return { ...mined, format, metadata: { ...mined.metadata, ...meta } };
+  }
+  const mined = statementFromRows(linesToRows(ocr.text), layouts, format, options);
+  return { ...mined, metadata: { ...mined.metadata, ...meta } };
 }
 
 /**
@@ -70,7 +101,11 @@ export async function extractStatement(
     case 'sms':
       return extractSms(input as string, loadSmsPatterns(options.formatsDir), hint);
     case 'pdf': {
-      const result = extractPdfStatement(input as Uint8Array, layouts, hint);
+      const result = extractPdfStatement(input as Uint8Array, layouts, {
+        ...hint,
+        ...(options.credentials !== undefined ? { credentials: options.credentials } : {}),
+        passwordPatterns: loadPasswordPatterns(options.formatsDir),
+      });
       if (
         result.transactions.length === 0 &&
         result.warnings.some((w) => w.includes('OCR')) &&
@@ -88,13 +123,7 @@ export async function extractStatement(
             ],
           };
         }
-        const rows = linesToRows(ocr.text);
-        const mined = statementFromRows(rows, layouts, 'image', withLayout);
-        return {
-          ...mined,
-          format: 'pdf',
-          metadata: { ...mined.metadata, ocrProvider: options.ocr.name },
-        };
+        return statementFromOcr(ocr, layouts, 'pdf', options.ocr.name, withLayout);
       }
       return result;
     }
@@ -132,12 +161,7 @@ export async function extractStatement(
           `ocr provider '${options.ocr.name}' failed: ${err instanceof Error ? err.message : String(err)}`,
         ]);
       }
-      const rows = linesToRows(ocr.text);
-      const mined = statementFromRows(rows, layouts, 'image', withLayout);
-      return {
-        ...mined,
-        metadata: { ...mined.metadata, ocrProvider: options.ocr.name },
-      };
+      return statementFromOcr(ocr, layouts, 'image', options.ocr.name, withLayout);
     }
     default:
       return empty('unknown', ['input format could not be identified']);

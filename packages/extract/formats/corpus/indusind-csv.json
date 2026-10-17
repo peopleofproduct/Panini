@@ -1,0 +1,27 @@
+{
+  "id": "indusind_csv",
+  "format": "csv",
+  "description": "IndusInd Bank statement export — 'Particulars' narration, 'Cheque No' ref column, DD MMM YYYY dates.",
+  "input": "INDUSIND BANK\nAccount No : XXXXXX2468\nDate,Particulars,Cheque No,Debit,Credit,Balance\n15 Oct 2026,UPI/102938475/DR/AMAZON@okicici/,CHQ001,999.00,,51234.75\n16 Oct 2026,NACH-EMI-HDFC HOME LOAN,,25000.00,,26234.75",
+  "expect": {
+    "bank": "INDUSIND",
+    "layoutId": "indusind_statement",
+    "accountMask": "2468",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 99900,
+        "balancePaise": 5123475,
+        "refNo": "CHQ001"
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "DEBIT",
+        "amountPaise": 2500000,
+        "balancePaise": 2623475
+      }
+    ]
+  }
+}
