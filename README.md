@@ -1,14 +1,21 @@
-# Panini (`@paniniapi/core`)
+# Panini — the open financial-data layer for India's DPI
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.base.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-0-brightgreen)](./package.json)
-[![Tests](https://img.shields.io/badge/tests-295%20passing-brightgreen)](#-development)
+[![Tests](https://img.shields.io/badge/tests-530%2B%20passing-brightgreen)](#-development)
 [![Maintained by People of Product™](https://img.shields.io/badge/maintained%20by-People%20of%20Product%E2%84%A2-orange)](#-maintained-by-people-of-product)
 
-> **The First Grammatical Open-Finance Orchestration Core for India's Digital Public Infrastructure (DPI).**
+> **Bank statements in — credit decisions out. Free, deterministic, and it never phones home.**
 
-Named after Acharya Pāṇini — the ancient architect of formal rule-based grammar — **Panini** is a zero-runtime-dependency TypeScript engine built to parse, structure, and normalize chaotic financial data ecosystems. It is a **fully free and open-source** local sandbox for processing **ReBIT v2.0 Account Aggregator payload schemas** and **OCEN 4.0 lending networks**, shipped with framework-neutral ops extensions for teams self-hosting at scale.
+Named after Acharya Pāṇini — the ancient architect of formal rule-based grammar — **Panini** is a zero-runtime-dependency TypeScript + Python engine that does what Indian fintechs currently pay vendors per-call for:
+
+- **Extract** messy bank statements — CSV, Excel, password-protected PDFs, SMS alerts, pluggable OCR
+- **Normalize** every narration through community-editable grammar rules — 15 bank layouts, UPI/IMPS/NEFT/RTGS/ATM/POS/wallets, merchants, IFSC, VPA handles
+- **Analyze** deterministically — income, obligations, EMI, FOIR, cash flow, trends, bounce/round-trip/self-transfer risk signals — every claim carrying a rule ID + evidence
+- **Validate** against India's open-finance standards — the only public free validators for ReBIT AA payloads, the complete ONDC action surface, and the OCEN 4.0 loan lifecycle
+- **Speak the AA protocol itself** — consent lifecycle, Rahasya-compatible X25519/HKDF/AES-256-GCM decryption, and multi-AA orchestration (handle→AA routing, bounded parallel fan-out) in ~600 auditable lines
+- **Run anywhere** — server, edge, or entirely inside the browser: statement → BSA report with zero network calls
 
 > Just as Pāṇini's Aṣṭādhyāyī reduced a language to deterministic rules ~2500 years ago, Panini treats bank narrations as a grammar — not an AI problem. Fully free under Apache-2.0, forever.
 
@@ -22,7 +29,7 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 
 ```
                  ┌─────────────────────────────────────────────────────┐
-                 │                Client / Host Server                 │
+                 │                Client / Host Server / Browser        │
                  │                                                     │
    statements ──►│  @paniniapi/extract  (CSV · XLSX · PDF · SMS · OCR)  │
                  │                       │                             │
@@ -32,8 +39,15 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
                  │            ▼                                        │
                  │     NormalizedTransaction / AAProfile               │
                  │            │                                        │
+                 │            ├──────────────► @paniniapi/insights      │
+                 │            │     (income · FOIR · trends · signals)  │
+                 │            │                                        │
                  │            ▼                                        │
-                 │  @paniniapi/standards-schema  (ReBIT / OCEN)         │
+                 │  @paniniapi/standards-schema (ReBIT · ONDC · OCEN)   │
+                 │                                                     │
+   AA consent ──►│  @paniniapi/fiu-client (consent→decrypt, multi-AA)   │
+   files ───────►│  @paniniapi/bsa  (statement files → BSA report)      │
+   browser ─────►│  @paniniapi/browser (ESM/CJS/IIFE, all data inlined) │
                  └───────────┬─────────────────────────────────────────┘
                              │  (optional, self-hosted ops layer)
                  ┌───────────▼────────────────────────────────────┐
@@ -64,7 +78,25 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 - **Strictly typed.** Strict TypeScript throughout — no `any`, `unknown` at external boundaries, `exactOptionalPropertyTypes` enabled.
 - **PII isolation.** The optional telemetry channel is opt-in only and its event type has _structurally no field_ for raw narrations, counterparties, references, VPAs, or amounts.
 
-## 🚀 Quick Start
+## � Security, Privacy & DPDP
+
+Panini is architected so that **sensitive financial data never has to leave your boundary** — and that isn't a privacy policy promise, it's a code property:
+
+- **Zero network calls, anywhere in the stack.** No `fetch`/`axios`/socket in any library code path — the FIU client's transport is *injected by you*, so every outbound call is one you wrote. A `grep -r "fetch\|http" packages/*/src` is an audit a security team can run in a minute.
+- **Zero runtime dependencies → near-zero supply-chain surface.** No third-party code executes on your data. Every line that touches a bank statement is in this repo, in the open.
+- **In-memory only.** No writes to disk, no caching, no logging of payloads — statement bytes live and die inside your process. The browser bundle literally cannot persist or transmit anything.
+- **Deterministic + auditable.** Same input → same output, always. Every extracted field and every credit-relevant claim carries a rule ID and evidence indices — an auditor can replay *how* a conclusion was reached, not just what it was.
+- **Secrets stay out.** The AA directory ships endpoints, never credentials. The sandbox-certification runbook reads everything from environment variables; there is nothing to leak.
+
+### Why this matters under DPDP 2023
+
+India's Digital Personal Data Protection Act makes the *processor* question expensive: any vendor that touches a bank statement on your behalf sits inside your compliance perimeter — data-processing agreements, purpose-limitation audits, breach-notification chains, cross-border transfer reviews. **A library you run yourself is not a processor.** Panini keeps the entire statement→insight pipeline inside your own infrastructure, so the vendor-data-processing surface simply doesn't exist. For FIUs — entities already carrying fiduciary-grade obligations over AA data — this is not a nice-to-have: it's the difference between "we vetted our vendor" and "there is no vendor."
+
+### What FIUs get beyond the price
+
+- **Full customization ownership.** Grammar rules, dictionaries, AA directory entries, schema validators — all editable JSON/TS in your fork. When a bank changes a narration format, *you* fix it in 20 minutes instead of filing a vendor ticket and waiting a sprint.
+- **Contribution flywheel.** Grammars and layouts you contribute back are maintained by the community forever — a bug fixed by one FIU benefits every FIU. This is how public infrastructure gets better: shared maintenance instead of per-vendor SLAs.
+- **No renegotiation cliff.** Per-call pricing punishes growth; a library's cost curve is flat at any volume. Scale your consent volume 10× — your parsing cost stays ₹0.
 
 ```bash
 npm install
