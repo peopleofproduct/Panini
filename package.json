@@ -18,19 +18,21 @@
     "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
     "simulate": "tsc -b packages/simulator && node packages/simulator/dist/cli.js",
     "playground": "esbuild playground/web-entry.ts --bundle --format=iife --target=es2020 --alias:node:fs=./playground/fs-stub.js --alias:node:path=./playground/fs-stub.js --outfile=playground/panini-web.js",
-    "parse": "node playground/parse.mjs"
+    "parse": "node playground/parse.mjs",
+    "bench": "node benchmarks/run.mjs",
+    "bench:ci": "node benchmarks/run.mjs --ci"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@types/jest": "^29.5.14",
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.10.0",
     "esbuild": "^0.28.2",
     "eslint": "^10.12.0",
     "eslint-config-prettier": "^10.1.8",
     "globals": "^17.13.0",
-    "jest": "^29.7.0",
+    "jest": "^30.5.2",
     "prettier": "^3.9.10",
-    "ts-jest": "^29.2.5",
+    "ts-jest": "^29.4.15",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.71.2"
   },
@@ -52,5 +54,10 @@
     "ocen",
     "dpi",
     "open-source"
-  ]
+  ],
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "^4.1.0"
+    }
+  }
 }
