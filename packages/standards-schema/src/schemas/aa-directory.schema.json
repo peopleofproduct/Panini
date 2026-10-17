@@ -1,0 +1,37 @@
+{
+  "$id": "https://panini.dev/schemas/aa-directory.schema.json",
+  "description": "Account Aggregator directory entry — community-maintained registry of AA identities, handle suffixes and endpoints for client-side multi-AA routing.",
+  "type": "object",
+  "required": ["aaId", "name", "handles", "environment", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "aaId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Stable kebab-case identifier, e.g. 'finvu' or 'onemoney'."
+    },
+    "name": { "type": "string", "minLength": 1 },
+    "handles": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*$" },
+      "description": "VUA handle suffixes served by this AA (without '@'), e.g. 'finvu'. Longest-suffix match wins at resolution."
+    },
+    "baseUrl": { "type": "string", "format": "uri" },
+    "environment": { "type": "string", "enum": ["production", "sandbox"] },
+    "publicKeyUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "Where the AA's JWS verification key is published, when known."
+    },
+    "fiTypes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "FI types this AA serves, when constrained."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "sunset", "unknown"],
+      "description": "Operational status per public sources; 'unknown' until verified."
+    }
+  }
+}

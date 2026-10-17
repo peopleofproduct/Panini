@@ -47,4 +47,5 @@ export {
   validateOndcTrackResponse,
   validateOndcCancelRequest,
   validateOndcUpdateRequest,
+  validateAaDirectoryEntry,
 } from './types';
