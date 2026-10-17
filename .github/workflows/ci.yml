@@ -18,6 +18,7 @@ jobs:
       - run: npm run lint
       - run: npm run format:check
       - run: npm run build
+      - run: npm -w @paniniapi/browser run build
       - run: npm test
       - run: npm run bench:ci
       - uses: actions/setup-python@v5

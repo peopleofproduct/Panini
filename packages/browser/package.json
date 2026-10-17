@@ -1,0 +1,54 @@
+{
+  "name": "@paniniapi/browser",
+  "version": "0.1.1",
+  "description": "Browser-safe Panini bundle — narration parsing, CSV/SMS statement extraction and deterministic insights with all grammar/dictionary data inlined. Zero node: imports; nothing leaves the page.",
+  "license": "Apache-2.0",
+  "author": "Kapil",
+  "main": "dist/panini.browser.cjs",
+  "module": "dist/panini.browser.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "scripts"
+  ],
+  "dependencies": {
+    "@paniniapi/core": "0.1.1",
+    "@paniniapi/rules-engine": "0.2.0",
+    "@paniniapi/extract": "0.2.1",
+    "@paniniapi/insights": "0.2.0"
+  },
+  "devDependencies": {
+    "@paniniapi/simulator": "0.2.0",
+    "esbuild": "^0.28.2"
+  },
+  "scripts": {
+    "generate": "node scripts/gen-data.mjs",
+    "build": "npm run generate && tsc -b && esbuild src/index.ts --bundle --alias:node:fs=./scripts/fs-stub.js --alias:node:path=./scripts/fs-stub.js --alias:node:zlib=./scripts/fs-stub.js --alias:node:crypto=./scripts/fs-stub.js --format=esm --outfile=dist/panini.browser.mjs && esbuild src/index.ts --bundle --alias:node:fs=./scripts/fs-stub.js --alias:node:path=./scripts/fs-stub.js --alias:node:zlib=./scripts/fs-stub.js --alias:node:crypto=./scripts/fs-stub.js --format=cjs --outfile=dist/panini.browser.cjs && esbuild src/index.ts --bundle --alias:node:fs=./scripts/fs-stub.js --alias:node:path=./scripts/fs-stub.js --alias:node:zlib=./scripts/fs-stub.js --alias:node:crypto=./scripts/fs-stub.js --format=iife --global-name=panini --outfile=dist/panini.browser.global.js",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git",
+    "directory": "packages/browser"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "browser",
+    "edge",
+    "privacy-preserving",
+    "bank-statement-analysis"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/panini.browser.mjs",
+      "require": "./dist/panini.browser.cjs"
+    }
+  }
+}
