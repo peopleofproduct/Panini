@@ -1,0 +1,503 @@
+{
+  "generated": "analyzeTransactions @paniniapi/insights",
+  "cases": [
+    {
+      "name": "salaried",
+      "input": [
+        {
+          "date": "2024-01-05",
+          "direction": "CREDIT",
+          "amountPaise": 8500000,
+          "narration": "SALARY-ACME CORP",
+          "is_salary": true,
+          "balancePaise": 12000000
+        },
+        {
+          "date": "2024-01-15",
+          "direction": "DEBIT",
+          "amountPaise": 2500000,
+          "narration": "NACH-HDFC EMI PAYMENT",
+          "merchant": "HDFC BANK",
+          "category": "Loan & EMI",
+          "balancePaise": 9500000
+        },
+        {
+          "date": "2024-02-05",
+          "direction": "CREDIT",
+          "amountPaise": 8500000,
+          "narration": "SALARY-ACME CORP",
+          "is_salary": true,
+          "balancePaise": 18000000
+        },
+        {
+          "date": "2024-02-15",
+          "direction": "DEBIT",
+          "amountPaise": 2500000,
+          "narration": "NACH-HDFC EMI PAYMENT",
+          "merchant": "HDFC BANK",
+          "category": "Loan & EMI",
+          "balancePaise": 15500000
+        },
+        {
+          "date": "2024-03-05",
+          "direction": "CREDIT",
+          "amountPaise": 8500000,
+          "narration": "SALARY-ACME CORP",
+          "is_salary": true,
+          "balancePaise": 24000000
+        },
+        {
+          "date": "2024-03-15",
+          "direction": "DEBIT",
+          "amountPaise": 2500000,
+          "narration": "NACH-HDFC EMI PAYMENT",
+          "merchant": "HDFC BANK",
+          "category": "Loan & EMI",
+          "balancePaise": 21500000
+        },
+        {
+          "date": "2024-03-20",
+          "direction": "DEBIT",
+          "amountPaise": 150000,
+          "narration": "UPI-SWIGGY",
+          "merchant": "Swiggy",
+          "balancePaise": 21350000
+        }
+      ],
+      "expected": {
+        "income": {
+          "credits": [
+            {
+              "index": 0,
+              "date": "2024-01-05",
+              "amountPaise": 8500000,
+              "employer": "ACME CORP",
+              "basis": "is_salary_flag"
+            },
+            {
+              "index": 2,
+              "date": "2024-02-05",
+              "amountPaise": 8500000,
+              "employer": "ACME CORP",
+              "basis": "is_salary_flag"
+            },
+            {
+              "index": 4,
+              "date": "2024-03-05",
+              "amountPaise": 8500000,
+              "employer": "ACME CORP",
+              "basis": "is_salary_flag"
+            }
+          ],
+          "sources": ["ACME CORP"],
+          "monthlyAveragePaise": 8500000,
+          "consistency": "regular",
+          "monthsObserved": 3
+        },
+        "obligations": {
+          "recurring": [
+            {
+              "counterparty": "HDFC BANK",
+              "occurrences": [1, 3, 5],
+              "typicalAmountPaise": 2500000,
+              "monthsHit": ["2024-01", "2024-02", "2024-03"],
+              "isEmi": true
+            }
+          ],
+          "emis": [
+            {
+              "counterparty": "HDFC BANK",
+              "occurrences": [1, 3, 5],
+              "typicalAmountPaise": 2500000,
+              "monthsHit": ["2024-01", "2024-02", "2024-03"],
+              "isEmi": true
+            }
+          ],
+          "monthlyObligationPaise": 2500000
+        },
+        "foir": {
+          "ratio": 0.294,
+          "monthlyIncomePaise": 8500000,
+          "monthlyObligationPaise": 2500000,
+          "note": "obligations 2500000 / income 8500000"
+        },
+        "cashflow": {
+          "totalCreditsPaise": 25500000,
+          "totalDebitsPaise": 7650000,
+          "netPaise": 17850000,
+          "monthsObserved": 3,
+          "averageMonthlyNetPaise": 5950000,
+          "minBalancePaise": 9500000,
+          "maxBalancePaise": 24000000,
+          "closingBalancePaise": 21350000
+        },
+        "trends": {
+          "monthly": [
+            {
+              "month": "2024-01",
+              "creditsPaise": 8500000,
+              "debitsPaise": 2500000,
+              "netPaise": 6000000
+            },
+            {
+              "month": "2024-02",
+              "creditsPaise": 8500000,
+              "debitsPaise": 2500000,
+              "netPaise": 6000000
+            },
+            {
+              "month": "2024-03",
+              "creditsPaise": 8500000,
+              "debitsPaise": 2650000,
+              "netPaise": 5850000
+            }
+          ],
+          "netFlowDirection": "stable",
+          "balanceVelocityPaisePerDay": -140000,
+          "creditVolatilityPct": 0,
+          "debitVolatilityPct": 2.77
+        },
+        "signals": [],
+        "warnings": [],
+        "analyzedTransactions": 7
+      }
+    },
+    {
+      "name": "anomalous",
+      "input": [
+        {
+          "date": "2024-01-10",
+          "direction": "CREDIT",
+          "amountPaise": 100000,
+          "narration": "NEFT-TEST FRIEND",
+          "counterparty": "Test Friend"
+        },
+        {
+          "date": "2024-01-12",
+          "direction": "DEBIT",
+          "amountPaise": 99000,
+          "narration": "UPI-TEST FRIEND",
+          "counterparty": "Test Friend"
+        },
+        {
+          "date": "2024-01-14",
+          "direction": "DEBIT",
+          "amountPaise": 5000,
+          "narration": "CHQ RET CHARGE - BOUNCED"
+        },
+        {
+          "date": "2024-01-16",
+          "direction": "DEBIT",
+          "amountPaise": 3000,
+          "narration": "SELF TRF TO OWN A/C"
+        },
+        {
+          "date": null,
+          "direction": "CREDIT",
+          "amountPaise": 999,
+          "narration": "UNDATED"
+        },
+        null,
+        {
+          "date": "2024-01-18",
+          "direction": "DEBIT",
+          "narration": "NO AMOUNT"
+        }
+      ],
+      "expected": {
+        "income": {
+          "credits": [],
+          "sources": [],
+          "monthlyAveragePaise": null,
+          "consistency": "insufficient_data",
+          "monthsObserved": 0
+        },
+        "obligations": {
+          "recurring": [],
+          "emis": [],
+          "monthlyObligationPaise": null
+        },
+        "foir": {
+          "ratio": null,
+          "monthlyIncomePaise": null,
+          "monthlyObligationPaise": null,
+          "note": "income undetected — FOIR not computable"
+        },
+        "cashflow": {
+          "totalCreditsPaise": 100999,
+          "totalDebitsPaise": 107000,
+          "netPaise": -6001,
+          "monthsObserved": 1,
+          "averageMonthlyNetPaise": -6001,
+          "minBalancePaise": null,
+          "maxBalancePaise": null,
+          "closingBalancePaise": null
+        },
+        "trends": {
+          "monthly": [
+            {
+              "month": "2024-01",
+              "creditsPaise": 100000,
+              "debitsPaise": 107000,
+              "netPaise": -7000
+            }
+          ],
+          "netFlowDirection": "insufficient_data",
+          "balanceVelocityPaisePerDay": null,
+          "creditVolatilityPct": null,
+          "debitVolatilityPct": null
+        },
+        "signals": [
+          {
+            "ruleId": "PANINI-RSK-BOUNCE-001",
+            "severity": "medium",
+            "note": "1 bounced/returned payment narration(s)",
+            "evidence": [
+              {
+                "ruleId": "PANINI-RSK-BOUNCE-001",
+                "note": "narration carries bounce/return/dishonour keywords",
+                "txnIndices": [2]
+              }
+            ]
+          },
+          {
+            "ruleId": "PANINI-RSK-RT-001",
+            "severity": "medium",
+            "note": "1 round-trip pattern(s) — credit mirrored by matching debit",
+            "evidence": [
+              {
+                "ruleId": "PANINI-RSK-RT-001",
+                "note": "credit ₹1000.00 mirrored by debit of ₹990.00 to TEST FRIEND within 2 day(s)",
+                "txnIndices": [0, 1]
+              }
+            ]
+          },
+          {
+            "ruleId": "PANINI-RSK-SELF-001",
+            "severity": "low",
+            "note": "1 self/own-account transfer narration(s)",
+            "evidence": [
+              {
+                "ruleId": "PANINI-RSK-SELF-001",
+                "note": "narration carries self/own-account keywords",
+                "txnIndices": [3]
+              }
+            ]
+          }
+        ],
+        "warnings": [
+          "2 transaction(s) dropped: missing direction or amount",
+          "credits present but none identified as income — check enrichment/labels"
+        ],
+        "analyzedTransactions": 5
+      }
+    },
+    {
+      "name": "mixed",
+      "input": [
+        {
+          "date": "2024-01-07",
+          "direction": "CREDIT",
+          "amountPaise": 60000,
+          "narration": "UPI-FREELANCE CLIENT A",
+          "counterparty": "Client A"
+        },
+        {
+          "date": "2024-02-07",
+          "direction": "CREDIT",
+          "amountPaise": 62000,
+          "narration": "UPI-FREELANCE CLIENT A",
+          "counterparty": "Client A"
+        },
+        {
+          "date": "2024-03-07",
+          "direction": "CREDIT",
+          "amountPaise": 59000,
+          "narration": "UPI-FREELANCE CLIENT A",
+          "counterparty": "Client A"
+        },
+        {
+          "date": "2024-01-10",
+          "direction": "DEBIT",
+          "amountPaise": 12000,
+          "narration": "UPI-NETFLIX",
+          "merchant": "Netflix"
+        },
+        {
+          "date": "2024-02-10",
+          "direction": "DEBIT",
+          "amountPaise": 12000,
+          "narration": "UPI-NETFLIX",
+          "merchant": "Netflix"
+        },
+        {
+          "date": "2024-03-10",
+          "direction": "DEBIT",
+          "amountPaise": 12000,
+          "narration": "UPI-NETFLIX",
+          "merchant": "Netflix"
+        },
+        {
+          "date": "2024-04-01",
+          "direction": "CREDIT",
+          "amountPaise": 61000,
+          "narration": "UPI-FREELANCE CLIENT A",
+          "counterparty": "Client A"
+        },
+        {
+          "date": "2024-04-10",
+          "direction": "DEBIT",
+          "amountPaise": 12000,
+          "narration": "UPI-NETFLIX",
+          "merchant": "Netflix"
+        }
+      ],
+      "expected": {
+        "income": {
+          "credits": [
+            {
+              "index": 0,
+              "date": "2024-01-07",
+              "amountPaise": 60000,
+              "employer": "CLIENT A",
+              "basis": "regular_credit"
+            },
+            {
+              "index": 1,
+              "date": "2024-02-07",
+              "amountPaise": 62000,
+              "employer": "CLIENT A",
+              "basis": "regular_credit"
+            },
+            {
+              "index": 2,
+              "date": "2024-03-07",
+              "amountPaise": 59000,
+              "employer": "CLIENT A",
+              "basis": "regular_credit"
+            },
+            {
+              "index": 6,
+              "date": "2024-04-01",
+              "amountPaise": 61000,
+              "employer": "CLIENT A",
+              "basis": "regular_credit"
+            }
+          ],
+          "sources": ["CLIENT A"],
+          "monthlyAveragePaise": 60500,
+          "consistency": "regular",
+          "monthsObserved": 4
+        },
+        "obligations": {
+          "recurring": [
+            {
+              "counterparty": "NETFLIX",
+              "occurrences": [3, 4, 5, 7],
+              "typicalAmountPaise": 12000,
+              "monthsHit": ["2024-01", "2024-02", "2024-03", "2024-04"],
+              "isEmi": false
+            }
+          ],
+          "emis": [],
+          "monthlyObligationPaise": 12000
+        },
+        "foir": {
+          "ratio": 0.198,
+          "monthlyIncomePaise": 60500,
+          "monthlyObligationPaise": 12000,
+          "note": "obligations 12000 / income 60500"
+        },
+        "cashflow": {
+          "totalCreditsPaise": 242000,
+          "totalDebitsPaise": 48000,
+          "netPaise": 194000,
+          "monthsObserved": 4,
+          "averageMonthlyNetPaise": 48500,
+          "minBalancePaise": null,
+          "maxBalancePaise": null,
+          "closingBalancePaise": null
+        },
+        "trends": {
+          "monthly": [
+            {
+              "month": "2024-01",
+              "creditsPaise": 60000,
+              "debitsPaise": 12000,
+              "netPaise": 48000
+            },
+            {
+              "month": "2024-02",
+              "creditsPaise": 62000,
+              "debitsPaise": 12000,
+              "netPaise": 50000
+            },
+            {
+              "month": "2024-03",
+              "creditsPaise": 59000,
+              "debitsPaise": 12000,
+              "netPaise": 47000
+            },
+            {
+              "month": "2024-04",
+              "creditsPaise": 61000,
+              "debitsPaise": 12000,
+              "netPaise": 49000
+            }
+          ],
+          "netFlowDirection": "stable",
+          "balanceVelocityPaisePerDay": null,
+          "creditVolatilityPct": 1.85,
+          "debitVolatilityPct": 0
+        },
+        "signals": [],
+        "warnings": [],
+        "analyzedTransactions": 8
+      }
+    },
+    {
+      "name": "empty",
+      "input": [],
+      "expected": {
+        "income": {
+          "credits": [],
+          "sources": [],
+          "monthlyAveragePaise": null,
+          "consistency": "insufficient_data",
+          "monthsObserved": 0
+        },
+        "obligations": {
+          "recurring": [],
+          "emis": [],
+          "monthlyObligationPaise": null
+        },
+        "foir": {
+          "ratio": null,
+          "monthlyIncomePaise": null,
+          "monthlyObligationPaise": null,
+          "note": "income undetected — FOIR not computable"
+        },
+        "cashflow": {
+          "totalCreditsPaise": 0,
+          "totalDebitsPaise": 0,
+          "netPaise": 0,
+          "monthsObserved": 0,
+          "averageMonthlyNetPaise": null,
+          "minBalancePaise": null,
+          "maxBalancePaise": null,
+          "closingBalancePaise": null
+        },
+        "trends": {
+          "monthly": [],
+          "netFlowDirection": "insufficient_data",
+          "balanceVelocityPaisePerDay": null,
+          "creditVolatilityPct": null,
+          "debitVolatilityPct": null
+        },
+        "signals": [],
+        "warnings": ["no usable transactions — report reflects an empty input"],
+        "analyzedTransactions": 0
+      }
+    }
+  ]
+}

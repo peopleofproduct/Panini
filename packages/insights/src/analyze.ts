@@ -23,9 +23,11 @@ import type {
   InsightsOptions,
   InsightsReport,
   InsightTransaction,
+  MonthlyFlow,
   ObligationsSummary,
   RecurringObligation,
   RiskSignal,
+  TrendSummary,
 } from './types';
 
 export const RULE_IDS = {
@@ -330,6 +332,66 @@ function summarizeCashflow(txns: readonly WorkTxn[]): CashflowSummary {
   };
 }
 
+function computeTrends(txns: readonly WorkTxn[]): TrendSummary {
+  const byMonth = new Map<string, MonthlyFlow>();
+  for (const w of txns) {
+    const mk = monthKey(w.txn.date);
+    if (mk === null || w.txn.amountPaise === null) continue;
+    const cur = byMonth.get(mk) ?? { month: mk, creditsPaise: 0, debitsPaise: 0, netPaise: 0 };
+    const credits = cur.creditsPaise + (w.txn.direction === 'CREDIT' ? w.txn.amountPaise : 0);
+    const debits = cur.debitsPaise + (w.txn.direction === 'DEBIT' ? w.txn.amountPaise : 0);
+    byMonth.set(mk, {
+      month: mk,
+      creditsPaise: credits,
+      debitsPaise: debits,
+      netPaise: credits - debits,
+    });
+  }
+  const monthly = [...byMonth.values()].sort((a, b) => a.month.localeCompare(b.month));
+
+  let netFlowDirection: TrendSummary['netFlowDirection'] = 'insufficient_data';
+  if (monthly.length >= 3) {
+    const half = Math.floor(monthly.length / 2);
+    const first = monthly.slice(0, half);
+    const second = monthly.slice(monthly.length - half);
+    const avg = (rows: readonly MonthlyFlow[]) =>
+      rows.reduce((s, r) => s + r.netPaise, 0) / rows.length;
+    const f = avg(first);
+    const s = avg(second);
+    const band = Math.max(Math.abs(f), 1) * 0.1;
+    netFlowDirection = s - f > band ? 'improving' : f - s > band ? 'declining' : 'stable';
+  }
+
+  // Median per-day balance change across consecutive dated balances.
+  const dated = txns.filter(
+    (w): w is WorkTxn & { txn: InsightTransaction & { date: string; balancePaise: number } } =>
+      w.txn.date !== null && w.txn.balancePaise !== null && w.txn.balancePaise !== undefined,
+  );
+  const velocities: number[] = [];
+  for (let i = 1; i < dated.length; i++) {
+    const dayDiff = epochDay(dated[i]!.txn.date)! - epochDay(dated[i - 1]!.txn.date)!;
+    if (dayDiff === 0) continue;
+    velocities.push((dated[i]!.txn.balancePaise - dated[i - 1]!.txn.balancePaise) / dayDiff);
+  }
+
+  const volatility = (key: 'creditsPaise' | 'debitsPaise'): number | null => {
+    if (monthly.length < 2) return null;
+    const values = monthly.map((m) => m[key]);
+    const mean = values.reduce((a, b) => a + b, 0) / values.length;
+    if (mean === 0) return null;
+    const variance = values.reduce((s, v) => s + (v - mean) ** 2, 0) / values.length;
+    return Math.round((Math.sqrt(variance) / mean) * 10000) / 100;
+  };
+
+  return {
+    monthly,
+    netFlowDirection,
+    balanceVelocityPaisePerDay: velocities.length > 0 ? Math.round(median(velocities)) : null,
+    creditVolatilityPct: volatility('creditsPaise'),
+    debitVolatilityPct: volatility('debitsPaise'),
+  };
+}
+
 function detectSignals(
   txns: readonly WorkTxn[],
   roundTripWindowDays: number,
@@ -452,6 +514,7 @@ export function analyzeTransactions(
   const obligations = detectObligations(usable, options?.minRecurringOccurrences ?? 3);
   const foir = computeFoir(income.summary, obligations.summary);
   const cashflow = summarizeCashflow(usable);
+  const trends = computeTrends(usable);
   const signals = detectSignals(
     usable,
     options?.roundTripWindowDays ?? 5,
@@ -463,6 +526,7 @@ export function analyzeTransactions(
     obligations: obligations.summary,
     foir,
     cashflow,
+    trends,
     signals,
     warnings,
     analyzedTransactions: usable.length,
