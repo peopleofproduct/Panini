@@ -1,0 +1,22 @@
+{
+  "id": "rbl_csv",
+  "format": "csv",
+  "description": "RBL Bank statement export — Transaction Date + Value Date, Withdrawal/Deposit columns.",
+  "input": "RBL BANK\nAccount No : XXXXXX5544\nTransaction Date,Value Date,Description,Cheque No,Withdrawal,Deposit,Balance\n15/10/2026,15/10/2026,UPI/402345678912/DR/PHONEPE@ybl/,CHQ200,450.00,,23450.00\n16/10/2026,16/10/2026,NACH-EMI-BAJAJ FINSERV,,5000.00,,18450.00",
+  "expect": {
+    "bank": "RBL",
+    "layoutId": "rbl_statement",
+    "accountMask": "5544",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 45000,
+        "balancePaise": 2345000,
+        "refNo": "CHQ200"
+      },
+      { "date": "2026-10-16", "direction": "DEBIT", "amountPaise": 500000, "balancePaise": 1845000 }
+    ]
+  }
+}

@@ -62,7 +62,7 @@ def parse_statement_date(value: str) -> Optional[str]:
     return parse_indian_date(f"{int(m.group(1)):02d}-{month:02d}-{m.group(3)}")
 
 
-_AMOUNT_BODY = re.compile(r"^\d+(?:\.\d{1,2})?$")
+_AMOUNT_BODY = re.compile(r"^-?\d+(?:\.\d{1,2})?$")
 _CURRENCY_PREFIX = re.compile(r"^(?:rs\.?|inr|₹)\s*", re.IGNORECASE)
 
 
@@ -223,8 +223,11 @@ def map_row(cells: list[str], columns: dict[str, int]) -> dict[str, Any]:
     balance_paise = None
     balance_raw = cell("balance")
     if balance_raw is not None:
+        bal_suffix = _DR_CR_SUFFIX.search(balance_raw)
         stripped = _DR_CR_SUFFIX.sub("", balance_raw).strip()
         balance_paise = _parse_paise(stripped)
+        if balance_paise is not None and bal_suffix and _direction_from_text(bal_suffix.group(1)) == "DEBIT":
+            balance_paise = -balance_paise
         if balance_paise is None:
             warnings.append(f"unparseable balance '{balance_raw}'")
 

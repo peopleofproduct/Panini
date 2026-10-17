@@ -1,10 +1,23 @@
 {
   "files": [],
   "references": [
-    { "path": "packages/core" },
-    { "path": "packages/extract" },
-    { "path": "packages/rules-engine" },
-    { "path": "packages/standards-schema" },
-    { "path": "packages/simulator" }
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/extract"
+    },
+    {
+      "path": "packages/rules-engine"
+    },
+    {
+      "path": "packages/standards-schema"
+    },
+    {
+      "path": "packages/simulator"
+    },
+    {
+      "path": "packages/insights"
+    }
   ]
 }

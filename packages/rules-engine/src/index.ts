@@ -17,14 +17,22 @@
 export { loadBuiltinRuleSets, loadCategories, loadRuleSets } from './loader';
 export {
   loadIfscBanks,
+  loadMccCodes,
   loadMerchants,
   loadVpaHandles,
   lookupIfscBank,
+  lookupMcc,
   lookupMerchant,
   lookupVpaHandle,
   setDictionaries,
 } from './dictionary';
-export type { DictionaryData, IfscBankInfo, MerchantEntry, VpaHandleInfo } from './dictionary';
+export type {
+  DictionaryData,
+  IfscBankInfo,
+  MccInfo,
+  MerchantEntry,
+  VpaHandleInfo,
+} from './dictionary';
 export { checkSample, coverageReport, loadCorpus } from './coverage';
 export type {
   BankCoverage,

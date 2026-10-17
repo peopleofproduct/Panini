@@ -43,15 +43,16 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
                  └────────────────────────────────────────────────┘
 ```
 
-| Package                       | Role                                                                                                                                                                                                                                                |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                        |
-| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                           |
-| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                                                                               |
-| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (9 banks + generic), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams. |
-| `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                                                                                       |
-| `panini-py/`                  | Python port sharing the same grammar JSONs, extraction formats, and corpus — conformance-gated against the TypeScript corpus.                                                                                                                       |
-| `playground/`                 | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                                                                                       |
+| Package                       | Role                                                                                                                                                                                                                                                 |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                         |
+| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                            |
+| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                                                                                |
+| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (15 banks + generic), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams. |
+| `@paniniapi/insights`         | Deterministic credit-relevant analytics — income/salary detection, recurring obligations, EMI, FOIR, cash-flow summaries, and bounce/round-trip/self-transfer risk signals. Explainable: every claim carries a rule ID + evidence indices.           |
+| `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads **and bank-layout statement files** — feeds the extraction round-trip corpus gate.                                                                                              |
+| `panini-py/`                  | Python port sharing the same grammar JSONs, extraction formats, and corpus — conformance-gated against the TypeScript corpus.                                                                                                                        |
+| `playground/`                 | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                                                                                        |
 
 ## ✨ Design Guarantees
 
@@ -144,6 +145,22 @@ await extractStatement(scannedPdf, { ocr: createTesseractProvider(tesseractWorke
 // real text layer. Flat OCR text degrades to whitespace-split rows.
 ```
 
+### Credit-relevant insights
+
+```ts
+import { analyzeTransactions } from '@paniniapi/insights';
+
+const report = analyzeTransactions(statement.transactions);
+// report.income       — salary credits, employer sources, monthly average,
+//                       regular/irregular consistency
+// report.obligations  — recurring debits, EMI patterns, monthly obligation
+// report.foir         — fixed-obligation-to-income ratio (null when income
+//                       is undetected — never fabricated)
+// report.cashflow     — totals, net, balance range, closing balance
+// report.signals      — PANINI-RSK-* bounce / round-trip / self-transfer
+//                       signals, each with evidence txn indices
+```
+
 ### Validate DPI payloads
 
 ```ts
@@ -191,9 +208,11 @@ cd panini-py && python3 -m unittest discover tests   # corpus conformance gate
 ### Entity dictionaries & corpus gate
 
 `packages/rules-engine/rules/entities/` holds community-editable datasets —
-merchant canonical names + aliases, 90+ UPI VPA handles → PSP app/sponsor bank
+merchant canonical names + aliases + MCC, 90+ UPI VPA handles → PSP app/sponsor bank
 (PhonePe, GPay, Paytm, CRED, WhatsApp Pay, BHIM, Navi, MobiKwik, super.money,
-Amazon Pay, Flipkart, bank-direct…), and IFSC prefix → bank. Ambiguous handles
+Amazon Pay, Flipkart, bank-direct…), IFSC prefix → bank, and ISO 18245
+MCC → category/description (POS narrations carrying `MCC-5411` tokens resolve
+to `Groceries`, not `Uncategorized`). Ambiguous handles
 are never guessed — they resolve to `null` instead of a wrong attribution.
 
 `rules/corpus/` holds per-bank narration fixtures; `tests/corpus.test.ts`

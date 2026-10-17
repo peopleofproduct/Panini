@@ -1,0 +1,27 @@
+{
+  "id": "federal_csv",
+  "format": "csv",
+  "description": "Federal Bank statement — 'Tran Date' + 'Chq No' + 'Particulars', DD/MM/YY dates.",
+  "input": "FEDERAL BANK\nAccount No : XXXXXX1122\nTran Date,Chq No,Particulars,Debit,Credit,Balance\n15/10/26,CHQ100,UPI/402345678912/DR/ZOMATO@icici/,320.50,,44100.00\n16/10/26,,RTGS-UTR789012-SUPPLIER PAYMENT,,25000.00,69100.00",
+  "expect": {
+    "bank": "FEDERAL",
+    "layoutId": "federal_statement",
+    "accountMask": "1122",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 32050,
+        "balancePaise": 4410000,
+        "refNo": "CHQ100"
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 2500000,
+        "balancePaise": 6910000
+      }
+    ]
+  }
+}

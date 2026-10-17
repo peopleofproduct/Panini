@@ -143,6 +143,123 @@
       }
     },
     {
+      "id": "union_statement",
+      "bank": "UNION",
+      "requiredHeaders": [
+        "transaction date",
+        "transaction details",
+        "reference no",
+        "debit",
+        "credit",
+        "balance"
+      ],
+      "columns": {
+        "date": ["transaction date", "value date", "date"],
+        "narration": ["transaction details", "description", "particulars", "narration"],
+        "refNo": ["reference no", "ref no", "cheque no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "idfc_statement",
+      "bank": "IDFC",
+      "requiredHeaders": [
+        "transaction date",
+        "value date",
+        "particulars",
+        "cheque no",
+        "debit",
+        "credit",
+        "balance"
+      ],
+      "columns": {
+        "date": ["transaction date", "value date", "date"],
+        "narration": ["particulars", "description", "narration"],
+        "refNo": ["cheque no", "ref no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "canara_statement",
+      "bank": "CANARA",
+      "requiredHeaders": [
+        "txn date",
+        "value date",
+        "cheque no",
+        "description",
+        "branch code",
+        "debit",
+        "credit",
+        "balance"
+      ],
+      "columns": {
+        "date": ["txn date", "value date", "date"],
+        "narration": ["description", "narration", "particulars"],
+        "refNo": ["cheque no", "ref no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "federal_statement",
+      "bank": "FEDERAL",
+      "requiredHeaders": ["tran date", "chq no", "particulars", "debit", "credit", "balance"],
+      "columns": {
+        "date": ["tran date", "value date", "date"],
+        "narration": ["particulars", "description", "narration"],
+        "refNo": ["chq no", "cheque no", "ref no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "rbl_statement",
+      "bank": "RBL",
+      "requiredHeaders": [
+        "transaction date",
+        "value date",
+        "description",
+        "cheque no",
+        "withdrawal",
+        "deposit",
+        "balance"
+      ],
+      "columns": {
+        "date": ["transaction date", "value date", "date"],
+        "narration": ["description", "narration", "particulars"],
+        "refNo": ["cheque no", "ref no"],
+        "debit": ["withdrawal", "debit", "dr"],
+        "credit": ["deposit", "credit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "au_statement",
+      "bank": "AU_SFB",
+      "requiredHeaders": [
+        "transaction date",
+        "narration",
+        "reference no",
+        "withdrawal",
+        "deposit",
+        "closing balance"
+      ],
+      "columns": {
+        "date": ["transaction date", "value date", "date"],
+        "narration": ["narration", "description", "particulars"],
+        "refNo": ["reference no", "ref no", "cheque no"],
+        "debit": ["withdrawal", "debit", "dr"],
+        "credit": ["deposit", "credit", "cr"],
+        "balance": ["closing balance", "balance", "bal"]
+      }
+    },
+    {
       "id": "generic_statement",
       "bank": "GENERIC",
       "requiredHeaders": ["date", "balance"],

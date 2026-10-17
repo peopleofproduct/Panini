@@ -40,6 +40,8 @@ const OUT_FIELDS = [
   'vpa_app',
   'vpa_bank',
   'ifsc_bank',
+  'mcc',
+  'mcc_description',
 ] as const;
 
 const CHANNELS = new Set([
