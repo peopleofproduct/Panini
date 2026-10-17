@@ -1,0 +1,53 @@
+{
+  "id": "hdfc",
+  "bank": "HDFC",
+  "version": "1.0.0",
+  "description": "HDFC Bank narration quirks: NWD network withdrawals, MMT/IMPS mobile transfers, CHQ PAID cheque narration.",
+  "patterns": [
+    {
+      "name": "hdfc_nwd_withdrawal",
+      "priority": 30,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^(?:NWD|ATW)[-/ ](?<tail>.*)$"
+    },
+    {
+      "name": "hdfc_mmt_imps",
+      "priority": 30,
+      "channel": "IMPS",
+      "category": "Transfers",
+      "media": "narration",
+      "regex": "^MMT[\\/]IMPS[\\/](?<txnId>\\d{9,16})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "hdfc_chq_paid",
+      "priority": 30,
+      "channel": "CHEQUE",
+      "type": "DEBIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^CHQ\\s+PAID[-/ ](?<txnId>\\d{5,7})(?:[-/ ](?<counterparty>.+))?$"
+    },
+    {
+      "name": "hdfc_chq_dep",
+      "priority": 30,
+      "channel": "CHEQUE",
+      "type": "CREDIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^CHQ\\s+DEP[-/ ](?<txnId>\\d{5,7})(?:[-/ ](?<counterparty>.+))?$"
+    },
+    {
+      "name": "hdfc_ft_netbanking",
+      "priority": 20,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:FT|FUNDTRANSFER)[-/ ](?<txnId>\\d{9,16})[-/ ](?<counterparty>[^-]+)(?:[-/ ](?<tail>.*))?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+    }
+  ]
+}

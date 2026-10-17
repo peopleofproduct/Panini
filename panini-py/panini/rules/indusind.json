@@ -1,0 +1,41 @@
+{
+  "id": "indusind",
+  "bank": "INDUSIND",
+  "version": "1.0.0",
+  "description": "IndusInd Bank narration quirks: ref-first UPI, NEFT/RTGS with IFSC fragments, ATM slashed format.",
+  "patterns": [
+    {
+      "name": "indusind_upi_ref_first",
+      "priority": 28,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI-(?<txnId>\\d{6,16})-(?<counterparty>[A-Za-z0-9 .&']+)(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:-(?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "indusind_neft_ifsc",
+      "priority": 25,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "indusind_rtgs_ifsc",
+      "priority": 25,
+      "channel": "RTGS",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^RTGS[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "indusind_atm",
+      "priority": 20,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^(?:ATM|CASH)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "kotak",
+  "bank": "KOTAK",
+  "version": "1.0.0",
+  "description": "Kotak Mahindra narration quirks: UPI merchant@handle-ref strings, MB:/IB: mobile/internet banking tags, Direct Debit, NEFT Cr- prefix.",
+  "patterns": [
+    {
+      "name": "kotak_upi_vpa_ref",
+      "priority": 30,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[-/](?<counterparty>[A-Za-z0-9 .&']+?)@(?<vpaHandle>[A-Za-z0-9._-]+)[-/ ](?<txnId>\\d{6,16})(?<tail>[-/: ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "kotak_mb_ib_transfer",
+      "priority": 28,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regex": "^(?:MB|IB)[:/-](?<counterparty>[A-Za-z0-9 .&']+?)[-/ ](?<txnId>\\d{6,16})(?<tail>.*)$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "kotak_direct_debit",
+      "priority": 28,
+      "channel": "NACH",
+      "type": "DEBIT",
+      "category": "Subscriptions",
+      "media": "narration",
+      "regex": "^(?:BY\\s+)?DIRECT\\s+DEBIT[-/ ](?<counterparty>.+?)(?:[-/ ](?<tail>.*))?$"
+    },
+    {
+      "name": "kotak_neft_cr",
+      "priority": 28,
+      "channel": "NEFT",
+      "type": "CREDIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT\\s*Cr[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "kotak_card_star",
+      "priority": 25,
+      "channel": "POS",
+      "type": "DEBIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:VISA|MASTER(?:CARD)?|RUPAY)[*](?<counterparty>[^*]+?)(?:[*](?<tail>.*))?$"
+    }
+  ]
+}

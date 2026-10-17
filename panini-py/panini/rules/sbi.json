@@ -1,0 +1,55 @@
+{
+  "id": "sbi",
+  "bank": "SBI",
+  "version": "1.0.0",
+  "description": "State Bank of India narration quirks: BY/TO TRANSFER prefixes, star-delimited NEFT, slashed UPI with DR/CR and IFSC fragments.",
+  "patterns": [
+    {
+      "name": "sbi_transfer_upi",
+      "priority": 30,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^(?:(?:BY|TO|WDL BY)\\s+)?(?:TRANSFER[-/ ])?UPI[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<bankCode>[A-Z]{2,4}\\d*))?(?:[\\/](?<date>\\d{8}))?(?<tail>.*)$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL" }
+    },
+    {
+      "name": "sbi_neft_star",
+      "priority": 25,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "NEFT\\*(?<bankCode>[A-Z]{4}\\d{7})\\*(?<counterparty>[^*-]+?)(?:[-*](?<remarks>.+))?$"
+    },
+    {
+      "name": "sbi_atm_nfs",
+      "priority": 25,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^(?:ATM[-/ ])?(?:NFS[-/ ])?(?:CASH[-/ ])?WDL\\b(?<tail>.*)$"
+    },
+    {
+      "name": "sbi_by_transfer_credit",
+      "priority": 4,
+      "type": "CREDIT",
+      "media": "narration",
+      "regex": "^BY\\s+TRANSFER[-/ ](?<counterparty>[^-]+)(?:[-/ ](?<remarks>.+))?$"
+    },
+    {
+      "name": "sbi_to_transfer_debit",
+      "priority": 4,
+      "type": "DEBIT",
+      "media": "narration",
+      "regex": "^TO\\s+TRANSFER[-/ ](?<counterparty>[^-]+)(?:[-/ ](?<remarks>.+))?$"
+    },
+    {
+      "name": "sbi_interest_credit",
+      "priority": 6,
+      "type": "CREDIT",
+      "category": "Income",
+      "media": "narration",
+      "regex": "^(?:CREDIT[- ]INTEREST|SBINT|INT[./]PD)\\b(?<tail>.*)$"
+    }
+  ]
+}

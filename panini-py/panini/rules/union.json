@@ -1,0 +1,41 @@
+{
+  "id": "union",
+  "bank": "UNION",
+  "version": "1.0.0",
+  "description": "Union Bank of India narration quirks: MBR mobile-banking refs, UPI pipelines, IFSC-led NEFT.",
+  "patterns": [
+    {
+      "name": "union_mbr_transfer",
+      "priority": 28,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regex": "^(?:MBR|MB)[-/ ](?<txnId>\\d{9,16})[-/ ](?<counterparty>[^-/]+)(?:[-/ ](?<tail>.*))?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "union_upi_pipeline",
+      "priority": 28,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<date>\\d{8}))?(?<tail>[\\/\\- ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL" }
+    },
+    {
+      "name": "union_neft_ifsc",
+      "priority": 25,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "union_atm",
+      "priority": 20,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^(?:ATM|VPS)[-/ ](?<tail>.*)$"
+    }
+  ]
+}

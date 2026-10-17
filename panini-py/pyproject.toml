@@ -26,3 +26,7 @@ Repository = "https://github.com/peopleofproduct/Panini"
 
 [tool.setuptools]
 packages = ["panini"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+panini = ["rules/*.json", "rules/entities/*.json"]
