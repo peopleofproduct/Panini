@@ -1,0 +1,27 @@
+{
+  "bank": "RBL",
+  "samples": [
+    {
+      "input": "RBLC-AMAZON-123456",
+      "expect": { "channel": "POS", "type": "DEBIT", "merchant": "Amazon" }
+    },
+    {
+      "input": "UPI-123456789012-MYNTRA@ybl",
+      "expect": {
+        "channel": "UPI",
+        "ref_no": "123456789012",
+        "merchant": "Myntra",
+        "vpa": "ybl",
+        "vpa_app": "PhonePe"
+      }
+    },
+    {
+      "input": "NEFT-RATN0009876-CLIENT SERVICES PVT",
+      "expect": {
+        "channel": "NEFT",
+        "counterparty": "Client Services Pvt",
+        "ifsc_bank": "RBL Bank"
+      }
+    }
+  ]
+}

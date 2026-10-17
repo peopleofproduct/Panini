@@ -1,0 +1,30 @@
+{
+  "bank": "BOB",
+  "samples": [
+    {
+      "input": "BY TRANSFER-NEFT*HDFC0000240*ACME CORP-SALARY",
+      "expect": { "channel": "NEFT", "counterparty": "ACME Corp", "ifsc_bank": "HDFC Bank" }
+    },
+    {
+      "input": "TO TRANSFER-JOHN DOE-RENT",
+      "expect": { "type": "DEBIT", "counterparty": "JOHN DOE" }
+    },
+    {
+      "input": "BY TRANSFER-INVOICE PAYMENT-VENDOR NAME",
+      "expect": { "type": "CREDIT", "counterparty": "Invoice Payment" }
+    },
+    {
+      "input": "IMPS/123456789012/ZOMATO/INW",
+      "expect": {
+        "channel": "IMPS",
+        "type": "CREDIT",
+        "ref_no": "123456789012",
+        "merchant": "Zomato"
+      }
+    },
+    {
+      "input": "ATM WDL-SELF-0042",
+      "expect": { "channel": "ATM", "type": "DEBIT", "category": "Cash Withdrawal" }
+    }
+  ]
+}

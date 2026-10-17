@@ -1,0 +1,34 @@
+{
+  "bank": "PNB",
+  "samples": [
+    {
+      "input": "UPI/DR/123456789012/JOHN DOE/SBIN/20261015",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "counterparty": "JOHN DOE",
+        "date": "2026-10-15",
+        "ifsc_bank": "State Bank of India"
+      }
+    },
+    {
+      "input": "NEFT-IN-N3452618902-ACME CORP",
+      "expect": {
+        "channel": "NEFT",
+        "type": "CREDIT",
+        "ref_no": "N3452618902",
+        "counterparty": "ACME Corp"
+      }
+    },
+    {
+      "input": "IMPS/123456789012/BIGBASKET/OUT",
+      "expect": {
+        "channel": "IMPS",
+        "ref_no": "123456789012",
+        "merchant": "BigBasket",
+        "merchant_canonical": "BigBasket"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "bank": "YES",
+  "samples": [
+    {
+      "input": "UPI-123456789012-SWIGGY@okhdfcbank-151026",
+      "expect": {
+        "channel": "UPI",
+        "ref_no": "123456789012",
+        "merchant": "Swiggy",
+        "vpa": "okhdfcbank",
+        "date": "2026-10-15",
+        "vpa_bank": "HDFC Bank"
+      }
+    },
+    {
+      "input": "INB-123456789012-JANE DOE-CR",
+      "expect": {
+        "channel": "NETBANKING",
+        "type": "CREDIT",
+        "ref_no": "123456789012",
+        "counterparty": "JANE DOE"
+      }
+    },
+    {
+      "input": "RTGS-YESB0001234-VENDOR PAYMENTS LLP",
+      "expect": {
+        "channel": "RTGS",
+        "counterparty": "Vendor Payments LLP",
+        "ifsc_bank": "YES Bank"
+      }
+    }
+  ]
+}

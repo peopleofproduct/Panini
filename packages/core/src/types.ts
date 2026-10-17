@@ -26,6 +26,7 @@ export type TransactionChannel =
   | 'POS'
   | 'CHEQUE'
   | 'NETBANKING'
+  | 'WALLET'
   | 'UNKNOWN';
 
 /** Direction of funds. REVERSAL/REFUND indicate a returned transaction. */

@@ -57,7 +57,15 @@
       "channel": "IMPS",
       "media": "narration",
       "regex": "^IMPS[-/](?<txnId>\\d{9,16})[-/](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
-      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+      "flags": {
+        "REV": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT",
+        "IN": "CREDIT",
+        "OUT": "DEBIT",
+        "INW": "CREDIT",
+        "OUTW": "DEBIT"
+      }
     },
     {
       "name": "atm_withdrawal",
@@ -100,6 +108,107 @@
       "media": "narration",
       "regexFlags": "i",
       "regex": "^(?:CHQ|CHEQUE|CLG)[-/ ](?<txnId>\\d{5,7})(?:[-/ ](?<counterparty>.+))?$"
+    },
+    {
+      "name": "upi_mandate_autopay",
+      "priority": 15,
+      "channel": "UPI",
+      "type": "DEBIT",
+      "category": "Subscriptions",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:UPI[-/ ]?)?(?:AUTO\\s?PAY|MANDATE|E[- ]?MANDATE|UPIAUTOPAY|MANDATE EXECUTION)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
+      "setMetadata": { "mandate": "upi" }
+    },
+    {
+      "name": "bank_charges",
+      "priority": 10,
+      "type": "DEBIT",
+      "category": "Bank Charges",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:(?:IMPS|NEFT|RTGS|UPI|ATM|SMS|AMB|DP|AMC|MAB)[-/ ])?(?:CHRG|CHARGES?|CHG|STCHG|SWCHG|SMSCHG|DPC|IPCH|AMC|PENAL(?:TY)?)[-/ ](?<tail>.*)$"
+    },
+    {
+      "name": "bbps_billpay",
+      "priority": 12,
+      "type": "DEBIT",
+      "category": "Utilities",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:BBPS|BILL\\s?PAY(?:MENT)?|BILLDESK|BHARAT\\s?BILL|BIL)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "refund_credit",
+      "priority": 12,
+      "type": "REFUND",
+      "category": "Refunds",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:REFUND|RFD|REV(?:ERSAL)?[-/ ]TXN)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "cheque_return",
+      "priority": 12,
+      "channel": "CHEQUE",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:CHQ|CHEQUE|CLG)[-/ ]?(?:RET(?:URN)?|RTN|BOUNCE|DISH(?:ONOURED|ONORED)?)[-/ ](?<txnId>\\d{4,7})?(?<tail>.*)$",
+      "setMetadata": { "bounce": "true" }
+    },
+    {
+      "name": "loan_disbursal",
+      "priority": 12,
+      "type": "CREDIT",
+      "category": "Loan & EMI",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:LN|LOAN|DISB(?:URSAL)?)[-/ ](?<txnId>[A-Z0-9]{5,16})[-/ ](?<counterparty>.+?)\\s*$"
+    },
+    {
+      "name": "interest_credit",
+      "priority": 10,
+      "type": "CREDIT",
+      "category": "Income",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:INT\\.?PD|SBINT|INT(?:EREST)?[./ ](?:PD|CR)|CREDIT\\s+INT(?:EREST)?)(?<tail>.*)$"
+    },
+    {
+      "name": "dividend_credit",
+      "priority": 10,
+      "type": "CREDIT",
+      "category": "Income",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:DIV|DIVIDEND)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "tax_payment",
+      "priority": 10,
+      "type": "DEBIT",
+      "category": "Taxes",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:GST|GSTP|CBIC|TDS|INCOME\\s?TAX|ADVANCE\\s?TAX)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "pension_credit",
+      "priority": 10,
+      "type": "CREDIT",
+      "category": "Income",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^PENSION[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "forex_international",
+      "priority": 10,
+      "type": "DEBIT",
+      "category": "Forex",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:INTL|FOREX|MARKUP)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
     },
     {
       "name": "sms_amount_first",

@@ -22,6 +22,7 @@ import {
   type TransactionType,
 } from '@panini/core';
 import { loadBuiltinRuleSets, loadCategories } from './loader';
+import { lookupIfscBank, lookupMerchant, lookupVpaHandle } from './dictionary';
 
 /**
  * High-priority grammar covering the dominant Indian-bank narration
@@ -49,7 +50,7 @@ export const BANK_NARRATION_RULE_SET: GrammarRuleSet = {
       regexFlags: 'i',
       confidence: 0.95,
       regex:
-        '^UPI[\\/](?<date>\\d{8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4})[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{6,18})[\\/](?<counterparty>[^\\/]+?)[\\/](?<vpaHandle>@?[A-Za-z0-9._-]+)(?:[\\/](?<remarks>[^\\/]*))?[\\/]?\\s*$',
+        '^UPI[\\/](?<date>\\d{8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4})[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{6,18})[\\/](?<counterparty>[^\\/@]+?)(?:(?:@|[\\/])(?<vpaHandle>[a-z0-9._-]+))?(?:[\\/](?<remarks>[^\\/]*))?[\\/]?\\s*$',
     },
     {
       // IMPS-<ref>-<merchant>-<bank>-<INBOUND|OUTBOUND>
@@ -148,6 +149,14 @@ export interface ParsedBankNarration {
   readonly confidence: number;
   readonly matched_rule: string | null;
   readonly warnings: readonly string[];
+  /** Canonical merchant name from the community dictionary, when matched. */
+  readonly merchant_canonical: string | null;
+  /** PSP app behind the VPA handle (e.g. 'PhonePe'), or null. */
+  readonly vpa_app: string | null;
+  /** Bank behind the VPA handle (e.g. 'Axis Bank'), or null. */
+  readonly vpa_bank: string | null;
+  /** Bank resolved from an embedded IFSC/bank code, or null. */
+  readonly ifsc_bank: string | null;
 }
 
 export interface ParseBankNarrationOptions {
@@ -157,21 +166,18 @@ export interface ParseBankNarrationOptions {
   readonly categories?: Record<string, string>;
   /** Skip loading bundled rules — use only archetypes + provided ruleSets. */
   readonly bare?: boolean;
+  /**
+   * Dictionary enrichment (canonical merchant, VPA/IFSC resolution,
+   * category upgrade). Defaults to true; set false for the rawest output.
+   */
+  readonly enrich?: boolean;
 }
 
 /**
  * Corporate suffixes that always get title-cased even when a neighbouring
  * word stays uppercase ('TCS LTD' → 'TCS Ltd').
  */
-const CORPORATE_SUFFIXES: ReadonlySet<string> = new Set([
-  'LTD',
-  'PVT',
-  'INC',
-  'LLP',
-  'LLC',
-  'CORP',
-  'CO',
-]);
+const CORPORATE_SUFFIXES: ReadonlySet<string> = new Set(['LTD', 'PVT', 'INC', 'CORP', 'CO']);
 
 /** Matches standalone abbreviations: 2–5 uppercase letters. */
 const ACRONYM_RE = /^[A-Z]{2,5}$/;
@@ -189,6 +195,7 @@ function titleCase(word: string): string {
  *   'TCS LTD'          → 'TCS Ltd'
  *   'EMPLOYER PVT LTD' → 'Employer Pvt Ltd'
  *   'ZEPTO'            → 'Zepto'   (a lone word is a brand, not an acronym)
+ *   'EPFO'             → 'EPFO'    (short lone abbreviations stay uppercase)
  *
  * Wired into the Normalizer via `NormalizerOptions.displayCase`.
  */
@@ -197,7 +204,10 @@ export function preserveAcronymCase(value: string): string {
     .trim()
     .split(/\s+/)
     .filter((w) => w.length > 0);
-  if (words.length <= 1) return titleCase(words[0] ?? value);
+  if (words.length <= 1) {
+    const word = words[0] ?? value;
+    return /^[A-Z]{2,4}$/.test(word) ? word : titleCase(word);
+  }
   return words
     .map((word) => {
       if (CORPORATE_SUFFIXES.has(word.toUpperCase())) return titleCase(word);
@@ -239,18 +249,38 @@ export function parseBankNarration(
   options?: ParseBankNarrationOptions,
 ): ParsedBankNarration {
   const txn = buildNormalizer(options).normalize(input);
+  const doEnrich = options?.enrich !== false;
+
+  // Dictionary enrichment: canonical merchant identity, VPA handle
+  // resolution, and IFSC bank resolution. Category upgrades apply only when
+  // keyword matching left the transaction Uncategorized.
+  const merchantEntry = doEnrich ? lookupMerchant(txn.counterparty) : null;
+  const vpaInfo = doEnrich ? lookupVpaHandle(txn.vpaHandle) : null;
+  const ifscSource = txn.metadata['bank_code'] ?? (doEnrich ? txn.raw : null);
+  const ifscInfo = doEnrich ? lookupIfscBank(ifscSource) : null;
+
+  const merchant = merchantEntry?.canonical ?? txn.counterparty;
+  const category =
+    txn.category === 'Uncategorized' && merchantEntry !== null
+      ? merchantEntry.category
+      : txn.category;
+
   return {
     channel: txn.channel,
     type: txn.type,
     ref_no: txn.transactionId,
-    merchant: txn.counterparty,
+    merchant,
     counterparty: txn.counterparty,
     vpa: txn.vpaHandle,
     is_salary: txn.metadata['is_salary'] === 'true',
     date: txn.date,
-    category: txn.category,
+    category,
     confidence: txn.confidence,
     matched_rule: txn.matchedRule,
     warnings: txn.warnings,
+    merchant_canonical: merchantEntry?.canonical ?? null,
+    vpa_app: vpaInfo?.app ?? null,
+    vpa_bank: vpaInfo?.bank ?? null,
+    ifsc_bank: ifscInfo?.name ?? null,
   };
 }

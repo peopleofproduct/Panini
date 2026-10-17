@@ -352,6 +352,7 @@ export class Normalizer {
     }
     if (appliedFlags.length > 0) metadata['flags'] = appliedFlags.join(',');
     if (groups['remarks']) metadata['remarks'] = groups['remarks'].trim();
+    if (groups['bankCode']) metadata['bank_code'] = groups['bankCode'].trim();
     // Rule-authored metadata wins over computed values (e.g. is_salary).
     Object.assign(metadata, pattern.setMetadata);
 

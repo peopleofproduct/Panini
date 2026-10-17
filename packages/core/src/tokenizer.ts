@@ -55,16 +55,27 @@ export const CHANNEL_KEYWORDS: Readonly<Record<string, TransactionChannel>> = {
   NETBANKING: 'NETBANKING',
   INET: 'NETBANKING',
   IB: 'NETBANKING',
+  PAYTM: 'WALLET',
+  PHONEPE: 'WALLET',
+  GPAY: 'WALLET',
+  GOOGLEPAY: 'WALLET',
+  BHIM: 'WALLET',
+  MOBIKWIK: 'WALLET',
+  FREECHARGE: 'WALLET',
+  AMAZONPAY: 'WALLET',
+  WALLET: 'WALLET',
 };
 
 /** Maps narration keywords to transaction direction. */
 export const DIRECTION_KEYWORDS: Readonly<Record<string, TransactionType>> = {
   DR: 'DEBIT',
+  D: 'DEBIT',
   DEBIT: 'DEBIT',
   DEBITED: 'DEBIT',
   WITHDRAWAL: 'DEBIT',
   WDL: 'DEBIT',
   CR: 'CREDIT',
+  C: 'CREDIT',
   CREDIT: 'CREDIT',
   CREDITED: 'CREDIT',
   DEP: 'CREDIT',

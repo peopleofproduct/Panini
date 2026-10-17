@@ -1,0 +1,44 @@
+{
+  "bank": "AXIS",
+  "samples": [
+    {
+      "input": "UPI/P2M/123456789012/SWIGGY@okaxis/DR",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "merchant": "Swiggy",
+        "vpa": "okaxis",
+        "vpa_bank": "Axis Bank"
+      }
+    },
+    {
+      "input": "UPI/P2A/987654321098/JOHN DOE@ybl/CR",
+      "expect": {
+        "channel": "UPI",
+        "type": "CREDIT",
+        "ref_no": "987654321098",
+        "counterparty": "JOHN DOE",
+        "vpa": "ybl",
+        "vpa_app": "PhonePe"
+      }
+    },
+    {
+      "input": "ATW-AXIS ATM TAMBARAM-4567",
+      "expect": { "channel": "ATM", "type": "DEBIT", "category": "Cash Withdrawal" }
+    },
+    {
+      "input": "INB/123456789012/JANE DOE/DR",
+      "expect": {
+        "channel": "NETBANKING",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "counterparty": "JANE DOE"
+      }
+    },
+    {
+      "input": "ACH-C-AXS78945612-EMPLOYER CORP",
+      "expect": { "channel": "ACH", "type": "CREDIT", "ref_no": "AXS78945612" }
+    }
+  ]
+}
