@@ -1,0 +1,27 @@
+{
+  "id": "yes_csv",
+  "format": "csv",
+  "description": "YES Bank statement export — 'Reference Number' column, Transaction Date header, DD-MM-YYYY dates.",
+  "input": "YES BANK LTD.\nAccount No : XXXXXX4321\nTransaction Date,Description,Reference Number,Debit,Credit,Balance\n15-10-2026,UPI/402345678912/DR/ZOMATO@icici/,REF987650,320.50,,44100.00\n16-10-2026,IMPS-INWARD-REMITTER NAME,IMPS12345,,1500.00,45600.00",
+  "expect": {
+    "bank": "YES",
+    "layoutId": "yes_statement",
+    "accountMask": "4321",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 32050,
+        "balancePaise": 4410000,
+        "refNo": "REF987650"
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 150000,
+        "balancePaise": 4560000
+      }
+    ]
+  }
+}

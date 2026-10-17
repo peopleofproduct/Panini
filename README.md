@@ -43,15 +43,15 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
                  └────────────────────────────────────────────────┘
 ```
 
-| Package                       | Role                                                                                                                                                                                      |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                              |
-| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate. |
-| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                     |
-| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (HDFC, ICICI, SBI, Axis, Kotak, generic), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams.            |
-| `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                             |
-| `panini-py/`                  | Python port sharing the same grammar JSONs, extraction formats, and corpus — conformance-gated against the TypeScript corpus.                                                             |
-| `playground/`                 | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                             |
+| Package                       | Role                                                                                                                                                                                                                                                |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                        |
+| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                           |
+| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                                                                               |
+| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (9 banks + generic), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams. |
+| `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                                                                                       |
+| `panini-py/`                  | Python port sharing the same grammar JSONs, extraction formats, and corpus — conformance-gated against the TypeScript corpus.                                                                                                                       |
+| `playground/`                 | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                                                                                       |
 
 ## ✨ Design Guarantees
 
@@ -129,10 +129,19 @@ const statement = await extractStatement(csvText); // or PDF bytes, XLSX, SMS
 //   ]
 // }
 
+// Password-protected statements — pass what you know; per-bank password
+// patterns (formats/pdf-passwords.json) generate the candidates:
+await extractStatement(pdfBytes, {
+  credentials: { dob: '15-04-1990', name: 'Kapil Sharma' }, // or { passwords: ['…'] }
+});
+
 // XLSX and scanned input go through provider seams — Panini stays
 // zero-dependency; you plug in SheetJS / Tesseract / cloud OCR:
-await extractStatement(xlsxBytes, { spreadsheet: sheetJsAdapter });
-await extractStatement(scannedPdf, { ocr: tesseractAdapter });
+import { createSheetJsProvider, createTesseractProvider } from '@paniniapi/extract';
+await extractStatement(xlsxBytes, { spreadsheet: createSheetJsProvider(XLSX) });
+await extractStatement(scannedPdf, { ocr: createTesseractProvider(tesseractWorker) });
+// Word-level OCR boxes keep column anchoring — same table pipeline as a
+// real text layer. Flat OCR text degrades to whitespace-split rows.
 ```
 
 ### Validate DPI payloads
