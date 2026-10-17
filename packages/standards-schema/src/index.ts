@@ -43,4 +43,8 @@ export {
   validateOndcCatalog,
   validateOndcOrder,
   validateOcenLifecycle,
+  validateOndcTrackRequest,
+  validateOndcTrackResponse,
+  validateOndcCancelRequest,
+  validateOndcUpdateRequest,
 } from './types';

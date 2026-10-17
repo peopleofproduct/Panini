@@ -1,0 +1,24 @@
+{
+  "$id": "https://panini.dev/schemas/ondc-update-request.schema.json",
+  "description": "ONDC `update` request payload — message body. Asks the BPP to update one aspect (update_target) of an existing order.",
+  "type": "object",
+  "required": ["order", "update_target"],
+  "additionalProperties": true,
+  "properties": {
+    "update_target": { "type": "string", "minLength": 1 },
+    "order": {
+      "type": "object",
+      "required": ["id"],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "state": {
+          "type": "string",
+          "enum": ["CREATED", "ACCEPTED", "IN_PROGRESS", "COMPLETED", "CANCELLED"]
+        },
+        "fulfillments": { "type": "array", "items": { "type": "object" } },
+        "payments": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  }
+}

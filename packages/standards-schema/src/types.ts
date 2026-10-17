@@ -214,6 +214,26 @@ export function validateOcenLifecycle(value: unknown): ValidationResult {
   return validate(loadSchema('ocen-lifecycle'), value);
 }
 
+/** ONDC `track` request message — order_id locator. */
+export function validateOndcTrackRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-track-request'), value);
+}
+
+/** ONDC `on_track` response message — tracking url + status. */
+export function validateOndcTrackResponse(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-track-response'), value);
+}
+
+/** ONDC `cancel` request message — order_id + network cancellation reason. */
+export function validateOndcCancelRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-cancel-request'), value);
+}
+
+/** ONDC `update` request message — update_target + partial order. */
+export function validateOndcUpdateRequest(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-update-request'), value);
+}
+
 /** Type guard: validates and narrows to {@link AAProfile}. */
 export function isAAProfile(value: unknown): value is AAProfile {
   return validateAAProfile(value).valid;

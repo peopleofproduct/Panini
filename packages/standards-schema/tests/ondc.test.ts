@@ -14,6 +14,10 @@ import {
   validateOndcCatalog,
   validateOndcOrder,
   validateOcenLifecycle,
+  validateOndcTrackRequest,
+  validateOndcTrackResponse,
+  validateOndcCancelRequest,
+  validateOndcUpdateRequest,
 } from '../src';
 
 const envelope = {
@@ -251,5 +255,73 @@ describe('OCEN loan lifecycle', () => {
         repaymentSchedule: [{ installmentNo: 1, dueDate: '1 July', amount: { total: 1 } }],
       }).valid,
     ).toBe(false);
+  });
+});
+
+describe('ONDC ops flows — track/cancel/update', () => {
+  it('accepts a track request', () => {
+    expect(validateOndcTrackRequest({ order_id: 'ord-1' }).valid).toBe(true);
+  });
+
+  it('rejects a track request without order_id', () => {
+    const r = validateOndcTrackRequest({});
+    expect(r.valid).toBe(false);
+    expect(r.errors.some((e) => e.path === '')).toBe(true);
+  });
+
+  it('accepts an on_track response with url + status', () => {
+    const r = validateOndcTrackResponse({
+      tracking: { url: 'https://bpp.example.com/track/ord-1', status: 'active' },
+    });
+    expect(r.valid).toBe(true);
+  });
+
+  it('rejects on_track with an unknown tracking status', () => {
+    const r = validateOndcTrackResponse({ tracking: { status: 'maybe' } });
+    expect(r.valid).toBe(false);
+    expect(r.errors[0]?.path).toBe('/tracking/status');
+  });
+
+  it('accepts a cancel request with reason + descriptor', () => {
+    const r = validateOndcCancelRequest({
+      order_id: 'ord-1',
+      cancellation_reason_id: '003',
+      descriptor: { short_desc: 'Changed my mind' },
+    });
+    expect(r.valid).toBe(true);
+  });
+
+  it('rejects a cancel request missing the reason id', () => {
+    const r = validateOndcCancelRequest({ order_id: 'ord-1' });
+    expect(r.valid).toBe(false);
+    expect(r.errors.some((e) => e.message.includes('cancellation_reason_id'))).toBe(true);
+  });
+
+  it('accepts an update request targeting fulfillments', () => {
+    const r = validateOndcUpdateRequest({
+      update_target: 'fulfillments',
+      order: {
+        id: 'ord-1',
+        fulfillments: [{ id: 'f1', state: { descriptor: { code: 'UPDATED' } } }],
+      },
+    });
+    expect(r.valid).toBe(true);
+  });
+
+  it('rejects an update request missing update_target or order id', () => {
+    expect(validateOndcUpdateRequest({ order: { id: 'o1' } }).valid).toBe(false);
+    expect(validateOndcUpdateRequest({ update_target: 'payments', order: {} }).valid).toBe(false);
+  });
+
+  it('order lifecycle states still validate for on_cancel/on_update carriers', () => {
+    const order = {
+      order: {
+        id: 'ord-1',
+        state: 'CANCELLED',
+        provider: { id: 'lender-1' },
+        items: [{ id: 'pl-1' }],
+      },
+    };
+    expect(validateOndcOrder(order).valid).toBe(true);
   });
 });
