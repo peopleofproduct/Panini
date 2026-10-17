@@ -1,0 +1,27 @@
+{
+  "id": "union_csv",
+  "format": "csv",
+  "description": "Union Bank of India statement export — 'Transaction Details' narration, Reference No column, DD/MM/YYYY dates.",
+  "input": "UNION BANK OF INDIA\nAccount No : XXXXXX6789\nTransaction Date,Transaction Details,Reference No,Debit,Credit,Balance\n15/10/2026,UPI/402345678912/DR/SWIGGY@okaxis/,UBI998877,1250.00,,45230.50\n16/10/2026,NEFT-N3452618902-SALARY-TCS LTD,N3452618902,,85000.00,130230.50",
+  "expect": {
+    "bank": "UNION",
+    "layoutId": "union_statement",
+    "accountMask": "6789",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 125000,
+        "balancePaise": 4523050,
+        "refNo": "UBI998877"
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 8500000,
+        "balancePaise": 13023050
+      }
+    ]
+  }
+}

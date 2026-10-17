@@ -22,7 +22,7 @@ import {
   type TransactionType,
 } from '@paniniapi/core';
 import { loadBuiltinRuleSets, loadCategories } from './loader';
-import { lookupIfscBank, lookupMerchant, lookupVpaHandle } from './dictionary';
+import { lookupIfscBank, lookupMcc, lookupMerchant, lookupVpaHandle } from './dictionary';
 
 /**
  * Structured output of {@link parseBankNarration}. Field names follow the
@@ -56,6 +56,11 @@ export interface ParsedBankNarration {
   readonly vpa_bank: string | null;
   /** Bank resolved from an embedded IFSC/bank code, or null. */
   readonly ifsc_bank: string | null;
+  /** ISO 18245 merchant category code when the narration carries one or the
+   *  merchant dictionary declares it, or null. */
+  readonly mcc: string | null;
+  /** Human-readable MCC description (e.g. 'Grocery stores and supermarkets'). */
+  readonly mcc_description: string | null;
 }
 
 export interface ParseBankNarrationOptions {
@@ -156,12 +161,22 @@ export function parseBankNarration(
   const vpaInfo = doEnrich ? lookupVpaHandle(txn.vpaHandle) : null;
   const ifscSource = txn.metadata['bank_code'] ?? (doEnrich ? txn.raw : null);
   const ifscInfo = doEnrich ? lookupIfscBank(ifscSource) : null;
+  // MCC can come from the narration itself ('POS 5411' / 'MCC-5411' tokens)
+  // or from the merchant dictionary entry.
+  const mccToken = txn.metadata['mcc'] ?? (doEnrich ? txn.raw : null);
+  const mccFromNarration = doEnrich ? lookupMcc(mccToken) : null;
+  const mccEntry =
+    doEnrich && mccFromNarration === null && merchantEntry?.mcc !== undefined
+      ? lookupMcc(merchantEntry.mcc)
+      : mccFromNarration;
 
   const merchant = merchantEntry?.canonical ?? txn.counterparty;
   const category =
     txn.category === 'Uncategorized' && merchantEntry !== null
       ? merchantEntry.category
-      : txn.category;
+      : txn.category === 'Uncategorized' && mccEntry !== null
+        ? mccEntry.category
+        : txn.category;
 
   return {
     channel: txn.channel,
@@ -180,5 +195,16 @@ export function parseBankNarration(
     vpa_app: vpaInfo?.app ?? null,
     vpa_bank: vpaInfo?.bank ?? null,
     ifsc_bank: ifscInfo?.name ?? null,
+    mcc: extractMccToken(mccToken) ?? merchantEntry?.mcc ?? null,
+    mcc_description: mccEntry?.description ?? null,
   };
+}
+
+const MCC_TOKEN_RE = /\bMCC[-\s:]?(\d{4})\b/i;
+
+/** Pulls a bare 4-digit MCC out of a narration token, or null. */
+function extractMccToken(raw: string | null): string | null {
+  if (raw === null) return null;
+  const m = MCC_TOKEN_RE.exec(raw);
+  return m !== null && m[1] !== undefined ? m[1] : null;
 }

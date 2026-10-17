@@ -15,7 +15,7 @@
  */
 
 const CURRENCY_PREFIX = /^(?:rs\.?|inr|₹)\s*/i;
-const AMOUNT_BODY = /^\d+(?:\.\d{1,2})?$/;
+const AMOUNT_BODY = /^-?\d+(?:\.\d{1,2})?$/;
 
 /**
  * Parses an Indian-formatted amount (`Rs.1,50,000.50`, `INR 250`, `99.9`)

@@ -1,0 +1,21 @@
+{
+  "id": "canara_csv",
+  "format": "csv",
+  "description": "Canara Bank detailed statement — Branch Code column present, DD/MM/YYYY, Debit/Credit split.",
+  "input": "CANARA BANK\nAccount No : XXXXXX7890\nTxn Date,Value Date,Cheque No,Description,Branch Code,Debit,Credit,Balance\n15/10/2026,15/10/2026,,UPI/402345678912/DR/AMAZON@okicici/,101,999.00,,51234.75\n16/10/2026,16/10/2026,,NEFT-SALARY-ACME PVT LTD,101,,45000.00,96234.75",
+  "expect": {
+    "bank": "CANARA",
+    "layoutId": "canara_statement",
+    "accountMask": "7890",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 99900, "balancePaise": 5123475 },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 4500000,
+        "balancePaise": 9623475
+      }
+    ]
+  }
+}

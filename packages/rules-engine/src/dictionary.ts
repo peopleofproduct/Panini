@@ -39,6 +39,12 @@ export interface IfscBankInfo {
   readonly code: string;
 }
 
+/** ISO 18245 merchant-category-code entry. `category` names a taxonomy row. */
+export interface MccInfo {
+  readonly description: string;
+  readonly category: string;
+}
+
 interface MerchantsFile {
   readonly merchants: readonly MerchantEntry[];
 }
@@ -47,6 +53,9 @@ interface VpaFile {
 }
 interface IfscFile {
   readonly banks: Readonly<Record<string, IfscBankInfo>>;
+}
+interface MccFile {
+  readonly codes: Readonly<Record<string, MccInfo>>;
 }
 
 /** Locates `rules/entities/` across src, dist and installed-package layouts. */
@@ -68,16 +77,18 @@ function loadJson<T>(file: string): T {
   return JSON.parse(readFileSync(join(resolveEntitiesDir(), file), 'utf8')) as T;
 }
 
-/** The three community datasets bundled under `rules/entities/`. */
+/** The community datasets bundled under `rules/entities/`. */
 export interface DictionaryData {
   readonly merchants: readonly MerchantEntry[];
   readonly vpaHandles: Readonly<Record<string, VpaHandleInfo>>;
   readonly ifscBanks: Readonly<Record<string, IfscBankInfo>>;
+  readonly mccCodes?: Readonly<Record<string, MccInfo>>;
 }
 
 let merchantsCache: readonly MerchantEntry[] | undefined;
 let vpaCache: Readonly<Record<string, VpaHandleInfo>> | undefined;
 let ifscCache: Readonly<Record<string, IfscBankInfo>> | undefined;
+let mccCache: Readonly<Record<string, MccInfo>> | undefined;
 
 /**
  * Injects dictionary data without touching the filesystem. Required for
@@ -88,6 +99,7 @@ export function setDictionaries(data: DictionaryData): void {
   merchantsCache = data.merchants;
   vpaCache = data.vpaHandles;
   ifscCache = data.ifscBanks;
+  mccCache = data.mccCodes;
 }
 
 /** Loads the community merchant dictionary (cached). */
@@ -106,6 +118,12 @@ export function loadVpaHandles(): Readonly<Record<string, VpaHandleInfo>> {
 export function loadIfscBanks(): Readonly<Record<string, IfscBankInfo>> {
   ifscCache ??= loadJson<IfscFile>('ifsc-codes.json').banks;
   return ifscCache;
+}
+
+/** Loads the MCC → description/category map (cached). Keys are '5411'-style codes. */
+export function loadMccCodes(): Readonly<Record<string, MccInfo>> {
+  mccCache ??= loadJson<MccFile>('mcc-codes.json').codes;
+  return mccCache;
 }
 
 /** Normalizes a counterparty string for dictionary matching. */
@@ -169,4 +187,19 @@ export function lookupIfscBank(value: string | null | undefined): IfscBankInfo |
     ifsc !== null ? ifsc[1] : /^[A-Z]{4}$/.test(upper.trim()) ? upper.trim() : undefined;
   if (prefix === undefined) return null;
   return loadIfscBanks()[prefix] ?? null;
+}
+
+const MCC_TOKEN_RE = /\bMCC[-\s:]?(\d{4})\b/i;
+
+/**
+ * Resolves a merchant category code to its dictionary entry. Accepts a bare
+ * 4-digit code ('5411') or any narration carrying an 'MCC-5411'/'MCC 5411'
+ * token — the form POS/card narrations embed.
+ */
+export function lookupMcc(value: string | null | undefined): MccInfo | null {
+  if (!value) return null;
+  const trimmed = value.trim();
+  const code = /^\d{4}$/.test(trimmed) ? trimmed : MCC_TOKEN_RE.exec(trimmed)?.[1];
+  if (code === undefined) return null;
+  return loadMccCodes()[code] ?? null;
 }

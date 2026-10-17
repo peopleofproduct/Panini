@@ -16,5 +16,12 @@
 
 export { generateMockProfile, generateMockProfiles, mulberry32 } from './mockFactory';
 export type { MockAAProfile, MockAATransaction, SimulationOptions } from './mockFactory';
+export { generateCsvStatement, STATEMENT_SPECS } from './statementFactory';
+export type {
+  GeneratedStatement,
+  GeneratedStatementRow,
+  GenerateStatementOptions,
+  StatementColumnSpec,
+} from './statementFactory';
 export { parseCliArgs, runCli } from './cli';
 export type { CliArgs, ParseArgsResult } from './cli';

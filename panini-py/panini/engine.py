@@ -401,8 +401,10 @@ _RULES_DIR = _default_rules_dir()
 
 def _load_entities(rules_dir: Path) -> dict[str, Any]:
     ent = rules_dir / "entities"
-    out: dict[str, Any] = {"merchants": [], "vpa-handles": {}, "ifsc-codes": {}}
-    for name in ("merchants", "vpa-handles", "ifsc-codes"):
+    out: dict[str, Any] = {
+        "merchants": [], "vpa-handles": {}, "ifsc-codes": {}, "mcc-codes": {},
+    }
+    for name in ("merchants", "vpa-handles", "ifsc-codes", "mcc-codes"):
         p = ent / f"{name}.json"
         if p.exists():
             data = json.loads(p.read_text())
@@ -410,6 +412,8 @@ def _load_entities(rules_dir: Path) -> dict[str, Any]:
                 out[name] = data.get("merchants", [])
             elif name == "vpa-handles":
                 out[name] = data.get("handles", {})
+            elif name == "mcc-codes":
+                out[name] = data.get("codes", {})
             else:
                 out[name] = data.get("banks", {})
     return out
@@ -437,6 +441,21 @@ def _lookup_merchant(counterparty: Optional[str], merchants: list[dict]) -> Opti
 
 
 _IFSC_RE = re.compile(r"([A-Z]{4})0[A-Z0-9]{6}")
+_MCC_TOKEN_RE = re.compile(r"\bMCC[-\s:]?(\d{4})\b", re.IGNORECASE)
+
+
+def _extract_mcc_token(raw: Optional[str]) -> Optional[str]:
+    if not raw:
+        return None
+    m = _MCC_TOKEN_RE.search(raw)
+    return m.group(1) if m else None
+
+
+def _lookup_mcc(value: Optional[str], codes: dict) -> Optional[dict]:
+    if not value:
+        return None
+    code = value.strip() if re.fullmatch(r"\d{4}", value.strip()) else _extract_mcc_token(value)
+    return codes.get(code) if code else None
 
 
 def _lookup_ifsc(value: Optional[str], banks: dict) -> Optional[dict]:
@@ -462,7 +481,7 @@ def parse_narration(input_: str | dict, *, enrich: bool = True,
     norm = Normalizer(rule_sets, categories)
     txn = norm.normalize(input_)
 
-    merchant_entry = vpa_info = ifsc_info = None
+    merchant_entry = vpa_info = ifsc_info = mcc_info = None
     if enrich:
         entities = _load_entities(rd)
         merchant_entry = _lookup_merchant(txn.counterparty, entities["merchants"])
@@ -470,13 +489,17 @@ def parse_narration(input_: str | dict, *, enrich: bool = True,
             vpa_info = entities["vpa-handles"].get(txn.vpa_handle)
         ifsc_src = txn.metadata.get("bank_code") or txn.raw
         ifsc_info = _lookup_ifsc(ifsc_src, entities["ifsc-codes"])
+        mcc_token = txn.metadata.get("mcc") or txn.raw
+        mcc_info = _lookup_mcc(mcc_token, entities["mcc-codes"])
+        if mcc_info is None and (merchant_entry or {}).get("mcc"):
+            mcc_info = _lookup_mcc(merchant_entry["mcc"], entities["mcc-codes"])
 
     merchant = (merchant_entry or {}).get("canonical") or txn.counterparty
-    category = (
-        merchant_entry["category"]
-        if txn.category == "Uncategorized" and merchant_entry
-        else txn.category
-    )
+    category = txn.category
+    if txn.category == "Uncategorized" and merchant_entry:
+        category = merchant_entry["category"]
+    elif txn.category == "Uncategorized" and mcc_info:
+        category = mcc_info["category"]
     return {
         "channel": txn.channel,
         "type": txn.type,
@@ -494,4 +517,7 @@ def parse_narration(input_: str | dict, *, enrich: bool = True,
         "vpa_app": (vpa_info or {}).get("app"),
         "vpa_bank": (vpa_info or {}).get("bank"),
         "ifsc_bank": (ifsc_info or {}).get("name"),
+        "mcc": (_extract_mcc_token(txn.raw) if enrich else None)
+        or (merchant_entry or {}).get("mcc"),
+        "mcc_description": (mcc_info or {}).get("description"),
     }

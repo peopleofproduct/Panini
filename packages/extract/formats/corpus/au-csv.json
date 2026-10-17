@@ -1,0 +1,22 @@
+{
+  "id": "au_csv",
+  "format": "csv",
+  "description": "AU Small Finance Bank statement — Narration + Reference No + Closing Balance headers.",
+  "input": "AU SMALL FINANCE BANK\nAccount No : XXXXXX9900\nTransaction Date,Narration,Reference No,Withdrawal,Deposit,Closing Balance\n15/10/2026,UPI/402345678912/CR/REFUND-FLIPKART/,AU11223,,1500.00,38500.00\n16/10/2026,ATM WDL-SELF-NSK,AU11224,2000.00,,36500.00",
+  "expect": {
+    "bank": "AU_SFB",
+    "layoutId": "au_statement",
+    "accountMask": "9900",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "CREDIT",
+        "amountPaise": 150000,
+        "balancePaise": 3850000,
+        "refNo": "AU11223"
+      },
+      { "date": "2026-10-16", "direction": "DEBIT", "amountPaise": 200000, "balancePaise": 3650000 }
+    ]
+  }
+}

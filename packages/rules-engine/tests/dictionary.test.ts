@@ -10,9 +10,11 @@
 
 import {
   loadIfscBanks,
+  loadMccCodes,
   loadMerchants,
   loadVpaHandles,
   lookupIfscBank,
+  lookupMcc,
   lookupMerchant,
   lookupVpaHandle,
   parseBankNarration,
@@ -83,6 +85,22 @@ describe('lookupIfscBank', () => {
   });
 });
 
+describe('lookupMcc', () => {
+  it('resolves bare codes and embedded tokens', () => {
+    expect(lookupMcc('5411')?.category).toBe('Groceries');
+    expect(lookupMcc('POS PURCHASE MCC-5812')?.category).toBe('Food & Dining');
+    expect(lookupMcc('mcc 6011')?.category).toBe('Cash Withdrawal');
+    expect(lookupMcc('MCC:8999')?.category).toBe('Professional Services');
+  });
+
+  it('returns null for unknown codes and non-MCC strings', () => {
+    expect(lookupMcc('0000')).toBeNull();
+    expect(lookupMcc('swiggy order')).toBeNull();
+    expect(lookupMcc('123')).toBeNull();
+    expect(lookupMcc(null)).toBeNull();
+  });
+});
+
 describe('parseBankNarration — enrichment', () => {
   it('canonicalizes the merchant and upgrades Uncategorized categories', () => {
     const txn = parseBankNarration('IMPS-628491047-KIRANAKART-HDFC-INBOUND');
@@ -103,6 +121,30 @@ describe('parseBankNarration — enrichment', () => {
     expect(txn.ifsc_bank).toBe('HDFC Bank');
   });
 
+  it('extracts MCC tokens from narrations and categorizes via the dictionary', () => {
+    const txn = parseBankNarration('POS 420123456789 PURCHASE MCC-5411');
+    expect(txn.mcc).toBe('5411');
+    expect(txn.mcc_description).toBe('Grocery stores and supermarkets');
+    expect(txn.category).toBe('Groceries');
+  });
+
+  it('surfaces merchant-dictionary MCC when the narration has none', () => {
+    const txn = parseBankNarration('UPI/20261015/DR/826384910234/SWIGGY/ybl/Cooking/');
+    expect(txn.mcc).toBe('5814');
+    expect(txn.mcc_description).toBe('Fast food restaurants');
+  });
+
+  it('keeps narration MCC over merchant dictionary when both exist', () => {
+    const txn = parseBankNarration('UPI/20261015/DR/826384910234/SWIGGY/ybl/Cooking/ MCC-5411');
+    expect(txn.mcc).toBe('5411');
+  });
+
+  it('returns null mcc fields when no code is present', () => {
+    const txn = parseBankNarration('CASH WDL SELF');
+    expect(txn.mcc).toBeNull();
+    expect(txn.mcc_description).toBeNull();
+  });
+
   it('returns null enrichment fields with enrich: false', () => {
     const txn = parseBankNarration('UPI/20261015/DR/826384910234/SWIGGY/okaxis/Cooking/', {
       enrich: false,
@@ -120,5 +162,6 @@ describe('dictionary loaders', () => {
     expect(loadMerchants().length).toBeGreaterThan(50);
     expect(Object.keys(loadVpaHandles()).length).toBeGreaterThan(30);
     expect(Object.keys(loadIfscBanks()).length).toBeGreaterThan(30);
+    expect(Object.keys(loadMccCodes()).length).toBeGreaterThan(50);
   });
 });

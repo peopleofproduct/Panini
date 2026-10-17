@@ -1,0 +1,22 @@
+{
+  "id": "idfc_csv",
+  "format": "csv",
+  "description": "IDFC FIRST Bank statement export — Transaction Date + Value Date + Particulars columns, DD-MM-YYYY dates.",
+  "input": "IDFC FIRST BANK\nAccount No : XXXXXX3456\nTransaction Date,Value Date,Particulars,Cheque No,Debit,Credit,Balance\n15-10-2026,15-10-2026,UPI/402345678912/DR/DMART@okhdfc/,CHQ091,500.00,,61500.25\n16-10-2026,16-10-2026,IMPS-INWARD-REMITTER,,2200.00,,59300.25",
+  "expect": {
+    "bank": "IDFC",
+    "layoutId": "idfc_statement",
+    "accountMask": "3456",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 50000,
+        "balancePaise": 6150025,
+        "refNo": "CHQ091"
+      },
+      { "date": "2026-10-16", "direction": "DEBIT", "amountPaise": 220000, "balancePaise": 5930025 }
+    ]
+  }
+}

@@ -122,8 +122,13 @@ export function mapRow(
   const balanceRaw = cellOf(cells, columns, 'balance');
   let balancePaise: number | null = null;
   if (balanceRaw !== null) {
+    const suffix = DR_CR_SUFFIX.exec(balanceRaw);
     const stripped = balanceRaw.replace(DR_CR_SUFFIX, '').trim();
     balancePaise = parsePaise(stripped);
+    // Indian statements mark an overdrawn balance as '1,234.00 Dr' — the
+    // magnitude parses positive, so re-apply the sign.
+    if (balancePaise !== null && suffix !== null && directionFromText(suffix[1] ?? '') === 'DEBIT')
+      balancePaise = -balancePaise;
     if (balancePaise === null) warnings.push(`unparseable balance '${balanceRaw}'`);
   }
 
