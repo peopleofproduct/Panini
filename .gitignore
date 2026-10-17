@@ -6,3 +6,6 @@ coverage/
 *.log
 .env
 .env.*
+
+# Generated playground bundle (rebuild with `npm run playground`)
+playground/panini-web.js

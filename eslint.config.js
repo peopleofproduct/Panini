@@ -11,6 +11,7 @@ module.exports = tseslint.config(
       '**/coverage/**',
       '*.tsbuildinfo',
       'eslint.config.js',
+      'playground/panini-web.js',
     ],
   },
   eslint.configs.recommended,
