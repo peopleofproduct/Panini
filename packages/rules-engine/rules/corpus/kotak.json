@@ -1,0 +1,36 @@
+{
+  "bank": "KOTAK",
+  "samples": [
+    {
+      "input": "UPI-JOHN DOE@okhdfcbank-123456789012",
+      "expect": {
+        "channel": "UPI",
+        "ref_no": "123456789012",
+        "counterparty": "JOHN DOE",
+        "vpa": "okhdfcbank",
+        "vpa_bank": "HDFC Bank"
+      }
+    },
+    {
+      "input": "NEFT Cr-SBIN0000123-ACME CORP PVT LTD",
+      "expect": {
+        "channel": "NEFT",
+        "type": "CREDIT",
+        "counterparty": "ACME Corp Pvt Ltd",
+        "ifsc_bank": "State Bank of India"
+      }
+    },
+    {
+      "input": "DIRECT DEBIT-NETFLIX-123456",
+      "expect": { "channel": "NACH", "type": "DEBIT", "category": "Subscriptions" }
+    },
+    {
+      "input": "MB:UTILITY PROVIDER-445566778899",
+      "expect": { "channel": "NETBANKING", "ref_no": "445566778899" }
+    },
+    {
+      "input": "VISA*AMAZON PAY INDIA*MUMBAI",
+      "expect": { "channel": "POS", "type": "DEBIT", "merchant": "Amazon" }
+    }
+  ]
+}

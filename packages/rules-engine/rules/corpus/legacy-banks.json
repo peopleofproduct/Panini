@@ -1,0 +1,81 @@
+{
+  "bank": "LEGACY",
+  "samples": [
+    {
+      "input": "UPI/20261015/DR/826384910234/SWIGGY/okaxis/Cooking/",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "ref_no": "826384910234",
+        "merchant": "Swiggy",
+        "vpa": "okaxis",
+        "date": "2026-10-15",
+        "category": "Food & Dining",
+        "vpa_bank": "Axis Bank"
+      }
+    },
+    {
+      "input": "IMPS-628491047-ZEPTO-HDFC-INBOUND",
+      "expect": {
+        "channel": "IMPS",
+        "type": "CREDIT",
+        "ref_no": "628491047",
+        "merchant": "Zepto",
+        "merchant_canonical": "Zepto"
+      }
+    },
+    {
+      "input": "NEFT-N3452618902-SALARY-OCTOBER 2026-TCS LTD",
+      "expect": {
+        "channel": "NEFT",
+        "type": "CREDIT",
+        "ref_no": "N3452618902",
+        "is_salary": true,
+        "counterparty": "TCS Ltd",
+        "category": "Income"
+      }
+    },
+    {
+      "input": "BY TRANSFER-UPI/DR/123456789012/SWIGGY BUNDL TECH/SBIN/20261015",
+      "bankHint": "SBI",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "merchant": "Swiggy",
+        "merchant_canonical": "Swiggy",
+        "date": "2026-10-15"
+      }
+    },
+    {
+      "input": "MMT/IMPS/123456789012/JOHN DOE/ICIC",
+      "expect": {
+        "channel": "IMPS",
+        "ref_no": "123456789012",
+        "counterparty": "JOHN DOE",
+        "category": "Transfers"
+      }
+    },
+    {
+      "input": "UPI-123456789012-ZOMATO-151026",
+      "expect": {
+        "channel": "UPI",
+        "ref_no": "123456789012",
+        "merchant": "Zomato",
+        "date": "2026-10-15"
+      }
+    },
+    {
+      "input": "CASHDEP-MUMBAI BRANCH-4567",
+      "expect": { "channel": "ATM", "type": "CREDIT", "category": "Cash Deposit" }
+    },
+    {
+      "input": "CHQ PAID-000123-VENDOR NAME",
+      "expect": { "channel": "CHEQUE", "type": "DEBIT", "ref_no": "000123" }
+    },
+    {
+      "input": "ACH-CR-AX99887-EMPLOYER CORP",
+      "expect": { "channel": "ACH", "ref_no": "AX99887" }
+    }
+  ]
+}

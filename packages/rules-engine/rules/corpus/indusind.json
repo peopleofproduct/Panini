@@ -1,0 +1,27 @@
+{
+  "bank": "INDUSIND",
+  "samples": [
+    {
+      "input": "UPI-123456789012-BIGBASKET@okicici-151026",
+      "expect": {
+        "channel": "UPI",
+        "ref_no": "123456789012",
+        "merchant": "BigBasket",
+        "vpa": "okicici",
+        "date": "2026-10-15"
+      }
+    },
+    {
+      "input": "NEFT-INDB0001234-ACME CORP",
+      "expect": { "channel": "NEFT", "counterparty": "ACME Corp", "ifsc_bank": "IndusInd Bank" }
+    },
+    {
+      "input": "RTGS-INDB0004321-WHOLESALE MART",
+      "expect": {
+        "channel": "RTGS",
+        "counterparty": "Wholesale MART",
+        "ifsc_bank": "IndusInd Bank"
+      }
+    }
+  ]
+}

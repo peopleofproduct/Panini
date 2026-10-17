@@ -17,6 +17,7 @@
       "name": "hdfc_mmt_imps",
       "priority": 30,
       "channel": "IMPS",
+      "category": "Transfers",
       "media": "narration",
       "regex": "^MMT[\\/]IMPS[\\/](?<txnId>\\d{9,16})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$",
       "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }

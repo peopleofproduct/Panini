@@ -23,9 +23,23 @@ cp scripts/pre-commit.sh .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ## Adding a bank grammar
 
 Bank rules are **data, not code** — drop a new JSON rule set into
-`packages/rules-engine/rules/` (see `generic.json` / `sbi.json` for the shape),
-register it in the loader, and add fixture tests. No changes to `@panini/core`
-should be needed.
+`packages/rules-engine/rules/` (see `generic.json` / `sbi.json` for the shape)
+and add fixture tests. No changes to `@panini/core` should be needed.
+
+Every grammar must ship **corpus samples** in
+`packages/rules-engine/rules/corpus/<bank>.json` — real-world narration strings
+with the fields you expect the parser to produce. The corpus is a CI gate:
+`npm test` runs every sample through the engine and fails the build if an
+expectation regresses. Prefer anonymized or synthetic narrations; never commit
+real account numbers, names, or VPAs.
+
+## Entity dictionaries
+
+`packages/rules-engine/rules/entities/` holds the community dictionaries —
+`merchants.json` (canonical names + narration aliases + category),
+`vpa-handles.json` (UPI handle → app/bank), and `ifsc-codes.json` (IFSC prefix →
+bank). Add entries by PR; enrichment uses them at parse time via
+`parseBankNarration`'s `enrich` option.
 
 ## Pull requests
 

@@ -1,0 +1,58 @@
+{
+  "id": "pnb",
+  "bank": "PNB",
+  "version": "1.0.0",
+  "description": "Punjab National Bank narration quirks: UPI/DR/ref/name/ifsc/date pipelines, NEFT-IN credits, slashed IMPS.",
+  "patterns": [
+    {
+      "name": "pnb_upi_pipeline",
+      "priority": 30,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[\\/](?<direction>DR|CR)[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<bankCode>[A-Z]{4}\\d{0,7}))?(?:[\\/](?<date>\\d{8}))?(?<tail>[\\/\\- ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL" }
+    },
+    {
+      "name": "pnb_neft_in",
+      "priority": 28,
+      "channel": "NEFT",
+      "type": "CREDIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT-IN[- ](?<txnId>[A-Z0-9]{6,18})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "pnb_imps_slashed",
+      "priority": 25,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[\\/](?<txnId>\\d{9,16})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$",
+      "flags": {
+        "REV": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT",
+        "IN": "CREDIT",
+        "OUT": "DEBIT",
+        "INW": "CREDIT",
+        "OUTW": "DEBIT"
+      }
+    },
+    {
+      "name": "pnb_atm_wdl",
+      "priority": 20,
+      "channel": "ATM",
+      "type": "DEBIT",
+      "category": "Cash Withdrawal",
+      "media": "narration",
+      "regex": "^ATM[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "pnb_pos",
+      "priority": 20,
+      "channel": "POS",
+      "type": "DEBIT",
+      "media": "narration",
+      "regex": "^POS[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "bank": "FEDERAL",
+  "samples": [
+    {
+      "input": "BY TRANSFER-NEFT-FDRL0000123-EMPLOYER PVT LTD",
+      "expect": {
+        "channel": "NEFT",
+        "type": "CREDIT",
+        "ref_no": "FDRL0000123",
+        "counterparty": "Employer Pvt Ltd",
+        "ifsc_bank": "Federal Bank"
+      }
+    },
+    {
+      "input": "PSPBILLPAY-BESCOM-98765",
+      "expect": { "type": "DEBIT", "category": "Utilities", "counterparty": "Bescom" }
+    },
+    {
+      "input": "UPI/123456789012/MYNTRA/ybl",
+      "expect": {
+        "channel": "UPI",
+        "ref_no": "123456789012",
+        "merchant": "Myntra",
+        "vpa": "ybl",
+        "vpa_app": "PhonePe"
+      }
+    }
+  ]
+}

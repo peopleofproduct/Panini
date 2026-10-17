@@ -1,0 +1,32 @@
+{
+  "bank": "UNION",
+  "samples": [
+    {
+      "input": "MBR-123456789012-JOHN DOE-DR",
+      "expect": {
+        "channel": "NETBANKING",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "counterparty": "JOHN DOE"
+      }
+    },
+    {
+      "input": "UPI/CR/123456789012/EMPLOYER LTD/20261015",
+      "expect": {
+        "channel": "UPI",
+        "type": "CREDIT",
+        "ref_no": "123456789012",
+        "counterparty": "Employer Ltd",
+        "date": "2026-10-15"
+      }
+    },
+    {
+      "input": "NEFT-UBIN0000789-VENDOR TRADERS",
+      "expect": {
+        "channel": "NEFT",
+        "counterparty": "Vendor Traders",
+        "ifsc_bank": "Union Bank of India"
+      }
+    }
+  ]
+}

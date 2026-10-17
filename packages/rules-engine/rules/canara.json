@@ -1,0 +1,39 @@
+{
+  "id": "canara",
+  "bank": "CANARA",
+  "version": "1.0.0",
+  "description": "Canara Bank narration quirks: TPT third-party transfers, slashed IMPS, IFSC-led NEFT.",
+  "patterns": [
+    {
+      "name": "canara_tpt_transfer",
+      "priority": 28,
+      "channel": "NETBANKING",
+      "media": "narration",
+      "regex": "^TPT[-/](?<counterparty>[^-/]+?)(?:[-/](?<txnId>[A-Z0-9]{6,18}))?(?:[-/](?<tail>.*))?$",
+      "flags": { "DR": "DEBIT", "CR": "CREDIT", "DEBIT": "DEBIT", "CREDIT": "CREDIT" }
+    },
+    {
+      "name": "canara_imps_slashed",
+      "priority": 25,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[\\/](?<txnId>\\d{9,16})[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "canara_neft_ifsc",
+      "priority": 25,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    },
+    {
+      "name": "canara_upi_pipeline",
+      "priority": 28,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[\\/](?<txnId>\\d{9,18})[\\/](?<direction>DR|CR)[\\/](?<counterparty>[^\\/@]+)(?:[@\\/](?<vpaHandle>@?[a-z0-9._-]+))?(?:[\\/](?<tail>.*))?$"
+    }
+  ]
+}

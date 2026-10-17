@@ -16,6 +16,23 @@
 
 export { loadBuiltinRuleSets, loadCategories, loadRuleSets } from './loader';
 export {
+  loadIfscBanks,
+  loadMerchants,
+  loadVpaHandles,
+  lookupIfscBank,
+  lookupMerchant,
+  lookupVpaHandle,
+} from './dictionary';
+export type { IfscBankInfo, MerchantEntry, VpaHandleInfo } from './dictionary';
+export { checkSample, coverageReport, loadCorpus } from './coverage';
+export type {
+  BankCoverage,
+  CorpusExpectation,
+  CorpusFile,
+  CorpusSample,
+  ExpectationFailure,
+} from './coverage';
+export {
   BANK_NARRATION_RULE_SET,
   BANK_RULE_SETS,
   parseBankNarration,

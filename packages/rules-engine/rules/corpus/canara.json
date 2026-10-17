@@ -1,0 +1,27 @@
+{
+  "bank": "CANARA",
+  "samples": [
+    {
+      "input": "TPT-AMAZON-DR-123456",
+      "expect": { "channel": "NETBANKING", "type": "DEBIT", "merchant": "Amazon" }
+    },
+    {
+      "input": "UPI/123456789012/DR/JOHN DOE/oksbi",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "counterparty": "JOHN DOE",
+        "vpa_bank": "State Bank of India"
+      }
+    },
+    {
+      "input": "NEFT-CNRB0000456-EMPLOYER PVT LTD-SAL",
+      "expect": {
+        "channel": "NEFT",
+        "counterparty": "Employer Pvt Ltd",
+        "ifsc_bank": "Canara Bank"
+      }
+    }
+  ]
+}

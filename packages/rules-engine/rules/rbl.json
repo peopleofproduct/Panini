@@ -1,0 +1,40 @@
+{
+  "id": "rbl",
+  "bank": "RBL",
+  "version": "1.0.0",
+  "description": "RBL Bank narration quirks: RBLC/RBL CARD prefixes, ref-first UPI, standard IMPS/NEFT.",
+  "patterns": [
+    {
+      "name": "rbl_card_prefix",
+      "priority": 28,
+      "channel": "POS",
+      "type": "DEBIT",
+      "media": "narration",
+      "regex": "^RBL(?:C|\\s+CARD)?[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "rbl_upi_ref_first",
+      "priority": 28,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI-(?<txnId>\\d{6,16})-(?<counterparty>[A-Za-z0-9 .&']+)(?:@(?<vpaHandle>[A-Za-z0-9]+))?(?:-(?<date>\\d{6,8}|\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}))?(?<tail>[-/: ].*)?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "rbl_imps",
+      "priority": 24,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[-/](?<txnId>\\d{9,16})[-/](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "rbl_neft_ifsc",
+      "priority": 24,
+      "channel": "NEFT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^NEFT[- ](?<bankCode>[A-Z]{4}\\d{7})[- ](?<counterparty>[^-]+)(?:[-](?<remarks>.+))?$"
+    }
+  ]
+}

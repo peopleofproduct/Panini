@@ -1,0 +1,41 @@
+{
+  "id": "federal",
+  "bank": "FEDERAL",
+  "version": "1.0.0",
+  "description": "Federal Bank narration quirks: BY TRANSFER prefixes, PSP bill-pay tags, slashed IMPS/UPI.",
+  "patterns": [
+    {
+      "name": "federal_transfer_neft",
+      "priority": 28,
+      "channel": "NEFT",
+      "type": "CREDIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^BY\\s+TRANSFER[-/ ]NEFT[-/ ](?<txnId>[A-Z0-9]{6,18})[-/ ](?<counterparty>[^-/]+)(?:[-/](?<remarks>.+))?$"
+    },
+    {
+      "name": "federal_psp_billpay",
+      "priority": 26,
+      "type": "DEBIT",
+      "category": "Utilities",
+      "media": "narration",
+      "regex": "^(?:PSPBILLPAY|PSP[-/ ]BILLPAY|BBPS)[-/ ](?<counterparty>[^-/]+?)(?:[-/](?<tail>.*))?$"
+    },
+    {
+      "name": "federal_upi_slashed",
+      "priority": 26,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/@]+?)(?:[@\\/](?<vpaHandle>@?[a-z0-9._-]+))?(?:[\\/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "RTN": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    },
+    {
+      "name": "federal_imps",
+      "priority": 24,
+      "channel": "IMPS",
+      "media": "narration",
+      "regex": "^IMPS[-/](?<txnId>\\d{9,16})[-/](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$",
+      "flags": { "REV": "REVERSAL", "DR": "DEBIT", "CR": "CREDIT" }
+    }
+  ]
+}

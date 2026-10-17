@@ -1,0 +1,23 @@
+{
+  "bank": "IDFC",
+  "samples": [
+    {
+      "input": "DEBIT CARD-1234-SWIGGY",
+      "expect": { "channel": "POS", "type": "DEBIT", "merchant": "Swiggy" }
+    },
+    {
+      "input": "UPI-DR-123456789012-ZOMATO-okaxis",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "ref_no": "123456789012",
+        "merchant": "Zomato",
+        "vpa": "okaxis"
+      }
+    },
+    {
+      "input": "NEFT-N987654321-RELIANCE RETAIL LTD",
+      "expect": { "channel": "NEFT", "ref_no": "N987654321", "counterparty": "Reliance Retail Ltd" }
+    }
+  ]
+}
