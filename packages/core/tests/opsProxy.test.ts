@@ -10,10 +10,10 @@
 
 import {
   CollectingTelemetrySink,
-  EnterpriseProxy,
+  OpsProxy,
   InMemoryBillingMeter,
   TokenBucketRateLimiter,
-} from '../src/enterpriseProxy';
+} from '../src/opsProxy';
 import { Normalizer } from '../src/normalizer';
 import type { GrammarRuleSet } from '../src/grammar';
 
@@ -43,7 +43,7 @@ function makeProxy(overrides?: {
 }) {
   const billingMeter = overrides?.billingMeter ?? new InMemoryBillingMeter();
   const sink = overrides?.telemetry?.sink ?? new CollectingTelemetrySink();
-  const proxy = new EnterpriseProxy({
+  const proxy = new OpsProxy({
     normalizer,
     billingMeter,
     ...(overrides?.rateLimiter !== undefined ? { rateLimiter: overrides.rateLimiter } : {}),
@@ -53,7 +53,7 @@ function makeProxy(overrides?: {
   return { proxy, billingMeter, sink };
 }
 
-describe('EnterpriseProxy — happy path', () => {
+describe('OpsProxy — happy path', () => {
   it('parses and returns 200 with the normalized transaction', () => {
     const { proxy } = makeProxy();
     const result = proxy.parse('client-key-1', INPUT);
@@ -76,7 +76,7 @@ describe('EnterpriseProxy — happy path', () => {
   });
 });
 
-describe('EnterpriseProxy — auth & throttling', () => {
+describe('OpsProxy — auth & throttling', () => {
   it('rejects a missing API key with 401', () => {
     const { proxy } = makeProxy();
     const result = proxy.parse(undefined, INPUT);
@@ -109,7 +109,7 @@ describe('EnterpriseProxy — auth & throttling', () => {
   });
 });
 
-describe('EnterpriseProxy — telemetry', () => {
+describe('OpsProxy — telemetry', () => {
   it('emits nothing when telemetry is disabled (default)', () => {
     const { proxy, sink } = makeProxy();
     proxy.parse('key-1', INPUT);

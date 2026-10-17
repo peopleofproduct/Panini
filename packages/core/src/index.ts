@@ -31,13 +31,13 @@ export { Normalizer } from './normalizer';
 export type { NormalizerOptions } from './normalizer';
 export {
   CollectingTelemetrySink,
-  EnterpriseProxy,
+  OpsProxy,
   InMemoryBillingMeter,
   TokenBucketRateLimiter,
-} from './enterpriseProxy';
+} from './opsProxy';
 export type {
   BillingMeter,
-  EnterpriseProxyOptions,
+  OpsProxyOptions,
   ParseTelemetryEvent,
   ProxyError,
   ProxyOk,
@@ -48,7 +48,7 @@ export type {
   TelemetrySink,
   UsageRecord,
   UsageSummary,
-} from './enterpriseProxy';
+} from './opsProxy';
 export { createPaniniHttpHandler } from './adapters/httpAdapter';
 export type {
   HttpAdapterOptions,

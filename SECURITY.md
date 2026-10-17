@@ -30,5 +30,5 @@ with you before publishing any advisory.
 - No network I/O anywhere in `@panini/core` or `@panini/standards-schema`
 - Telemetry hooks are opt-in only and structurally exclude raw narration
   text, counterparties, transaction IDs, VPAs, and amounts
-- The optional ops layer (`EnterpriseProxy`) never ships PII — its telemetry
+- The optional ops layer (`OpsProxy`) never ships PII — its telemetry
   event type has no field capable of carrying it

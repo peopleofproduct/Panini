@@ -19,12 +19,14 @@ import type { NormalizedTransaction, RawInput, TransactionChannel, TransactionTy
 
 /**
  * ═══════════════════════════════════════════════════════════════════
- * PANINI ENTERPRISE — DOWNSTREAM PAID-LAYER SCAFFOLD
+ * PANINI OPS LAYER — SELF-HOSTABLE API SCAFFOLD
  * ═══════════════════════════════════════════════════════════════════
  *
- * This module is the seam between the open-source parser and the paid
- * "Panini Enterprise" hosted API. It stays transport-agnostic (no HTTP
- * framework dependency) so the enterprise server can mount it behind
+ * Optional plumbing for teams serving Panini behind their own API.
+ * Fully open-source and free — this is the same kind of gateway glue
+ * (API keys, rate limiting, usage metering) that proprietary vendors
+ * charge for, given away as building blocks. It stays transport-agnostic
+ * (no HTTP framework dependency) so you can mount it behind
  * Fastify/Express/a Lambda handler unchanged.
  *
  * Hard privacy contract: the telemetry path is OPT-IN and constructed
@@ -49,7 +51,7 @@ export interface RateLimiter {
 
 /**
  * Reference token-bucket limiter, fully in-memory. Suitable for a single
- * enterprise node; swap for Redis/etc. behind the same interface for a
+ * self-hosted node; swap for Redis/etc. behind the same interface for a
  * fleet deployment.
  */
 export class TokenBucketRateLimiter implements RateLimiter {
@@ -174,7 +176,7 @@ function hashApiKey(apiKey: string): string {
 
 // ── Proxy ────────────────────────────────────────────────────────────
 
-export interface EnterpriseProxyOptions {
+export interface OpsProxyOptions {
   readonly normalizer: Normalizer;
   readonly rateLimiter?: RateLimiter;
   readonly billingMeter?: BillingMeter;
@@ -199,14 +201,14 @@ export interface ProxyError {
 
 export type ProxyResult = ProxyOk | ProxyError;
 
-export class EnterpriseProxy {
+export class OpsProxy {
   private readonly normalizer: Normalizer;
   private readonly rateLimiter: RateLimiter | undefined;
   private readonly billingMeter: BillingMeter | undefined;
   private readonly telemetry: { enabled: boolean; sink: TelemetrySink } | undefined;
   private readonly now: () => number;
 
-  constructor(options: EnterpriseProxyOptions) {
+  constructor(options: OpsProxyOptions) {
     this.normalizer = options.normalizer;
     this.rateLimiter = options.rateLimiter;
     this.billingMeter = options.billingMeter;
