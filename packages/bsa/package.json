@@ -1,0 +1,47 @@
+{
+  "name": "@paniniapi/bsa",
+  "version": "0.1.0",
+  "description": "BSA-in-a-box — turnkey bank statement analysis: statement files in, enriched transactions + deterministic credit-relevant report (JSON + Markdown) out. Fully client-side, zero telemetry, zero implicit network calls.",
+  "license": "Apache-2.0",
+  "author": "Kapil",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "panini-bsa": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@paniniapi/extract": "0.2.0",
+    "@paniniapi/insights": "0.2.0",
+    "@paniniapi/rules-engine": "0.2.0"
+  },
+  "devDependencies": {
+    "@paniniapi/simulator": "0.2.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git",
+    "directory": "packages/bsa"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "bank-statement-analysis",
+    "bsa",
+    "foir",
+    "income-detection",
+    "credit-underwriting",
+    "privacy-preserving"
+  ]
+}

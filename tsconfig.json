@@ -21,6 +21,9 @@
     },
     {
       "path": "packages/fiu-client"
+    },
+    {
+      "path": "packages/bsa"
     }
   ]
 }
