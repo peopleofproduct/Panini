@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/fiu-client",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Open, zero-dependency FIU client for India's Account Aggregator ecosystem — consent lifecycle, X25519/ECDH key exchange, AES-256-GCM FI decryption per the ReBIT spec, and schema validation. Injectable transport; no implicit network calls.",
   "license": "Apache-2.0",
   "author": "Kapil",

@@ -55,11 +55,16 @@ export interface FiuClient {
   requestConsent(input: ConsentRequestInput): Promise<ConsentHandleResponse>;
   /** GET /Consent/handle/{handle} → artefact status while consent is pending. */
   consentStatus(handle: string): Promise<{ status: string; consentId?: string }>;
-  /** GET /Consent/{consentId} → signed artefact, optionally JWS-verified. */
+  /** GET /Consent/{consentId} → signed artefact, optionally JWS-verified.
+   *  `signedConsent` is the raw JWS — pass it to {@link FiuClient.requestFi}. */
   fetchConsentArtefact(
     consentId: string,
     aaPublicKey?: string | JsonWebKey,
-  ): Promise<{ artefact: ConsentArtefact; signature: 'verified' | 'unverified' | 'invalid' }>;
+  ): Promise<{
+    artefact: ConsentArtefact;
+    signature: 'verified' | 'unverified' | 'invalid';
+    signedConsent: string;
+  }>;
   /**
    * POST /FI/request → sessionId. Generates a fresh ephemeral key pair per
    * call and retains it (in-memory only) for the matching decrypt.
@@ -157,7 +162,10 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
       if (!res.signedConsent) {
         throw new FiuError('SCHEMA', 'artefact response missing signedConsent');
       }
-      return parseConsentArtefact(res.signedConsent, aaPublicKey);
+      return {
+        ...parseConsentArtefact(res.signedConsent, aaPublicKey),
+        signedConsent: res.signedConsent,
+      };
     },
 
     async requestFi(artefact, fiDataRange, signedConsentB64) {

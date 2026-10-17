@@ -24,6 +24,9 @@
     },
     {
       "path": "packages/bsa"
+    },
+    {
+      "path": "packages/browser"
     }
   ]
 }
