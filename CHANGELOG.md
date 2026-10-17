@@ -4,6 +4,21 @@ All notable changes to Project Panini are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `@paniniapi/extract` — statement extraction for Indian banking documents.
+  Data-driven CSV/Excel layouts for HDFC, ICICI, SBI, Axis, Kotak and a
+  generic heuristic fallback (`formats/csv-layouts.json`); zero-dependency
+  RFC-4180 CSV parser; PDF text-layer extraction (FlateDecode streams,
+  Tj/TJ operators, header-anchored column reconstruction); bank SMS alert
+  patterns (`formats/sms-patterns.json`); pluggable `SpreadsheetProvider`
+  and `OcrProvider` seams so XLSX and scanned input work without bundling
+  heavy dependencies.
+- `panini-py` — Python `extract_csv_statement` / `extract_sms` ports sharing
+  the same formats JSONs and corpus fixtures.
+
 ## [0.1.0] — 2026-10-16
 
 ### Added

@@ -1,0 +1,40 @@
+{
+  "name": "@paniniapi/extract",
+  "version": "0.1.0",
+  "description": "Statement extraction for Indian banking documents — CSV/Excel layouts, PDF text-layer, bank SMS, and pluggable OCR/spreadsheet seams. Zero runtime dependencies.",
+  "license": "Apache-2.0",
+  "author": "Kapil",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "formats"
+  ],
+  "dependencies": {
+    "@paniniapi/core": "0.1.0"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git",
+    "directory": "packages/extract"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/peopleofproduct/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "bank-statement",
+    "pdf",
+    "csv",
+    "sms-parsing",
+    "extraction",
+    "upi"
+  ]
+}

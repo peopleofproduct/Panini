@@ -1,0 +1,57 @@
+{
+  "$schema": "sms-patterns-v1",
+  "description": "Bank SMS alert patterns. Named groups extract fields: accountMask, amount, balance, date, narration. Patterns are evaluated in order; the first match wins.",
+  "patterns": [
+    {
+      "id": "acct_debited_by",
+      "bank": "GENERIC",
+      "regex": "a/?c\\s*(?:no\\.?\\s*)?(?:xx+|x+|\\*+|ending\\s+)?(?<accountMask>\\d{2,6})\\b[^.\\n]{0,40}?\\bdebited\\s+(?:by|for|with|of)?\\s*(?<amount>(?:rs\\.?|inr|₹)\\s*[\\d,]+(?:\\.\\d{1,2})?|[\\d,]+(?:\\.\\d{1,2})?)",
+      "flags": "i",
+      "direction": "DEBIT"
+    },
+    {
+      "id": "acct_credited_by",
+      "bank": "GENERIC",
+      "regex": "a/?c\\s*(?:no\\.?\\s*)?(?:xx+|x+|\\*+|ending\\s+)?(?<accountMask>\\d{2,6})\\b[^.\\n]{0,40}?\\bcredited\\s+(?:by|for|with|of)?\\s*(?<amount>(?:rs\\.?|inr|₹)\\s*[\\d,]+(?:\\.\\d{1,2})?|[\\d,]+(?:\\.\\d{1,2})?)",
+      "flags": "i",
+      "direction": "CREDIT"
+    },
+    {
+      "id": "amount_credited_to_acct",
+      "bank": "GENERIC",
+      "regex": "(?<amount>(?:rs\\.?|inr|₹)\\s*[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:is\\s+)?(?:credited|received|deposited)\\s+(?:to|into|in)\\s+(?:your\\s+)?a/?c\\s*(?:no\\.?\\s*)?(?:xx+|x+|\\*+)?(?<accountMask>\\d{2,6})",
+      "flags": "i",
+      "direction": "CREDIT"
+    },
+    {
+      "id": "amount_debited_from_acct",
+      "bank": "GENERIC",
+      "regex": "(?<amount>(?:rs\\.?|inr|₹)\\s*[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:is\\s+)?(?:debited|spent|withdrawn|paid)\\s+(?:from|on|in)\\s+(?:your\\s+)?a/?c\\s*(?:no\\.?\\s*)?(?:xx+|x+|\\*+)?(?<accountMask>\\d{2,6})",
+      "flags": "i",
+      "direction": "DEBIT"
+    },
+    {
+      "id": "inr_spent_card",
+      "bank": "GENERIC",
+      "regex": "(?<amount>(?:rs\\.?|inr|₹)\\s*[\\d,]+(?:\\.\\d{1,2})?)\\s+(?:spent|debited|used)\\s+on\\s+(?:your\\s+)?(?:card|a/?c)\\s*(?:no\\.?\\s*)?(?:xx+|x+|\\*+)?(?<accountMask>\\d{2,6})?",
+      "flags": "i",
+      "direction": "DEBIT"
+    },
+    {
+      "id": "upi_debit_alert",
+      "bank": "GENERIC",
+      "regex": "(?:debited|paid)\\s+(?:rs\\.?|inr|₹)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)[^\\n]{0,30}?\\bupi\\b",
+      "flags": "i",
+      "direction": "DEBIT"
+    },
+    {
+      "id": "upi_credit_alert",
+      "bank": "GENERIC",
+      "regex": "(?:credited|received)\\s+(?:rs\\.?|inr|₹)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)[^\\n]{0,30}?\\bupi\\b",
+      "flags": "i",
+      "direction": "CREDIT"
+    }
+  ],
+  "balanceRegex": "(?:avl|available|avail)\\s*bal(?:ance)?\\s*(?::|is)?\\s*(?<balance>(?:rs\\.?|inr|₹)?\\s*[\\d,]+(?:\\.\\d{1,2})?)",
+  "dateRegex": "\\b(?<date>\\d{1,2}[-/ ](?:\\d{1,2}|[A-Za-z]{3,9})[-/ ]\\d{2,4})\\b"
+}

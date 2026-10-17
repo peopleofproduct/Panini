@@ -1,0 +1,125 @@
+{
+  "$schema": "statement-layouts-v1",
+  "description": "CSV/Excel statement layouts for Indian banks. Header cells are normalized (lowercase, non-alnum collapsed to space) before matching; a row qualifies as a layout's header when every requiredHeaders cell appears in it. Column indices are resolved at detection time via the columns keyword lists — never hardcoded positions.",
+  "maxHeaderScanRows": 15,
+  "minRowsForDetection": 1,
+  "layouts": [
+    {
+      "id": "hdfc_statement",
+      "bank": "HDFC",
+      "requiredHeaders": [
+        "date",
+        "narration",
+        "chq ref no",
+        "withdrawal amt",
+        "deposit amt",
+        "closing balance"
+      ],
+      "columns": {
+        "date": ["date", "tran date"],
+        "narration": ["narration", "description", "particulars"],
+        "refNo": ["chq ref no", "ref no", "cheque no", "chq no"],
+        "debit": ["withdrawal amt", "debit", "debit amount", "dr"],
+        "credit": ["deposit amt", "credit", "credit amount", "cr"],
+        "balance": ["closing balance", "balance", "bal"]
+      }
+    },
+    {
+      "id": "icici_statement",
+      "bank": "ICICI",
+      "requiredHeaders": ["transaction date", "transaction remarks", "balance inr"],
+      "columns": {
+        "date": ["transaction date", "value date", "date"],
+        "narration": ["transaction remarks", "description", "particulars"],
+        "refNo": ["cheque number", "ref no cheque no", "ref no", "cheque no"],
+        "debit": ["withdrawal amount inr", "withdrawal amount", "debit", "dr"],
+        "credit": ["deposit amount inr", "deposit amount", "credit", "cr"],
+        "balance": ["balance inr", "balance", "bal"]
+      }
+    },
+    {
+      "id": "sbi_statement",
+      "bank": "SBI",
+      "requiredHeaders": [
+        "txn date",
+        "description",
+        "ref no cheque no",
+        "debit",
+        "credit",
+        "balance"
+      ],
+      "columns": {
+        "date": ["txn date", "value date", "date"],
+        "narration": ["description", "narration", "particulars"],
+        "refNo": ["ref no cheque no", "ref no", "cheque no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "axis_statement",
+      "bank": "AXIS",
+      "requiredHeaders": ["tran date", "particulars", "dr", "cr", "bal"],
+      "columns": {
+        "date": ["tran date", "transaction date", "date"],
+        "narration": ["particulars", "description", "transaction details"],
+        "refNo": ["chqno", "chq no", "ref no"],
+        "debit": ["dr", "debit", "withdrawal"],
+        "credit": ["cr", "credit", "deposit"],
+        "balance": ["bal", "balance"]
+      }
+    },
+    {
+      "id": "kotak_statement",
+      "bank": "KOTAK",
+      "requiredHeaders": ["date", "description", "amount", "dr cr", "balance"],
+      "columns": {
+        "date": ["date", "txn date"],
+        "narration": ["description", "narration", "particulars"],
+        "refNo": ["chq ref no", "ref no", "cheque no"],
+        "amount": ["amount", "amount inr"],
+        "direction": ["dr cr", "dr cr indicator", "type"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "generic_statement",
+      "bank": "GENERIC",
+      "requiredHeaders": ["date", "balance"],
+      "columns": {
+        "date": ["date", "txn date", "tran date", "transaction date", "value date", "posting date"],
+        "narration": [
+          "description",
+          "narration",
+          "particulars",
+          "details",
+          "remarks",
+          "transaction remarks",
+          "transaction details"
+        ],
+        "refNo": [
+          "ref no cheque no",
+          "chq ref no",
+          "ref no",
+          "cheque no",
+          "utr",
+          "utr no",
+          "transaction id"
+        ],
+        "debit": [
+          "debit",
+          "withdrawal",
+          "withdrawal amt",
+          "withdrawal amount",
+          "dr",
+          "debit amount"
+        ],
+        "credit": ["credit", "deposit", "deposit amt", "deposit amount", "cr", "credit amount"],
+        "amount": ["amount", "amount inr", "txn amount"],
+        "direction": ["dr cr", "type", "txn type", "transaction type"],
+        "balance": ["balance", "closing balance", "bal", "balance inr"]
+      }
+    }
+  ]
+}

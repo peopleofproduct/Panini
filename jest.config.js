@@ -4,6 +4,7 @@ module.exports = {
     '<rootDir>/packages/core',
     '<rootDir>/packages/rules-engine',
     '<rootDir>/packages/standards-schema',
+    '<rootDir>/packages/extract',
     '<rootDir>/packages/simulator',
   ],
   coverageProvider: 'v8',
