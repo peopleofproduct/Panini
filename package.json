@@ -18,7 +18,9 @@
     "format:check": "prettier --check \"**/*.{ts,js,json,md}\"",
     "simulate": "tsc -b packages/simulator && node packages/simulator/dist/cli.js",
     "playground": "esbuild playground/web-entry.ts --bundle --format=iife --target=es2020 --alias:node:fs=./playground/fs-stub.js --alias:node:path=./playground/fs-stub.js --outfile=playground/panini-web.js",
-    "parse": "node playground/parse.mjs"
+    "parse": "node playground/parse.mjs",
+    "bench": "node benchmarks/run.mjs",
+    "bench:ci": "node benchmarks/run.mjs --ci"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

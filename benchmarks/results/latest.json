@@ -1,0 +1,346 @@
+{
+  "meta": {
+    "generated_at": "2026-10-17T20:03:03.971Z",
+    "git_sha": "c2a9c39",
+    "node": "v24.15.0",
+    "packages": {
+      "core": "0.1.1",
+      "rules-engine": "0.2.0",
+      "standards-schema": "0.2.0",
+      "extract": "0.2.0",
+      "insights": "0.1.1",
+      "simulator": "0.2.0"
+    }
+  },
+  "extraction": [
+    {
+      "layout": "hdfc_statement",
+      "bank": "HDFC",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "icici_statement",
+      "bank": "ICICI",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "sbi_statement",
+      "bank": "SBI",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "axis_statement",
+      "bank": "AXIS",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "kotak_statement",
+      "bank": "KOTAK",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "pnb_statement",
+      "bank": "PNB",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": null,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "bob_statement",
+      "bank": "BOB",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "yes_statement",
+      "bank": "YES",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "indusind_statement",
+      "bank": "INDUSIND",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "union_statement",
+      "bank": "UNION",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "idfc_statement",
+      "bank": "IDFC",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "canara_statement",
+      "bank": "CANARA",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "federal_statement",
+      "bank": "FEDERAL",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "rbl_statement",
+      "bank": "RBL",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    },
+    {
+      "layout": "au_statement",
+      "bank": "AU_SFB",
+      "statements": 5,
+      "rows_expected": 200,
+      "rows_extracted": 200,
+      "exact_rows_pct": 100,
+      "amount_pct": 100,
+      "date_pct": 100,
+      "direction_pct": 100,
+      "balance_pct": 100,
+      "refno_pct": 100,
+      "layout_detect_pct": 100
+    }
+  ],
+  "anomalies": {
+    "statements": 45,
+    "crashes": 0,
+    "over_extraction": 0,
+    "statements_with_warnings": 44
+  },
+  "narration": {
+    "corpus_files": 14,
+    "samples": 76,
+    "sample_pass_pct": 100,
+    "counterparty_or_merchant_pct": 90.79,
+    "categorized_pct": 64.47,
+    "per_bank": [
+      {
+        "bank": "AXIS",
+        "samples": 5,
+        "matched": 5,
+        "passed": 5,
+        "avg_confidence": 0.9
+      },
+      {
+        "bank": "BOB",
+        "samples": 5,
+        "matched": 5,
+        "passed": 5,
+        "avg_confidence": 0.9
+      },
+      {
+        "bank": "CANARA",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.883
+      },
+      {
+        "bank": "FEDERAL",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.9
+      },
+      {
+        "bank": "GENERIC",
+        "samples": 19,
+        "matched": 19,
+        "passed": 19,
+        "avg_confidence": 0.9
+      },
+      {
+        "bank": "IDFC",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.883
+      },
+      {
+        "bank": "INDUSIND",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.867
+      },
+      {
+        "bank": "KOTAK",
+        "samples": 5,
+        "matched": 5,
+        "passed": 5,
+        "avg_confidence": 0.9
+      },
+      {
+        "bank": "LEGACY",
+        "samples": 9,
+        "matched": 9,
+        "passed": 9,
+        "avg_confidence": 0.914
+      },
+      {
+        "bank": "PNB",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.9
+      },
+      {
+        "bank": "RBL",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.883
+      },
+      {
+        "bank": "UNION",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.883
+      },
+      {
+        "bank": "WALLET",
+        "samples": 9,
+        "matched": 9,
+        "passed": 9,
+        "avg_confidence": 0.922
+      },
+      {
+        "bank": "YES",
+        "samples": 3,
+        "matched": 3,
+        "passed": 3,
+        "avg_confidence": 0.883
+      }
+    ]
+  },
+  "insights": {
+    "transactions": 60,
+    "deterministic": true,
+    "rule_hits": 2,
+    "runtime_ms": 6.1
+  }
+}
