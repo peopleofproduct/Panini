@@ -16,7 +16,7 @@
 
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { GrammarRuleSet } from '@panini/core';
+import type { GrammarRuleSet } from '@paniniapi/core';
 
 const CATEGORIES_FILE = 'categories.json';
 
@@ -34,7 +34,7 @@ function resolveRulesDir(): string {
     if (existsSync(dir)) return dir;
   }
   throw new Error(
-    `@panini/rules-engine: could not locate bundled rules directory. Checked: ${candidates.join(', ')}`,
+    `@paniniapi/rules-engine: could not locate bundled rules directory. Checked: ${candidates.join(', ')}`,
   );
 }
 

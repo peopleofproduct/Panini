@@ -77,7 +77,7 @@ function resolveCorpusDir(): string {
     if (existsSync(dir)) return dir;
   }
   throw new Error(
-    `@panini/rules-engine: could not locate corpus directory. Checked: ${candidates.join(', ')}`,
+    `@paniniapi/rules-engine: could not locate corpus directory. Checked: ${candidates.join(', ')}`,
   );
 }
 

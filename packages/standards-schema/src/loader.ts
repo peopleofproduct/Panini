@@ -30,7 +30,7 @@ function resolveSchemasDir(): string {
     if (existsSync(dir)) return dir;
   }
   throw new Error(
-    `@panini/standards-schema: could not locate bundled schemas directory. Checked: ${candidates.join(', ')}`,
+    `@paniniapi/standards-schema: could not locate bundled schemas directory. Checked: ${candidates.join(', ')}`,
   );
 }
 
@@ -38,7 +38,7 @@ function resolveSchemasDir(): string {
 export function loadSchema(name: string): SchemaNode {
   const file = join(resolveSchemasDir(), `${name}.schema.json`);
   if (!existsSync(file)) {
-    throw new Error(`@panini/standards-schema: unknown schema '${name}'`);
+    throw new Error(`@paniniapi/standards-schema: unknown schema '${name}'`);
   }
   return JSON.parse(readFileSync(file, 'utf8')) as SchemaNode;
 }

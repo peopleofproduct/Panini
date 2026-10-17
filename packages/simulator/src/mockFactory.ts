@@ -19,7 +19,7 @@ import type {
   AATransaction,
   AATransactionMode,
   AATransactionType,
-} from '@panini/standards-schema';
+} from '@paniniapi/standards-schema';
 
 /**
  * A generated transaction may be deliberately malformed (anomaly

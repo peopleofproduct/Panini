@@ -9,7 +9,7 @@
  */
 
 import { loadBuiltinRuleSets, loadCategories } from '../src';
-import { Normalizer } from '@panini/core';
+import { Normalizer } from '@paniniapi/core';
 
 describe('loadBuiltinRuleSets', () => {
   it('loads all bundled grammar files', () => {

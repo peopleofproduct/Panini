@@ -27,7 +27,7 @@ with you before publishing any advisory.
 
 ## Security-relevant design guarantees
 
-- No network I/O anywhere in `@panini/core` or `@panini/standards-schema`
+- No network I/O anywhere in `@paniniapi/core` or `@paniniapi/standards-schema`
 - Telemetry hooks are opt-in only and structurally exclude raw narration
   text, counterparties, transaction IDs, VPAs, and amounts
 - The optional ops layer (`OpsProxy`) never ships PII — its telemetry

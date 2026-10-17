@@ -20,7 +20,7 @@ import {
   type RawInput,
   type TransactionChannel,
   type TransactionType,
-} from '@panini/core';
+} from '@paniniapi/core';
 import { loadBuiltinRuleSets, loadCategories } from './loader';
 import { lookupIfscBank, lookupMerchant, lookupVpaHandle } from './dictionary';
 

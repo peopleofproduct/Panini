@@ -21,7 +21,7 @@ jobs:
       - run: npm test
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
       - name: Python port — corpus conformance
         working-directory: panini-py
         run: python -m unittest discover tests
