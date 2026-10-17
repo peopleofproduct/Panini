@@ -258,6 +258,8 @@ Find us:
 
 Contributions welcome — see [CONTRIBUTING.md](./CONTRIBUTING.md). Panini is free forever — if it saved your team money, you can [support the maintainers](./SUPPORT.md).
 
+Accuracy claims are public and reproducible — see [benchmarks/BENCHMARKS.md](./benchmarks/BENCHMARKS.md) (`npm run bench`).
+
 ## License
 
 Apache-2.0 — see [LICENSE](./LICENSE) and [NOTICE](./NOTICE).
