@@ -1,0 +1,178 @@
+{
+  "$id": "https://panini.dev/schemas/aa-consent-request.schema.json",
+  "description": "ReBIT AA consent request — the ConsentDetail envelope an FIU sends to create a consent handle (POST /Consent).",
+  "type": "object",
+  "required": ["ver", "timestamp", "txnid", "ConsentDetail"],
+  "additionalProperties": true,
+  "properties": {
+    "ver": { "type": "string", "pattern": "^\\d+\\.\\d+(\\.\\d+)?$" },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "txnid": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "ConsentDetail": {
+      "type": "object",
+      "required": [
+        "consentStart",
+        "consentExpiry",
+        "consentMode",
+        "fetchType",
+        "consentTypes",
+        "fiTypes",
+        "DataConsumer",
+        "Customer",
+        "Purpose",
+        "FIDataRange",
+        "DataLife",
+        "Frequency"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "consentStart": { "type": "string", "format": "date-time" },
+        "consentExpiry": { "type": "string", "format": "date-time" },
+        "consentMode": {
+          "type": "string",
+          "enum": ["VIEW", "STORE", "QUERY", "STREAM"]
+        },
+        "fetchType": { "type": "string", "enum": ["ONETIME", "PERIODIC"] },
+        "consentTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": ["PROFILE", "SUMMARY", "TRANSACTIONS"]
+          }
+        },
+        "fiTypes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "DEPOSIT",
+              "TERM-DEPOSIT",
+              "RECURRING_DEPOSIT",
+              "SIP",
+              "CP",
+              "GOVT_SECURITIES",
+              "EQUITIES",
+              "BONDS",
+              "DEBENTURES",
+              "MUTUAL_FUNDS",
+              "ETF",
+              "IDR",
+              "CIS",
+              "AIF",
+              "INSURANCE_POLICIES",
+              "NPS",
+              "INVIT",
+              "REIT",
+              "OTHER"
+            ]
+          }
+        },
+        "DataConsumer": {
+          "type": "object",
+          "required": ["id"],
+          "additionalProperties": true,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "type": "string", "enum": ["FIU", "FIU_REQUESTER"] }
+          }
+        },
+        "DataProvider": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "id": { "type": "string", "minLength": 1 },
+            "type": { "type": "string", "enum": ["FIP", "AA"] }
+          }
+        },
+        "Customer": {
+          "type": "object",
+          "required": ["id"],
+          "additionalProperties": true,
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Customer identifier — typically 'mobile@onemoney' style AA handle."
+            },
+            "Identifiers": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["category", "type", "value"],
+                "additionalProperties": true,
+                "properties": {
+                  "category": { "type": "string", "enum": ["STRONG", "WEAK", "ANCREDITYPE"] },
+                  "type": { "type": "string", "minLength": 1 },
+                  "value": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        },
+        "Purpose": {
+          "type": "object",
+          "required": ["code"],
+          "additionalProperties": true,
+          "properties": {
+            "code": { "type": "string", "pattern": "^\\d{3}$" },
+            "refUri": { "type": "string" },
+            "text": { "type": "string" },
+            "Category": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": { "type": { "type": "string" } }
+            }
+          }
+        },
+        "FIDataRange": {
+          "type": "object",
+          "required": ["from", "to"],
+          "additionalProperties": true,
+          "properties": {
+            "from": { "type": "string", "format": "date-time" },
+            "to": { "type": "string", "format": "date-time" }
+          }
+        },
+        "DataLife": {
+          "type": "object",
+          "required": ["unit", "value"],
+          "additionalProperties": true,
+          "properties": {
+            "unit": { "type": "string", "enum": ["MONTH", "YEAR", "DAY", "INF"] },
+            "value": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "Frequency": {
+          "type": "object",
+          "required": ["unit", "value"],
+          "additionalProperties": true,
+          "properties": {
+            "unit": {
+              "type": "string",
+              "enum": ["HOUR", "DAY", "MONTH", "YEAR", "INF"]
+            },
+            "value": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "DataFilter": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "operator", "value"],
+            "additionalProperties": true,
+            "properties": {
+              "type": { "type": "string", "minLength": 1 },
+              "operator": {
+                "type": "string",
+                "enum": ["=", "!=", ">", "<", ">=", "<=", "IN", "NOT IN"]
+              },
+              "value": { "type": ["string", "number", "array"] }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/rules-engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Community-extendable JSON grammar sets for Indian bank narration formats — 14 banks plus generic archetypes, entity dictionaries, and a corpus coverage gate.",
   "license": "Apache-2.0",
   "author": "Kapil",
@@ -11,7 +11,7 @@
     "rules"
   ],
   "dependencies": {
-    "@paniniapi/core": "0.1.0"
+    "@paniniapi/core": "0.1.1"
   },
   "scripts": {
     "build": "tsc -b",

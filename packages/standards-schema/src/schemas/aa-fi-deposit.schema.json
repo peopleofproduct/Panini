@@ -1,0 +1,51 @@
+{
+  "$id": "https://panini.dev/schemas/aa-fi-deposit.schema.json",
+  "description": "ReBIT AA FI data for TERM-DEPOSIT and RECURRING_DEPOSIT: envelope plus a deposit Summary and optional Transaction array.",
+  "type": "object",
+  "required": ["FIPId", "FIUTimestamp", "maskedAccountNumber", "Summary"],
+  "additionalProperties": true,
+  "properties": {
+    "FIPId": { "type": "string", "minLength": 1, "maxLength": 80 },
+    "FIUTimestamp": { "type": "string", "format": "date-time" },
+    "maskedAccountNumber": {
+      "type": "string",
+      "pattern": "^[Xx*]{0,12}\\d{3,6}$"
+    },
+    "fiType": { "type": "string", "enum": ["TERM-DEPOSIT", "RECURRING_DEPOSIT"] },
+    "Summary": {
+      "type": "object",
+      "required": ["accountType", "principalAmount", "maturityDate"],
+      "additionalProperties": true,
+      "properties": {
+        "accountType": {
+          "type": "string",
+          "enum": ["FIXED", "RECURRING", "CUMULATIVE", "NON_CUMULATIVE", "OTHER"]
+        },
+        "principalAmount": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+        "currentValue": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+        "maturityValue": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+        "interestRatePct": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,4})?$" },
+        "openingDate": { "type": "string", "format": "date" },
+        "maturityDate": { "type": "string", "format": "date" },
+        "tenureMonths": { "type": "integer", "minimum": 0 },
+        "installmentAmount": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" }
+      }
+    },
+    "Transaction": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["txnId", "amount", "type", "valueDate"],
+        "additionalProperties": true,
+        "properties": {
+          "txnId": { "type": "string", "minLength": 1 },
+          "amount": { "type": ["number", "string"], "pattern": "^-?\\d+(\\.\\d{1,2})?$" },
+          "narration": { "type": "string" },
+          "type": { "type": "string", "enum": ["DEBIT", "CREDIT", "OTHERS"] },
+          "valueDate": { "type": "string", "format": "date" },
+          "transactionTimestamp": { "type": "string", "format": "date-time" }
+        }
+      }
+    }
+  }
+}
