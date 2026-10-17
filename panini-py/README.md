@@ -1,7 +1,7 @@
 # panini-py — Python port of Panini
 
 Deterministic, privacy-preserving parser for Indian bank narrations.
-This package is the Python port of `@panini/rules-engine` and shares the
+This package is the Python port of `@paniniapi/rules-engine` and shares the
 **same grammar JSONs and conformance corpus** — both runtimes are tested
 against the identical fixture set, so parity is enforced, not assumed.
 

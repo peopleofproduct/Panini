@@ -60,7 +60,7 @@ function resolveEntitiesDir(): string {
     if (existsSync(dir)) return dir;
   }
   throw new Error(
-    `@panini/rules-engine: could not locate entities directory. Checked: ${candidates.join(', ')}`,
+    `@paniniapi/rules-engine: could not locate entities directory. Checked: ${candidates.join(', ')}`,
   );
 }
 

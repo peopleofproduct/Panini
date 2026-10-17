@@ -19,7 +19,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "paths": {
-      "@panini/*": ["./packages/*/src"]
+      "@paniniapi/*": ["./packages/*/src"]
     }
   }
 }

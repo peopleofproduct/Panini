@@ -9,8 +9,8 @@
  */
 
 import { listSchemas, loadSchema, validateAgainst } from '../src';
-import { Normalizer } from '@panini/core';
-import { loadBuiltinRuleSets, loadCategories } from '@panini/rules-engine';
+import { Normalizer } from '@paniniapi/core';
+import { loadBuiltinRuleSets, loadCategories } from '@paniniapi/rules-engine';
 
 describe('bundled schemas', () => {
   it('lists the bundled schemas', () => {

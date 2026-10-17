@@ -1,5 +1,5 @@
 {
-  "name": "@panini/simulator",
+  "name": "@paniniapi/simulator",
   "version": "0.1.0",
   "private": true,
   "description": "Generative sandbox producing randomized ReBIT v2.0-compliant financial payloads with realistic Indian banking narration noise.",
@@ -14,11 +14,11 @@
     "dist"
   ],
   "dependencies": {
-    "@panini/standards-schema": "0.1.0"
+    "@paniniapi/standards-schema": "0.1.0"
   },
   "devDependencies": {
-    "@panini/core": "0.1.0",
-    "@panini/rules-engine": "0.1.0"
+    "@paniniapi/core": "0.1.0",
+    "@paniniapi/rules-engine": "0.1.0"
   },
   "scripts": {
     "build": "tsc -b"

@@ -1,4 +1,4 @@
-# Panini (`@panini/core`)
+# Panini (`@paniniapi/core`)
 
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.base.json)
@@ -24,14 +24,14 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
                  ┌────────────────────────────────────────────────┐
                  │              Client / Host Server              │
                  │                                                │
-   narrations ──►│  @panini/rules-engine ──► @panini/core          │
+   narrations ──►│  @paniniapi/rules-engine ──► @paniniapi/core          │
    AA payloads ─►│     (JSON grammars)         (Normalizer)        │
                  │            │                                    │
                  │            ▼                                    │
                  │     NormalizedTransaction / AAProfile          │
                  │            │                                    │
                  │            ▼                                    │
-                 │  @panini/standards-schema  (ReBIT / OCEN)      │
+                 │  @paniniapi/standards-schema  (ReBIT / OCEN)      │
                  └───────────┬────────────────────────────────────┘
                              │  (optional, self-hosted ops layer)
                  ┌───────────▼────────────────────────────────────┐
@@ -41,14 +41,14 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
                  └────────────────────────────────────────────────┘
 ```
 
-| Package                    | Role                                                                                                                                                                                      |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `@panini/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                              |
-| `@panini/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate. |
-| `@panini/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                     |
-| `@panini/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                             |
-| `panini-py/`               | Python port sharing the same grammar JSONs and corpus — 76/76 conformance fixtures, CI-gated.                                                                                             |
-| `playground/`              | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                             |
+| Package                       | Role                                                                                                                                                                                      |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                              |
+| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate. |
+| `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA profiles and OCEN 4.0 loan applications.                                                                                                     |
+| `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads for client-side testing.                                                                                             |
+| `panini-py/`                  | Python port sharing the same grammar JSONs and corpus — 76/76 conformance fixtures, CI-gated.                                                                                             |
+| `playground/`                 | Self-contained browser playground (zero network calls) + `npm run parse` CLI.                                                                                                             |
 
 ## ✨ Design Guarantees
 
@@ -68,7 +68,7 @@ npm test        # jest — 295 tests across 18 suites
 ### Parse a narration
 
 ```ts
-import { parseBankNarration } from '@panini/rules-engine';
+import { parseBankNarration } from '@paniniapi/rules-engine';
 
 parseBankNarration('NEFT-N3452618902-SALARY-OCTOBER 2026-TCS LTD');
 // {
@@ -100,8 +100,8 @@ parseBankNarration('UPI/20261015/DR/826384910234/SWIGGY@okaxis/Cooking/');
 Or use the raw engine for custom grammars:
 
 ```ts
-import { Normalizer } from '@panini/core';
-import { loadBuiltinRuleSets, loadCategories } from '@panini/rules-engine';
+import { Normalizer } from '@paniniapi/core';
+import { loadBuiltinRuleSets, loadCategories } from '@paniniapi/rules-engine';
 
 const normalizer = new Normalizer({
   ruleSets: loadBuiltinRuleSets(),
@@ -113,7 +113,7 @@ normalizer.normalize('UPI-SWIGGY-826384@okaxis-20261015-REV-DEBIT');
 ### Validate DPI payloads
 
 ```ts
-import { validateAAProfile, isOCENLoanApplication } from '@panini/standards-schema';
+import { validateAAProfile, isOCENLoanApplication } from '@paniniapi/standards-schema';
 
 const result = validateAAProfile(payload); // { valid, errors[] } — zero deps
 ```
@@ -168,7 +168,7 @@ generates one test per sample, so grammar regressions fail CI.
 ### Self-hostable ops layer
 
 ```ts
-import { createPaniniHttpHandler, OpsProxy } from '@panini/core';
+import { createPaniniHttpHandler, OpsProxy } from '@paniniapi/core';
 
 app.post('/v1/parse', createPaniniHttpHandler(proxy));
 // bearer token → rate-limit bucket → normalize → usage meter → JSON

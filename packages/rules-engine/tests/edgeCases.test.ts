@@ -13,8 +13,8 @@
  * emit undefined fields — malformed input degrades to UNKNOWN, not errors.
  */
 
-import { Normalizer } from '@panini/core';
-import { validateAgainst } from '@panini/standards-schema';
+import { Normalizer } from '@paniniapi/core';
+import { validateAgainst } from '@paniniapi/standards-schema';
 import {
   loadBuiltinRuleSets,
   loadCategories,

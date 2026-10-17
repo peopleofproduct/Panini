@@ -15,8 +15,8 @@
  */
 
 import { generateMockProfile, generateMockProfiles, mulberry32 } from '../src';
-import { validateAAProfile } from '@panini/standards-schema';
-import { parseBankNarration } from '@panini/rules-engine';
+import { validateAAProfile } from '@paniniapi/standards-schema';
+import { parseBankNarration } from '@paniniapi/rules-engine';
 
 describe('mulberry32', () => {
   it('produces a deterministic stream for a fixed seed', () => {
