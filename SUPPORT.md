@@ -20,7 +20,7 @@ No payment gateway, no fees, no foreign rails — it goes directly to the mainta
 
 ## Why support?
 
-Independent market data (see [`future-roadmap-strategy-doc.md`](./future-roadmap-strategy-doc.md) §14) puts Indian lender/fintech spend on statement-parsing and financial-data plumbing at roughly **₹600 Cr+/year**. Panini makes the digital-format majority of that free.
+Public market data — Perfios alone reported ₹557.8 Cr in FY24 revenue (RoC filings via Inc42), and the Account Aggregator ecosystem facilitated ₹1.6 lakh crore of lending in FY25 (Sahamati) — puts Indian lender/fintech spend on statement-parsing and financial-data plumbing at roughly **₹600 Cr+/year**. Panini makes the digital-format majority of that free.
 
 If Panini replaced even a fraction of your vendor fees — ₹10 L/yr for a small fintech, ₹1 Cr+/yr for a mid-size lender — consider routing a small share of that saving back. It keeps the corpus growing and the project maintained.
 
