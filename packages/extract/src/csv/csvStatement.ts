@@ -17,6 +17,7 @@
 import type { CsvLayoutsFile } from '../formatsLoader';
 import { parseStatementDate } from '../statementDate';
 import { findAccountMask, mapRow } from '../rowMapper';
+import { mineStatementMetadata } from '../statementMetadata';
 import type { ExtractedStatement, ExtractedTransaction, StatementFormat } from '../types';
 import { parseCsv } from './csvParser';
 import { detectTable } from './layouts';
@@ -58,6 +59,11 @@ export function statementFromRows(
     .map((r) => r.join(' '))
     .join(' ');
   const accountMask = findAccountMask(preambleText);
+  const footerText = rows
+    .slice(-file.maxHeaderScanRows)
+    .map((r) => r.join(' '))
+    .join(' ');
+  Object.assign(metadata, mineStatementMetadata(`${preambleText} ${footerText}`));
 
   const table = detectTable(rows, file, options);
   if (!table) {
@@ -87,6 +93,12 @@ export function statementFromRows(
 
   if (transactions.length === 0) {
     warnings.push('header detected but no transaction rows parsed');
+  } else if (metadata['closingBalancePaise'] === undefined) {
+    // Fallback: last transaction's running balance is the de-facto close.
+    const lastBalance = [...transactions].reverse().find((t) => t.balancePaise !== null);
+    if (lastBalance?.balancePaise !== null && lastBalance?.balancePaise !== undefined) {
+      metadata['closingBalancePaise'] = String(lastBalance.balancePaise);
+    }
   }
 
   return {

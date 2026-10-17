@@ -84,6 +84,65 @@
       }
     },
     {
+      "id": "pnb_statement",
+      "bank": "PNB",
+      "requiredHeaders": ["txn date", "transaction details", "withdrawal", "deposit", "balance"],
+      "columns": {
+        "date": ["txn date", "value date", "date"],
+        "narration": ["transaction details", "description", "particulars", "narration"],
+        "refNo": ["ref no", "cheque no", "ref no cheque no"],
+        "debit": ["withdrawal", "debit", "dr"],
+        "credit": ["deposit", "credit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "bob_statement",
+      "bank": "BOB",
+      "requiredHeaders": ["date", "narration", "chq ref no", "withdrawal", "deposit", "balance"],
+      "columns": {
+        "date": ["date", "value date", "txn date"],
+        "narration": ["narration", "description", "particulars"],
+        "refNo": ["chq ref no", "ref no", "cheque no"],
+        "debit": ["withdrawal", "debit", "dr"],
+        "credit": ["deposit", "credit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "yes_statement",
+      "bank": "YES",
+      "requiredHeaders": [
+        "transaction date",
+        "description",
+        "reference number",
+        "debit",
+        "credit",
+        "balance"
+      ],
+      "columns": {
+        "date": ["transaction date", "value date", "date"],
+        "narration": ["description", "transaction description", "particulars"],
+        "refNo": ["reference number", "ref no", "cheque no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "indusind_statement",
+      "bank": "INDUSIND",
+      "requiredHeaders": ["date", "particulars", "cheque no", "debit", "credit", "balance"],
+      "columns": {
+        "date": ["date", "transaction date", "value date"],
+        "narration": ["particulars", "description", "narration"],
+        "refNo": ["cheque no", "ref no", "chq no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
       "id": "generic_statement",
       "bank": "GENERIC",
       "requiredHeaders": ["date", "balance"],

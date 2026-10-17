@@ -16,6 +16,9 @@
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import type { PasswordPatternsFile } from './pdf/encryption';
+
+export type { PasswordPattern, PasswordPatternsFile } from './pdf/encryption';
 
 /** A bank CSV/Excel layout: header signature + semantic column mapping. */
 export interface CsvLayout {
@@ -75,4 +78,9 @@ export function loadCsvLayouts(dir?: string): CsvLayoutsFile {
 export function loadSmsPatterns(dir?: string): SmsPatternsFile {
   const file = join(resolveFormatsDir(dir), 'sms-patterns.json');
   return JSON.parse(readFileSync(file, 'utf8')) as SmsPatternsFile;
+}
+
+export function loadPasswordPatterns(dir?: string): PasswordPatternsFile {
+  const file = join(resolveFormatsDir(dir), 'pdf-passwords.json');
+  return JSON.parse(readFileSync(file, 'utf8')) as PasswordPatternsFile;
 }

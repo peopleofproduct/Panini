@@ -28,8 +28,23 @@ export interface OcrProvider {
   recognize(image: Uint8Array): Promise<OcrResult>;
 }
 
+/** A recognized word with its position — preserves column anchoring. */
+export interface OcrFragment {
+  readonly text: string;
+  readonly x: number;
+  readonly y: number;
+  /** 1-based page number; OCR engines number pages from 1. */
+  readonly page?: number;
+}
+
 export interface OcrResult {
   readonly text: string;
+  /**
+   * Word-level boxes when the engine reports them (Tesseract TSV/hOCR).
+   * Preferred over `text` — feeds the same x-anchored table pipeline as
+   * a real PDF text layer, so column attribution survives OCR.
+   */
+  readonly fragments?: readonly OcrFragment[];
   /** Optional provider-reported confidence in [0, 1]. */
   readonly confidence?: number;
 }

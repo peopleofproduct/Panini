@@ -52,10 +52,13 @@ const ENDSTREAM = 'endstream';
 
 interface RawStream {
   readonly dictionary: string;
+  readonly obj: number;
+  readonly gen: number;
   readonly data: Uint8Array;
 }
 
 const LENGTH_RE = /\/Length\s+(\d+)/;
+const OBJ_REF_RE = /(\d+)\s+(\d+)\s+obj\s*$/;
 
 function findStreams(pdf: Uint8Array): RawStream[] {
   const latin = Buffer.from(pdf).toString(LATIN1);
@@ -69,6 +72,10 @@ function findStreams(pdf: Uint8Array): RawStream[] {
     // The object's dictionary is the text between the preceding `<<` and `stream`.
     const dictStart = latin.lastIndexOf('<<', m.index);
     const dictionary = dictStart >= 0 ? latin.slice(dictStart, m.index) : '';
+    // Object number needed for the per-object decryption key.
+    const objRef = OBJ_REF_RE.exec(latin.slice(Math.max(0, dictStart - 40), dictStart).trimEnd());
+    const obj = objRef ? Number(objRef[1]) : 0;
+    const gen = objRef ? Number(objRef[2]) : 0;
 
     // Prefer /Length — compressed data can legitimately contain the
     // bytes "endstream" mid-stream, which a naive scan would truncate on.
@@ -83,17 +90,26 @@ function findStreams(pdf: Uint8Array): RawStream[] {
       end = latin.indexOf(ENDSTREAM, dataStart);
     }
     if (end < 0) break;
-    out.push({ dictionary, data: pdf.subarray(dataStart, end) });
+    out.push({ dictionary, obj, gen, data: pdf.subarray(dataStart, end) });
     STREAM_RE.lastIndex = end + ENDSTREAM.length;
   }
   return out;
 }
 
-function decodeStream(stream: RawStream): Uint8Array | null {
+function decodeStream(
+  stream: RawStream,
+  decrypt?: (data: Uint8Array, obj: number, gen: number) => Uint8Array | null,
+): Uint8Array | null {
   const flate = /\/FlateDecode|\/Fl\b/.test(stream.dictionary);
   try {
-    if (flate) return inflateSync(Buffer.from(stream.data));
-    return stream.data;
+    let data = stream.data;
+    if (decrypt) {
+      const plain = decrypt(data, stream.obj, stream.gen);
+      if (!plain) return null;
+      data = plain;
+    }
+    if (flate) return inflateSync(Buffer.from(data));
+    return data;
   } catch {
     return null;
   }
@@ -463,12 +479,17 @@ export function linesFromFragments(fragments: readonly PdfFragment[]): PdfLine[]
 /**
  * Extracts positioned text fragments from PDF bytes. Returns fragments in
  * content-stream order; scanned (image-only) PDFs return an empty list.
+ * `decrypt` is the per-stream decryptor returned by `decryptPdf` for
+ * password-protected documents.
  */
-export function extractPdfFragments(pdf: Uint8Array): PdfFragment[] {
+export function extractPdfFragments(
+  pdf: Uint8Array,
+  decrypt?: (data: Uint8Array, obj: number, gen: number) => Uint8Array | null,
+): PdfFragment[] {
   const fragments: PdfFragment[] = [];
   let page = 0;
   for (const stream of findStreams(pdf)) {
-    const decoded = decodeStream(stream);
+    const decoded = decodeStream(stream, decrypt);
     if (!decoded) continue;
     const toks = tokenize(decoded);
     if (!toks.some((t) => t.kind === 'op' && (t.value === 'Tj' || t.value === 'TJ'))) continue;

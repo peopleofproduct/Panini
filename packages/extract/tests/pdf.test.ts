@@ -101,6 +101,31 @@ describe('extractPdfStatement', () => {
     expect(result.warnings.join(' ')).toMatch(/OCR/);
   });
 
+  it('stitches wrapped narration continuation lines onto the parent row', () => {
+    const cols = [50, 140, 300, 380, 460, 540];
+    const frags = [
+      ...['Date', 'Narration', 'Ref No.', 'Debit', 'Credit', 'Balance'].map((h, i) => ({
+        x: cols[i] ?? 0,
+        y: 700,
+        text: h,
+      })),
+      // first row's narration wraps onto a second visual line
+      { x: 50, y: 680, text: '15/10/26' },
+      { x: 140, y: 680, text: 'UPI/402345678912/DR/SWIGGY@okaxis/' },
+      { x: 380, y: 680, text: '1250.00' },
+      { x: 540, y: 680, text: '45230.50' },
+      { x: 140, y: 664, text: 'RENT OCT 2026' }, // continuation — no date/amount
+      { x: 50, y: 648, text: '16/10/26' },
+      { x: 140, y: 648, text: 'NEFT-SALARY-TCS' },
+      { x: 460, y: 648, text: '85000.00' },
+      { x: 540, y: 648, text: '130230.50' },
+    ];
+    const result = extractPdfStatement(makePdf(frags), layouts);
+    expect(result.transactions.length).toBe(2);
+    expect(result.transactions[0]?.narration).toContain('RENT OCT 2026');
+    expect(result.transactions[1]?.direction).toBe('CREDIT');
+  });
+
   it('handles multi-page statements with a table per page', () => {
     const cols = [50, 140, 300, 380, 460];
     const streamFor = (rows: string[][]) => {
