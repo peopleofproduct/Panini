@@ -189,6 +189,16 @@ export function validateOCENLoanApplication(value: unknown): ValidationResult {
   return validate(loadSchema('ocen-loan'), value);
 }
 
+/** ONDC Beckn envelope — context + message wrapper for every action. */
+export function validateOndcEnvelope(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-beckn-envelope'), value);
+}
+
+/** ONDC financial-services search intent (`message.intent`, FIS domains). */
+export function validateOndcFsSearch(value: unknown): ValidationResult {
+  return validate(loadSchema('ondc-fs-search'), value);
+}
+
 /** Type guard: validates and narrows to {@link AAProfile}. */
 export function isAAProfile(value: unknown): value is AAProfile {
   return validateAAProfile(value).valid;

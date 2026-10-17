@@ -18,6 +18,9 @@
     },
     {
       "path": "packages/insights"
+    },
+    {
+      "path": "packages/fiu-client"
     }
   ]
 }
