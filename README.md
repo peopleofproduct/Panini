@@ -273,6 +273,13 @@ are never guessed — they resolve to `null` instead of a wrong attribution.
 `rules/corpus/` holds per-bank narration fixtures; `tests/corpus.test.ts`
 generates one test per sample, so grammar regressions fail CI.
 
+When a bank changes its narration format overnight, you do not have to
+redeploy the engine: `analyzeNarrationBatch` compares a live batch against
+the corpus baseline (`drift: true` on collapse), `panini-bsa doctor`
+prints the unmatched shapes plus corpus-tested draft rules, and a hotfix
+is one JSON file in a `loadRuleSets(dir)` overlay directory. The full
+playbook is [`docs/rules-hotpatch.md`](docs/rules-hotpatch.md).
+
 ### Self-hostable ops layer
 
 ```ts

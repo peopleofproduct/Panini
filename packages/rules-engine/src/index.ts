@@ -50,3 +50,7 @@ export type {
 } from './coverage';
 export { parseBankNarration, preserveAcronymCase } from './bankRules';
 export type { ParseBankNarrationOptions, ParsedBankNarration } from './bankRules';
+export { analyzeNarrationBatch, corpusBaseline, skeletonOf } from './drift';
+export type { DriftCluster, DriftOptions, DriftReport } from './drift';
+export { suggestGrammarRule } from './suggest';
+export type { RuleSuggestion } from './suggest';

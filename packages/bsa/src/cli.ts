@@ -15,8 +15,9 @@
  * limitations under the License.
  */
 
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { basename, join } from 'node:path';
+import { analyzeNarrationBatch, suggestGrammarRule } from '@paniniapi/rules-engine';
 import { analyzeStatementFiles } from './pipeline';
 import { renderMarkdown } from './render';
 
@@ -24,6 +25,7 @@ const HELP = `panini-bsa — Bank Statement Analysis in a box
 
 Usage:
   panini-bsa <files...> [options]
+  panini-bsa doctor <files...> [--bank <id>]   Drift check + rule suggestions
 
 Options:
   -o, --out <dir>       Output directory (default: ./bsa-report)
@@ -34,10 +36,78 @@ Options:
   -h, --help            Show this help
 
 Outputs: bsa-report.json + bsa-report.md. All analysis is local —
-no data leaves this process.`;
+no data leaves this process.
+
+doctor: feed it statement files or one-narration-per-line .txt dumps to
+measure grammar match-rate against the corpus baseline and draft rule
+suggestions for whatever isn't matching. Exit 1 on drift.`;
+
+/** Narrations from a file: one per line for .txt; the narration column for statement files. */
+async function narrationsFrom(path: string, bank?: string): Promise<string[]> {
+  const data = new Uint8Array(readFileSync(path));
+  if (path.endsWith('.txt')) {
+    return Buffer.from(data)
+      .toString('utf8')
+      .split(/\r?\n/)
+      .map((l) => l.trim())
+      .filter((l) => l !== '');
+  }
+  const { extractStatement } = await import('@paniniapi/extract');
+  const st = await extractStatement(data, bank === undefined ? {} : { bankHint: bank });
+  return st.transactions.map((t) => t.narration);
+}
+
+async function doctor(paths: readonly string[], bank?: string): Promise<number> {
+  const all: string[] = [];
+  for (const p of paths) {
+    if (!existsSync(p)) {
+      console.error(`doctor: no such file '${p}'`);
+      return 1;
+    }
+    all.push(...(await narrationsFrom(p, bank)));
+  }
+  if (all.length === 0) {
+    console.error('doctor: no narrations found in input');
+    return 1;
+  }
+  const report = analyzeNarrationBatch(all, bank === undefined ? {} : { bankHint: bank });
+  console.log(`narrations: ${report.total}`);
+  console.log(`rule-matched: ${report.matched} (${(report.matchRate * 100).toFixed(1)}%)`);
+  if (report.baselineMatchRate !== null) {
+    console.log(`corpus baseline: ${(report.baselineMatchRate * 100).toFixed(1)}%`);
+  }
+  for (const w of report.warnings) console.warn(`⚠ ${w}`);
+  if (report.unmatchedClusters.length === 0) {
+    console.log('no unmatched narrations — grammar covers this batch');
+    return 0;
+  }
+  console.log(`\nunmatched clusters (${report.unmatchedClusters.length}):`);
+  for (const c of report.unmatchedClusters) {
+    console.log(`\n  ${c.skeleton}  ×${c.count}`);
+    for (const s of c.samples) console.log(`    ${s}`);
+    const suggestion = suggestGrammarRule(c.samples);
+    if (suggestion !== null) {
+      console.log(`    → draft rule: ${JSON.stringify(suggestion.pattern.regex)}`);
+      console.log(`    → ${suggestion.note}`);
+    } else {
+      console.log('    → no safe draft (samples too heterogeneous)');
+    }
+  }
+  return report.drift ? 1 : 0;
+}
 
 async function main(): Promise<number> {
   const args = process.argv.slice(2);
+  if (args[0] === 'doctor') {
+    const rest = args.slice(1);
+    const paths: string[] = [];
+    let bank: string | undefined;
+    for (let i = 0; i < rest.length; i++) {
+      if (rest[i] === '--bank') bank = rest[++i];
+      else paths.push(rest[i]!);
+    }
+    return doctor(paths, bank);
+  }
   if (args.includes('-h') || args.includes('--help') || args.length === 0) {
     console.log(HELP);
     return args.length === 0 ? 1 : 0;

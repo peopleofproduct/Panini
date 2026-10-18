@@ -27,6 +27,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New doc: `docs/statement-integrity.md` — signal dictionary, verdict
   semantics, and honest limits (deterministic evidence ≠ ML forensics;
   AA-sourced data remains the tamper-proof channel).
+- **Grammar-drift response kit** (`@paniniapi/rules-engine`) — the
+  operational answer to "the bank changed its narration format overnight":
+  - `analyzeNarrationBatch(narrations, { bankHint })` — batch match-rate /
+    confidence vs the corpus baseline; `drift: true` + warnings when the
+    rate collapses (>20pp default, tunable). Unmatched narrations are
+    grouped into token-skeleton clusters so operators see the _new
+    shape_, not thousands of raw strings.
+  - `suggestGrammarRule(samples)` — drafts a candidate `GrammarPattern`
+    from same-skeleton samples and **self-tests it against the whole
+    corpus** (`corpusImpact`, `safe` flag). Suggestions never mutate
+    production grammars; they are paste-ready drafts for human review.
+  - `panini-bsa doctor <files...> [--bank id]` — CLI wrapper that runs
+    the drift report on statement files or one-per-line `.txt` dumps and
+    prints a draft rule per unmatched cluster. Exit `1` on drift.
+  - New doc: `docs/rules-hotpatch.md` — the full detect → diagnose →
+    overlay-patch → upstream playbook. Grammar fixes ship as JSON rule
+    files via `loadRuleSets(dir)` — no engine redeploy required.
 
 ## [0.3.2] — 2026-10-18 — Phase 0 defect sweep (extraction + narration)
 
