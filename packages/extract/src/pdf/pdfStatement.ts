@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import type { CsvLayoutsFile } from '../formatsLoader';
+import type { BankNamesFile, CsvLayoutsFile } from '../formatsLoader';
+import { detectBankId } from '../bankNames';
 import { findAccountMask, mapRow } from '../rowMapper';
 import { mineStatementMetadata } from '../statementMetadata';
 import type { ExtractedStatement, ExtractedTransaction } from '../types';
@@ -28,6 +29,8 @@ export interface ExtractPdfOptions {
   readonly credentials?: PdfCredentials;
   /** Password template file; defaults to bundled formats/pdf-passwords.json. */
   readonly passwordPatterns?: PasswordPatternsFile;
+  /** Bank-name dictionary for letterhead sniffing. */
+  readonly bankNames?: BankNamesFile;
 }
 
 const LINE_Y_TOLERANCE = 3;
@@ -125,7 +128,7 @@ function fragmentsToCells(
  */
 export function statementFromFragments(
   fragments: readonly PdfFragment[],
-  options?: { bankHint?: string },
+  options?: { bankHint?: string; bankNames?: BankNamesFile },
 ): ExtractedStatement {
   const warnings: string[] = [];
   const metadata: Record<string, string> = {};
@@ -134,6 +137,27 @@ export function statementFromFragments(
     .slice(0, 60)
     .map((f) => f.text)
     .join(' ');
+  let detectedBank: string | null = null;
+  if (options?.bankNames !== undefined) {
+    // Reconstruct letterhead lines: group same-baseline fragments, order
+    // by x, then scan the topmost lines for a bank name.
+    const page0 = fragments.filter((f) => f.page === 0).sort((a, b) => b.y - a.y || a.x - b.x);
+    const lines: string[] = [];
+    let lastY: number | null = null;
+    let current: string[] = [];
+    for (const f of page0) {
+      if (lastY !== null && Math.abs(f.y - lastY) > LINE_Y_TOLERANCE) {
+        lines.push(current.join(' '));
+        current = [];
+      }
+      lastY = f.y;
+      current.push(f.text);
+      if (lines.length >= 20) break;
+    }
+    if (current.length > 0) lines.push(current.join(' '));
+    detectedBank = detectBankId(lines.join('\n'), options.bankNames);
+  }
+  if (detectedBank !== null) metadata['bankSource'] = 'preamble';
   const accountMask = findAccountMask(allText);
   Object.assign(metadata, mineStatementMetadata(allText));
 
@@ -208,7 +232,7 @@ export function statementFromFragments(
 
   return {
     format: 'pdf',
-    bank: options?.bankHint ?? null,
+    bank: detectedBank ?? options?.bankHint ?? null,
     layoutId: 'pdf_table_anchors',
     accountMask,
     transactions,

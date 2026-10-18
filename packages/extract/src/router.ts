@@ -26,7 +26,15 @@
  * silently mis-parses.
  */
 
-import { loadCsvLayouts } from './formatsLoader';
+import {
+  loadBankNames,
+  loadCsvLayouts,
+  maybeLoadFormats,
+  mergeBankNames,
+  mergeCsvLayouts,
+  type BankNamesFile,
+  type CsvLayoutsFile,
+} from './formatsLoader';
 import { statementFromRows } from './csv/csvStatement';
 import { statementFromOcr } from './extract';
 import type { OcrProvider, OcrResult } from './ocr';
@@ -52,6 +60,7 @@ export interface ExtractionRouterOptions {
   readonly maxPolls?: number;
   /** Layout resolution — same semantics as extractStatement. */
   readonly formatsDir?: string;
+  readonly extraFormatsDir?: string;
   readonly bankHint?: string;
   readonly layoutId?: string;
 }
@@ -77,7 +86,7 @@ async function runTier(
   tier: RouterTier,
   pages: readonly VisionPage[],
   layouts: ReturnType<typeof loadCsvLayouts>,
-  options: { bankHint?: string; layoutId?: string },
+  options: { bankHint?: string; layoutId?: string; bankNames?: BankNamesFile },
   router: ExtractionRouterOptions,
 ): Promise<ExtractedStatement> {
   const format = 'image';
@@ -152,9 +161,21 @@ export async function extractWithRouter(
   pages: readonly VisionPage[],
   router: ExtractionRouterOptions,
 ): Promise<RoutedExtraction> {
-  const layouts = loadCsvLayouts(router.formatsDir);
+  const layouts = mergeCsvLayouts(
+    loadCsvLayouts(router.formatsDir),
+    router.extraFormatsDir !== undefined
+      ? maybeLoadFormats<CsvLayoutsFile>('csv-layouts.json', router.extraFormatsDir)
+      : undefined,
+  );
+  const bankNames = mergeBankNames(
+    loadBankNames(router.formatsDir),
+    router.extraFormatsDir !== undefined
+      ? maybeLoadFormats<BankNamesFile>('bank-names.json', router.extraFormatsDir)
+      : undefined,
+  );
   const minScore = router.minVerifyScore ?? 0.85;
   const withLayout = {
+    bankNames,
     ...(router.bankHint !== undefined ? { bankHint: router.bankHint } : {}),
     ...(router.layoutId !== undefined ? { layoutId: router.layoutId } : {}),
   };

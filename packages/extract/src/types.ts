@@ -74,6 +74,13 @@ export interface ExtractOptions {
   readonly layoutId?: string;
   /** Directory of layout/pattern JSONs; defaults to the bundled set. */
   readonly formatsDir?: string;
+  /**
+   * Additional formats directory merged ON TOP of the bundled (or
+   * `formatsDir`) set — caller layouts/patterns/bank-names are checked
+   * first and shadow same-id bundled entries. Lets a lender carry
+   * private regional/co-op bank layouts without forking the formats set.
+   */
+  readonly extraFormatsDir?: string;
   /** Provider for XLSX input (spreadsheet files carry no native text). */
   readonly spreadsheet?: SpreadsheetProvider;
   /** Provider for image/scanned input (OCR). */

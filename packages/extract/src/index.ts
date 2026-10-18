@@ -65,13 +65,22 @@ export { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement'
 export type { ExtractPdfOptions } from './pdf/pdfStatement';
 export { decryptPdf, passwordCandidates } from './pdf/encryption';
 export type { EncryptionInfo, PdfCredentials, PdfUnlock, StreamCipher } from './pdf/encryption';
+export { detectBankId } from './bankNames';
 export {
+  loadBankNames,
   loadCsvLayouts,
   loadPasswordPatterns,
   loadSmsPatterns,
+  maybeLoadFormats,
+  mergeBankNames,
+  mergeCsvLayouts,
+  mergePasswordPatterns,
+  mergeSmsPatterns,
   resolveFormatsDir,
 } from './formatsLoader';
 export type {
+  BankName,
+  BankNamesFile,
   CsvLayout,
   CsvLayoutsFile,
   PasswordPattern,

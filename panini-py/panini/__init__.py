@@ -7,6 +7,7 @@ from .engine import Normalizer, parse_narration  # noqa: F401
 from .dates import parse_indian_date, is_plausible_date  # noqa: F401
 from .tokenizer import tokenize  # noqa: F401
 from .extract import (  # noqa: F401
+    detect_bank_id,
     extract_csv_statement,
     extract_sms,
     parse_statement_date,
@@ -28,11 +29,12 @@ from .reconcile import (  # noqa: F401
     transactions_from_aa_data,
 )
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
 __all__ = [
     "Normalizer", "parse_narration", "parse_indian_date",
     "is_plausible_date", "tokenize", "extract_csv_statement",
     "extract_sms", "parse_statement_date", "analyze_transactions",
+    "detect_bank_id",
     "analyze_narration_batch", "corpus_baseline", "skeleton_of",
     "suggest_grammar_rule",
     "evaluate_scorecard", "validate_scorecard_spec", "ScorecardSpecError",

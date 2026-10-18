@@ -15,7 +15,21 @@
  */
 
 import { extractCsvStatement, statementFromRows } from './csv/csvStatement';
-import { loadCsvLayouts, loadPasswordPatterns, loadSmsPatterns } from './formatsLoader';
+import {
+  loadBankNames,
+  loadCsvLayouts,
+  loadPasswordPatterns,
+  loadSmsPatterns,
+  maybeLoadFormats,
+  mergeBankNames,
+  mergeCsvLayouts,
+  mergePasswordPatterns,
+  mergeSmsPatterns,
+  type BankNamesFile,
+  type CsvLayoutsFile,
+  type PasswordPatternsFile,
+  type SmsPatternsFile,
+} from './formatsLoader';
 import type { OcrResult } from './ocr';
 import { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement';
 import type { PdfFragment } from './pdf/pdfText';
@@ -55,7 +69,7 @@ export function statementFromOcr(
   layouts: ReturnType<typeof loadCsvLayouts>,
   format: StatementFormat,
   providerName: string,
-  options: { bankHint?: string; layoutId?: string },
+  options: { bankHint?: string; layoutId?: string; bankNames?: BankNamesFile },
 ): ExtractedStatement {
   const meta: Record<string, string> = { ocrProvider: providerName };
   if (ocr.confidence !== undefined) meta['ocrConfidence'] = ocr.confidence.toFixed(3);
@@ -95,7 +109,26 @@ export async function extractStatement(
     ...hint,
     ...(options.layoutId !== undefined ? { layoutId: options.layoutId } : {}),
   };
-  const layouts = loadCsvLayouts(options.formatsDir);
+  const extra = options.extraFormatsDir;
+  const layouts = mergeCsvLayouts(
+    loadCsvLayouts(options.formatsDir),
+    extra !== undefined ? maybeLoadFormats<CsvLayoutsFile>('csv-layouts.json', extra) : undefined,
+  );
+  const bankNames = mergeBankNames(
+    loadBankNames(options.formatsDir),
+    extra !== undefined ? maybeLoadFormats<BankNamesFile>('bank-names.json', extra) : undefined,
+  );
+  const smsPatterns = mergeSmsPatterns(
+    loadSmsPatterns(options.formatsDir),
+    extra !== undefined ? maybeLoadFormats<SmsPatternsFile>('sms-patterns.json', extra) : undefined,
+  );
+  const passwordPatterns = mergePasswordPatterns(
+    loadPasswordPatterns(options.formatsDir),
+    extra !== undefined
+      ? maybeLoadFormats<PasswordPatternsFile>('pdf-passwords.json', extra)
+      : undefined,
+  );
+  const withBankNames = { ...withLayout, bankNames };
   // sniffFormat decodes text-like byte input (UTF-8 / BOM-marked UTF-16) to
   // decide csv/sms — the text pipelines then need the decoded string, not
   // the raw bytes.
@@ -103,14 +136,15 @@ export async function extractStatement(
 
   switch (format) {
     case 'csv':
-      return extractCsvStatement(textInput, layouts, withLayout);
+      return extractCsvStatement(textInput, layouts, withBankNames);
     case 'sms':
-      return extractSms(textInput, loadSmsPatterns(options.formatsDir), hint);
+      return extractSms(textInput, smsPatterns, hint);
     case 'pdf': {
       const result = extractPdfStatement(input as Uint8Array, layouts, {
         ...hint,
         ...(options.credentials !== undefined ? { credentials: options.credentials } : {}),
-        passwordPatterns: loadPasswordPatterns(options.formatsDir),
+        passwordPatterns,
+        bankNames,
       });
       if (
         result.transactions.length === 0 &&
@@ -129,7 +163,7 @@ export async function extractStatement(
             ],
           };
         }
-        return statementFromOcr(ocr, layouts, 'pdf', options.ocr.name, withLayout);
+        return statementFromOcr(ocr, layouts, 'pdf', options.ocr.name, withBankNames);
       }
       return result;
     }
@@ -153,7 +187,7 @@ export async function extractStatement(
           `spreadsheet reader '${spreadsheet.name}' returned a non-tabular result`,
         ]);
       }
-      const mined = statementFromRows(rows, layouts, 'xlsx', withLayout);
+      const mined = statementFromRows(rows, layouts, 'xlsx', withBankNames);
       return {
         ...mined,
         metadata: { ...mined.metadata, spreadsheetProvider: spreadsheet.name },
@@ -173,7 +207,7 @@ export async function extractStatement(
           `ocr provider '${options.ocr.name}' failed: ${err instanceof Error ? err.message : String(err)}`,
         ]);
       }
-      return statementFromOcr(ocr, layouts, 'image', options.ocr.name, withLayout);
+      return statementFromOcr(ocr, layouts, 'image', options.ocr.name, withBankNames);
     }
     default:
       return empty('unknown', ['input format could not be identified']);

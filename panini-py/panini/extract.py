@@ -36,6 +36,58 @@ def _load(name: str, formats_dir: Optional[Path]) -> dict[str, Any]:
     return json.loads(((formats_dir or _formats_dir()) / name).read_text())
 
 
+def _load_maybe(name: str, formats_dir: Optional[Path]) -> Optional[dict[str, Any]]:
+    path = (formats_dir or _formats_dir()) / name
+    return json.loads(path.read_text()) if path.exists() else None
+
+
+def _load_merged(
+    name: str,
+    formats_dir: Optional[Path],
+    extra_formats_dir: Optional[Path],
+) -> dict[str, Any]:
+    """Bundled formats + caller's extra_formats_dir merged on top —
+    caller entries are checked first and shadow same-id bundled ones."""
+    base = _load(name, formats_dir)
+    if extra_formats_dir is None:
+        return base
+    extra = _load_maybe(name, Path(extra_formats_dir))
+    if extra is None:
+        return base
+    merged = dict(base)
+    for key in ("layouts", "patterns", "banks"):
+        if key in extra or key in base:
+            extra_items = list(extra.get(key, []))
+            extra_ids = {
+                item.get("id") for item in extra_items if item.get("id") is not None
+            }
+            merged[key] = extra_items + [
+                item for item in base.get(key, []) if item.get("id") not in extra_ids
+            ]
+    return merged
+
+
+def detect_bank_id(text: str, names_file: dict[str, Any]) -> Optional[str]:
+    """Identify the issuing bank from statement preamble lines. Word-bounded
+    matching; on a line with several hits the longest name wins so
+    'union bank of india' beats the 'bank of india' inside it."""
+    max_lines = int(names_file.get("maxScanLines", 20))
+    for line in text.split("\n")[:max_lines]:
+        norm = re.sub(r"\s+", " ", re.sub(r"[^a-z0-9]+", " ", line.lower())).strip()
+        if not norm:
+            continue
+        padded = f" {norm} "
+        best: Optional[str] = None
+        best_len = 0
+        for bank in names_file.get("banks", []):
+            for name in bank.get("names", []):
+                if len(name) > best_len and f" {name} " in padded:
+                    best, best_len = bank["id"], len(name)
+        if best is not None:
+            return best
+    return None
+
+
 # ── dates & amounts ─────────────────────────────────────────────────────────
 
 _MONTHS = {
@@ -370,19 +422,22 @@ def extract_csv_statement(
     text: str,
     formats_dir: Optional[Path] = None,
     bank_hint: Optional[str] = None,
+    extra_formats_dir: Optional[Path] = None,
 ) -> dict[str, Any]:
-    layouts_file = _load("csv-layouts.json", formats_dir)
+    layouts_file = _load_merged("csv-layouts.json", formats_dir, extra_formats_dir)
+    names_file = _load_merged("bank-names.json", formats_dir, extra_formats_dir)
     rows = parse_csv(text)
     warnings: list[str] = []
     max_scan = int(layouts_file.get("maxHeaderScanRows", 15))
     preamble = " ".join(" ".join(r) for r in rows[:max_scan])
+    detected_bank = detect_bank_id(preamble, names_file) if names_file else None
     account_mask = _find_account_mask(preamble)
 
     table = detect_table(rows, layouts_file, bank_hint)
     if table is None:
         return {
             "format": "csv",
-            "bank": bank_hint,
+            "bank": detected_bank or bank_hint,
             "layoutId": None,
             "accountMask": account_mask,
             "transactions": [],
@@ -480,9 +535,26 @@ def extract_csv_statement(
         warnings.append("header detected but no transaction rows parsed")
 
     layout = table["layout"]
+    bank = layout["bank"] if layout else (detected_bank or bank_hint)
+    bank_source = (
+        "layout"
+        if layout
+        else "preamble" if detected_bank else "hint" if bank_hint else None
+    )
+    if bank_source is not None:
+        metadata["bankSource"] = bank_source
+    if layout is None or layout["id"] == "generic_statement":
+        suffix = (
+            f" (detected bank: {detected_bank}; a dedicated layout would improve accuracy)"
+            if detected_bank
+            else ""
+        )
+        warnings.append(
+            f"no bank-specific layout matched — parsed via generic fallback{suffix}"
+        )
     return {
         "format": "csv",
-        "bank": layout["bank"] if layout else None,
+        "bank": bank,
         "layoutId": layout["id"] if layout else "generic_heuristic",
         "accountMask": account_mask,
         "transactions": transactions,
@@ -497,8 +569,9 @@ def extract_sms(
     body: str,
     formats_dir: Optional[Path] = None,
     bank_hint: Optional[str] = None,
+    extra_formats_dir: Optional[Path] = None,
 ) -> dict[str, Any]:
-    file = _load("sms-patterns.json", formats_dir)
+    file = _load_merged("sms-patterns.json", formats_dir, extra_formats_dir)
     warnings: list[str] = []
     text = body.strip()
 

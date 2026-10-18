@@ -31,6 +31,7 @@ import type { ExtractedStatement } from '@paniniapi/extract';
 import type { InsightTransaction, InsightsReport } from '@paniniapi/insights';
 import { analyzeTransactions } from '@paniniapi/insights';
 import {
+  BANK_NAMES,
   CATEGORIES,
   CSV_LAYOUTS,
   DICTIONARIES,
@@ -69,7 +70,7 @@ export function extractCsv(
   text: string,
   options?: { bankHint?: string; layoutId?: string },
 ): ExtractedStatement {
-  return extractCsvStatement(text, CSV_LAYOUTS, options ?? {});
+  return extractCsvStatement(text, CSV_LAYOUTS, { bankNames: BANK_NAMES, ...options });
 }
 
 /** Extract bank transactions from an SMS/alert body. */

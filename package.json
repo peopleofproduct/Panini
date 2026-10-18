@@ -21,7 +21,8 @@
     "parse": "node playground/parse.mjs",
     "bench": "node benchmarks/run.mjs",
     "bench:ci": "node benchmarks/run.mjs --ci",
-    "check:pins": "node scripts/check-pins.mjs"
+    "check:pins": "node scripts/check-pins.mjs",
+    "coverage:banks": "node scripts/bank-coverage.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import type { CsvLayoutsFile } from '../formatsLoader';
+import type { BankNamesFile, CsvLayoutsFile } from '../formatsLoader';
+import { detectBankId } from '../bankNames';
 import { parseStatementDate } from '../statementDate';
 import { findAccountMask, mapRow } from '../rowMapper';
 import { mineStatementMetadata } from '../statementMetadata';
@@ -63,7 +64,7 @@ export function statementFromRows(
   rows: readonly string[][],
   file: CsvLayoutsFile,
   format: StatementFormat,
-  options?: { bankHint?: string; layoutId?: string },
+  options?: { bankHint?: string; layoutId?: string; bankNames?: BankNamesFile },
 ): ExtractedStatement {
   const warnings: string[] = [];
   const metadata: Record<string, string> = {};
@@ -72,6 +73,8 @@ export function statementFromRows(
     .slice(0, file.maxHeaderScanRows)
     .map((r) => r.join(' '))
     .join(' ');
+  const detectedBank =
+    options?.bankNames !== undefined ? detectBankId(preambleText, options.bankNames) : null;
   const accountMask = findAccountMask(preambleText);
   const footerText = rows
     .slice(-file.maxHeaderScanRows)
@@ -83,7 +86,7 @@ export function statementFromRows(
   if (!table) {
     return {
       format,
-      bank: options?.bankHint ?? null,
+      bank: detectedBank ?? options?.bankHint ?? null,
       layoutId: null,
       accountMask,
       transactions: [],
@@ -187,10 +190,27 @@ export function statementFromRows(
     }
   }
 
+  const layout = table.layout;
+  const bank = layout ? layout.bank : (detectedBank ?? options?.bankHint ?? null);
+  const bankSource =
+    layout !== null
+      ? 'layout'
+      : detectedBank !== null
+        ? 'preamble'
+        : options?.bankHint !== undefined
+          ? 'hint'
+          : null;
+  if (bankSource !== null) metadata['bankSource'] = bankSource;
+  if (layout === null || layout.id === 'generic_statement') {
+    warnings.push(
+      `no bank-specific layout matched — parsed via generic fallback${detectedBank !== null ? ` (detected bank: ${detectedBank}; a dedicated layout would improve accuracy)` : ''}`,
+    );
+  }
+
   return {
     format,
-    bank: table.layout ? table.layout.bank : null,
-    layoutId: table.layout ? table.layout.id : 'generic_heuristic',
+    bank,
+    layoutId: layout ? layout.id : 'generic_heuristic',
     accountMask,
     transactions,
     warnings,
@@ -202,7 +222,7 @@ export function statementFromRows(
 export function extractCsvStatement(
   text: string,
   file: CsvLayoutsFile,
-  options?: { bankHint?: string; layoutId?: string },
+  options?: { bankHint?: string; layoutId?: string; bankNames?: BankNamesFile },
 ): ExtractedStatement {
   const { rows, delimiter } = parseCsv(text);
   const result = statementFromRows(rows, file, 'csv', options);

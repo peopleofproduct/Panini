@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Bank-name detection + coverage report** (`@paniniapi/extract`) —
+  `formats/bank-names.json` carries ~50 Indian bank identities;
+  `detectBankId` sniffs statement letterheads (word-bounded,
+  longest-match-wins) so a recognised-but-uncovered bank reports its
+  `bank` even when it parses via the generic fallback — with
+  `metadata.bankSource` provenance (`layout`/`preamble`/`hint`) and a
+  `generic fallback` warning that names the detected bank. Works across
+  CSV, XLSX, PDF letterheads and OCR text. `npm run coverage:banks`
+  regenerates `docs/bank-coverage.md`: 15 corpus-gated layouts + 38
+  name-detectable banks.
+- **`extraFormatsDir`** (`extractStatement`, `extractWithRouter`,
+  `extract_csv_statement`, `extract_sms`) — append private formats
+  (layouts, bank names, SMS patterns, PDF password patterns) on top of
+  the bundled set without forking; caller entries check first and
+  shadow same-id bundled entries. Regional/co-op bank layouts become a
+  config file, not a fork.
 - **`panini-bsa --aa <file>`** — pass a decrypted AA FI payload (JSON) and
   every statement is reconciled against the bank's own feed in the same
   report: `reconciliation` verdict per file, an "AA ↔ Document

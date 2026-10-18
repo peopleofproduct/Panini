@@ -1,0 +1,73 @@
+{
+  "$schema": "bank-names-v1",
+  "description": "Canonical Indian bank identities for preamble sniffing. `names` are lowercase, word-bounded phrases matched against a statement's preamble region; when several names hit one line, the longest wins (so 'south indian bank' beats 'indian bank', 'union bank of india' beats 'bank of india'). Presence here does NOT imply a dedicated layout — see csv-layouts.json and docs/bank-coverage.md.",
+  "maxScanLines": 20,
+  "banks": [
+    { "id": "HDFC", "names": ["hdfc bank", "housing development finance corporation bank"] },
+    {
+      "id": "ICICI",
+      "names": ["icici bank", "industrial credit and investment corporation of india"]
+    },
+    { "id": "SBI", "names": ["state bank of india", "sbi"] },
+    { "id": "AXIS", "names": ["axis bank"] },
+    { "id": "KOTAK", "names": ["kotak mahindra bank", "kotak bank"] },
+    { "id": "PNB", "names": ["punjab national bank"] },
+    { "id": "BOB", "names": ["bank of baroda"] },
+    { "id": "CANARA", "names": ["canara bank"] },
+    { "id": "UNION", "names": ["union bank of india"] },
+    { "id": "IDFC", "names": ["idfc first bank", "idfc bank"] },
+    { "id": "INDUSIND", "names": ["indusind bank"] },
+    { "id": "FEDERAL", "names": ["federal bank"] },
+    { "id": "RBL", "names": ["rbl bank", "ratnakar bank"] },
+    { "id": "YES", "names": ["yes bank"] },
+    { "id": "AU_SFB", "names": ["au small finance bank", "au bank"] },
+
+    { "id": "INDIAN_BANK", "names": ["indian bank"] },
+    { "id": "BOI", "names": ["bank of india"] },
+    { "id": "CENTRAL_BANK", "names": ["central bank of india"] },
+    { "id": "UCO", "names": ["uco bank"] },
+    { "id": "BOM", "names": ["bank of maharashtra"] },
+    { "id": "IOB", "names": ["indian overseas bank"] },
+    { "id": "PSB", "names": ["punjab and sind bank", "punjab & sind bank"] },
+    { "id": "IDBI", "names": ["idbi bank"] },
+    { "id": "BANDHAN", "names": ["bandhan bank"] },
+    { "id": "CSB", "names": ["csb bank", "catholic syrian bank"] },
+    { "id": "DCB", "names": ["dcb bank", "development credit bank"] },
+    { "id": "KVB", "names": ["karur vysya bank", "kvb"] },
+    { "id": "KARNATAKA", "names": ["karnataka bank"] },
+    { "id": "SIB", "names": ["south indian bank"] },
+    { "id": "TMB", "names": ["tamilnad mercantile bank", "tmb bank"] },
+    { "id": "CUB", "names": ["city union bank"] },
+    { "id": "EQUITAS", "names": ["equitas small finance bank", "equitas bank"] },
+    { "id": "UJJIVAN", "names": ["ujjivan small finance bank", "ujjivan bank"] },
+    { "id": "JANA", "names": ["jana small finance bank"] },
+    { "id": "ESAF", "names": ["esaf small finance bank", "esaf bank"] },
+    { "id": "SURYODAY", "names": ["suryoday small finance bank"] },
+    { "id": "FINCARE", "names": ["fincare small finance bank"] },
+    { "id": "UTKARSH", "names": ["utkarsh small finance bank"] },
+
+    { "id": "IPPB", "names": ["india post payments bank", "ippb"] },
+    { "id": "PAYTM_PB", "names": ["paytm payments bank"] },
+    { "id": "AIRTEL_PB", "names": ["airtel payments bank"] },
+    { "id": "FINO_PB", "names": ["fino payments bank"] },
+    { "id": "JIO_PB", "names": ["jio payments bank"] },
+    { "id": "NSDL_PB", "names": ["nsdl payments bank"] },
+
+    { "id": "HSBC", "names": ["hsbc bank", "hsbc", "hongkong and shanghai banking"] },
+    { "id": "SC", "names": ["standard chartered bank", "standard chartered"] },
+    { "id": "DEUTSCHE", "names": ["deutsche bank"] },
+    { "id": "DBS", "names": ["dbs bank", "digibank by dbs", "dbs bank india"] },
+    { "id": "CITI", "names": ["citibank", "citi bank"] },
+
+    {
+      "id": "SARASWAT",
+      "names": ["saraswat bank", "saraswat co operative bank", "saraswat co-operative bank"]
+    },
+    {
+      "id": "COSMOS",
+      "names": ["cosmos bank", "cosmos co operative bank", "cosmos co-operative bank"]
+    },
+    { "id": "NKGSB", "names": ["nkgsb co operative bank", "nkgsb bank"] },
+    { "id": "KALUPUR", "names": ["kalupur commercial co operative bank", "kalupur bank"] }
+  ]
+}

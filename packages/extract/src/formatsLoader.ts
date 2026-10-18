@@ -34,6 +34,30 @@ export interface CsvLayoutsFile {
   readonly layouts: readonly CsvLayout[];
 }
 
+/** A canonical bank identity for preamble sniffing (`bank-names.json`). */
+export interface BankName {
+  readonly id: string;
+  readonly names: readonly string[];
+}
+
+export interface BankNamesFile {
+  readonly maxScanLines: number;
+  readonly banks: readonly BankName[];
+}
+
+/**
+ * Caller layouts are checked first and shadow bundled entries with the
+ * same id — the same "caller wins" rule the grammar hotpatch path uses.
+ */
+export function mergeCsvLayouts(base: CsvLayoutsFile, extra?: CsvLayoutsFile): CsvLayoutsFile {
+  if (extra === undefined) return base;
+  const extraIds = new Set(extra.layouts.map((l) => l.id));
+  return {
+    ...base,
+    layouts: [...extra.layouts, ...base.layouts.filter((l) => !extraIds.has(l.id))],
+  };
+}
+
 /** One SMS extraction pattern; regex uses JS syntax with named groups. */
 export interface SmsPattern {
   readonly id: string;
@@ -86,6 +110,17 @@ function loadFormatsJson<T>(name: string, dir: string | undefined): T {
   return parsed;
 }
 
+/**
+ * Like `loadFormatsJson` but returns undefined when the file is absent —
+ * used for `extraFormatsDir`, where callers may provide only a subset of
+ * the formats files.
+ */
+export function maybeLoadFormats<T>(name: string, dir: string): T | undefined {
+  const path = join(dir, name);
+  if (!existsSync(path)) return undefined;
+  return JSON.parse(readFileSync(path, 'utf8')) as T;
+}
+
 export function loadCsvLayouts(dir?: string): CsvLayoutsFile {
   return loadFormatsJson<CsvLayoutsFile>('csv-layouts.json', dir);
 }
@@ -96,4 +131,35 @@ export function loadSmsPatterns(dir?: string): SmsPatternsFile {
 
 export function loadPasswordPatterns(dir?: string): PasswordPatternsFile {
   return loadFormatsJson<PasswordPatternsFile>('pdf-passwords.json', dir);
+}
+
+export function loadBankNames(dir?: string): BankNamesFile {
+  return loadFormatsJson<BankNamesFile>('bank-names.json', dir);
+}
+
+/** Same caller-wins merge for the extra-formats seam. */
+export function mergeSmsPatterns(base: SmsPatternsFile, extra?: SmsPatternsFile): SmsPatternsFile {
+  if (extra === undefined) return base;
+  const extraIds = new Set(extra.patterns.map((p) => p.id));
+  return {
+    ...base,
+    patterns: [...extra.patterns, ...base.patterns.filter((p) => !extraIds.has(p.id))],
+  };
+}
+
+export function mergeBankNames(base: BankNamesFile, extra?: BankNamesFile): BankNamesFile {
+  if (extra === undefined) return base;
+  const extraIds = new Set(extra.banks.map((b) => b.id));
+  return {
+    ...base,
+    banks: [...extra.banks, ...base.banks.filter((b) => !extraIds.has(b.id))],
+  };
+}
+
+export function mergePasswordPatterns(
+  base: PasswordPatternsFile,
+  extra?: PasswordPatternsFile,
+): PasswordPatternsFile {
+  if (extra === undefined) return base;
+  return { ...base, patterns: [...extra.patterns, ...base.patterns] };
 }

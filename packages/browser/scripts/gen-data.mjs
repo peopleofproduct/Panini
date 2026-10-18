@@ -31,6 +31,7 @@ const dictionaries = {
 
 const csvLayouts = JSON.parse(readFileSync(join(formatsDir, 'csv-layouts.json'), 'utf8'));
 const smsPatterns = JSON.parse(readFileSync(join(formatsDir, 'sms-patterns.json'), 'utf8'));
+const bankNames = JSON.parse(readFileSync(join(formatsDir, 'bank-names.json'), 'utf8'));
 
 const out = `/**
  * Copyright 2026 Kapil — Project Panini Contributors
@@ -42,7 +43,7 @@ const out = `/**
 
 import type { GrammarRuleSet } from '@paniniapi/core';
 import type { DictionaryData } from '@paniniapi/rules-engine';
-import type { CsvLayoutsFile, SmsPatternsFile } from '@paniniapi/extract';
+import type { BankNamesFile, CsvLayoutsFile, SmsPatternsFile } from '@paniniapi/extract';
 
 export const RULE_SET_FILES = ${JSON.stringify(ruleFiles)} as const;
 
@@ -57,6 +58,8 @@ export const DICTIONARIES = ${JSON.stringify(dictionaries)} as DictionaryData;
 export const CSV_LAYOUTS = ${JSON.stringify(csvLayouts)} as unknown as CsvLayoutsFile;
 
 export const SMS_PATTERNS = ${JSON.stringify(smsPatterns)} as unknown as SmsPatternsFile;
+
+export const BANK_NAMES = ${JSON.stringify(bankNames)} as unknown as BankNamesFile;
 `;
 
 writeFileSync(join(here, '../src/data.gen.ts'), out);
