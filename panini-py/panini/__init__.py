@@ -23,8 +23,12 @@ from .scorecard import (  # noqa: F401
     evaluate_scorecard,
     validate_scorecard_spec,
 )
+from .reconcile import (  # noqa: F401
+    reconcile_with_aa,
+    transactions_from_aa_data,
+)
 
-__version__ = "0.3.3"
+__version__ = "0.4.0"
 __all__ = [
     "Normalizer", "parse_narration", "parse_indian_date",
     "is_plausible_date", "tokenize", "extract_csv_statement",
@@ -32,4 +36,5 @@ __all__ = [
     "analyze_narration_batch", "corpus_baseline", "skeleton_of",
     "suggest_grammar_rule",
     "evaluate_scorecard", "validate_scorecard_spec", "ScorecardSpecError",
+    "reconcile_with_aa", "transactions_from_aa_data",
 ]

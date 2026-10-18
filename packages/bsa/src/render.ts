@@ -54,18 +54,38 @@ export function renderMarkdown(report: BsaReport): string {
     '',
   );
 
+  const hasRecon = report.statements.some((s) => s.reconciliation !== null);
   lines.push(
     '## Statements',
     '',
-    '| File | Format | Bank | Layout | Txns | Warnings | Integrity |',
+    `| File | Format | Bank | Layout | Txns | Warnings | Integrity |${hasRecon ? ' AA Reconcile |' : ''}`,
   );
-  lines.push('| --- | --- | --- | --- | --- | --- | --- |');
+  lines.push(`| --- | --- | --- | --- | --- | --- | --- |${hasRecon ? ' --- |' : ''}`);
   for (const s of report.statements) {
     lines.push(
-      `| ${s.name} | ${s.format} | ${s.bank ?? '—'} | ${s.layoutId ?? '—'} | ${s.transactionCount} | ${s.warnings.length} | ${s.integrity?.verdict ?? '—'} |`,
+      `| ${s.name} | ${s.format} | ${s.bank ?? '—'} | ${s.layoutId ?? '—'} | ${s.transactionCount} | ${s.warnings.length} | ${s.integrity?.verdict ?? '—'} |${hasRecon ? ` ${s.reconciliation?.verdict ?? '—'} |` : ''}`,
     );
   }
   lines.push('');
+
+  const reconFlagged = report.statements.filter(
+    (s) =>
+      s.reconciliation !== null &&
+      (s.reconciliation.verdict === 'fabrication_evidence' ||
+        s.reconciliation.verdict === 'partial'),
+  );
+  if (reconFlagged.length > 0) {
+    lines.push('## AA ↔ Document Reconciliation', '');
+    lines.push(
+      '> **`fabrication_evidence` means the document disagrees with the bank\u2019s own feed — fail closed.**',
+      '',
+    );
+    for (const s of reconFlagged) {
+      lines.push(`### ${s.name} — ${s.reconciliation!.verdict}`);
+      lines.push(`- ${s.reconciliation!.summary}`);
+      lines.push('');
+    }
+  }
 
   const flagged = report.statements.filter(
     (s) => s.integrity !== null && (s.integrity.critical > 0 || s.integrity.warnings > 0),

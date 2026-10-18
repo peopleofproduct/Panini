@@ -15,7 +15,7 @@
  */
 
 import { extractStatement } from '@paniniapi/extract';
-import { inspectStatement } from '@paniniapi/forensics';
+import { inspectStatement, reconcileWithAa, transactionsFromAaData } from '@paniniapi/forensics';
 import type { InsightTransaction } from '@paniniapi/insights';
 import { analyzeTransactions } from '@paniniapi/insights';
 import { parseBankNarration } from '@paniniapi/rules-engine';
@@ -35,6 +35,8 @@ export async function analyzeStatementFiles(
   const enrich = options.enrich !== false;
   const statements: BsaReport['statements'][number][] = [];
   const enriched: EnrichedTransaction[] = [];
+  const aaTransactions =
+    options.aaData === undefined ? null : transactionsFromAaData(options.aaData);
 
   for (const [fileIndex, file] of files.entries()) {
     const st = await extractStatement(file.data, options);
@@ -54,6 +56,18 @@ export async function analyzeStatementFiles(
           .map((s) => `${s.ruleId}: ${s.message}`),
       };
     }
+    let reconciliation: BsaReport['statements'][number]['reconciliation'] = null;
+    if (aaTransactions !== null) {
+      const r = reconcileWithAa(st, aaTransactions);
+      reconciliation = {
+        verdict: r.verdict,
+        matchedRows: r.matchedRows,
+        documentOnlyRows: r.documentOnlyRows.length,
+        aaOnlyRows: r.aaOnlyRows.length,
+        unverifiableRows: r.unverifiableRows.length,
+        summary: r.summary,
+      };
+    }
     statements.push({
       name: file.name,
       format: st.format,
@@ -64,6 +78,7 @@ export async function analyzeStatementFiles(
       warnings: st.warnings,
       metadata: st.metadata,
       integrity,
+      reconciliation,
     });
     for (const t of st.transactions) {
       const parsed = enrich ? parseBankNarration(t.narration) : null;

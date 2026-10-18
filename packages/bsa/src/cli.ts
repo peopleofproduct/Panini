@@ -33,6 +33,9 @@ Options:
   --password <pw>       Password applied to protected PDFs
   --no-enrich           Skip narration enrichment (faster, coarser report)
   --no-forensics        Skip document-integrity checks (tamper signals)
+  --aa <file>           Decrypted AA FI payload (JSON) — reconciles every
+                        statement against the bank's own feed. Exit 4 on
+                        fabrication_evidence.
   -h, --help            Show this help
 
 Outputs: bsa-report.json + bsa-report.md. All analysis is local —
@@ -128,6 +131,13 @@ async function main(): Promise<number> {
       opts['enrich'] = false;
     } else if (a === '--no-forensics') {
       opts['forensics'] = false;
+    } else if (a === '--aa') {
+      const p = args[++i];
+      if (p === undefined) {
+        console.error('--aa requires a file path');
+        return 1;
+      }
+      opts['aaData'] = JSON.parse(readFileSync(p, 'utf8'));
     } else {
       files.push({ name: basename(a), data: new Uint8Array(readFileSync(a)) });
     }
@@ -148,13 +158,19 @@ async function main(): Promise<number> {
       `${report.summary.filesProcessed} file(s) → ${outDir}/bsa-report.{json,md}`,
   );
   let tampered = false;
+  let fabricated = false;
   for (const s of report.statements) {
     if (s.warnings.length > 0) console.warn(`⚠ ${s.name}: ${s.warnings.length} warning(s)`);
     if (s.integrity?.verdict === 'tamper_evidence') {
       tampered = true;
       console.error(`✗ ${s.name}: TAMPER EVIDENCE — ${s.integrity.topSignals.join('; ')}`);
     }
+    if (s.reconciliation?.verdict === 'fabrication_evidence') {
+      fabricated = true;
+      console.error(`✗ ${s.name}: FABRICATION EVIDENCE vs AA feed — ${s.reconciliation.summary}`);
+    }
   }
+  if (fabricated) return 4;
   if (tampered) return 3;
   return report.summary.totalTransactions === 0 ? 2 : 0;
 }

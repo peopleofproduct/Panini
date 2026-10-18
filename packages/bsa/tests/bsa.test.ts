@@ -67,6 +67,76 @@ describe('analyzeStatementFiles', () => {
     expect(md).toContain('Document Integrity');
   });
 
+  const AA_DOC =
+    'HDFC BANK LTD.\nStatement From 01/10/26 To 31/10/26\n' +
+    'Date,Narration,Chq./Ref.No.,Value Dt,Withdrawal Amt.,Deposit Amt.,Closing Balance\n' +
+    '15/10/26,NEFT-N1-SALARY-TCS,N1,15/10/26,,85000.00,90000.00\n' +
+    '16/10/26,UPI-SWIGGY,U1,16/10/26,1250.00,,88750.00\n';
+  const AA_FEED = {
+    Account: {
+      Transactions: {
+        Transaction: [
+          {
+            txnId: '1',
+            amount: '85000.00',
+            type: 'CREDIT',
+            valueDate: '2026-10-15',
+            narration: 'NEFT-N1-SALARY-TCS',
+          },
+          {
+            txnId: '2',
+            amount: '1250.00',
+            type: 'DEBIT',
+            valueDate: '2026-10-16',
+            narration: 'UPI-SWIGGY',
+          },
+        ],
+      },
+    },
+  };
+
+  it('reconciles statements against AA data when provided', async () => {
+    const report = await analyzeStatementFiles([{ name: 'stmt.csv', data: AA_DOC }], {
+      aaData: AA_FEED,
+    });
+    const s = report.statements[0]!;
+    expect(s.reconciliation).not.toBeNull();
+    expect(s.reconciliation!.verdict).toBe('consistent');
+    expect(s.reconciliation!.matchedRows).toBe(2);
+  });
+
+  it('flags fabrication when AA feed carries rows the document omits', async () => {
+    const aaExtra = {
+      Account: {
+        Transactions: {
+          Transaction: [
+            ...AA_FEED.Account.Transactions.Transaction,
+            {
+              txnId: '3',
+              amount: '500.00',
+              type: 'DEBIT',
+              valueDate: '2026-10-17',
+              narration: 'UPI EMI BOUNCE',
+            },
+          ],
+        },
+      },
+    };
+    const report = await analyzeStatementFiles([{ name: 'stmt.csv', data: AA_DOC }], {
+      aaData: aaExtra,
+    });
+    const s = report.statements[0]!;
+    expect(s.reconciliation!.verdict).toBe('fabrication_evidence');
+    expect(s.reconciliation!.aaOnlyRows).toBe(1);
+    const md = renderMarkdown(report);
+    expect(md).toContain('AA ↔ Document Reconciliation');
+  });
+
+  it('omits reconciliation when no AA data is supplied', async () => {
+    const report = await analyzeStatementFiles([{ name: 'stmt.csv', data: AA_DOC }]);
+    expect(report.statements[0]!.reconciliation).toBeNull();
+  });
+
   it('never throws on garbage input — warnings only', async () => {
     const report = await analyzeStatementFiles([
       { name: 'garbage.bin', data: new Uint8Array([0, 1, 2, 3, 255]) },

@@ -17,7 +17,7 @@
 import type { ExtractOptions, StatementFormat } from '@paniniapi/extract';
 import type { InsightsOptions, InsightsReport } from '@paniniapi/insights';
 import type { ParsedBankNarration } from '@paniniapi/rules-engine';
-import type { IntegrityVerdict } from '@paniniapi/forensics';
+import type { IntegrityVerdict, ReconcileVerdict } from '@paniniapi/forensics';
 
 /** One input document — bytes for PDF/XLSX/image, text for CSV/SMS. */
 export interface BsaInputFile {
@@ -47,6 +47,19 @@ export interface StatementResult {
     readonly critical: number;
     readonly warnings: number;
     readonly topSignals: readonly string[];
+  } | null;
+  /**
+   * AA ↔ document reconciliation — present only when `BsaOptions.aaData`
+   * was supplied. 'fabrication_evidence' means the document disagrees
+   * with the bank's own feed: fail closed.
+   */
+  readonly reconciliation: {
+    readonly verdict: ReconcileVerdict;
+    readonly matchedRows: number;
+    readonly documentOnlyRows: number;
+    readonly aaOnlyRows: number;
+    readonly unverifiableRows: number;
+    readonly summary: string;
   } | null;
 }
 
@@ -98,4 +111,10 @@ export interface BsaOptions extends ExtractOptions {
   /** PEM roots or X509Certificate anchors for PDF signature chain checks. */
   readonly trustStore?: readonly string[];
   readonly insightsOptions?: InsightsOptions;
+  /**
+   * Decrypted ReBIT AA FI payload (or a bare transaction array). When
+   * supplied, every extracted statement is reconciled against the bank's
+   * own feed — see docs/aa-reconciliation.md.
+   */
+  readonly aaData?: unknown;
 }

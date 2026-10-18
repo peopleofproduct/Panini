@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`panini-bsa --aa <file>`** — pass a decrypted AA FI payload (JSON) and
+  every statement is reconciled against the bank's own feed in the same
+  report: `reconciliation` verdict per file, an "AA ↔ Document
+  Reconciliation" section in Markdown output, and **exit code 4** on
+  `fabrication_evidence` (CI-gateable).
+- **`panini-parser` 0.4.0 (Python parity)** — `reconcile_with_aa` +
+  `transactions_from_aa_data` ported with identical semantics and
+  verdicts (11 parity tests mirroring the TS suite).
 - **Recurring-monitoring kernel** (`@paniniapi/insights`) — the
   open-ended answer to hosted collections/monitoring products.
   `statementDiff` (deterministic multiset diff between snapshots) +
