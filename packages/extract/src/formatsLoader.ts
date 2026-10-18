@@ -27,10 +27,26 @@ export interface CsvLayout {
   /**
    * Account type the layout describes — `deposit` statements carry a
    * running balance; `credit_card` statements carry a signed amount +
-   * direction column instead. Reported as `metadata.accountKind`.
+   * direction column instead; `merchant` statements are settlement
+   * exports (direction semantics differ from a bank account). Reported
+   * as `metadata.accountKind`.
    */
-  readonly kind?: 'deposit' | 'credit_card';
+  readonly kind?: 'deposit' | 'credit_card' | 'merchant';
   readonly requiredHeaders: readonly string[];
+  /**
+   * Normalized header cells that must NOT appear in the row — used to
+   * keep narrow signatures (e.g. `date|transaction details|amount` on
+   * card statements) from matching deposit tables that also carry
+   * balance/debit/credit columns.
+   */
+  readonly forbiddenHeaders?: readonly string[];
+  /**
+   * Direction convention for single-amount columns: banks that export a
+   * signed `Amount (INR)` column (e.g. Bank of Baroda .xls) treat an
+   * unsigned positive value as a credit. Without this hint an unsigned
+   * amount leaves `direction` null.
+   */
+  readonly unsignedAmount?: 'credit' | 'debit';
   readonly columns: Readonly<Record<string, readonly string[]>>;
 }
 

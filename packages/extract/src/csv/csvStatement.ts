@@ -130,7 +130,7 @@ export function statementFromRows(
     // transactions.
     const marker = BALANCE_MARKER_RE.exec(narrationText);
     if (marker !== null && noAmounts && !noBalance) {
-      const mapped = mapRow(cells, cols);
+      const mapped = mapRow(cells, cols, { unsignedAmount: table.layout?.unsignedAmount });
       if (mapped.balancePaise !== null) {
         const isOpening =
           marker[1] !== undefined || marker[2] !== undefined || marker[3] !== undefined;
@@ -168,7 +168,7 @@ export function statementFromRows(
       continue;
     }
 
-    const mapped = mapRow(cells, cols);
+    const mapped = mapRow(cells, cols, { unsignedAmount: table.layout?.unsignedAmount });
     transactions.push(mapped);
     lastBaseWarnings = mapped.warnings;
     continuationRows = 0;
@@ -193,9 +193,14 @@ export function statementFromRows(
 
   const layout = table.layout;
   if (layout?.kind !== undefined) metadata['accountKind'] = layout.kind;
-  const bank = layout ? layout.bank : (detectedBank ?? options?.bankHint ?? null);
+  // A bank-specific layout names its bank; GENERIC layouts (incl. the
+  // generic credit-card shape) defer to preamble/hint before 'GENERIC'.
+  const bank =
+    layout !== null && layout.bank !== 'GENERIC'
+      ? layout.bank
+      : (detectedBank ?? options?.bankHint ?? (layout ? layout.bank : null));
   const bankSource =
-    layout !== null
+    layout !== null && layout.bank !== 'GENERIC'
       ? 'layout'
       : detectedBank !== null
         ? 'preamble'
@@ -203,7 +208,7 @@ export function statementFromRows(
           ? 'hint'
           : null;
   if (bankSource !== null) metadata['bankSource'] = bankSource;
-  if (layout === null || layout.id === 'generic_statement') {
+  if (layout === null || layout.bank === 'GENERIC') {
     warnings.push(
       `no bank-specific layout matched — parsed via generic fallback${detectedBank !== null ? ` (detected bank: ${detectedBank}; a dedicated layout would improve accuracy)` : ''}`,
     );

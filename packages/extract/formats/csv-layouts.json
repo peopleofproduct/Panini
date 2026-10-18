@@ -327,6 +327,107 @@
       }
     },
     {
+      "id": "kotak_statement_v2",
+      "bank": "KOTAK",
+      "requiredHeaders": ["sl no", "transaction date", "dr cr"],
+      "columns": {
+        "date": ["transaction date", "value date"],
+        "narration": ["description", "narration", "transaction details"],
+        "refNo": ["chq ref no", "ref no", "cheque no"],
+        "amount": ["amount", "amount inr"],
+        "direction": ["dr cr", "cr dr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "idbi_statement",
+      "bank": "IDBI",
+      "requiredHeaders": ["txn date", "description", "cr dr", "amount inr", "balance inr"],
+      "columns": {
+        "date": ["txn date", "value date"],
+        "narration": ["description", "transaction details"],
+        "refNo": ["cheque no", "ref no"],
+        "direction": ["cr dr", "dr cr"],
+        "amount": ["amount inr", "amount"],
+        "balance": ["balance inr", "balance"]
+      }
+    },
+    {
+      "id": "bob_statement_v3",
+      "bank": "BOB",
+      "requiredHeaders": ["date", "description", "instrument id", "amount inr", "balance inr"],
+      "unsignedAmount": "credit",
+      "columns": {
+        "date": ["date", "value date"],
+        "narration": ["description", "particulars"],
+        "refNo": ["instrument id", "ref no"],
+        "amount": ["amount inr", "amount"],
+        "balance": ["balance inr", "balance"]
+      }
+    },
+    {
+      "id": "svc_statement",
+      "bank": "SVC",
+      "requiredHeaders": ["date", "particulars", "chq no", "debit", "credit", "balance"],
+      "columns": {
+        "date": ["date", "value date", "txn date"],
+        "narration": ["particulars", "description", "narration"],
+        "refNo": ["chq no", "cheque no", "ref no"],
+        "debit": ["debit", "withdrawal", "dr"],
+        "credit": ["credit", "deposit", "cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "yes_cc_statement",
+      "bank": "YES",
+      "kind": "credit_card",
+      "requiredHeaders": ["date", "transaction details", "merchant category", "amount"],
+      "forbiddenHeaders": ["balance", "closing balance", "debit", "credit"],
+      "columns": {
+        "date": ["date"],
+        "narration": ["transaction details", "description"],
+        "amount": ["amount", "amount inr", "amt"]
+      }
+    },
+    {
+      "id": "cc_generic",
+      "bank": "GENERIC",
+      "kind": "credit_card",
+      "requiredHeaders": ["date", "transaction details", "amount"],
+      "forbiddenHeaders": [
+        "balance",
+        "closing balance",
+        "bal",
+        "debit",
+        "credit",
+        "withdrawal",
+        "deposit",
+        "dr",
+        "cr",
+        "dr cr",
+        "cr dr",
+        "merchant category"
+      ],
+      "columns": {
+        "date": ["date"],
+        "narration": ["transaction details", "description"],
+        "amount": ["amount", "amount inr", "amt"]
+      }
+    },
+    {
+      "id": "paytm_merchant",
+      "bank": "PAYTM_PB",
+      "kind": "merchant",
+      "requiredHeaders": ["transaction id", "transaction date", "amount", "transaction type"],
+      "columns": {
+        "date": ["transaction date", "date"],
+        "narration": ["customer nickname", "customer vpa", "payment mode"],
+        "refNo": ["transaction id", "order id"],
+        "amount": ["amount"]
+      }
+    },
+    {
       "id": "generic_statement",
       "bank": "GENERIC",
       "requiredHeaders": ["date", "balance"],

@@ -1,0 +1,25 @@
+{
+  "id": "idbi-csv",
+  "format": "csv",
+  "input": "IDBI Bank Ltd\nAccount No: XX7712\nTxn Date,Value Date,Description,Cheque No,CR/DR,Amount (INR),Balance (INR)\n15/10/2026,15/10/2026,UPI-SALON-PAYMENT,0,DR,\"1,500.00\",\"48,500.00\"\n16/10/2026,16/10/2026,NEFT SALARY CREDIT,0,CR,\"85,000.00\",\"1,33,500.00\"\n",
+  "expect": {
+    "bank": "IDBI",
+    "layoutId": "idbi_statement",
+    "accountMask": "7712",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 150000,
+        "balancePaise": 4850000
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 8500000,
+        "balancePaise": 13350000
+      }
+    ]
+  }
+}

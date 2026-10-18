@@ -1,0 +1,14 @@
+{
+  "id": "yes-cc-csv",
+  "format": "csv",
+  "input": "YES BANK Credit Card Statement\nCard No: XXXX4477\nDate,Transaction Details,Merchant Category,Amount\n15/10/2026,AMAZON PAY INDIA - Ref No: ABC123456789012345678901,Shopping,\"1,299.00 Dr\"\n16/10/2026,PAYMENT RECEIVED - Ref No: XYZ987654321098765432109,Payments,\"5,000.00 Cr\"\n",
+  "expect": {
+    "bank": "YES",
+    "layoutId": "yes_cc_statement",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 129900 },
+      { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 500000 }
+    ]
+  }
+}

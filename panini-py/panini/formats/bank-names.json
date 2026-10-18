@@ -8,11 +8,11 @@
       "id": "ICICI",
       "names": ["icici bank", "industrial credit and investment corporation of india"]
     },
-    { "id": "SBI", "names": ["state bank of india", "sbi"] },
+    { "id": "SBI", "names": ["state bank of india", "sbi card", "sbi"] },
     { "id": "AXIS", "names": ["axis bank"] },
     { "id": "KOTAK", "names": ["kotak mahindra bank", "kotak bank"] },
     { "id": "PNB", "names": ["punjab national bank"] },
-    { "id": "BOB", "names": ["bank of baroda"] },
+    { "id": "BOB", "names": ["bank of baroda", "bobcard", "bob card"] },
     { "id": "CANARA", "names": ["canara bank"] },
     { "id": "UNION", "names": ["union bank of india"] },
     { "id": "IDFC", "names": ["idfc first bank", "idfc bank"] },
@@ -47,7 +47,10 @@
     { "id": "UTKARSH", "names": ["utkarsh small finance bank"] },
 
     { "id": "IPPB", "names": ["india post payments bank", "ippb"] },
-    { "id": "PAYTM_PB", "names": ["paytm payments bank"] },
+    {
+      "id": "PAYTM_PB",
+      "names": ["paytm payments bank", "paytm for business", "paytm merchant", "paytm"]
+    },
     { "id": "AIRTEL_PB", "names": ["airtel payments bank"] },
     { "id": "FINO_PB", "names": ["fino payments bank"] },
     { "id": "JIO_PB", "names": ["jio payments bank"] },
@@ -68,6 +71,16 @@
       "names": ["cosmos bank", "cosmos co operative bank", "cosmos co-operative bank"]
     },
     { "id": "NKGSB", "names": ["nkgsb co operative bank", "nkgsb bank"] },
-    { "id": "KALUPUR", "names": ["kalupur commercial co operative bank", "kalupur bank"] }
+    { "id": "KALUPUR", "names": ["kalupur commercial co operative bank", "kalupur bank"] },
+    {
+      "id": "SVC",
+      "names": [
+        "shamrao vithal co operative bank",
+        "the shamrao vithal co operative bank",
+        "shamrao vithal bank",
+        "svc bank"
+      ]
+    },
+    { "id": "KGB", "names": ["kerala gramin bank"] }
   ]
 }

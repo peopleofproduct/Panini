@@ -23,8 +23,20 @@ import type { ExtractedTransaction, RowDirection } from './types';
 const ACCOUNT_RE =
   /(?:a\/c|account)\s*(?:no\.?|number|#)?\s*[:-]?\s*(?:x{2,}|\*{2,}|\d{2,}[x*]{2,})?(\d{3,6})\b/i;
 
-/** "1,234.56 Dr" / "INR 500.00 CR" — amount with an embedded direction suffix. */
-const DR_CR_SUFFIX = /\b(dr|cr|debit|credit)\b\.?\s*$/i;
+/**
+ * "1,234.56 Dr" / "INR 500.00 CR" / "508.06 D" — amount with an embedded
+ * direction suffix. Card issuers (SBI Card & co.) append bare `C`/`D`
+ * markers, so single letters count when they end the cell.
+ */
+const DR_CR_SUFFIX = /(?:\b(dr|cr|debit|credit)\b|\b([dc]))\.?\s*$/i;
+
+function directionFromSuffix(match: RegExpExecArray | null): RowDirection {
+  if (match === null) return null;
+  const token = (match[1] ?? match[2] ?? '').toUpperCase();
+  if (token === 'D' || token === 'DR' || token === 'DEBIT') return 'DEBIT';
+  if (token === 'C' || token === 'CR' || token === 'CREDIT') return 'CREDIT';
+  return null;
+}
 
 export function findAccountMask(text: string): string | null {
   const m = ACCOUNT_RE.exec(text);
@@ -69,6 +81,7 @@ function directionFromColumn(value: string): RowDirection {
 export function mapRow(
   cells: readonly string[],
   columns: Partial<Record<ColumnField, number>>,
+  options?: { unsignedAmount?: 'credit' | 'debit' | undefined },
 ): ExtractedTransaction {
   const warnings: string[] = [];
   const raw = cells.join(' ').trim();
@@ -123,10 +136,19 @@ export function mapRow(
       warnings.push(`unparseable amount '${amountRaw}'`);
     } else {
       amountPaise = parsed.paise;
-      if (suffix) direction = directionFromText(suffix[1] ?? '');
+      if (suffix) direction = directionFromSuffix(suffix);
       else if (directionRaw !== null) direction = directionFromColumn(directionRaw);
       if (direction === null && !suffix) {
-        direction = parsed.sign === 'neg' ? 'DEBIT' : parsed.sign === 'pos' ? 'CREDIT' : null;
+        direction =
+          parsed.sign === 'neg'
+            ? 'DEBIT'
+            : parsed.sign === 'pos'
+              ? 'CREDIT'
+              : options?.unsignedAmount === 'credit'
+                ? 'CREDIT'
+                : options?.unsignedAmount === 'debit'
+                  ? 'DEBIT'
+                  : null;
       }
     }
   }
@@ -145,9 +167,7 @@ export function mapRow(
     } else {
       // Indian statements mark an overdrawn balance as '1,234.00 Dr' — the
       // magnitude parses positive, so re-apply the sign (also '-x' / '(x)').
-      const overdrawn =
-        parsed.sign === 'neg' ||
-        (suffix !== null && directionFromText(suffix[1] ?? '') === 'DEBIT');
+      const overdrawn = parsed.sign === 'neg' || directionFromSuffix(suffix) === 'DEBIT';
       balancePaise = overdrawn && parsed.paise !== 0 ? -parsed.paise : parsed.paise;
     }
   }

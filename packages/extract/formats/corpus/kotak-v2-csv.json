@@ -1,0 +1,25 @@
+{
+  "id": "kotak-v2-csv",
+  "format": "csv",
+  "input": "Kotak Mahindra Bank\nAccount No: XXXX9988\nSl. No.,Transaction Date,Value Date,Description,Chq / Ref No.,Amount,Dr / Cr,Balance\n1,15/10/2026,15/10/2026,UPI-UTILITIES PAYMENT,CHQ000111,\"3,400.00\",Dr,\"56,600.00\"\n2,16/10/2026,16/10/2026,NEFT SALARY CREDIT,CHQ000112,\"72,000.00\",Cr,\"1,28,600.00\"\n",
+  "expect": {
+    "bank": "KOTAK",
+    "layoutId": "kotak_statement_v2",
+    "accountMask": "9988",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 340000,
+        "balancePaise": 5660000
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 7200000,
+        "balancePaise": 12860000
+      }
+    ]
+  }
+}

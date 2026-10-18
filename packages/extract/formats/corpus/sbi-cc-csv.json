@@ -1,0 +1,19 @@
+{
+  "id": "sbi-cc-csv",
+  "format": "csv-cases",
+  "cases": [
+    {
+      "id": "sbi-cc-generic-layout",
+      "input": "SBI Card\nStatement Period: 01 Oct 26 to 31 Oct 26\nDate,Transaction Details,Amount\n15 Oct 26,AMAZON PAY INDIA MUMBAI,\"1,299.00 D\"\n16 Oct 26,PAYMENT RECEIVED THANK YOU,\"5,000.00 C\"\n",
+      "expect": {
+        "count": 2,
+        "rows": [
+          { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 129900 },
+          { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 500000 }
+        ],
+        "metadata": { "accountKind": "credit_card", "bankSource": "preamble" },
+        "warningsContain": ["no bank-specific layout matched"]
+      }
+    }
+  ]
+}

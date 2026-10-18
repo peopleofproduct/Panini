@@ -1,0 +1,25 @@
+{
+  "id": "svc-csv",
+  "format": "csv",
+  "input": "The Shamrao Vithal Co-operative Bank Ltd\nAccount XXXX6655\nDate,Particulars,Chq No.,Debit,Credit,Balance\n15-Oct-2026,BY TRANSFER NEFT SALARY,,,\"90,000.00\",\"1,20,000.00\"\n16-Oct-2026,TO TRANSFER UPI GROCERY,110022,\"2,250.00\",,\"1,17,750.00\"\n",
+  "expect": {
+    "bank": "SVC",
+    "layoutId": "svc_statement",
+    "accountMask": "6655",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "CREDIT",
+        "amountPaise": 9000000,
+        "balancePaise": 12000000
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "DEBIT",
+        "amountPaise": 225000,
+        "balancePaise": 11775000
+      }
+    ]
+  }
+}

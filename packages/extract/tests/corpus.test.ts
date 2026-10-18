@@ -18,7 +18,12 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { extractCsvStatement } from '../src/csv/csvStatement';
 import { extractSms } from '../src/sms';
-import { loadCsvLayouts, loadSmsPatterns, resolveFormatsDir } from '../src/formatsLoader';
+import {
+  loadBankNames,
+  loadCsvLayouts,
+  loadSmsPatterns,
+  resolveFormatsDir,
+} from '../src/formatsLoader';
 
 const CORPUS = join(resolveFormatsDir(), 'corpus');
 
@@ -67,13 +72,14 @@ const files = readdirSync(CORPUS)
 describe('formats corpus', () => {
   const layouts = loadCsvLayouts();
   const smsFile = loadSmsPatterns();
+  const bankNames = loadBankNames();
 
   for (const name of files) {
     const fixture = JSON.parse(readFileSync(join(CORPUS, name), 'utf8')) as Fixture;
 
     if (fixture.format === 'csv' && fixture.input && fixture.expect) {
       it(`${name}: detects ${fixture.expect.layoutId} and extracts ${fixture.expect.count} rows`, () => {
-        const result = extractCsvStatement(fixture.input as string, layouts);
+        const result = extractCsvStatement(fixture.input as string, layouts, { bankNames });
         const expect_ = fixture.expect as NonNullable<Fixture['expect']>;
         expect(result.bank).toBe(expect_.bank);
         expect(result.layoutId).toBe(expect_.layoutId);
@@ -94,7 +100,7 @@ describe('formats corpus', () => {
     if (fixture.format === 'csv-cases' && fixture.cases) {
       for (const c of fixture.cases) {
         it(`${name}: ${c.id}`, () => {
-          const result = extractCsvStatement(c.input, layouts);
+          const result = extractCsvStatement(c.input, layouts, { bankNames });
           expect(result.transactions.length).toBe(c.expect.count);
           (c.expect.rows ?? []).forEach((want, i) => {
             const got = result.transactions[i] as unknown as Record<string, unknown> | undefined;

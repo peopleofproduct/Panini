@@ -1,0 +1,24 @@
+{
+  "id": "bob-v3-csv",
+  "format": "csv",
+  "input": "Bank of Baroda\nDate,Description,Instrument ID,Amount (INR),Balance (INR)\n15/10/2026,UPI-RENT PAYMENT,UTR100001,\"-15,000.00\",\"43,000.00\"\n16/10/2026,NEFT CREDIT SALARY,UTR100002,\"60,000.00\",\"1,03,000.00\"\n",
+  "expect": {
+    "bank": "BOB",
+    "layoutId": "bob_statement_v3",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 1500000,
+        "balancePaise": 4300000
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 6000000,
+        "balancePaise": 10300000
+      }
+    ]
+  }
+}

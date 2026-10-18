@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Deeper coverage wave** — layouts for **IDBI** (`CR/DR` + `Amount
+(INR)`), **Bank of Baroda .xls** (signed `Amount (INR)` — new
+  `unsignedAmount` layout hint maps unsigned positives to credits),
+  **Shamrao Vithal Co-operative Bank (SVC)** — first co-op bank layout,
+  **Kotak v2** (`Sl. No.` CSV export), **YES Bank credit card**
+  (`Merchant Category` column), a **`cc_generic`** layout for
+  SBI/Kotak-style card statements (`forbiddenHeaders` keeps it from
+  stealing deposit tables; bank falls back to preamble detection), and
+  **Paytm for Business merchant exports** (`kind: "merchant"`).
+  Single-letter `C`/`D` amount suffixes now parse; `bank-names.json`
+  gains SVC + Kerala Gramin; generic keyword coverage widened
+  (`cr dr`, `instrument id`, `rrn`, `booking/entry/trade date`, …).
 - **Wider layout coverage** — evidence-backed second export variants
   (`axis_statement_v2` SRL NO, `icici_statement_v2` S No. + value-date
   first, `bob_statement_v2` TRAN/VAL DATE), plus **credit-card

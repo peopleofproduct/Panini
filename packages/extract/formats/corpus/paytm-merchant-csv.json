@@ -1,0 +1,18 @@
+{
+  "id": "paytm-merchant-csv",
+  "format": "csv-cases",
+  "cases": [
+    {
+      "id": "paytm-merchant-settlement",
+      "input": "Paytm for Business - Transaction Report\nTransaction_ID,Transaction_Date,Payment_Mode,Customer_VPA,Customer_Nickname,Amount,Status,Transaction_Type\nPAYTM100000001,15/10/2026,UPI,rahul@okhdfc,Rahul Sharma,\"1,250.00\",SUCCESS,ACQUIRING\nPAYTM100000002,16/10/2026,UPI,priya@okicici,Priya Nair,\"840.00\",SUCCESS,ACQUIRING\n",
+      "expect": {
+        "count": 2,
+        "rows": [
+          { "date": "2026-10-15", "amountPaise": 125000, "refNo": "PAYTM100000001" },
+          { "date": "2026-10-16", "amountPaise": 84000, "refNo": "PAYTM100000002" }
+        ],
+        "metadata": { "accountKind": "merchant", "bankSource": "layout" }
+      }
+    }
+  ]
+}

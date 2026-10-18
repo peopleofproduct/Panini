@@ -333,7 +333,22 @@ _ACCOUNT_RE = re.compile(
     re.IGNORECASE,
 )
 
-_DR_CR_SUFFIX = re.compile(r"\b(dr|cr|debit|credit)\b\.?\s*$", re.IGNORECASE)
+# "1,234.56 Dr" / "500.00 C" — card issuers append bare C/D markers, so
+# single letters count when they end the cell.
+_DR_CR_SUFFIX = re.compile(
+    r"(?:\b(dr|cr|debit|credit)\b|\b([dc]))\.?\s*$", re.IGNORECASE
+)
+
+
+def _direction_from_suffix(match: Optional[re.Match]) -> Optional[str]:
+    if match is None:
+        return None
+    token = (match.group(1) or match.group(2) or "").upper()
+    if token in ("D", "DR", "DEBIT"):
+        return "DEBIT"
+    if token in ("C", "CR", "CREDIT"):
+        return "CREDIT"
+    return None
 
 
 def _find_account_mask(text: str) -> Optional[str]:
@@ -388,8 +403,11 @@ def detect_table(
 
     for layout in layouts:
         required = set(layout.get("requiredHeaders", []))
+        forbidden = set(layout.get("forbiddenHeaders", []))
         for i in range(max_scan):
             cells = norm_rows[i]
+            if forbidden.intersection(cells):
+                continue
             if required.issubset(set(cells)):
                 columns: dict[str, int] = {}
                 for field, candidates in layout.get("columns", {}).items():
@@ -428,7 +446,11 @@ def detect_table(
     return best
 
 
-def map_row(cells: list[str], columns: dict[str, int]) -> dict[str, Any]:
+def map_row(
+    cells: list[str],
+    columns: dict[str, int],
+    unsigned_amount: Optional[str] = None,
+) -> dict[str, Any]:
     warnings: list[str] = []
 
     def cell(field: str) -> Optional[str]:
@@ -482,12 +504,20 @@ def map_row(cells: list[str], columns: dict[str, int]) -> dict[str, Any]:
         else:
             amount_paise = parsed[0]
             if suffix:
-                direction = _direction_from_text(suffix.group(1))
+                direction = _direction_from_suffix(suffix)
             elif direction_raw is not None:
                 direction = _direction_from_column(direction_raw)
             if direction is None and not suffix:
                 direction = (
-                    "DEBIT" if parsed[1] == "neg" else "CREDIT" if parsed[1] == "pos" else None
+                    "DEBIT"
+                    if parsed[1] == "neg"
+                    else "CREDIT"
+                    if parsed[1] == "pos"
+                    else "CREDIT"
+                    if unsigned_amount == "credit"
+                    else "DEBIT"
+                    if unsigned_amount == "debit"
+                    else None
                 )
     if direction is None and direction_raw is not None:
         direction = _direction_from_column(direction_raw)
@@ -502,7 +532,7 @@ def map_row(cells: list[str], columns: dict[str, int]) -> dict[str, Any]:
             warnings.append(f"unparseable balance '{balance_raw}'")
         else:
             overdrawn = parsed_bal[1] == "neg" or (
-                bal_suffix is not None and _direction_from_text(bal_suffix.group(1)) == "DEBIT"
+                _direction_from_suffix(bal_suffix) == "DEBIT"
             )
             balance_paise = -parsed_bal[0] if overdrawn and parsed_bal[0] != 0 else parsed_bal[0]
 
@@ -602,7 +632,9 @@ def extract_csv_statement(
         # transactions.
         marker = _BALANCE_MARKER_RE.match(narration_text)
         if marker is not None and no_amounts and not no_balance:
-            mapped = map_row(cells, columns)
+            mapped = map_row(
+                cells, columns, unsigned_amount=(table["layout"] or {}).get("unsignedAmount")
+            )
             if mapped["balancePaise"] is not None:
                 is_opening = any(marker.group(g) for g in (1, 2, 3))
                 key = "openingBalancePaise" if is_opening else "closingBalancePaise"
@@ -643,7 +675,9 @@ def extract_csv_statement(
                 warnings.append(f"skipped non-transaction row {i + 1}: '{preview[:60]}'")
             continue
 
-        mapped = map_row(cells, columns)
+        mapped = map_row(
+            cells, columns, unsigned_amount=(table["layout"] or {}).get("unsignedAmount")
+        )
         transactions.append(mapped)
         last_base_warnings = list(mapped["warnings"])
         continuation_rows = 0
@@ -661,15 +695,21 @@ def extract_csv_statement(
     layout = table["layout"]
     if layout and layout.get("kind") is not None:
         metadata["accountKind"] = layout["kind"]
-    bank = layout["bank"] if layout else (detected_bank or bank_hint)
+    # A bank-specific layout names its bank; GENERIC layouts defer to
+    # preamble/hint before 'GENERIC'.
+    bank = (
+        layout["bank"]
+        if layout and layout["bank"] != "GENERIC"
+        else (detected_bank or bank_hint or (layout["bank"] if layout else None))
+    )
     bank_source = (
         "layout"
-        if layout
+        if layout and layout["bank"] != "GENERIC"
         else "preamble" if detected_bank else "hint" if bank_hint else None
     )
     if bank_source is not None:
         metadata["bankSource"] = bank_source
-    if layout is None or layout["id"] == "generic_statement":
+    if layout is None or layout["bank"] == "GENERIC":
         suffix = (
             f" (detected bank: {detected_bank}; a dedicated layout would improve accuracy)"
             if detected_bank

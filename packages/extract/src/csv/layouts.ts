@@ -45,8 +45,13 @@ function columnIndex(cells: readonly string[], candidates: readonly string[]): n
   return -1;
 }
 
-function headerCoverage(cells: readonly string[], required: readonly string[]): boolean {
+function headerCoverage(
+  cells: readonly string[],
+  required: readonly string[],
+  forbidden: readonly string[] | undefined,
+): boolean {
   const set = new Set(cells);
+  if (forbidden !== undefined && forbidden.some((h) => set.has(h))) return false;
   return required.every((h) => set.has(h));
 }
 
@@ -66,7 +71,23 @@ function mapColumns(
 }
 
 const KEYWORD_FIELDS: readonly [ColumnField, readonly string[]][] = [
-  ['date', ['date', 'txn date', 'tran date', 'transaction date', 'value date', 'posting date']],
+  [
+    'date',
+    [
+      'date',
+      'txn date',
+      'tran date',
+      'transaction date',
+      'value date',
+      'posting date',
+      'post date',
+      'date of transaction',
+      'date and time',
+      'booking date',
+      'entry date',
+      'trade date',
+    ],
+  ],
   [
     'narration',
     [
@@ -77,11 +98,25 @@ const KEYWORD_FIELDS: readonly [ColumnField, readonly string[]][] = [
       'remarks',
       'transaction remarks',
       'transaction details',
+      'activity',
+      'narrative',
     ],
   ],
   [
     'refNo',
-    ['ref no cheque no', 'chq ref no', 'ref no', 'cheque no', 'utr', 'utr no', 'transaction id'],
+    [
+      'ref no cheque no',
+      'chq ref no',
+      'ref no',
+      'cheque no',
+      'cheque number',
+      'utr',
+      'utr no',
+      'transaction id',
+      'instrument id',
+      'rrn',
+      'order id',
+    ],
   ],
   [
     'debit',
@@ -93,6 +128,7 @@ const KEYWORD_FIELDS: readonly [ColumnField, readonly string[]][] = [
       'dr',
       'debit amount',
       'withdrawal amount inr',
+      'withdrawal inr',
     ],
   ],
   [
@@ -105,11 +141,24 @@ const KEYWORD_FIELDS: readonly [ColumnField, readonly string[]][] = [
       'cr',
       'credit amount',
       'deposit amount inr',
+      'deposit inr',
     ],
   ],
-  ['amount', ['amount', 'amount inr', 'txn amount']],
-  ['direction', ['dr cr', 'type', 'txn type', 'transaction type', 'dr cr indicator']],
-  ['balance', ['balance', 'closing balance', 'bal', 'balance inr']],
+  ['amount', ['amount', 'amount inr', 'txn amount', 'amt', 'amount in rs', 'transaction amount']],
+  [
+    'direction',
+    [
+      'dr cr',
+      'cr dr',
+      'type',
+      'txn type',
+      'transaction type',
+      'dr cr indicator',
+      'cr dr indicator',
+      'debit credit',
+    ],
+  ],
+  ['balance', ['balance', 'closing balance', 'bal', 'balance inr', 'available balance']],
 ];
 
 /**
@@ -148,7 +197,7 @@ export function detectTable(
     for (let i = 0; i < maxScan; i += 1) {
       const cells = normRows[i];
       if (!cells) continue;
-      if (headerCoverage(cells, layout.requiredHeaders)) {
+      if (headerCoverage(cells, layout.requiredHeaders, layout.forbiddenHeaders)) {
         const columns = mapColumns(layout, cells);
         if (columns.date !== undefined) {
           return { layout, headerRowIndex: i, columns };
