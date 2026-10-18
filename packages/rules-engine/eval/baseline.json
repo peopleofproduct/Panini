@@ -16,8 +16,8 @@
       "ruleMatchRate": 0
     },
     "merchant": {
-      "total": 30,
-      "passed": 30,
+      "total": 44,
+      "passed": 44,
       "passRate": 1,
       "avgConfidence": 0,
       "ruleMatchRate": 0
