@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Counterparty money-flow + conduct metrics** (`@paniniapi/insights`
+  0.5.0) — `counterpartyFlows` aggregates every transaction into
+  per-counterparty in/out/net totals with evidence indices (the
+  deterministic kernel behind money-trail products; top-N, unattributed
+  rows counted honestly). `detectConductMetrics` reports overdrawn
+  days, worst overdraft, average EOD balance, EOD volatility, and
+  bounce rate — the behavioural layer that complements fraud flags.
+  `panini-bsa` renders "Account Conduct" and "Top Counterparties"
+  sections. Python parity: `counterparty_flows`,
+  `detect_conduct_metrics`.
 - **Fraud-indicator suite + multi-account consolidation**
   (`@paniniapi/insights`) — `detectFraudIndicators` runs the
   industry-standard named checks (circular in/out pairs across

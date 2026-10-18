@@ -155,6 +155,35 @@ export function renderMarkdown(report: BsaReport): string {
     lines.push('');
   }
 
+  {
+    const c = report.conduct;
+    lines.push('## Account Conduct', '');
+    lines.push(`- **Average EOD balance:** ${formatInr(c.averageEodBalancePaise)}`);
+    lines.push(`- **EOD volatility:** ${c.eodVolatilityPct ?? '—'}%`);
+    lines.push(`- **Overdrawn days:** ${c.overdrawnDays}`);
+    lines.push(`- **Bounces:** ${c.bounceCount} (${c.bounceRatePct ?? '—'}% of debits)`, '');
+  }
+
+  if (report.counterpartyFlows.flows.length > 0) {
+    lines.push('## Top Counterparties', '');
+    lines.push(
+      '| Counterparty | Inflow | Outflow | Net | Txns |',
+      '| --- | --- | --- | --- | --- |',
+    );
+    for (const f of report.counterpartyFlows.flows.slice(0, 15)) {
+      lines.push(
+        `| ${f.counterparty} | ${formatInr(f.inflowPaise)} | ${formatInr(f.outflowPaise)} | ${formatInr(f.netPaise)} | ${f.txnCount} |`,
+      );
+    }
+    if (report.counterpartyFlows.unattributedCount > 0) {
+      lines.push(
+        '',
+        `_+ ${report.counterpartyFlows.unattributedCount} row(s) with no resolvable counterparty._`,
+      );
+    }
+    lines.push('');
+  }
+
   if (report.fraud !== null) {
     lines.push('## Fraud Indicators', '');
     if (report.fraud.indicators.length === 0) {

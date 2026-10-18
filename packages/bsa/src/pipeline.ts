@@ -20,6 +20,8 @@ import type { AccountSlice, InsightTransaction } from '@paniniapi/insights';
 import {
   analyzeTransactions,
   consolidateAccounts,
+  counterpartyFlows,
+  detectConductMetrics,
   detectFraudIndicators,
   detectPortfolioIndicators,
 } from '@paniniapi/insights';
@@ -166,6 +168,10 @@ export async function analyzeStatementFiles(
           warnings: [...fraud.warnings, ...(portfolioFraud?.warnings ?? [])],
         };
 
+  // Conduct metrics + counterparty money-flow aggregates on the pooled set.
+  const conduct = detectConductMetrics(insightsInput);
+  const flows = counterpartyFlows(insightsInput, { top: 25 });
+
   const dates = enriched
     .map((t) => t.date)
     .filter((d): d is string => d !== null)
@@ -187,6 +193,8 @@ export async function analyzeStatementFiles(
     insights,
     fraud: fraudReport,
     portfolio,
+    conduct: conduct.metrics,
+    counterpartyFlows: flows,
     transactions: enriched,
   };
 }

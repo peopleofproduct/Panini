@@ -61,6 +61,28 @@ panini-bsa --no-fraud acct-a.pdf            # skip the suite
 Exit codes: `4` fabrication evidence (AA reconcile), `3` tamper evidence,
 `5` high-severity fraud (with `--fail-on-fraud`), `2` no transactions.
 
+## Money-flow & conduct layer
+
+Two sibling kernels round out the credit-file picture:
+
+```ts
+import { counterpartyFlows, detectConductMetrics } from '@paniniapi/insights';
+```
+
+- **`counterpartyFlows(txns, { top })`** — per-counterparty
+  inflow/outflow/net totals, txn counts, first/last seen, evidence
+  indices; sorted by volume. Rows with no resolvable counterparty are
+  counted in `unattributedCount` rather than silently dropped — the
+  deterministic kernel behind "money trail" views.
+- **`detectConductMetrics(txns)`** — behavioural conduct: overdrawn
+  EOD days, worst overdraft, average EOD balance, EOD volatility %,
+  bounce rate vs debits, return-fee count. Emits conduct signals
+  (≥5 overdrawn days, bounce rate ≥5%, volatility ≥80%) alongside
+  the metrics.
+
+The `panini-bsa` report renders these as "Account Conduct" and "Top
+Counterparties" sections automatically.
+
 ## Configuration
 
 `FraudOptions` — `holidays` (ISO dates; weekends always count),

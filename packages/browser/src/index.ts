@@ -81,12 +81,17 @@ export function extractSmsText(text: string, options?: { bankHint?: string }): E
 export {
   analyzeTransactions,
   consolidateAccounts,
+  counterpartyFlows,
+  detectConductMetrics,
   detectFraudIndicators,
   detectPortfolioIndicators,
+  FLOW_RULE_IDS,
   FRAUD_RULE_IDS,
 } from '@paniniapi/insights';
 export type {
   AccountSlice,
+  ConductMetrics,
+  CounterpartyFlowReport,
   FraudReport,
   InsightTransaction,
   InsightsReport,

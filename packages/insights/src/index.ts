@@ -17,6 +17,8 @@
 export { analyzeTransactions, RULE_IDS } from './analyze';
 export { consolidateAccounts } from './consolidate';
 export { detectFraudIndicators, detectPortfolioIndicators, FRAUD_RULE_IDS } from './fraud';
+export { counterpartyFlows, detectConductMetrics, FLOW_RULE_IDS } from './flows';
+export type { ConductMetrics, CounterpartyFlow, CounterpartyFlowReport } from './flows';
 export { evaluateScorecard, validateScorecardSpec, ScorecardSpecError } from './scorecard';
 export { detectMonitoringEvents, runMonitorCycle, statementDiff } from './monitor';
 export type {

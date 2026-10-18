@@ -19,6 +19,11 @@ from .fraud import (  # noqa: F401
     detect_portfolio_indicators,
     FRAUD_RULE_IDS,
 )
+from .flows import (  # noqa: F401
+    counterparty_flows,
+    detect_conduct_metrics,
+    FLOW_RULE_IDS,
+)
 from .drift import (  # noqa: F401
     analyze_narration_batch,
     corpus_baseline,
@@ -35,7 +40,7 @@ from .reconcile import (  # noqa: F401
     transactions_from_aa_data,
 )
 
-__version__ = "0.5.2"
+__version__ = "0.5.4"
 __all__ = [
     "Normalizer", "parse_narration", "parse_indian_date",
     "is_plausible_date", "tokenize", "extract_csv_statement",
@@ -47,4 +52,5 @@ __all__ = [
     "reconcile_with_aa", "transactions_from_aa_data",
     "consolidate_accounts", "detect_fraud_indicators",
     "detect_portfolio_indicators", "FRAUD_RULE_IDS",
+    "counterparty_flows", "detect_conduct_metrics", "FLOW_RULE_IDS",
 ]

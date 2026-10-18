@@ -16,6 +16,8 @@
 
 import type { ExtractOptions, StatementFormat } from '@paniniapi/extract';
 import type {
+  ConductMetrics,
+  CounterpartyFlowReport,
   FraudOptions,
   FraudReport,
   InsightsOptions,
@@ -115,6 +117,11 @@ export interface BsaReport {
   /** Multi-account consolidation: per-account rollups, internal transfers,
    *  cross-statement duplicates, external-only flow totals. */
   readonly portfolio: PortfolioReport | null;
+  /** Behavioural conduct metrics — overdrawn days, EOD balance stats,
+   *  bounce rate. Always computed (deterministic, no options). */
+  readonly conduct: ConductMetrics;
+  /** Top-25 counterparties by volume — the money-trail table. */
+  readonly counterpartyFlows: CounterpartyFlowReport;
   readonly transactions: readonly EnrichedTransaction[];
 }
 
