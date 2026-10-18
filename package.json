@@ -20,7 +20,8 @@
     "playground": "esbuild playground/web-entry.ts --bundle --format=iife --target=es2020 --alias:node:fs=./playground/fs-stub.js --alias:node:path=./playground/fs-stub.js --outfile=playground/panini-web.js",
     "parse": "node playground/parse.mjs",
     "bench": "node benchmarks/run.mjs",
-    "bench:ci": "node benchmarks/run.mjs --ci"
+    "bench:ci": "node benchmarks/run.mjs --ci",
+    "check:pins": "node scripts/check-pins.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
