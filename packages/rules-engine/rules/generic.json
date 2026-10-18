@@ -254,12 +254,24 @@
       "regex": "^(?:INTL|FOREX|MARKUP)[-/ ](?<counterparty>[^-/]+)(?:[-/](?<tail>.*))?$"
     },
     {
+      "name": "ipo_asba",
+      "priority": 4,
+      "category": "Investments",
+      "media": "narration",
+      "regex": "^(?<tail>.*\\b(?:IPO|ASBA)\\b.*)$",
+      "flags": {
+        "REFUND": "REFUND",
+        "RFD": "REFUND",
+        "REV": "REVERSAL"
+      }
+    },
+    {
       "name": "sms_amount_first",
       "priority": 20,
       "media": "sms",
       "regexFlags": "i",
       "confidence": 0.92,
-      "regex": "(?:Rs\\.?|INR|₹)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?<direction>debited|credited)\\s+from\\s+(?:a\\/c|ac|acct|account)\\s*(?:no\\.?\\s*)?(?:[xX*]+\\s*)?(?<accountMask>\\d{3,4})\\s+on\\s+(?<date>\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}|\\d{8})(?:\\s+at\\s+(?<counterparty>[A-Za-z0-9 .&*-]+?)(?:\\.|\\s+on\\s|\\s+Avl|$))?(?:.*?[Aa]vl\\s*[Bb]al(?:ance)?[:\\s]*(?:Rs\\.?|INR|₹)?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,2})?))?"
+      "regex": "(?:Rs\\.?|INR|\u20b9)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?<direction>debited|credited)\\s+from\\s+(?:a\\/c|ac|acct|account)\\s*(?:no\\.?\\s*)?(?:[xX*]+\\s*)?(?<accountMask>\\d{3,4})\\s+on\\s+(?<date>\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}|\\d{8})(?:\\s+at\\s+(?<counterparty>[A-Za-z0-9 .&*-]+?)(?:\\.|\\s+on\\s|\\s+Avl|$))?(?:.*?[Aa]vl\\s*[Bb]al(?:ance)?[:\\s]*(?:Rs\\.?|INR|\u20b9)?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,2})?))?"
     },
     {
       "name": "sms_direction_first",
@@ -267,7 +279,7 @@
       "media": "sms",
       "regexFlags": "i",
       "confidence": 0.92,
-      "regex": "(?:a\\/c|ac|acct|account)\\s*(?:no\\.?\\s*)?(?:[xX*]+\\s*)?(?<accountMask>\\d{3,4})\\s+(?:is\\s+|has\\s+been\\s+)?(?<direction>debited|credited)\\s+(?:by|with|from|for)?\\s*(?:Rs\\.?|INR|₹)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)(?:.*?\\bon\\s*(?<date>\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}|\\d{8}))?(?:.*?(?:at|to|Info:?|towards)\\s+(?<counterparty>[A-Za-z0-9 .&*-]+?)(?:\\.|\\s+Avl|\\s+on\\s|$))?(?:.*?[Aa]vl\\s*[Bb]al(?:ance)?[:\\s]*(?:Rs\\.?|INR|₹)?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,2})?))?"
+      "regex": "(?:a\\/c|ac|acct|account)\\s*(?:no\\.?\\s*)?(?:[xX*]+\\s*)?(?<accountMask>\\d{3,4})\\s+(?:is\\s+|has\\s+been\\s+)?(?<direction>debited|credited)\\s+(?:by|with|from|for)?\\s*(?:Rs\\.?|INR|\u20b9)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)(?:.*?\\bon\\s*(?<date>\\d{2}[-/.]\\d{2}[-/.]\\d{2,4}|\\d{8}))?(?:.*?(?:at|to|Info:?|towards)\\s+(?<counterparty>[A-Za-z0-9 .&*-]+?)(?:\\.|\\s+Avl|\\s+on\\s|$))?(?:.*?[Aa]vl\\s*[Bb]al(?:ance)?[:\\s]*(?:Rs\\.?|INR|\u20b9)?\\s*(?<balance>[\\d,]+(?:\\.\\d{1,2})?))?"
     },
     {
       "name": "sms_amount_then_direction",
@@ -275,7 +287,7 @@
       "media": "sms",
       "regexFlags": "i",
       "confidence": 0.75,
-      "regex": "(?:Rs\\.?|INR|₹)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?<direction>debited|credited)"
+      "regex": "(?:Rs\\.?|INR|\u20b9)\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)\\s+(?<direction>debited|credited)"
     },
     {
       "name": "sms_direction_then_amount",
@@ -283,7 +295,7 @@
       "media": "sms",
       "regexFlags": "i",
       "confidence": 0.75,
-      "regex": "(?<direction>debited|credited)\\s+(?:by|with|from|for)?\\s*(?:Rs\\.?|INR|₹)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
+      "regex": "(?<direction>debited|credited)\\s+(?:by|with|from|for)?\\s*(?:Rs\\.?|INR|\u20b9)?\\s*(?<amount>[\\d,]+(?:\\.\\d{1,2})?)"
     }
   ]
 }

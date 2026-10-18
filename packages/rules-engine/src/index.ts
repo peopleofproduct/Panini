@@ -14,7 +14,13 @@
  * limitations under the License.
  */
 
-export { loadBuiltinRuleSets, loadCategories, loadRuleSets } from './loader';
+export {
+  loadBuiltinRuleSets,
+  loadCategories,
+  loadRuleSets,
+  loadTaxonomy,
+} from './loader';
+export type { Taxonomy, TaxonomyEntry } from './loader';
 export {
   loadIfscBanks,
   loadMccCodes,

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Gold narration → ParsedBankNarration evaluation set. Every case is hand-verified against public documentation of Indian bank narration shapes; `expect` fields are exact-match assertions. Cases must be correct by definition — if the engine regresses on one, the test fails. Add cases only for shapes you have evidence for; never assert a field you have not verified.",
+  "description": "Gold narration \u2192 ParsedBankNarration evaluation set. Every case is hand-verified against public documentation of Indian bank narration shapes; `expect` fields are exact-match assertions. Cases must be correct by definition \u2014 if the engine regresses on one, the test fails. Add cases only for shapes you have evidence for; never assert a field you have not verified.",
   "cases": [
     {
       "input": "UPI-DR-402512345678-SWIGGY-okaxis",
@@ -40,15 +40,30 @@
     },
     {
       "input": "UPI/DR/1234/OLA CABS/ybl",
-      "expect": { "channel": "UPI", "type": "DEBIT", "merchant": "Ola", "category": "Transport" }
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "merchant": "Ola",
+        "category": "Transport"
+      }
     },
     {
       "input": "UPI/123456789012/Payment from PhonePe/user@ybl/YES BANK",
-      "expect": { "channel": "UPI", "counterparty": "User", "ref_no": "123456789012", "vpa": "ybl" }
+      "expect": {
+        "channel": "UPI",
+        "counterparty": "User",
+        "ref_no": "123456789012",
+        "vpa": "ybl"
+      }
     },
     {
       "input": "UPI/123456789012/SWIGGY/swiggy@ybl/Order",
-      "expect": { "channel": "UPI", "merchant": "Swiggy", "ref_no": "123456789012", "vpa": "ybl" }
+      "expect": {
+        "channel": "UPI",
+        "merchant": "Swiggy",
+        "ref_no": "123456789012",
+        "vpa": "ybl"
+      }
     },
     {
       "input": "UPI-RAMESH KUMAR-ramesh@okhdfcbank-HDFC0001234-123456789012-Sent via UPI",
@@ -61,7 +76,12 @@
     },
     {
       "input": "UPI-SWIGGY-SWIGGY@YBL-YESB0YBLUPI-123456789012-UPI",
-      "expect": { "channel": "UPI", "merchant": "Swiggy", "ref_no": "123456789012", "vpa": "ybl" }
+      "expect": {
+        "channel": "UPI",
+        "merchant": "Swiggy",
+        "ref_no": "123456789012",
+        "vpa": "ybl"
+      }
     },
     {
       "input": "NEFT-HDFCN52026010512-ACME CORP PVT LTD-SALARY JAN",
@@ -101,11 +121,19 @@
     },
     {
       "input": "IMPS-402512345678-RAMESH KUMAR-IN",
-      "expect": { "channel": "IMPS", "counterparty": "Ramesh KUMAR", "ref_no": "402512345678" }
+      "expect": {
+        "channel": "IMPS",
+        "counterparty": "Ramesh KUMAR",
+        "ref_no": "402512345678"
+      }
     },
     {
       "input": "MMT/IMPS/123456789012/RAMESH KUMAR",
-      "expect": { "channel": "IMPS", "counterparty": "Ramesh KUMAR", "ref_no": "123456789012" }
+      "expect": {
+        "channel": "IMPS",
+        "counterparty": "Ramesh KUMAR",
+        "ref_no": "123456789012"
+      }
     },
     {
       "input": "POS 415982XXXXXX0342 SWIGGY",
@@ -119,11 +147,19 @@
     },
     {
       "input": "ATM WDL-SELF-0042",
-      "expect": { "channel": "ATM", "type": "DEBIT", "category": "Cash Withdrawal" }
+      "expect": {
+        "channel": "ATM",
+        "type": "DEBIT",
+        "category": "Cash Withdrawal"
+      }
     },
     {
       "input": "NACH-ABC FINANCE-EMI-123456",
-      "expect": { "channel": "NACH", "type": "DEBIT", "category": "Loan & EMI" }
+      "expect": {
+        "channel": "NACH",
+        "type": "DEBIT",
+        "category": "Loan & EMI"
+      }
     },
     {
       "input": "NACH-DR-NETFLIX-99887",
@@ -145,7 +181,11 @@
     },
     {
       "input": "ECS/NACH/BAJAJ FINANCE/EMI",
-      "expect": { "type": "DEBIT", "merchant": "Bajaj Finance", "category": "Loan & EMI" }
+      "expect": {
+        "type": "DEBIT",
+        "merchant": "Bajaj Finance",
+        "category": "Loan & EMI"
+      }
     },
     {
       "input": "UPIAUTOPAY-NETFLIX-REF123456",
@@ -158,11 +198,19 @@
     },
     {
       "input": "MANDATE-ICICI PRUDENTIAL-567890",
-      "expect": { "type": "DEBIT", "counterparty": "ICICI Prudential", "category": "Subscriptions" }
+      "expect": {
+        "type": "DEBIT",
+        "counterparty": "ICICI Prudential",
+        "category": "Subscriptions"
+      }
     },
     {
       "input": "BBPS-BESCOM-999888777",
-      "expect": { "type": "DEBIT", "merchant": "BESCOM", "category": "Utilities" }
+      "expect": {
+        "type": "DEBIT",
+        "merchant": "BESCOM",
+        "category": "Utilities"
+      }
     },
     {
       "input": "BIL/BPAY/000123456/BSES RAJDHANI/CRN12345",
@@ -175,7 +223,11 @@
     },
     {
       "input": "REFUND-FLIPKART-ORD998877",
-      "expect": { "type": "REFUND", "merchant": "Flipkart", "category": "Refunds" }
+      "expect": {
+        "type": "REFUND",
+        "merchant": "Flipkart",
+        "category": "Refunds"
+      }
     },
     {
       "input": "CHQ DEP 00123456 ACME CORP",
@@ -188,7 +240,11 @@
     },
     {
       "input": "CHQ PAID-MICR INWARD CLEARING-000123",
-      "expect": { "channel": "CHEQUE", "type": "DEBIT", "ref_no": "000123" }
+      "expect": {
+        "channel": "CHEQUE",
+        "type": "DEBIT",
+        "ref_no": "000123"
+      }
     },
     {
       "input": "DISB-LN789456123-HDFC LTD",
@@ -201,39 +257,77 @@
     },
     {
       "input": "INT.PD-ACME-2026",
-      "expect": { "type": "CREDIT", "category": "Income" }
+      "expect": {
+        "type": "CREDIT",
+        "category": "Income"
+      }
     },
     {
       "input": "DIV-HDFC BANK-Q2FY26",
-      "expect": { "type": "CREDIT", "counterparty": "HDFC BANK", "category": "Income" }
+      "expect": {
+        "type": "CREDIT",
+        "counterparty": "HDFC BANK",
+        "category": "Income"
+      }
     },
     {
       "input": "GST-CBIC-2026OCT",
-      "expect": { "type": "DEBIT", "counterparty": "CBIC", "category": "Taxes" }
+      "expect": {
+        "type": "DEBIT",
+        "counterparty": "CBIC",
+        "category": "Taxes"
+      }
     },
     {
       "input": "PENSION-EPFO-SEP2026",
-      "expect": { "type": "CREDIT", "counterparty": "EPFO", "category": "Income" }
+      "expect": {
+        "type": "CREDIT",
+        "counterparty": "EPFO",
+        "category": "Income"
+      }
     },
     {
       "input": "INTL-AMAZON UK-4567",
-      "expect": { "type": "DEBIT", "merchant": "Amazon", "category": "Forex" }
+      "expect": {
+        "type": "DEBIT",
+        "merchant": "Amazon",
+        "category": "Forex"
+      }
     },
     {
       "input": "AMB CHG-JUL26-CRNBR123",
-      "expect": { "type": "DEBIT", "category": "Bank Charges" }
+      "expect": {
+        "type": "DEBIT",
+        "category": "Bank Charges"
+      }
     },
     {
       "input": "SMS CHRGS 2026",
-      "expect": { "type": "DEBIT", "category": "Bank Charges" }
+      "expect": {
+        "type": "DEBIT",
+        "category": "Bank Charges"
+      }
     },
     {
       "input": "IB FUNDS TRANSFER TO SELF 1234",
-      "expect": { "channel": "NETBANKING", "category": "Transfers" }
+      "expect": {
+        "channel": "NETBANKING",
+        "category": "Transfers"
+      }
     },
     {
       "input": "FD CLOSURE PROCEEDS 123",
-      "expect": { "category": "Investments" }
+      "expect": {
+        "category": "Investments"
+      }
+    },
+    {
+      "input": "IPO-ASBA-ZOMATO LTD-APP123",
+      "expect": {
+        "category": "Investments",
+        "matched_rule": "generic-indian-banks:ipo_asba",
+        "merchant": null
+      }
     }
   ]
 }

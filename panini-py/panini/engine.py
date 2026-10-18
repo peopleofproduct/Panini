@@ -200,8 +200,9 @@ def compile_rule_sets(rule_sets: list[dict[str, Any]]) -> list[Pattern]:
 def load_builtin_rules(rules_dir: Path) -> tuple[list[dict], dict[str, str]]:
     grammars, corpus = [], {}
     for path in sorted(rules_dir.glob("*.json")):
-        if path.name == "categories.json":
-            corpus = json.loads(path.read_text())
+        if path.name in ("categories.json", "taxonomy.json"):
+            if path.name == "categories.json":
+                corpus = json.loads(path.read_text())
             continue
         grammars.append(json.loads(path.read_text()))
     return grammars, corpus

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Gold narration → flat category set covering all 39 taxonomy values plus the Uncategorized control. One verified shape per category; this is the coverage gate that keeps the legacy `category` field honest.",
+  "description": "Gold narration → flat category set covering all 43 taxonomy values plus the Uncategorized control. One verified shape per category; this is the coverage gate that keeps the legacy `category` field honest.",
   "cases": [
     { "input": "UPI-DR-402512345678-SWIGGY-okaxis", "expect": { "category": "Food & Dining" } },
     { "input": "UPI-DR-123456789-DMART-okaxis", "expect": { "category": "Groceries" } },
@@ -53,6 +53,16 @@
       "input": "NEFT-UTIB0001234-LEGAL FEE-ADVOCATE",
       "expect": { "category": "Legal & Compliance" }
     },
-    { "input": "NACH-DR-SOMEBILLER-99887", "expect": { "category": "Uncategorized" } }
+    { "input": "DBT/LPG SUBSIDY/2026", "expect": { "category": "Government Benefits" } },
+    { "input": "POS 4455 LIQUOR SHOP", "expect": { "category": "Alcohol & Bars" } },
+    { "input": "POS 4455 VETERINARY HOSPITAL", "expect": { "category": "Pet Care" } },
+    { "input": "POS 4455 PEPPERFRY", "expect": { "category": "Home & Furniture" } },
+    {
+      "input": "IPO-ASBA-ZOMATO LTD-APP123",
+      "expect": { "category": "Investments" }
+    },
+    { "input": "NACH-DR-SOMEBILLER-99887", "expect": { "category": "Uncategorized" } },
+    { "input": "WIRE MESH SUPPLIERS-1122", "expect": { "category": "Uncategorized" } },
+    { "input": "FUND COLLECTION DRIVE", "expect": { "category": "Uncategorized" } }
   ]
 }

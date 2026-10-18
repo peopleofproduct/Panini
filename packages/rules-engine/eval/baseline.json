@@ -2,15 +2,15 @@
   "version": 1,
   "sets": {
     "narration": {
-      "total": 37,
-      "passed": 37,
+      "total": 38,
+      "passed": 38,
       "passRate": 1,
-      "avgConfidence": 0.8499999999999996,
-      "ruleMatchRate": 0.8648648648648649
+      "avgConfidence": 0.8513157894736839,
+      "ruleMatchRate": 0.868421052631579
     },
     "category": {
-      "total": 40,
-      "passed": 40,
+      "total": 47,
+      "passed": 47,
       "passRate": 1,
       "avgConfidence": 0,
       "ruleMatchRate": 0

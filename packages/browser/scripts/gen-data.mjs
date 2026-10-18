@@ -16,9 +16,10 @@ const entitiesDir = join(rulesDir, 'entities');
 const formatsDir = join(here, '../../extract/formats');
 
 const ruleFiles = readdirSync(rulesDir)
-  .filter((f) => f.endsWith('.json') && f !== 'categories.json')
+  .filter((f) => f.endsWith('.json') && !['categories.json', 'taxonomy.json'].includes(f))
   .sort();
 const categories = JSON.parse(readFileSync(join(rulesDir, 'categories.json'), 'utf8'));
+const taxonomy = JSON.parse(readFileSync(join(rulesDir, 'taxonomy.json'), 'utf8'));
 const ruleSets = ruleFiles.map((f) => JSON.parse(readFileSync(join(rulesDir, f), 'utf8')));
 
 const dictionaries = {
@@ -48,6 +49,8 @@ export const RULE_SET_FILES = ${JSON.stringify(ruleFiles)} as const;
 export const RULE_SETS = ${JSON.stringify(ruleSets)} as unknown as readonly GrammarRuleSet[];
 
 export const CATEGORIES = ${JSON.stringify(categories)} as Record<string, string>;
+
+export const TAXONOMY = ${JSON.stringify(taxonomy)} as const;
 
 export const DICTIONARIES = ${JSON.stringify(dictionaries)} as DictionaryData;
 

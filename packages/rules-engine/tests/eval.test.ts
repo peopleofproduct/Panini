@@ -10,7 +10,7 @@
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { lookupMerchant, parseBankNarration } from '../src';
+import { loadCategories, loadTaxonomy, lookupMerchant, parseBankNarration } from '../src';
 import type { MerchantEntry } from '../src/dictionary';
 
 interface GoldCase {
@@ -165,5 +165,20 @@ describe('eval — gold sets', () => {
         );
     }
     expect(regressions).toEqual([]);
+  });
+});
+
+describe('taxonomy governance', () => {
+  it('categories.json labels and taxonomy.json entries stay in lockstep', () => {
+    const labels = new Set(Object.values(loadCategories()));
+    const taxonomy = loadTaxonomy();
+    const known = new Set(Object.keys(taxonomy.categories));
+    expect([...labels].filter((l) => !known.has(l))).toEqual([]);
+    expect([...known].filter((l) => !labels.has(l))).toEqual([]);
+    for (const [label, entry] of Object.entries(taxonomy.categories)) {
+      expect(entry.id.length).toBeGreaterThan(0);
+      expect(entry.group.length).toBeGreaterThan(0);
+      expect(label).not.toBe('Uncategorized');
+    }
   });
 });
