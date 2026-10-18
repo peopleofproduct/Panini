@@ -12,10 +12,18 @@ from .extract import (  # noqa: F401
     parse_statement_date,
 )
 from .insights import analyze_transactions  # noqa: F401
+from .drift import (  # noqa: F401
+    analyze_narration_batch,
+    corpus_baseline,
+    skeleton_of,
+)
+from .suggest import suggest_grammar_rule  # noqa: F401
 
-__version__ = "0.3.0"
+__version__ = "0.3.3"
 __all__ = [
     "Normalizer", "parse_narration", "parse_indian_date",
     "is_plausible_date", "tokenize", "extract_csv_statement",
     "extract_sms", "parse_statement_date", "analyze_transactions",
+    "analyze_narration_batch", "corpus_baseline", "skeleton_of",
+    "suggest_grammar_rule",
 ]

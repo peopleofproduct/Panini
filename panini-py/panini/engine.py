@@ -549,10 +549,25 @@ def _grammar_assigned(matched_rule: Optional[str], patterns: list) -> bool:
 
 
 def parse_narration(input_: str | dict, *, enrich: bool = True,
-                    rules_dir: Optional[Path] = None) -> dict[str, Any]:
+                    rules_dir: Optional[Path] = None,
+                    rule_sets: Optional[list[dict]] = None,
+                    bare: bool = False) -> dict[str, Any]:
     """Parse a bank narration into the flattened ParsedBankNarration shape —
-    the same output contract as parseBankNarration() in TypeScript."""
-    norm, entities = _normalizer_for(rules_dir or _RULES_DIR)
+    the same output contract as parseBankNarration() in TypeScript.
+
+    `rule_sets` mirrors the TS `ruleSets` option: extra grammar rule sets
+    (as parsed JSON dicts) merged *after* the bundled sets — the seam used
+    by local hotfix overlays and suggestion self-tests. `bare=True` mirrors
+    the TS `bare` option: skip bundled rules entirely."""
+    if rule_sets or bare:
+        rd = (rules_dir or _RULES_DIR).resolve()
+        builtin, categories = load_builtin_rules(rd)
+        norm = Normalizer(
+            ([] if bare else builtin) + list(rule_sets or []), categories
+        )
+        entities = _load_entities(rd)
+    else:
+        norm, entities = _normalizer_for(rules_dir or _RULES_DIR)
     txn = norm.normalize(input_)
 
     merchant_entry = vpa_info = ifsc_info = mcc_info = None

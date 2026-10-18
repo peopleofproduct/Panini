@@ -1,0 +1,61 @@
+{
+  "bank": "WALLET",
+  "samples": [
+    {
+      "input": "PAYTM-ZOMATO-123456789012",
+      "expect": { "channel": "WALLET", "merchant": "Zomato", "ref_no": "123456789012" }
+    },
+    {
+      "input": "PHONEPE-UBER-445566",
+      "expect": { "channel": "WALLET", "merchant": "Uber", "ref_no": "445566" }
+    },
+    {
+      "input": "GPAY-LOCAL KIRANA STORE-778899",
+      "expect": { "channel": "WALLET", "counterparty": "LOCAL Kirana STORE", "ref_no": "778899" }
+    },
+    {
+      "input": "ADD MONEY TO PAYTM WALLET",
+      "expect": { "channel": "WALLET", "type": "DEBIT", "category": "Wallet Top-up" }
+    },
+    {
+      "input": "AMAZON PAY-SHOPPING ORDER-112233",
+      "expect": { "channel": "WALLET", "merchant": "Shopping ORDER", "ref_no": "112233" }
+    },
+    {
+      "input": "UPI/20261015/DR/123456789012/JOHN@axisb/PAYMENT/",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "counterparty": "JOHN",
+        "vpa": "axisb",
+        "vpa_app": "CRED",
+        "vpa_bank": "Axis Bank"
+      }
+    },
+    {
+      "input": "UPI/20261015/CR/987654321098/JANE@wasbi/GIFT/",
+      "expect": {
+        "channel": "UPI",
+        "type": "CREDIT",
+        "counterparty": "JANE",
+        "vpa": "wasbi",
+        "vpa_app": "WhatsApp Pay",
+        "vpa_bank": "State Bank of India"
+      }
+    },
+    {
+      "input": "UPI/20261015/DR/112233445566/RAJ@naviaxis/P2P/",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "counterparty": "RAJ",
+        "vpa": "naviaxis",
+        "vpa_app": "Navi"
+      }
+    },
+    {
+      "input": "UPI/20261015/CR/223344556677/SELF@upi/TOPUP/",
+      "expect": { "channel": "UPI", "type": "CREDIT", "vpa": "upi", "vpa_app": "BHIM" }
+    }
+  ]
+}

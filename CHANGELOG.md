@@ -44,6 +44,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New doc: `docs/rules-hotpatch.md` — the full detect → diagnose →
     overlay-patch → upstream playbook. Grammar fixes ship as JSON rule
     files via `loadRuleSets(dir)` — no engine redeploy required.
+- **`panini-parser` 0.3.3 (Python parity)** — same drift kit on the
+  Python engine: `analyze_narration_batch`, `corpus_baseline`,
+  `skeleton_of`, `suggest_grammar_rule` (identical corpus self-test),
+  plus `parse_narration(..., rule_sets=[...], bare=True)` mirroring the
+  TS overlay options. Corpus fixtures now ship inside the wheel
+  (`rules/corpus/*.json`, guarded by a bundled-drift test).
 
 ## [0.3.2] — 2026-10-18 — Phase 0 defect sweep (extraction + narration)
 

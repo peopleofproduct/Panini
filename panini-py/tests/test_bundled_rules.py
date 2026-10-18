@@ -36,6 +36,19 @@ class BundledRulesDrift(unittest.TestCase):
                 f"bundled {name} diverged from packages/rules-engine/rules/{name}",
             )
 
+    def test_corpus_present_and_identical(self):
+        src_corpus = SRC / "corpus"
+        bnd_corpus = BUNDLED / "corpus"
+        src_files = {p.name for p in src_corpus.glob("*.json")}
+        bnd_files = {p.name for p in bnd_corpus.glob("*.json")}
+        self.assertEqual(src_files, bnd_files, "bundled corpus diverged — re-sync")
+        for name in src_files:
+            self.assertEqual(
+                json.loads((src_corpus / name).read_text()),
+                json.loads((bnd_corpus / name).read_text()),
+                f"bundled corpus/{name} diverged",
+            )
+
     def test_entities_present_and_identical(self):
         src_ent = SRC / "entities"
         bnd_ent = BUNDLED / "entities"

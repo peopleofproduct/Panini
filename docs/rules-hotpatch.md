@@ -70,7 +70,8 @@ parseBankNarration(text, { ruleSets });
 
 Restart the process — new format parses. Total outage: one JSON file + a
 restart, measured in minutes, no dependency bumps, no redeploy of the
-engine itself.
+engine itself. The Python engine has the identical seam:
+`panini.parse_narration(text, rule_sets=[json.loads(...)])`.
 
 ## 4. Upstream — make it permanent for everyone
 

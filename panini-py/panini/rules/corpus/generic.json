@@ -1,0 +1,215 @@
+{
+  "bank": "GENERIC",
+  "samples": [
+    {
+      "input": "UPIAUTOPAY-NETFLIX-REF123456",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "category": "Subscriptions",
+        "merchant": "Netflix"
+      }
+    },
+    {
+      "input": "MANDATE-ICICI PRUDENTIAL-567890",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "category": "Subscriptions"
+      }
+    },
+    {
+      "input": "AMB CHG-JUL26-CRNBR123",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Bank Charges"
+      }
+    },
+    {
+      "input": "SMS CHG-QTR-4567",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Bank Charges"
+      }
+    },
+    {
+      "input": "BBPS-BESCOM-999888777",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Utilities",
+        "counterparty": "Bescom"
+      }
+    },
+    {
+      "input": "REFUND-FLIPKART-ORD998877",
+      "expect": {
+        "type": "REFUND",
+        "category": "Refunds",
+        "merchant": "Flipkart"
+      }
+    },
+    {
+      "input": "CHQ RET-123456",
+      "expect": {
+        "channel": "CHEQUE"
+      }
+    },
+    {
+      "input": "DISB-LN789456123-HDFC LTD",
+      "expect": {
+        "type": "CREDIT",
+        "category": "Loan & EMI",
+        "ref_no": "LN789456123"
+      }
+    },
+    {
+      "input": "INT.PD-ACME-2026",
+      "expect": {
+        "type": "CREDIT",
+        "category": "Income"
+      }
+    },
+    {
+      "input": "DIV-HDFC BANK-Q2FY26",
+      "expect": {
+        "type": "CREDIT",
+        "category": "Income",
+        "counterparty": "HDFC BANK"
+      }
+    },
+    {
+      "input": "GST-CBIC-2026OCT",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Taxes"
+      }
+    },
+    {
+      "input": "PENSION-EPFO-SEP2026",
+      "expect": {
+        "type": "CREDIT",
+        "category": "Income",
+        "counterparty": "EPFO"
+      }
+    },
+    {
+      "input": "INTL-AMAZON UK-4567",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Forex",
+        "counterparty": "Amazon UK",
+        "merchant": "Amazon"
+      }
+    },
+    {
+      "input": "NACH-ABC FINANCE-EMI-123456",
+      "expect": {
+        "channel": "NACH",
+        "type": "DEBIT",
+        "category": "Loan & EMI"
+      }
+    },
+    {
+      "input": "POS 415982XXXXXX0342 SWIGGY",
+      "expect": {
+        "channel": "POS",
+        "type": "DEBIT",
+        "counterparty": "Swiggy"
+      }
+    },
+    {
+      "input": "POS 4111********1111 MYNTRA",
+      "expect": {
+        "channel": "POS",
+        "type": "DEBIT",
+        "counterparty": "Myntra"
+      }
+    },
+    {
+      "input": "NACH-DR-ICIC-HOME LOAN-984512",
+      "expect": {
+        "channel": "NACH",
+        "type": "DEBIT",
+        "category": "Loan & EMI"
+      }
+    },
+    {
+      "input": "MANDATE-123456789-SIP IN MF",
+      "expect": {
+        "channel": "UPI",
+        "type": "DEBIT",
+        "category": "Subscriptions"
+      }
+    },
+    {
+      "input": "CHQ DEP 00123456 ACME CORP",
+      "expect": {
+        "channel": "CHEQUE",
+        "type": "CREDIT",
+        "ref_no": "00123456"
+      }
+    },
+    {
+      "input": "NACH-DR-NETFLIX-99887",
+      "expect": {
+        "channel": "NACH",
+        "type": "DEBIT",
+        "category": "Subscriptions",
+        "merchant": "Netflix"
+      }
+    },
+    {
+      "input": "CHQ PAID-MICR INWARD CLEARING-000123",
+      "expect": {
+        "channel": "CHEQUE",
+        "type": "DEBIT",
+        "ref_no": "000123"
+      }
+    },
+    {
+      "input": "IB FUNDS TRANSFER TO SELF 1234",
+      "expect": {
+        "category": "Transfers"
+      }
+    },
+    {
+      "input": "CASH DEPOSIT BY SELF",
+      "expect": {
+        "category": "Cash Deposit"
+      }
+    },
+    {
+      "input": "BIL/BPAY/000123456/BSES RAJDHANI/CRN12345",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Utilities",
+        "counterparty": "BSES Rajdhani",
+        "ref_no": "000123456"
+      }
+    },
+    {
+      "input": "UPI/123456789012/Payment from PhonePe/user@ybl/YES BANK",
+      "expect": {
+        "channel": "UPI",
+        "counterparty": "User",
+        "vpa": "ybl",
+        "ref_no": "123456789012"
+      }
+    },
+    {
+      "input": "UPI-RAMESH KUMAR-ramesh@okhdfcbank-HDFC0001234-123456789012-Sent via UPI",
+      "expect": {
+        "channel": "UPI",
+        "counterparty": "Ramesh KUMAR",
+        "vpa": "okhdfcbank",
+        "ref_no": "123456789012"
+      }
+    },
+    {
+      "input": "FD CLOSURE PROCEEDS 123",
+      "expect": {
+        "category": "Investments"
+      }
+    }
+  ]
+}
