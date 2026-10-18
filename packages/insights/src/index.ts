@@ -15,8 +15,20 @@
  */
 
 export { analyzeTransactions, RULE_IDS } from './analyze';
+export { consolidateAccounts } from './consolidate';
+export { detectFraudIndicators, detectPortfolioIndicators, FRAUD_RULE_IDS } from './fraud';
 export { evaluateScorecard, validateScorecardSpec, ScorecardSpecError } from './scorecard';
 export { detectMonitoringEvents, runMonitorCycle, statementDiff } from './monitor';
+export type {
+  AccountRollup,
+  AccountSlice,
+  ConsolidatedFlow,
+  ConsolidationOptions,
+  DuplicateTxn,
+  InternalTransfer,
+  PortfolioReport,
+} from './consolidate';
+export type { FraudOptions, FraudReport } from './fraud';
 export type {
   AlertSink,
   MonitorCycleOptions,

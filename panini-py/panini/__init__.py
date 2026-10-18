@@ -13,6 +13,12 @@ from .extract import (  # noqa: F401
     parse_statement_date,
 )
 from .insights import analyze_transactions  # noqa: F401
+from .consolidate import consolidate_accounts  # noqa: F401
+from .fraud import (  # noqa: F401
+    detect_fraud_indicators,
+    detect_portfolio_indicators,
+    FRAUD_RULE_IDS,
+)
 from .drift import (  # noqa: F401
     analyze_narration_batch,
     corpus_baseline,
@@ -39,4 +45,6 @@ __all__ = [
     "suggest_grammar_rule",
     "evaluate_scorecard", "validate_scorecard_spec", "ScorecardSpecError",
     "reconcile_with_aa", "transactions_from_aa_data",
+    "consolidate_accounts", "detect_fraud_indicators",
+    "detect_portfolio_indicators", "FRAUD_RULE_IDS",
 ]

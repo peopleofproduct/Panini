@@ -15,7 +15,13 @@
  */
 
 import type { ExtractOptions, StatementFormat } from '@paniniapi/extract';
-import type { InsightsOptions, InsightsReport } from '@paniniapi/insights';
+import type {
+  FraudOptions,
+  FraudReport,
+  InsightsOptions,
+  InsightsReport,
+  PortfolioReport,
+} from '@paniniapi/insights';
 import type { ParsedBankNarration } from '@paniniapi/rules-engine';
 import type { IntegrityVerdict, ReconcileVerdict } from '@paniniapi/forensics';
 
@@ -100,6 +106,15 @@ export interface BsaReport {
   readonly statements: readonly StatementResult[];
   readonly summary: BsaSummary;
   readonly insights: InsightsReport;
+  /**
+   * Named fraud-indicator findings — pooled single-statement rules plus
+   * portfolio-level checks (cross-account rotation, inflated turnover).
+   * Null when `BsaOptions.fraud === false`.
+   */
+  readonly fraud: FraudReport | null;
+  /** Multi-account consolidation: per-account rollups, internal transfers,
+   *  cross-statement duplicates, external-only flow totals. */
+  readonly portfolio: PortfolioReport | null;
   readonly transactions: readonly EnrichedTransaction[];
 }
 
@@ -111,6 +126,9 @@ export interface BsaOptions extends ExtractOptions {
   /** PEM roots or X509Certificate anchors for PDF signature chain checks. */
   readonly trustStore?: readonly string[];
   readonly insightsOptions?: InsightsOptions;
+  /** Fraud-indicator suite (pooled + portfolio). Default true. */
+  readonly fraud?: boolean;
+  readonly fraudOptions?: FraudOptions;
   /**
    * Decrypted ReBIT AA FI payload (or a bare transaction array). When
    * supplied, every extracted statement is reconciled against the bank's

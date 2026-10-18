@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Fraud-indicator suite + multi-account consolidation**
+  (`@paniniapi/insights`) — `detectFraudIndicators` runs the
+  industry-standard named checks (circular in/out pairs across
+  different counterparties, holiday/weekend cash deposits, RTGS below
+  the ₹2L floor, round-figure clustering, zero-transaction gap months,
+  wash months, salary-stop and salary-strip patterns, dormant→spike,
+  overdrawn days, minimum-balance penalties) — every flag a rule ID +
+  evidence indices. `consolidateAccounts` merges a borrower's full
+  account set: per-account rollups, inter-account transfer legs
+  detected by amount+window and netted out of consolidated flow, and
+  cross-statement refNo duplicates flagged. `detectPortfolioIndicators`
+  adds the checks that only exist across accounts — `A→B→A` rotation
+  cycles and own-account-inflated turnover. Python parity:
+  `detect_fraud_indicators`, `detect_portfolio_indicators`,
+  `consolidate_accounts`. See `docs/fraud-indicators.md`.
+- **`panini-bsa` fraud + portfolio sections** — the CLI report now
+  carries a "Fraud Indicators" section and a "Multi-Account
+  Consolidation" table with external-only turnover; `--fail-on-fraud`
+  exits `5` on any high-severity indicator, `--no-fraud` skips the
+  suite.
 - **RBI-licensed entity names** — `bank-names.json` now covers ~120
   entities: all scheduled commercial banks, SFBs, payments banks,
   major scheduled UCBs (SVC, Saraswat, Cosmos, TJSB, Abhyudaya, …),

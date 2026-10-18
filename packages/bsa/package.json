@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/bsa",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "BSA-in-a-box \u2014 turnkey bank statement analysis: statement files in, enriched transactions + deterministic credit-relevant report (JSON + Markdown) out. Fully client-side, zero telemetry, zero implicit network calls.",
   "license": "Apache-2.0",
   "author": "Kapil",
@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@paniniapi/extract": "0.5.0",
-    "@paniniapi/insights": "0.3.1",
+    "@paniniapi/insights": "0.4.0",
     "@paniniapi/rules-engine": "0.2.3",
     "@paniniapi/forensics": "0.2.2"
   },

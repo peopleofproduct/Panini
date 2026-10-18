@@ -36,6 +36,8 @@ Options:
   --aa <file>           Decrypted AA FI payload (JSON) — reconciles every
                         statement against the bank's own feed. Exit 4 on
                         fabrication_evidence.
+  --no-fraud            Skip the fraud-indicator suite
+  --fail-on-fraud       Exit 5 when any HIGH-severity fraud indicator fires
   -h, --help            Show this help
 
 Outputs: bsa-report.json + bsa-report.md. All analysis is local —
@@ -118,6 +120,7 @@ async function main(): Promise<number> {
 
   const files: { name: string; data: Uint8Array }[] = [];
   let outDir = './bsa-report';
+  let failOnFraud = false;
   const opts: Record<string, unknown> = {};
   for (let i = 0; i < args.length; i++) {
     const a = args[i]!;
@@ -131,6 +134,10 @@ async function main(): Promise<number> {
       opts['enrich'] = false;
     } else if (a === '--no-forensics') {
       opts['forensics'] = false;
+    } else if (a === '--no-fraud') {
+      opts['fraud'] = false;
+    } else if (a === '--fail-on-fraud') {
+      failOnFraud = true;
     } else if (a === '--aa') {
       const p = args[++i];
       if (p === undefined) {
@@ -170,8 +177,13 @@ async function main(): Promise<number> {
       console.error(`✗ ${s.name}: FABRICATION EVIDENCE vs AA feed — ${s.reconciliation.summary}`);
     }
   }
+  const fraudHigh = report.fraud?.indicators.filter((s) => s.severity === 'high') ?? [];
+  for (const s of fraudHigh) {
+    console.error(`⚠ fraud indicator: ${s.ruleId} — ${s.note}`);
+  }
   if (fabricated) return 4;
   if (tampered) return 3;
+  if (failOnFraud && fraudHigh.length > 0) return 5;
   return report.summary.totalTransactions === 0 ? 2 : 0;
 }
 

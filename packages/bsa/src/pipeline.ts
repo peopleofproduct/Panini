@@ -16,8 +16,13 @@
 
 import { extractStatement } from '@paniniapi/extract';
 import { inspectStatement, reconcileWithAa, transactionsFromAaData } from '@paniniapi/forensics';
-import type { InsightTransaction } from '@paniniapi/insights';
-import { analyzeTransactions } from '@paniniapi/insights';
+import type { AccountSlice, InsightTransaction } from '@paniniapi/insights';
+import {
+  analyzeTransactions,
+  consolidateAccounts,
+  detectFraudIndicators,
+  detectPortfolioIndicators,
+} from '@paniniapi/insights';
 import { parseBankNarration } from '@paniniapi/rules-engine';
 import type { BsaInputFile, BsaOptions, BsaReport, EnrichedTransaction } from './types';
 
@@ -35,6 +40,7 @@ export async function analyzeStatementFiles(
   const enrich = options.enrich !== false;
   const statements: BsaReport['statements'][number][] = [];
   const enriched: EnrichedTransaction[] = [];
+  const enrichedByFile: InsightTransaction[][] = [];
   const aaTransactions =
     options.aaData === undefined ? null : transactionsFromAaData(options.aaData);
 
@@ -80,9 +86,10 @@ export async function analyzeStatementFiles(
       integrity,
       reconciliation,
     });
+    const fileRows: InsightTransaction[] = [];
     for (const t of st.transactions) {
       const parsed = enrich ? parseBankNarration(t.narration) : null;
-      enriched.push({
+      const row: EnrichedTransaction = {
         date: t.date,
         narration: t.narration,
         refNo: t.refNo,
@@ -100,8 +107,23 @@ export async function analyzeStatementFiles(
         vpaApp: parsed?.vpa_app ?? null,
         ifscBank: parsed?.ifsc_bank ?? null,
         fileIndex,
+      };
+      enriched.push(row);
+      fileRows.push({
+        date: row.date,
+        narration: row.narration,
+        refNo: row.refNo,
+        direction: row.direction === 'UNKNOWN' ? null : row.direction,
+        amountPaise: row.amountPaise,
+        balancePaise: row.balancePaise,
+        counterparty: row.merchantCanonical ?? row.counterparty,
+        merchant: row.merchantCanonical ?? row.merchant,
+        category: row.category,
+        channel: row.channel,
+        is_salary: row.is_salary,
       });
     }
+    enrichedByFile.push(fileRows);
   }
 
   const insightsInput: InsightTransaction[] = enriched.map((t) => {
@@ -122,6 +144,28 @@ export async function analyzeStatementFiles(
   });
   const insights = analyzeTransactions(insightsInput, options.insightsOptions);
 
+  // Fraud indicators: pooled single-statement rules plus the portfolio-level
+  // checks that only exist across the borrower's full account set.
+  const fraud =
+    options.fraud === false ? null : detectFraudIndicators(insightsInput, options.fraudOptions);
+  const slices: AccountSlice[] = statements.map((s, fi) => ({
+    accountKey: `${s.bank ?? 'BANK'}-${s.accountMask ?? `file-${fi}`}`,
+    accountMask: s.accountMask,
+    bank: s.bank,
+    transactions: enrichedByFile[fi] ?? [],
+  }));
+  const portfolio =
+    options.fraud === false ? null : consolidateAccounts(slices, options.fraudOptions);
+  const portfolioFraud =
+    options.fraud === false ? null : detectPortfolioIndicators(slices, options.fraudOptions);
+  const fraudReport =
+    fraud === null
+      ? null
+      : {
+          indicators: [...fraud.indicators, ...(portfolioFraud?.indicators ?? [])],
+          warnings: [...fraud.warnings, ...(portfolioFraud?.warnings ?? [])],
+        };
+
   const dates = enriched
     .map((t) => t.date)
     .filter((d): d is string => d !== null)
@@ -141,6 +185,8 @@ export async function analyzeStatementFiles(
       accounts,
     },
     insights,
+    fraud: fraudReport,
+    portfolio,
     transactions: enriched,
   };
 }

@@ -51,13 +51,13 @@ const BOUNCE_RE =
 const SELF_RE =
   /\b(self|own\s*a\/?c|own\s*(?:acct|account|transfer|trf)|trf\s*to\s*self|self\s*trf|by\s*self|to\s*self)\b/i;
 
-const DAY_MS = 86_400_000;
+export const DAY_MS = 86_400_000;
 
-function monthKey(date: string | null): string | null {
+export function monthKey(date: string | null): string | null {
   return date !== null && /^\d{4}-\d{2}/.test(date) ? date.slice(0, 7) : null;
 }
 
-function epochDay(date: string | null): number | null {
+export function epochDay(date: string | null): number | null {
   if (date === null) return null;
   // Accept ISO date-time inputs ('2024-01-15T10:30:00Z', the AA
   // transactionTimestamp shape) by reducing to their date component.
@@ -67,7 +67,7 @@ function epochDay(date: string | null): number | null {
 }
 
 /** Uppercase alnum counterparty key for grouping 'SWIGGY BUNDL' ~ 'Swiggy'. */
-function counterpartyKey(txn: InsightTransaction): string | null {
+export function counterpartyKey(txn: InsightTransaction): string | null {
   const raw = txn.merchant ?? txn.counterparty;
   if (raw !== null && raw !== undefined && raw.trim() !== '') {
     const k = raw
@@ -89,13 +89,13 @@ function counterpartyKey(txn: InsightTransaction): string | null {
   return /^[A-Za-z][A-Za-z0-9 &]{2,30}$/.test(cleaned) ? cleaned.toUpperCase() : null;
 }
 
-function median(values: readonly number[]): number {
+export function median(values: readonly number[]): number {
   const sorted = [...values].sort((a, b) => a - b);
   const mid = Math.floor(sorted.length / 2);
   return sorted.length % 2 === 1 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
 }
 
-function withinTolerance(a: number, b: number, tolerance: number): boolean {
+export function withinTolerance(a: number, b: number, tolerance: number): boolean {
   return Math.abs(a - b) <= Math.max(a, b) * tolerance;
 }
 

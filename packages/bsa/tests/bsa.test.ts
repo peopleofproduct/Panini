@@ -164,6 +164,47 @@ describe('analyzeStatementFiles', () => {
     expect(report.transactions.every((t) => t.category === 'Uncategorized')).toBe(true);
     expect(report.transactions.every((t) => !t.is_salary)).toBe(true);
   });
+
+  it('surfaces fraud indicators + multi-account consolidation', async () => {
+    const header =
+      'HDFC BANK LTD.\nStatement From 01/01/26 To 31/01/26\n' +
+      'Date,Narration,Chq./Ref.No.,Value Dt,Withdrawal Amt.,Deposit Amt.,Closing Balance\n';
+    // Two accounts, same borrower's money rotating A→B (₹50,000 out of A,
+    // ₹50,000 into B next day) — portfolio-level detection.
+    const acctA =
+      header +
+      '01/01/26,NEFT-SALARY-ACME,S1,01/01/26,,75000.00,100000.00\n' +
+      '05/01/26,NEFT TO ALPHA,S2,05/01/26,50000.00,,50000.00\n';
+    const acctB =
+      header +
+      '06/01/26,NEFT FROM A OWN,B1,06/01/26,,50000.00,51000.00\n' +
+      '10/01/26,UPI-SWIGGY,B2,10/01/26,450.00,,50550.00\n';
+    const report = await analyzeStatementFiles([
+      { name: 'a.csv', data: acctA },
+      { name: 'b.csv', data: acctB },
+    ]);
+    expect(report.fraud).not.toBeNull();
+    expect(report.portfolio).not.toBeNull();
+    // Two files with no detected masks → distinct accountKeys.
+    expect(report.portfolio!.accounts).toHaveLength(2);
+    // ₹50k debit in file-a mirrored by ₹50k credit in file-b.
+    const internal = report.portfolio!.internalTransfers;
+    expect(internal.length).toBeGreaterThanOrEqual(1);
+    expect(internal[0]!.amountPaise).toBe(50000_00);
+    // External turnover nets out the internal legs.
+    expect(report.portfolio!.consolidated.externalCreditsPaise).toBe(75000_00);
+    const md = renderMarkdown(report);
+    expect(md).toContain('## Fraud Indicators');
+    expect(md).toContain('## Multi-Account Consolidation');
+  });
+
+  it('fraud:false leaves fraud and portfolio null', async () => {
+    const report = await analyzeStatementFiles([csvFile('a.csv', 'hdfc_statement', 7)], {
+      fraud: false,
+    });
+    expect(report.fraud).toBeNull();
+    expect(report.portfolio).toBeNull();
+  });
 });
 
 describe('formatInr — Indian digit grouping', () => {

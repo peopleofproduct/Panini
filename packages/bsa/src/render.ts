@@ -155,6 +155,49 @@ export function renderMarkdown(report: BsaReport): string {
     lines.push('');
   }
 
+  if (report.fraud !== null) {
+    lines.push('## Fraud Indicators', '');
+    if (report.fraud.indicators.length === 0) {
+      lines.push('None detected.', '');
+    } else {
+      lines.push(
+        '> **Indicators are anomaly patterns, not proof — every flag carries evidence rows for review.**',
+        '',
+      );
+      for (const s of report.fraud.indicators) {
+        lines.push(`- **[${s.severity.toUpperCase()}] ${s.ruleId}** — ${s.note}`);
+      }
+      lines.push('');
+    }
+  }
+
+  if (report.portfolio !== null && report.portfolio.accounts.length > 1) {
+    const p = report.portfolio;
+    lines.push('## Multi-Account Consolidation', '');
+    lines.push(
+      '| Account | Bank | Txns | Credits | Debits | Period |',
+      '| --- | --- | --- | --- | --- | --- |',
+    );
+    for (const a of p.accounts) {
+      lines.push(
+        `| ${a.accountKey} | ${a.bank ?? '—'} | ${a.txnCount} | ${formatInr(a.totalCreditsPaise)} | ${formatInr(a.totalDebitsPaise)} | ${a.periodStart ?? '—'}→${a.periodEnd ?? '—'} |`,
+      );
+    }
+    lines.push('');
+    lines.push(
+      `- **External turnover:** ${formatInr(p.consolidated.externalCreditsPaise)} credits / ${formatInr(p.consolidated.externalDebitsPaise)} debits`,
+    );
+    lines.push(
+      `- **Internal transfers netted:** ${p.internalTransfers.length} leg-pair(s), ${formatInr(p.consolidated.internalVolumePaise)} volume`,
+    );
+    if (p.duplicates.length > 0) {
+      lines.push(
+        `- **Cross-statement duplicates:** ${p.duplicates.length} row(s) share refNo+amount+date`,
+      );
+    }
+    lines.push('');
+  }
+
   if (i.warnings.length > 0 || report.statements.some((s) => s.warnings.length > 0)) {
     lines.push('## Data Quality', '');
     for (const w of i.warnings) lines.push(`- ${w}`);

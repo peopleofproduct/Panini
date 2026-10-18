@@ -78,8 +78,20 @@ export function extractSmsText(text: string, options?: { bankHint?: string }): E
   return extractSms(text, SMS_PATTERNS, options ?? {});
 }
 
-export { analyzeTransactions } from '@paniniapi/insights';
-export type { InsightTransaction, InsightsReport } from '@paniniapi/insights';
+export {
+  analyzeTransactions,
+  consolidateAccounts,
+  detectFraudIndicators,
+  detectPortfolioIndicators,
+  FRAUD_RULE_IDS,
+} from '@paniniapi/insights';
+export type {
+  AccountSlice,
+  FraudReport,
+  InsightTransaction,
+  InsightsReport,
+  PortfolioReport,
+} from '@paniniapi/insights';
 
 export interface CsvAnalysis {
   readonly statement: ExtractedStatement;
