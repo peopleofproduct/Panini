@@ -16,6 +16,15 @@
 
 export { inspectStatement, type InspectOptions } from './report';
 export { checkConsistency } from './consistency';
+export { reconcileWithAa, transactionsFromAaData } from './reconcile';
+export type {
+  AaTransaction,
+  ReconcileField,
+  ReconcileMismatch,
+  ReconcileOptions,
+  ReconcileVerdict,
+  ReconciliationReport,
+} from './reconcile';
 export { verifyPdfSignatures, type SignatureOptions } from './pdf/signature';
 export { inspectPdfStructure, type StructureOptions } from './pdf/structure';
 export { inspectPdfContent } from './pdf/content';

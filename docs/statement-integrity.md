@@ -85,7 +85,10 @@ pretends a text format is tamper-evident.
   consistency checks still run.
 - For regulated lending, uploaded files should be a _fallback_ channel:
   Account Aggregator data (see `@paniniapi/fiu-client`) is signed by the
-  bank's FIP at source — tamper-proof by construction.
+  bank's FIP at source — tamper-proof by construction. And when both
+  channels exist, `reconcileWithAa` diffs the document against that
+  ground truth row-by-row — see
+  [`docs/aa-reconciliation.md`](./aa-reconciliation.md).
 
 ## BSA integration
 

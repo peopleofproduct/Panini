@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **AA ↔ document reconciliation** (`@paniniapi/forensics`) — the
+  ground-truth fraud check. `reconcileWithAa(statement, aaTransactions)`
+  diffs a claimed statement against the bank's own AA feed via
+  deterministic multiset matching on (date ± window, amount, direction):
+  fabricated rows the bank doesn't know and bank rows the document omits
+  are `fabrication_evidence`; narration/balance drift on matched rows is
+  a soft warning; rows outside AA coverage are `unverifiable`, not
+  accused. `transactionsFromAaData` tolerantly extracts the transaction
+  array from ReBIT FI payloads. Verdicts: `consistent` / `partial` /
+  `fabrication_evidence` / `incomparable`. New doc:
+  `docs/aa-reconciliation.md`.
 - **Degraded-scan OCR orchestration kit** (`@paniniapi/extract`) — the
   "any eyes, proven numbers" architecture for scans too degraded for
   text-layer extraction:
