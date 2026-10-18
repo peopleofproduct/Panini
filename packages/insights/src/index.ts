@@ -16,6 +16,19 @@
 
 export { analyzeTransactions, RULE_IDS } from './analyze';
 export { evaluateScorecard, validateScorecardSpec, ScorecardSpecError } from './scorecard';
+export { detectMonitoringEvents, runMonitorCycle, statementDiff } from './monitor';
+export type {
+  AlertSink,
+  MonitorCycleOptions,
+  MonitorCycleResult,
+  MonitorEventSeverity,
+  MonitoringEvent,
+  MonitorRules,
+  MonitorSnapshot,
+  SnapshotStore,
+  StatementDiff,
+  StatementSource,
+} from './monitor';
 export type {
   ScorecardBand,
   ScorecardCondition,

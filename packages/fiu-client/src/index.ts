@@ -41,6 +41,13 @@ export {
 export { xorNonces, deriveSessionKey, decryptFi, encryptFi } from './crypto';
 export { decodeJws, verifyJws, type DecodedJws } from './jws';
 export { buildConsentRequest, parseConsentArtefact } from './consent';
+export { consentStatus, sweepConsents } from './consentTrack';
+export type {
+  ConsentLifecycle,
+  ConsentStatusInfo,
+  ConsentStore,
+  ConsentSweep,
+} from './consentTrack';
 export { buildFiRequest, decryptFiResponse } from './fi';
 export { createFiuClient, type FiuClient, type FiuClientConfig, type FetchLike } from './client';
 export {

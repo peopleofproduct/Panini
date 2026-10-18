@@ -8,6 +8,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Recurring-monitoring kernel** (`@paniniapi/insights`) — the
+  open-ended answer to hosted collections/monitoring products.
+  `statementDiff` (deterministic multiset diff between snapshots) +
+  `detectMonitoringEvents` (8 rule-Id'd change events: baseline,
+  new_activity, income_source_lost, balance_drop, new_obligation,
+  obligation_stopped, new risk signals, large_debit — all thresholds
+  caller-tunable) + `runMonitorCycle` orchestrating three caller-owned
+  seams: `StatementSource` (AA pull / TSP / file drop), `SnapshotStore`
+  (any database), `AlertSink` (any webhook/queue). The lender's
+  composition is the complete product. New doc:
+  `docs/monitoring.md`.
+- **Consent-lifecycle tracking** (`@paniniapi/fiu-client`) —
+  `consentStatus(artefact, now, leadDays)` derives lifecycle state
+  (active/expiring/expired/revoked…) + renewalDue as a pure function;
+  `sweepConsents(store)` buckets every artefact in a caller-owned
+  `ConsentStore` into renewing/expired/revoked — the nightly job for
+  consent-fleet management.
 - **AA ↔ document reconciliation** (`@paniniapi/forensics`) — the
   ground-truth fraud check. `reconcileWithAa(statement, aaTransactions)`
   diffs a claimed statement against the bank's own AA feed via
