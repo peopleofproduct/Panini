@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **`@paniniapi/forensics` (0.1.0, new)** — deterministic document-integrity
+  forensics for statement files. `inspectStatement(bytes)` returns an
+  explainable `IntegrityReport` (verdict + rule-Id'd signals + evidence):
+  - **Arithmetic consistency** (all formats): running-balance chain
+    verification, opening/closing reconciliation, out-of-period dates,
+    duplicate-row fabrication detection.
+  - **PDF container signals**: incremental updates, consumer-editor
+    `/Producer` fingerprints, post-period `ModDate`, AcroForm overlays,
+    covering annotations, invisible text, stacked/overtyped fragments.
+  - **Full CMS signature validation**: `/ByteRange` digest vs CMS
+    `messageDigest`, RSA-PKCS#1/ECDSA signature over signedAttrs
+    (`node:crypto`), embedded cert chain walked to a caller-supplied
+    trust store. Post-sign appends flagged.
+- **`@paniniapi/bsa`** — per-file `integrity` verdicts in the JSON report,
+  a Document Integrity section in Markdown output, `--no-forensics` flag,
+  and exit code `3` when any file shows `tamper_evidence` (CI-gateable).
+- New doc: `docs/statement-integrity.md` — signal dictionary, verdict
+  semantics, and honest limits (deterministic evidence ≠ ML forensics;
+  AA-sourced data remains the tamper-proof channel).
+
 ## [0.3.2] — 2026-10-18 — Phase 0 defect sweep (extraction + narration)
 
 ### Added

@@ -54,14 +54,34 @@ export function renderMarkdown(report: BsaReport): string {
     '',
   );
 
-  lines.push('## Statements', '', '| File | Format | Bank | Layout | Txns | Warnings |');
-  lines.push('| --- | --- | --- | --- | --- | --- |');
+  lines.push(
+    '## Statements',
+    '',
+    '| File | Format | Bank | Layout | Txns | Warnings | Integrity |',
+  );
+  lines.push('| --- | --- | --- | --- | --- | --- | --- |');
   for (const s of report.statements) {
     lines.push(
-      `| ${s.name} | ${s.format} | ${s.bank ?? '—'} | ${s.layoutId ?? '—'} | ${s.transactionCount} | ${s.warnings.length} |`,
+      `| ${s.name} | ${s.format} | ${s.bank ?? '—'} | ${s.layoutId ?? '—'} | ${s.transactionCount} | ${s.warnings.length} | ${s.integrity?.verdict ?? '—'} |`,
     );
   }
   lines.push('');
+
+  const flagged = report.statements.filter(
+    (s) => s.integrity !== null && (s.integrity.critical > 0 || s.integrity.warnings > 0),
+  );
+  if (flagged.length > 0) {
+    lines.push('## Document Integrity', '');
+    lines.push(
+      '> **A `tamper_evidence` verdict means the file must not drive an automated approval.**',
+      '',
+    );
+    for (const s of flagged) {
+      lines.push(`### ${s.name} — ${s.integrity!.verdict}`);
+      for (const sig of s.integrity!.topSignals) lines.push(`- ${sig}`);
+      lines.push('');
+    }
+  }
 
   lines.push('## Income', '');
   lines.push(`- **Monthly average:** ${formatInr(i.income.monthlyAveragePaise)}`);

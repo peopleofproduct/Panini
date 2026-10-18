@@ -17,6 +17,7 @@
 import type { ExtractOptions, StatementFormat } from '@paniniapi/extract';
 import type { InsightsOptions, InsightsReport } from '@paniniapi/insights';
 import type { ParsedBankNarration } from '@paniniapi/rules-engine';
+import type { IntegrityVerdict } from '@paniniapi/forensics';
 
 /** One input document — bytes for PDF/XLSX/image, text for CSV/SMS. */
 export interface BsaInputFile {
@@ -36,6 +37,17 @@ export interface StatementResult {
   readonly transactionCount: number;
   readonly warnings: readonly string[];
   readonly metadata: Readonly<Record<string, string>>;
+  /**
+   * Document-integrity verdict from @paniniapi/forensics — 'tamper_evidence'
+   * means a lender must not auto-approve on this file. Omitted only when
+   * forensics is disabled via `BsaOptions.forensics === false`.
+   */
+  readonly integrity: {
+    readonly verdict: IntegrityVerdict;
+    readonly critical: number;
+    readonly warnings: number;
+    readonly topSignals: readonly string[];
+  } | null;
 }
 
 /** Enriched transaction — extracted row + narration intelligence merged. */
@@ -81,5 +93,9 @@ export interface BsaReport {
 export interface BsaOptions extends ExtractOptions {
   /** Narration enrichment via rules-engine dictionaries. Default true. */
   readonly enrich?: boolean;
+  /** Document-integrity forensics per file. Default true. */
+  readonly forensics?: boolean;
+  /** PEM roots or X509Certificate anchors for PDF signature chain checks. */
+  readonly trustStore?: readonly string[];
   readonly insightsOptions?: InsightsOptions;
 }

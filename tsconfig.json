@@ -27,6 +27,9 @@
     },
     {
       "path": "packages/browser"
+    },
+    {
+      "path": "packages/forensics"
     }
   ]
 }

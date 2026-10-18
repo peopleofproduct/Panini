@@ -51,6 +51,22 @@ describe('analyzeStatementFiles', () => {
     expect(enriched).toBeDefined();
   });
 
+  it('runs integrity forensics per file — tampered balance chain flags tamper_evidence', async () => {
+    const tampered =
+      'HDFC BANK LTD.\nStatement From 01/10/26 To 31/10/26\n' +
+      'Date,Narration,Chq./Ref.No.,Value Dt,Withdrawal Amt.,Deposit Amt.,Closing Balance\n' +
+      '15/10/26,NEFT-N1-SALARY-TCS,N1,15/10/26,,85000.00,90000.00\n' +
+      '16/10/26,UPI-X,U1,16/10/26,1250.00,,99999.00\n'; // balance chain breaks
+    const report = await analyzeStatementFiles([
+      { name: 'tampered.csv', data: tampered },
+      csvFile('clean.csv', 'hdfc_statement', 5, 10),
+    ]);
+    const t = report.statements.find((s) => s.name === 'tampered.csv');
+    expect(t?.integrity?.verdict).toBe('tamper_evidence');
+    const md = renderMarkdown(report);
+    expect(md).toContain('Document Integrity');
+  });
+
   it('never throws on garbage input — warnings only', async () => {
     const report = await analyzeStatementFiles([
       { name: 'garbage.bin', data: new Uint8Array([0, 1, 2, 3, 255]) },

@@ -15,6 +15,7 @@
  */
 
 import { extractStatement } from '@paniniapi/extract';
+import { inspectStatement } from '@paniniapi/forensics';
 import type { InsightTransaction } from '@paniniapi/insights';
 import { analyzeTransactions } from '@paniniapi/insights';
 import { parseBankNarration } from '@paniniapi/rules-engine';
@@ -37,6 +38,22 @@ export async function analyzeStatementFiles(
 
   for (const [fileIndex, file] of files.entries()) {
     const st = await extractStatement(file.data, options);
+    let integrity: BsaReport['statements'][number]['integrity'] = null;
+    if (options.forensics !== false) {
+      const report = await inspectStatement(file.data, {
+        extract: options,
+        ...(options.trustStore === undefined ? {} : { trustStore: options.trustStore }),
+      });
+      integrity = {
+        verdict: report.verdict,
+        critical: report.critical,
+        warnings: report.warningCount,
+        topSignals: report.signals
+          .filter((s) => s.severity !== 'info')
+          .slice(0, 5)
+          .map((s) => `${s.ruleId}: ${s.message}`),
+      };
+    }
     statements.push({
       name: file.name,
       format: st.format,
@@ -46,6 +63,7 @@ export async function analyzeStatementFiles(
       transactionCount: st.transactions.length,
       warnings: st.warnings,
       metadata: st.metadata,
+      integrity,
     });
     for (const t of st.transactions) {
       const parsed = enrich ? parseBankNarration(t.narration) : null;

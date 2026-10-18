@@ -30,6 +30,7 @@ Options:
   --bank <id>           Bank hint applied to all files
   --password <pw>       Password applied to protected PDFs
   --no-enrich           Skip narration enrichment (faster, coarser report)
+  --no-forensics        Skip document-integrity checks (tamper signals)
   -h, --help            Show this help
 
 Outputs: bsa-report.json + bsa-report.md. All analysis is local —
@@ -55,6 +56,8 @@ async function main(): Promise<number> {
       opts['credentials'] = { password: args[++i] };
     } else if (a === '--no-enrich') {
       opts['enrich'] = false;
+    } else if (a === '--no-forensics') {
+      opts['forensics'] = false;
     } else {
       files.push({ name: basename(a), data: new Uint8Array(readFileSync(a)) });
     }
@@ -74,9 +77,15 @@ async function main(): Promise<number> {
     `analysed ${report.summary.totalTransactions} transactions across ` +
       `${report.summary.filesProcessed} file(s) → ${outDir}/bsa-report.{json,md}`,
   );
+  let tampered = false;
   for (const s of report.statements) {
     if (s.warnings.length > 0) console.warn(`⚠ ${s.name}: ${s.warnings.length} warning(s)`);
+    if (s.integrity?.verdict === 'tamper_evidence') {
+      tampered = true;
+      console.error(`✗ ${s.name}: TAMPER EVIDENCE — ${s.integrity.topSignals.join('; ')}`);
+    }
   }
+  if (tampered) return 3;
   return report.summary.totalTransactions === 0 ? 2 : 0;
 }
 

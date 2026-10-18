@@ -10,6 +10,7 @@ module.exports = {
     '<rootDir>/packages/simulator',
     '<rootDir>/packages/bsa',
     '<rootDir>/packages/browser',
+    '<rootDir>/packages/forensics',
   ],
   coverageProvider: 'v8',
 };

@@ -31,7 +31,7 @@ Determinism: all inputs are seeded (`mulberry32`), so identical commits produce 
 ## Latest results
 
 <!-- BEGIN RESULTS -->
-_Generated 2026-10-18T09:12:52.756Z · commit 1d6ae39 · node v24.15.0_
+_Generated 2026-10-18T10:02:07.758Z · commit 0de0570 · node v24.15.0_
 
 | Layout | Rows | Exact % | Amount % | Date % | Dir % | Balance % | Layout detect % |
 | --- | --- | --- | --- | --- | --- | --- | --- |

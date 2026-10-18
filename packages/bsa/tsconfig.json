@@ -7,5 +7,18 @@
     "types": ["node"]
   },
   "include": ["src"],
-  "references": [{ "path": "../extract" }, { "path": "../insights" }, { "path": "../rules-engine" }]
+  "references": [
+    {
+      "path": "../extract"
+    },
+    {
+      "path": "../insights"
+    },
+    {
+      "path": "../rules-engine"
+    },
+    {
+      "path": "../forensics"
+    }
+  ]
 }

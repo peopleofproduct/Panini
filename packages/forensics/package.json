@@ -1,0 +1,40 @@
+{
+  "name": "@paniniapi/forensics",
+  "version": "0.1.0",
+  "description": "Deterministic document-integrity forensics for bank statements — PDF structural signals, CMS/PKCS#7 signature validation, and arithmetic consistency checks. Zero runtime dependencies, fully client-side.",
+  "license": "Apache-2.0",
+  "author": "Kapil",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "trust"
+  ],
+  "dependencies": {
+    "@paniniapi/extract": "0.2.3"
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "prepublishOnly": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peopleofproduct/Panini.git",
+    "directory": "packages/forensics"
+  },
+  "homepage": "https://github.com/peopleofproduct/Panini#readme",
+  "bugs": "https://github.com/peopleofproduct/Panini/issues",
+  "keywords": [
+    "fintech",
+    "india",
+    "bank-statement",
+    "pdf",
+    "forensics",
+    "tamper-detection",
+    "document-integrity",
+    "lending"
+  ]
+}
