@@ -29,7 +29,7 @@ from .reconcile import (  # noqa: F401
     transactions_from_aa_data,
 )
 
-__version__ = "0.5.0"
+__version__ = "0.5.1"
 __all__ = [
     "Normalizer", "parse_narration", "parse_indian_date",
     "is_plausible_date", "tokenize", "extract_csv_statement",

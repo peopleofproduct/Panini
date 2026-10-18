@@ -71,6 +71,73 @@
       }
     },
     {
+      "id": "axis_statement_v2",
+      "bank": "AXIS",
+      "requiredHeaders": ["srl no", "tran date"],
+      "columns": {
+        "date": ["tran date", "transaction date"],
+        "narration": ["transaction particulars", "particulars", "description"],
+        "refNo": ["chqno", "chq no", "ref no"],
+        "debit": ["debit", "dr", "withdrawal"],
+        "credit": ["credit", "cr", "deposit"],
+        "amount": ["amount", "transaction amount"],
+        "direction": ["debit or credit", "dr cr"],
+        "balance": ["balance", "bal"]
+      }
+    },
+    {
+      "id": "icici_statement_v2",
+      "bank": "ICICI",
+      "requiredHeaders": ["s no", "value date", "transaction remarks"],
+      "columns": {
+        "date": ["transaction date", "value date"],
+        "narration": ["transaction remarks", "description"],
+        "refNo": ["cheque number", "ref no cheque no", "ref no"],
+        "debit": ["withdrawal amount", "withdrawal amount inr", "debit"],
+        "credit": ["deposit amount", "deposit amount inr", "credit"],
+        "balance": ["balance", "balance inr"]
+      }
+    },
+    {
+      "id": "bob_statement_v2",
+      "bank": "BOB",
+      "requiredHeaders": ["tran date", "val date"],
+      "columns": {
+        "date": ["tran date"],
+        "narration": ["description", "transaction details", "particulars"],
+        "refNo": ["chq no", "ref no", "cheque no"],
+        "debit": ["dr", "debit", "withdrawal"],
+        "credit": ["cr", "credit", "deposit"],
+        "amount": ["amount", "transaction amount"],
+        "direction": ["debit or credit", "dr cr"],
+        "balance": ["bal", "balance"]
+      }
+    },
+    {
+      "id": "hdfc_cc_statement",
+      "bank": "HDFC",
+      "kind": "credit_card",
+      "requiredHeaders": ["transaction type", "description", "amt"],
+      "columns": {
+        "date": ["date", "date time", "date & time"],
+        "narration": ["description", "transaction details"],
+        "amount": ["amt", "amt in rs", "amount"],
+        "direction": ["debit credit", "debit / credit", "type"]
+      }
+    },
+    {
+      "id": "axis_cc_statement",
+      "bank": "AXIS",
+      "kind": "credit_card",
+      "requiredHeaders": ["date", "transaction details", "debit credit"],
+      "columns": {
+        "date": ["date"],
+        "narration": ["transaction details", "description"],
+        "amount": ["amount", "amount inr", "amt"],
+        "direction": ["debit credit", "debit / credit"]
+      }
+    },
+    {
       "id": "kotak_statement",
       "bank": "KOTAK",
       "requiredHeaders": ["date", "description", "amount", "dr cr", "balance"],

@@ -1,0 +1,14 @@
+{
+  "format": "csv",
+  "description": "Axis credit-card statement — Date / Transaction Details / Debit-Credit / Amount columns; no running balance (kind: credit_card).",
+  "input": "AXIS BANK CREDIT CARD\nCredit Card Number : XXXXXXXXXXXX9988\nDate,Transaction Details,Debit/Credit,Amount\n15/10/2026,FLIPKART ORDER PAYMENT,Debit,3450.00\n16/10/2026,PAYMENT RECEIVED THANK YOU,Credit,5000.00",
+  "expect": {
+    "bank": "AXIS",
+    "layoutId": "axis_cc_statement",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 345000 },
+      { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 500000 }
+    ]
+  }
+}

@@ -61,7 +61,8 @@ class BundledRulesDrift(unittest.TestCase):
             )
 
     def test_extract_formats_present_and_identical(self):
-        for name in ("csv-layouts.json", "sms-patterns.json"):
+        for name in ("csv-layouts.json", "sms-patterns.json",
+                     "bank-names.json"):
             bundled = BUNDLED_FORMATS / name
             self.assertTrue(bundled.exists(), f"missing bundled formats/{name}")
             self.assertEqual(

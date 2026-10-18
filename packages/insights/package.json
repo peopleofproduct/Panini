@@ -11,7 +11,7 @@
     "scorecards"
   ],
   "devDependencies": {
-    "@paniniapi/extract": "0.4.0",
+    "@paniniapi/extract": "0.4.1",
     "@paniniapi/simulator": "0.2.2"
   },
   "scripts": {

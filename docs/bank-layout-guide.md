@@ -114,6 +114,11 @@ that still don't match parse nothing and report a warning.
 - **XLSX** — the same layouts apply; the native reader renders cells as
   display strings (dates → `YYYY-MM-DD`), so no XLSX-specific work.
 - **PDF statements** — same layouts after text-layer row reconstruction.
+- **Credit-card statements** — layouts carry `kind: "credit_card"`
+  (signed amount + direction column, no running balance) and report
+  `metadata.accountKind`. See `hdfc_cc_statement`/`axis_cc_statement`.
+- **UPI-app statements** (PhonePe) — vertical field records, parsed by
+  `parseUpiAppStatement`; text and text-layer-PDF inputs both handled.
 - **SMS alerts** — a different pipeline entirely; see
   `formats/sms-patterns.json`.
 - **Narration parsing** — bank-specific `UPI-...-...` shapes live in

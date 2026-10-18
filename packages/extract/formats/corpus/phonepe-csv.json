@@ -1,0 +1,20 @@
+{
+  "format": "csv",
+  "description": "PhonePe emailed transaction statement — vertical field records (date line, Paid to, Transaction ID, UTR, Paid by, Debit/Credit amount line), not a table.",
+  "input": "PhonePe Transaction Statement\n\nAug 07, 2026\n03:38 PM\nPaid to ZOMATO LTD\nTransaction ID : T2408071538001\nUTR : 422019876543\nPaid by HDFC Bank -XXXX1234\nDebit ₹ 320.00\n\nAug 08, 2026\n10:12 AM\nReceived from RAMESH KUMAR\nTransaction ID : T2408081012002\nUTR : 422019876544\nPaid by ICICI Bank -XXXX9988\nCredit ₹ 1500.00",
+  "expect": {
+    "bank": "PHONEPE",
+    "layoutId": "phonepe_statement",
+    "accountMask": "1234",
+    "count": 2,
+    "rows": [
+      { "date": "2026-08-07", "direction": "DEBIT", "amountPaise": 32000, "refNo": "422019876543" },
+      {
+        "date": "2026-08-08",
+        "direction": "CREDIT",
+        "amountPaise": 150000,
+        "refNo": "422019876544"
+      }
+    ]
+  }
+}

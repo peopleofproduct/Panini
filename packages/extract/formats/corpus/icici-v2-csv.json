@@ -1,0 +1,25 @@
+{
+  "format": "csv",
+  "description": "ICICI detailed statement export — S No. serial column, Value Date before Transaction Date, plain 'Balance' header (not 'Balance (INR)').",
+  "input": "ICICI BANK LIMITED\nAccount Number : XXXXXX3344\nS No.,Value Date,Transaction Date,Cheque Number,Transaction Remarks,Withdrawal Amount,Deposit Amount,Balance\n1,15/10/2026,15/10/2026,,UPI/402345678912/CR/SALARY ACME,,45000.00,96234.75\n2,16/10/2026,16/10/2026,,NACH-EMI-HDFC HOME LOAN,25000.00,,71234.75",
+  "expect": {
+    "bank": "ICICI",
+    "layoutId": "icici_statement_v2",
+    "accountMask": "3344",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "CREDIT",
+        "amountPaise": 4500000,
+        "balancePaise": 9623475
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "DEBIT",
+        "amountPaise": 2500000,
+        "balancePaise": 7123475
+      }
+    ]
+  }
+}

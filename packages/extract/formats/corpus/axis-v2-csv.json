@@ -1,0 +1,25 @@
+{
+  "format": "csv",
+  "description": "Axis Bank account .xls/CSV export — SRL NO serial column + Tran Date; the second Axis layout variant.",
+  "input": "AXIS BANK LTD\nAccount No : XXXXXX8899\nSRL NO,Tran Date,Value Date,Transaction Particulars,CHQNO,Debit,Credit,Balance\n1,15/10/2026,15/10/2026,UPI/402345678912/DR/SWIGGY@okaxis/,,1250.00,,45230.50\n2,16/10/2026,16/10/2026,NEFT-N3452618902-SALARY-TCS LTD,,,85000.00,130230.50",
+  "expect": {
+    "bank": "AXIS",
+    "layoutId": "axis_statement_v2",
+    "accountMask": "8899",
+    "count": 2,
+    "rows": [
+      {
+        "date": "2026-10-15",
+        "direction": "DEBIT",
+        "amountPaise": 125000,
+        "balancePaise": 4523050
+      },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 8500000,
+        "balancePaise": 13023050
+      }
+    ]
+  }
+}

@@ -20,7 +20,8 @@ import { findAccountMask, mapRow } from '../rowMapper';
 import { mineStatementMetadata } from '../statementMetadata';
 import type { ExtractedStatement, ExtractedTransaction } from '../types';
 import { normalizeHeaderCell, type ColumnField } from '../csv/layouts';
-import { extractPdfFragments, type PdfFragment } from './pdfText';
+import { extractPdfFragments, linesFromFragments, type PdfFragment } from './pdfText';
+import { looksLikeUpiAppStatement, parseUpiAppStatement } from '../upiStatement';
 import { decryptPdf, type PdfCredentials, type PasswordPatternsFile } from './encryption';
 
 export interface ExtractPdfOptions {
@@ -283,5 +284,16 @@ export function extractPdfStatement(
   }
 
   const result = statementFromFragments(fragments, options);
+  if (result.transactions.length === 0) {
+    // UPI-app statements aren't tables — try the vertical-record parser on
+    // the reconstructed lines before reporting a parse failure.
+    const lineText = linesFromFragments(fragments)
+      .map((l) => l.text)
+      .join('\n');
+    if (looksLikeUpiAppStatement(lineText)) {
+      const upi = parseUpiAppStatement(lineText, 'pdf');
+      return { ...upi, warnings: [...warnings, ...upi.warnings] };
+    }
+  }
   return { ...result, warnings: [...warnings, ...result.warnings] };
 }

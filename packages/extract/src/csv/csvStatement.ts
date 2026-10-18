@@ -16,6 +16,7 @@
 
 import type { BankNamesFile, CsvLayoutsFile } from '../formatsLoader';
 import { detectBankId } from '../bankNames';
+import { looksLikeUpiAppStatement, parseUpiAppStatement } from '../upiStatement';
 import { parseStatementDate } from '../statementDate';
 import { findAccountMask, mapRow } from '../rowMapper';
 import { mineStatementMetadata } from '../statementMetadata';
@@ -191,6 +192,7 @@ export function statementFromRows(
   }
 
   const layout = table.layout;
+  if (layout?.kind !== undefined) metadata['accountKind'] = layout.kind;
   const bank = layout ? layout.bank : (detectedBank ?? options?.bankHint ?? null);
   const bankSource =
     layout !== null
@@ -224,6 +226,11 @@ export function extractCsvStatement(
   file: CsvLayoutsFile,
   options?: { bankHint?: string; layoutId?: string; bankNames?: BankNamesFile },
 ): ExtractedStatement {
+  // UPI-app statements (PhonePe et al.) are vertical field records, not
+  // tables — route them before the delimited-column machinery sees them.
+  if (looksLikeUpiAppStatement(text)) {
+    return parseUpiAppStatement(text, 'csv');
+  }
   const { rows, delimiter } = parseCsv(text);
   const result = statementFromRows(rows, file, 'csv', options);
   return {

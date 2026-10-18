@@ -1,0 +1,14 @@
+{
+  "format": "csv",
+  "description": "HDFC credit-card statement export — 'Transaction type' table with AMT + Debit / Credit direction column; no running balance (kind: credit_card).",
+  "input": "HDFC BANK CREDIT CARD STATEMENT\nCard No : XXXXXXXXXXXX4521\nTransaction type,Primary / Addon Customer Name,Date & Time,Description,REWARDS,AMT,Debit / Credit\nDomestic,TEST USER,15/10/2026 10:30:00,AMAZON PAY INDIA,,2500.00,Db\nDomestic,TEST USER,16/10/2026 14:22:00,PAYMENT RECEIVED THANK YOU,,5000.00,Cr",
+  "expect": {
+    "bank": "HDFC",
+    "layoutId": "hdfc_cc_statement",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 250000 },
+      { "date": "2026-10-16", "direction": "CREDIT", "amountPaise": 500000 }
+    ]
+  }
+}

@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Wider layout coverage** — evidence-backed second export variants
+  (`axis_statement_v2` SRL NO, `icici_statement_v2` S No. + value-date
+  first, `bob_statement_v2` TRAN/VAL DATE), plus **credit-card
+  statements** (`hdfc_cc_statement`, `axis_cc_statement` —
+  `kind: "credit_card"`, signed amount + direction column, no running
+  balance, reported as `metadata.accountKind`) and **PhonePe vertical
+  statements** (`parseUpiAppStatement` — the emailed-PDF/text field
+  record format, works on pasted text and scanned-as-text PDF pages;
+  `bank: "PHONEPE"`, `metadata.statementIssuer`). 20 layout variants
+  now corpus-gated; `Db`/`Cr` direction markers added. Python parity
+  (`parse_upi_app_statement`, `accountKind`, `extra_formats_dir`).
 - **Bank-name detection + coverage report** (`@paniniapi/extract`) —
   `formats/bank-names.json` carries ~50 Indian bank identities;
   `detectBankId` sniffs statement letterheads (word-bounded,

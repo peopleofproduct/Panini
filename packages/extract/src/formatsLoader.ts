@@ -24,6 +24,12 @@ export type { PasswordPattern, PasswordPatternsFile } from './pdf/encryption';
 export interface CsvLayout {
   readonly id: string;
   readonly bank: string;
+  /**
+   * Account type the layout describes — `deposit` statements carry a
+   * running balance; `credit_card` statements carry a signed amount +
+   * direction column instead. Reported as `metadata.accountKind`.
+   */
+  readonly kind?: 'deposit' | 'credit_card';
   readonly requiredHeaders: readonly string[];
   readonly columns: Readonly<Record<string, readonly string[]>>;
 }

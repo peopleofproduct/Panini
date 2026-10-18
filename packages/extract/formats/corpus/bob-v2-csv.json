@@ -1,0 +1,21 @@
+{
+  "format": "csv",
+  "description": "Bank of Baroda second export variant — TRAN DATE / VAL DATE / DR / CR / BAL header set.",
+  "input": "BANK OF BARODA\nAccount No : XXXXXX5566\nTRAN DATE,VAL DATE,CHQ NO,DESCRIPTION,DR,CR,BAL\n15/10/2026,15/10/2026,,UPI/555444333/DR/DMART@okhdfc/,200.00,,43000.00\n16/10/2026,16/10/2026,UTR789012,RTGS-UTR789012-SUPPLIER PAYMENT,,25000.00,68000.00",
+  "expect": {
+    "bank": "BOB",
+    "layoutId": "bob_statement_v2",
+    "accountMask": "5566",
+    "count": 2,
+    "rows": [
+      { "date": "2026-10-15", "direction": "DEBIT", "amountPaise": 20000, "balancePaise": 4300000 },
+      {
+        "date": "2026-10-16",
+        "direction": "CREDIT",
+        "amountPaise": 2500000,
+        "balancePaise": 6800000,
+        "refNo": "UTR789012"
+      }
+    ]
+  }
+}

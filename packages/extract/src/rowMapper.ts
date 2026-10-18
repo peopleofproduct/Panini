@@ -56,8 +56,8 @@ function directionFromText(value: string): RowDirection {
  */
 function directionFromColumn(value: string): RowDirection {
   const t = value.trim().toUpperCase();
-  if (/^D\.?$/.test(t)) return 'DEBIT';
-  if (/^C\.?$/.test(t)) return 'CREDIT';
+  if (/^(?:D|DB|DR|DBT)\.?$/.test(t)) return 'DEBIT';
+  if (/^(?:C|CR)\.?$/.test(t)) return 'CREDIT';
   return directionFromText(value);
 }
 

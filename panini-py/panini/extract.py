@@ -67,6 +67,128 @@ def _load_merged(
     return merged
 
 
+# ── UPI-app statements (PhonePe) ────────────────────────────────────────────
+#
+# PhonePe's emailed transaction statement is not a table — every record is a
+# ~7-line vertical block (date line, Paid to, Transaction ID, UTR, Paid by,
+# Debit/Credit amount line). Detected by field markers, parsed line-wise.
+
+_UPI_DATE_RE = re.compile(r"^([A-Za-z]{3,9})\s+(\d{1,2}),?\s*(\d{4})")
+_UPI_TIME_RE = re.compile(r"^\d{1,2}:\d{2}\s*(?::\d{2})?\s*[AP]M", re.IGNORECASE)
+_UPI_AMOUNT_RE = re.compile(
+    r"^(debit(?:ed)?|credit(?:ed)?)\b[^\d]*([\d,]+(?:\.\d{1,2})?)", re.IGNORECASE
+)
+_UPI_TXN_ID_RE = re.compile(r"^transaction\s*id\s*:\s*(\S+)", re.IGNORECASE)
+_UPI_UTR_RE = re.compile(r"^utr\s*(?:no\.?|number)?\s*:\s*(\S+)", re.IGNORECASE)
+_UPI_NARRATION_RE = re.compile(
+    r"^(paid to|received from|bill paid|refund(?:\s+from)?)\s*[-–:]?\s*(.+)",
+    re.IGNORECASE,
+)
+_UPI_PAID_BY_RE = re.compile(r"^paid by\s+(.+)", re.IGNORECASE)
+_UPI_PAID_BY_MASK_RE = re.compile(r"[-–*xX]{2,}\s*(\d{3,6})\b")
+
+_UPI_MONTHS = {
+    "jan": "01", "january": "01", "feb": "02", "february": "02",
+    "mar": "03", "march": "03", "apr": "04", "april": "04", "may": "05",
+    "jun": "06", "june": "06", "jul": "07", "july": "07", "aug": "08",
+    "august": "08", "sep": "09", "september": "09", "oct": "10",
+    "october": "10", "nov": "11", "november": "11", "dec": "12",
+    "december": "12",
+}
+
+
+def looks_like_upi_app_statement(text: str) -> bool:
+    return bool(
+        re.search(r"transaction\s*id\s*:", text, re.IGNORECASE)
+        and re.search(r"^paid to\b", text, re.IGNORECASE | re.MULTILINE)
+    )
+
+
+def parse_upi_app_statement(text: str, fmt: str = "csv") -> dict[str, Any]:
+    warnings: list[str] = []
+    metadata = {"statementIssuer": "phonepe", "accountKind": "upi_app"}
+    transactions: list[dict[str, Any]] = []
+
+    date: Optional[str] = None
+    narration = ""
+    raw_parts: list[str] = []
+    txn_id: Optional[str] = None
+    utr: Optional[str] = None
+    paid_by = ""
+
+    for line in (l.strip() for l in re.split(r"\r\n|\n|\r", text) if l.strip()):
+        dm = _UPI_DATE_RE.match(line)
+        if dm:
+            mm = _UPI_MONTHS.get(dm.group(1).lower())
+            date = f"{dm.group(3)}-{mm}-{dm.group(2).zfill(2)}" if mm else None
+            narration = ""
+            raw_parts = [line]
+            txn_id = utr = None
+            continue
+        if date is None:
+            continue
+        raw_parts.append(line)
+        if _UPI_TIME_RE.match(line):
+            continue
+        m = _UPI_TXN_ID_RE.match(line)
+        if m:
+            txn_id = m.group(1)
+            continue
+        m = _UPI_UTR_RE.match(line)
+        if m:
+            utr = m.group(1)
+            continue
+        m = _UPI_PAID_BY_RE.match(line)
+        if m:
+            if paid_by == "":
+                paid_by = m.group(1)
+            continue
+        m = _UPI_AMOUNT_RE.match(line)
+        if m:
+            amount = parse_statement_amount(m.group(2))
+            if amount is not None:
+                transactions.append({
+                    "date": date,
+                    "narration": narration or "PhonePe transaction",
+                    "amountPaise": amount[0],
+                    "direction": "DEBIT" if m.group(1).lower().startswith("deb") else "CREDIT",
+                    "refNo": utr or txn_id,
+                    "balancePaise": None,
+                    "raw": " ".join(raw_parts),
+                    "warnings": [],
+                })
+            else:
+                warnings.append(f"unparseable amount line: '{line[:60]}'")
+            date = None
+            narration = ""
+            raw_parts = []
+            txn_id = utr = None
+            continue
+        m = _UPI_NARRATION_RE.match(line)
+        if m:
+            narration = f"{m.group(1)} {m.group(2)}".strip()
+
+    if date is not None:
+        warnings.append("final record had no amount line — dropped")
+    if not transactions:
+        warnings.append("UPI-app statement markers found but no records parsed")
+
+    mask = (
+        _find_account_mask(paid_by)
+        or (mm.group(1) if (mm := _UPI_PAID_BY_MASK_RE.search(paid_by)) else None)
+        or _find_account_mask(" ".join(text.split("\n")[:10]))
+    )
+    return {
+        "format": fmt,
+        "bank": "PHONEPE",
+        "layoutId": "phonepe_statement",
+        "accountMask": mask,
+        "transactions": transactions,
+        "warnings": warnings,
+        "metadata": metadata,
+    }
+
+
 def detect_bank_id(text: str, names_file: dict[str, Any]) -> Optional[str]:
     """Identify the issuing bank from statement preamble lines. Word-bounded
     matching; on a line with several hits the longest name wins so
@@ -231,9 +353,9 @@ def _direction_from_text(value: str) -> Optional[str]:
 def _direction_from_column(value: str) -> Optional[str]:
     """A dedicated type column may hold a bare D / C indicator."""
     t = value.strip().upper()
-    if re.fullmatch(r"D\.?", t):
+    if re.fullmatch(r"(?:D|DB|DR|DBT)\.?", t):
         return "DEBIT"
-    if re.fullmatch(r"C\.?", t):
+    if re.fullmatch(r"(?:C|CR)\.?", t):
         return "CREDIT"
     return _direction_from_text(value)
 
@@ -426,6 +548,8 @@ def extract_csv_statement(
 ) -> dict[str, Any]:
     layouts_file = _load_merged("csv-layouts.json", formats_dir, extra_formats_dir)
     names_file = _load_merged("bank-names.json", formats_dir, extra_formats_dir)
+    if looks_like_upi_app_statement(text):
+        return parse_upi_app_statement(text, "csv")
     rows = parse_csv(text)
     warnings: list[str] = []
     max_scan = int(layouts_file.get("maxHeaderScanRows", 15))
@@ -535,6 +659,8 @@ def extract_csv_statement(
         warnings.append("header detected but no transaction rows parsed")
 
     layout = table["layout"]
+    if layout and layout.get("kind") is not None:
+        metadata["accountKind"] = layout["kind"]
     bank = layout["bank"] if layout else (detected_bank or bank_hint)
     bank_source = (
         "layout"
