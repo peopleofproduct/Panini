@@ -18,7 +18,7 @@
     "@paniniapi/rules-engine": "0.2.2"
   },
   "devDependencies": {
-    "@paniniapi/simulator": "0.2.1"
+    "@paniniapi/simulator": "0.2.2"
   },
   "scripts": {
     "build": "tsc -b",

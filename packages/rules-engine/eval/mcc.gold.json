@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "description": "Gold narration → MCC extraction/enrichment set. Asserts parseBankNarration `mcc`/`mcc_description` fields. `mcc` is the extracted code even when the dictionary lacks it; `mcc_description` is null for unknown codes.",
+  "cases": [
+    {
+      "input": "POS PURCHASE MCC-5411",
+      "expect": {
+        "mcc": "5411",
+        "mcc_description": "Grocery stores and supermarkets",
+        "category": "Groceries"
+      }
+    },
+    {
+      "input": "MCC 5814 ZOMATO",
+      "expect": { "mcc": "5814", "mcc_description": "Fast food restaurants" }
+    },
+    {
+      "input": "TXN MCC-5999 PAY",
+      "expect": { "mcc": "5999", "mcc_description": "Miscellaneous and specialty retail" }
+    },
+    {
+      "input": "UPI MCC-4121 OLA",
+      "expect": {
+        "mcc": "4121",
+        "mcc_description": "Taxicabs and limousines — includes ride-hailing"
+      }
+    },
+    {
+      "input": "MCC-4814 AIRTEL RECHARGE",
+      "expect": {
+        "mcc": "4814",
+        "mcc_description": "Telecommunication services — recharge/billing"
+      }
+    },
+    {
+      "input": "MCC-6011 ATM WDL",
+      "expect": {
+        "mcc": "6011",
+        "mcc_description": "Financial institutions — automated cash disbursement (ATM)"
+      }
+    },
+    {
+      "input": "MCC-6012 FIN INST",
+      "expect": {
+        "mcc": "6012",
+        "mcc_description": "Financial institutions — merchandise and services"
+      }
+    },
+    {
+      "input": "MCC-4900 UTIL",
+      "expect": { "mcc": "4900", "mcc_description": "Utilities — electric, gas, water, sanitary" }
+    },
+    {
+      "input": "MCC-8021 DENTIST",
+      "expect": { "mcc": "8021", "mcc_description": "Dentists and orthodontists" }
+    },
+    {
+      "input": "MCC-7011 HOTEL",
+      "expect": { "mcc": "7011", "mcc_description": "Hotels, motels, resorts" }
+    },
+    {
+      "input": "MCC-5812 RESTAURANT",
+      "expect": { "mcc": "5812", "mcc_description": "Eating places and restaurants" }
+    },
+    { "input": "MCC-9999 UNKNOWN", "expect": { "mcc": "9999", "mcc_description": null } },
+    { "input": "MCC-0000", "expect": { "mcc": "0000", "mcc_description": null } },
+    { "input": "MCC-123 SHORT", "expect": { "mcc": null } },
+    { "input": "NARRATION NO CODE", "expect": { "mcc": null } }
+  ]
+}

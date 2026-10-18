@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "description": "Gold narration → flat category set covering all 39 taxonomy values plus the Uncategorized control. One verified shape per category; this is the coverage gate that keeps the legacy `category` field honest.",
+  "cases": [
+    { "input": "UPI-DR-402512345678-SWIGGY-okaxis", "expect": { "category": "Food & Dining" } },
+    { "input": "UPI-DR-123456789-DMART-okaxis", "expect": { "category": "Groceries" } },
+    { "input": "UPI/DR/1234/OLA CABS/ybl", "expect": { "category": "Transport" } },
+    { "input": "UPI-DR-123456789-HP PETROL-okaxis", "expect": { "category": "Fuel" } },
+    { "input": "UPI-DR-123456789-IRCTC-ybl", "expect": { "category": "Travel" } },
+    { "input": "UPI-DR-123456789-MYNTRA-ybl", "expect": { "category": "Shopping" } },
+    { "input": "UPIAUTOPAY-NETFLIX-REF123456", "expect": { "category": "Subscriptions" } },
+    { "input": "POS 4455 BOOKMYSHOW", "expect": { "category": "Entertainment" } },
+    { "input": "UPI-DR-123456789-AIRTEL-ybl", "expect": { "category": "Telecom" } },
+    { "input": "BIL/BPAY/000123456/BESCOM/CRN1", "expect": { "category": "Utilities" } },
+    {
+      "input": "NEFT-HDFCN52026010512-ACME CORP PVT LTD-SALARY JAN",
+      "expect": { "category": "Income" }
+    },
+    { "input": "REFUND-FLIPKART-ORD998877", "expect": { "category": "Refunds" } },
+    { "input": "ACH D- TATA CAPITAL-1234", "expect": { "category": "Loan & EMI" } },
+    { "input": "ATM WDL-SELF-0042", "expect": { "category": "Cash Withdrawal" } },
+    { "input": "CASHDEP-BRANCH-1234", "expect": { "category": "Cash Deposit" } },
+    { "input": "RTGS-UTIB0001234-ACME CORP-RENT", "expect": { "category": "Housing" } },
+    { "input": "POS 4455 APOLLO PHARMACY", "expect": { "category": "Healthcare" } },
+    { "input": "FD CLOSURE PROCEEDS 123", "expect": { "category": "Investments" } },
+    { "input": "ECS-LIC OF INDIA-PREMIUM", "expect": { "category": "Insurance" } },
+    { "input": "GST-CBIC-2026OCT", "expect": { "category": "Taxes" } },
+    { "input": "NEFT-UTIB0001234-SCHOOL FEES-TERM1", "expect": { "category": "Education" } },
+    { "input": "SMS CHRGS 2026", "expect": { "category": "Bank Charges" } },
+    { "input": "IB FUNDS TRANSFER TO SELF 1234", "expect": { "category": "Transfers" } },
+    { "input": "CC PAYMENT-HDFC BANK-1234", "expect": { "category": "Credit Card" } },
+    { "input": "UPI-DR-123456789-SIMPL-ybl", "expect": { "category": "BNPL" } },
+    { "input": "UPI-DR-123456789-DREAM11-ybl", "expect": { "category": "Gaming" } },
+    { "input": "NEFT-UTIB0001234-TEMPLE TRUST-DONATION", "expect": { "category": "Donations" } },
+    {
+      "input": "NEFT-UTIB0001234-RAZORPAY-CONSULTING",
+      "expect": { "category": "Professional Services" }
+    },
+    { "input": "POS 4455 URBANCLAP SALON", "expect": { "category": "Personal Care" } },
+    { "input": "NEFT-UTIB0001234-RTO CHALLAN-5544", "expect": { "category": "Government & Fees" } },
+    { "input": "INTL-AMAZON UK-4567", "expect": { "category": "Forex" } },
+    { "input": "PAYTM WALLET TOPUP-1234", "expect": { "category": "Wallet Top-up" } },
+    { "input": "POS 4455 VEHICLE SERVICE CENTER", "expect": { "category": "Auto & Vehicle" } },
+    { "input": "UPI-DR-123456789-TANISHQ-ybl", "expect": { "category": "Jewellery" } },
+    { "input": "NACH-CULTFIT-4455", "expect": { "category": "Fitness" } },
+    { "input": "UPI-DR-123456789-PEST CONTROL-ybl", "expect": { "category": "Home Services" } },
+    {
+      "input": "UPI-DR-123456789-FLIPKART BOOKS-ybl",
+      "expect": { "category": "Books & Stationery" }
+    },
+    { "input": "UPI-DR-123456789-DTDC-ybl", "expect": { "category": "Postage & Courier" } },
+    {
+      "input": "NEFT-UTIB0001234-LEGAL FEE-ADVOCATE",
+      "expect": { "category": "Legal & Compliance" }
+    },
+    { "input": "NACH-DR-SOMEBILLER-99887", "expect": { "category": "Uncategorized" } }
+  ]
+}

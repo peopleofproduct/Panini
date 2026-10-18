@@ -16,8 +16,8 @@
     "@paniniapi/standards-schema": "0.3.2"
   },
   "devDependencies": {
-    "@paniniapi/core": "0.1.2",
-    "@paniniapi/rules-engine": "0.2.1"
+    "@paniniapi/core": "0.1.3",
+    "@paniniapi/rules-engine": "0.2.2"
   },
   "scripts": {
     "build": "tsc -b",

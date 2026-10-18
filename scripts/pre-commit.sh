@@ -10,6 +10,9 @@ set -euo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
+echo "pre-commit: checking dependency pins…"
+node scripts/check-pins.mjs
+
 echo "pre-commit: running lint…"
 npm run lint
 

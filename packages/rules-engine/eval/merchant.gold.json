@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "description": "Gold counterparty → canonical merchant evaluation set. Asserts lookupMerchant() output: canonical name + category (and MCC where declared). `null` cases are documented non-merchants and must stay unmapped — never alias a person to a merchant.",
+  "cases": [
+    {
+      "input": "SWIGGY BUNDL TECH",
+      "expect": { "canonical": "Swiggy", "category": "Food & Dining", "mcc": "5814" }
+    },
+    { "input": "ZOMATO LIMITED", "expect": { "canonical": "Zomato", "category": "Food & Dining" } },
+    {
+      "input": "DOMINOS PIZZA",
+      "expect": { "canonical": "Domino's", "category": "Food & Dining" }
+    },
+    { "input": "AMAZON PAY", "expect": { "canonical": "Amazon", "category": "Shopping" } },
+    { "input": "FLIPKART INTERNET", "expect": { "canonical": "Flipkart", "category": "Shopping" } },
+    { "input": "MYNTRA DESIGNS", "expect": { "canonical": "Myntra", "category": "Shopping" } },
+    { "input": "BIGBASKET", "expect": { "canonical": "BigBasket", "category": "Groceries" } },
+    {
+      "input": "OLA CABS",
+      "expect": { "canonical": "Ola", "category": "Transport", "mcc": "4121" }
+    },
+    {
+      "input": "UBER INDIA",
+      "expect": { "canonical": "Uber", "category": "Transport", "mcc": "4121" }
+    },
+    { "input": "IRCTC", "expect": { "canonical": "IRCTC", "category": "Travel", "mcc": "4112" } },
+    {
+      "input": "NETFLIX COM",
+      "expect": { "canonical": "Netflix", "category": "Subscriptions", "mcc": "5968" }
+    },
+    {
+      "input": "AIRTEL",
+      "expect": { "canonical": "Airtel", "category": "Telecom", "mcc": "4814" }
+    },
+    { "input": "JIO", "expect": { "canonical": "Jio", "category": "Telecom" } },
+    { "input": "BESCOM", "expect": { "canonical": "BESCOM", "category": "Utilities" } },
+    { "input": "TATA POWER", "expect": { "canonical": "Tata Power", "category": "Utilities" } },
+    {
+      "input": "APOLLO PHARMACY",
+      "expect": { "canonical": "Apollo Pharmacy", "category": "Healthcare" }
+    },
+    { "input": "LIC OF INDIA", "expect": { "canonical": "LIC", "category": "Insurance" } },
+    { "input": "ZERODHA", "expect": { "canonical": "Zerodha", "category": "Investments" } },
+    { "input": "GROWW", "expect": { "canonical": "Groww", "category": "Investments" } },
+    { "input": "DREAM11", "expect": { "canonical": "Dream11", "category": "Gaming" } },
+    {
+      "input": "BOOKMYSHOW",
+      "expect": { "canonical": "BookMyShow", "category": "Entertainment", "mcc": "7832" }
+    },
+    { "input": "PVR", "expect": { "canonical": "PVR INOX", "category": "Entertainment" } },
+    { "input": "DECATHLON", "expect": { "canonical": "Decathlon", "category": "Shopping" } },
+    { "input": "NYKAA", "expect": { "canonical": "Nykaa", "category": "Shopping" } },
+    {
+      "input": "TATA CAPITAL",
+      "expect": { "canonical": "Tata Capital", "category": "Loan & EMI" }
+    },
+    {
+      "input": "BAJAJ FINANCE LTD",
+      "expect": { "canonical": "Bajaj Finance", "category": "Loan & EMI" }
+    },
+    {
+      "input": "HDB FINANCIAL SERVICES",
+      "expect": { "canonical": "HDB Financial Services", "category": "Loan & EMI" }
+    },
+    { "input": "RAMESH KUMAR", "expect": { "canonical": null } },
+    { "input": "UNKNOWN XYZ", "expect": { "canonical": null } },
+    { "input": "PHONEPE", "expect": { "canonical": null } }
+  ]
+}

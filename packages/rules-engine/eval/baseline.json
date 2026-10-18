@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "sets": {
+    "narration": {
+      "total": 37,
+      "passed": 37,
+      "passRate": 1,
+      "avgConfidence": 0.8499999999999996,
+      "ruleMatchRate": 0.8648648648648649
+    },
+    "category": {
+      "total": 40,
+      "passed": 40,
+      "passRate": 1,
+      "avgConfidence": 0,
+      "ruleMatchRate": 0
+    },
+    "merchant": {
+      "total": 30,
+      "passed": 30,
+      "passRate": 1,
+      "avgConfidence": 0,
+      "ruleMatchRate": 0
+    },
+    "mcc": {
+      "total": 15,
+      "passed": 15,
+      "passRate": 1,
+      "avgConfidence": 0,
+      "ruleMatchRate": 0
+    }
+  }
+}

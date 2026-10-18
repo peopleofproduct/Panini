@@ -23,5 +23,7 @@ export type {
   GenerateStatementOptions,
   StatementColumnSpec,
 } from './statementFactory';
+export { generateQuirkyCsvStatement, ALL_QUIRKS } from './quirkFactory';
+export type { QuirkyStatement, QuirkOptions, StatementQuirk } from './quirkFactory';
 export { parseCliArgs, runCli } from './cli';
 export type { CliArgs, ParseArgsResult } from './cli';

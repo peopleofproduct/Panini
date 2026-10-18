@@ -10,8 +10,8 @@
     "dist"
   ],
   "devDependencies": {
-    "@paniniapi/extract": "0.2.2",
-    "@paniniapi/simulator": "0.2.1"
+    "@paniniapi/extract": "0.2.3",
+    "@paniniapi/simulator": "0.2.2"
   },
   "scripts": {
     "build": "tsc -b",
