@@ -99,6 +99,12 @@ India's Digital Personal Data Protection Act makes the _processor_ question expe
 - **Contribution flywheel.** Grammars and layouts you contribute back are maintained by the community forever — a bug fixed by one FIU benefits every FIU. This is how public infrastructure gets better: shared maintenance instead of per-vendor SLAs.
 - **No renegotiation cliff.** Per-call pricing punishes growth; a library's cost curve is flat at any volume. Scale your consent volume 10× — your parsing cost stays ₹0.
 
+### Honest limits — read before you deploy
+
+- **Scoring**: Panini emits evidence-backed facts and a transparent, JSON-declared scorecard engine — **not** a calibrated credit score. Your risk team owns the model (which RBI accountability rules require anyway). See [docs/scorecard.md](docs/scorecard.md).
+- **Operations**: it's a pinned library, not a fork you maintain — but grammar vigilance is real. The cost answer and ops checklist live in [docs/operating-panini.md](docs/operating-panini.md).
+- **Liability**: Apache-2.0 — no SLA, no indemnity. The shield is auditability: replayable decisions, evidence on every claim, public CI-gated quality receipts. Deployment checklist: [docs/accountability.md](docs/accountability.md).
+
 ```bash
 npm install
 npm run build   # tsc -b (project references)

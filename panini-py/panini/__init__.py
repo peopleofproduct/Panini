@@ -18,6 +18,11 @@ from .drift import (  # noqa: F401
     skeleton_of,
 )
 from .suggest import suggest_grammar_rule  # noqa: F401
+from .scorecard import (  # noqa: F401
+    ScorecardSpecError,
+    evaluate_scorecard,
+    validate_scorecard_spec,
+)
 
 __version__ = "0.3.3"
 __all__ = [
@@ -26,4 +31,5 @@ __all__ = [
     "extract_sms", "parse_statement_date", "analyze_transactions",
     "analyze_narration_batch", "corpus_baseline", "skeleton_of",
     "suggest_grammar_rule",
+    "evaluate_scorecard", "validate_scorecard_spec", "ScorecardSpecError",
 ]

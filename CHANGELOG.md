@@ -50,6 +50,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   plus `parse_narration(..., rule_sets=[...], bare=True)` mirroring the
   TS overlay options. Corpus fixtures now ship inside the wheel
   (`rules/corpus/*.json`, guarded by a bundled-drift test).
+- **Deterministic scorecard engine** (`@paniniapi/insights`) —
+  `evaluateScorecard(report, spec)` evaluates a JSON-declared, weighted
+  rule card over the evidence-backed `InsightsReport`. Returns a score
+  with a per-rule derivation trace and `coveragePct` (thin-file guard:
+  a high score on low coverage is flagged, not hidden). Ships
+  `scorecards/reference.json` — explicitly uncalibrated; the lender owns
+  the risk policy. Python parity: `panini.evaluate_scorecard`.
+- New docs: `docs/scorecard.md`, `docs/operating-panini.md` (honest TCO),
+  `docs/accountability.md` (OSS liability posture + deployment
+  checklist).
 
 ## [0.3.2] — 2026-10-18 — Phase 0 defect sweep (extraction + narration)
 

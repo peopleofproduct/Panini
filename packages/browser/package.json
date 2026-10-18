@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "@paniniapi/core": "0.1.3",
-    "@paniniapi/rules-engine": "0.2.2",
+    "@paniniapi/rules-engine": "0.2.3",
     "@paniniapi/extract": "0.2.3",
     "@paniniapi/insights": "0.2.1"
   },

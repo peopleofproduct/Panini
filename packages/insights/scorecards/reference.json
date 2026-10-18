@@ -1,0 +1,69 @@
+{
+  "id": "panini.reference.retail",
+  "version": "1.0.0",
+  "description": "REFERENCE ONLY — a conservative, uncalibrated example scorecard. It demonstrates the spec format on real insight metrics. It is NOT trained on default data and must not be used for lending decisions until your risk team calibrates weights and validates on your own book.",
+  "rules": [
+    {
+      "id": "income.regular",
+      "points": 25,
+      "description": "Income is regular and observed for 3+ months",
+      "when": {
+        "all": [
+          { "metric": "income.consistency", "op": "eq", "value": "regular" },
+          { "metric": "income.monthsObserved", "op": "gte", "value": 3 }
+        ]
+      }
+    },
+    {
+      "id": "income.present",
+      "points": 10,
+      "description": "Any income detected at all",
+      "when": { "metric": "income.monthlyAveragePaise", "op": "gt", "value": 0 }
+    },
+    {
+      "id": "foir.comfortable",
+      "points": 20,
+      "description": "FOIR under 50% — obligations fit inside income",
+      "when": { "metric": "foir.ratio", "op": "lte", "value": 0.5 }
+    },
+    {
+      "id": "foir.stretched",
+      "points": 5,
+      "description": "FOIR 50–75% — partial credit",
+      "when": {
+        "all": [
+          { "metric": "foir.ratio", "op": "gt", "value": 0.5 },
+          { "metric": "foir.ratio", "op": "lte", "value": 0.75 }
+        ]
+      }
+    },
+    {
+      "id": "cashflow.positive",
+      "points": 15,
+      "description": "Net monthly cash flow is positive",
+      "when": { "metric": "cashflow.averageMonthlyNetPaise", "op": "gt", "value": 0 }
+    },
+    {
+      "id": "trend.improving",
+      "points": 10,
+      "description": "Monthly net flow improving across the period",
+      "when": { "metric": "trends.netFlowDirection", "op": "eq", "value": "improving" }
+    },
+    {
+      "id": "risk.noHighSignals",
+      "points": 15,
+      "description": "No high-severity risk signals (bounces, round-trips, self-transfers) — guarded so an empty file can't earn this",
+      "when": {
+        "all": [
+          { "metric": "analyzedTransactions", "op": "gte", "value": 10 },
+          { "metric": "signals.count.high", "op": "eq", "value": 0 }
+        ]
+      }
+    }
+  ],
+  "bands": [
+    { "minScorePct": 75, "label": "strong_facts" },
+    { "minScorePct": 50, "label": "mixed_facts" },
+    { "minScorePct": 0, "label": "weak_facts" }
+  ]
+}

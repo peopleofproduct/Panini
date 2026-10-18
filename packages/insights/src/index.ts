@@ -15,6 +15,18 @@
  */
 
 export { analyzeTransactions, RULE_IDS } from './analyze';
+export { evaluateScorecard, validateScorecardSpec, ScorecardSpecError } from './scorecard';
+export type {
+  ScorecardBand,
+  ScorecardCondition,
+  ScorecardComposite,
+  ScorecardContribution,
+  ScorecardOp,
+  ScorecardResult,
+  ScorecardRule,
+  ScorecardSpec,
+  ScorecardWhen,
+} from './scorecard';
 export type {
   CashflowSummary,
   Evidence,
