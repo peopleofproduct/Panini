@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/extract",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Statement extraction for Indian banking documents \u2014 CSV/Excel layouts, PDF text-layer, bank SMS, and pluggable OCR/spreadsheet seams. Zero runtime dependencies.",
   "license": "Apache-2.0",
   "author": "Kapil",

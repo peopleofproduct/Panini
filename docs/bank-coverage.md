@@ -10,26 +10,26 @@ PDF statements use bank-agnostic column anchors and are not listed here.
 
 ## Dedicated layouts
 
-| Bank | Layout | Corpus fixture |
-| --- | --- | --- |
-| HDFC | `hdfc_statement, hdfc_cc_statement` | yes |
-| ICICI | `icici_statement, icici_statement_v2` | yes |
-| SBI | `sbi_statement` | yes |
-| AXIS | `axis_statement, axis_statement_v2, axis_cc_statement` | yes |
-| KOTAK | `kotak_statement, kotak_statement_v2` | yes |
-| PNB | `pnb_statement` | yes |
-| BOB | `bob_statement_v2, bob_statement, bob_statement_v3` | yes |
-| CANARA | `canara_statement` | yes |
-| UNION | `union_statement` | yes |
-| IDFC | `idfc_statement` | yes |
-| INDUSIND | `indusind_statement` | yes |
-| FEDERAL | `federal_statement` | yes |
-| RBL | `rbl_statement` | yes |
-| YES | `yes_statement, yes_cc_statement` | yes |
-| AU_SFB | `au_statement` | yes |
-| IDBI | `idbi_statement` | yes |
-| PAYTM_PB | `paytm_merchant` | **missing** |
-| SVC | `svc_statement` | yes |
+| Bank     | Layout                                                 | Corpus fixture |
+| -------- | ------------------------------------------------------ | -------------- |
+| HDFC     | `hdfc_statement, hdfc_cc_statement`                    | yes            |
+| ICICI    | `icici_statement, icici_statement_v2`                  | yes            |
+| SBI      | `sbi_statement`                                        | yes            |
+| AXIS     | `axis_statement, axis_statement_v2, axis_cc_statement` | yes            |
+| KOTAK    | `kotak_statement, kotak_statement_v2`                  | yes            |
+| PNB      | `pnb_statement`                                        | yes            |
+| BOB      | `bob_statement_v2, bob_statement, bob_statement_v3`    | yes            |
+| CANARA   | `canara_statement`                                     | yes            |
+| UNION    | `union_statement`                                      | yes            |
+| IDFC     | `idfc_statement`                                       | yes            |
+| INDUSIND | `indusind_statement`                                   | yes            |
+| FEDERAL  | `federal_statement`                                    | yes            |
+| RBL      | `rbl_statement`                                        | yes            |
+| YES      | `yes_statement, yes_cc_statement`                      | yes            |
+| AU_SFB   | `au_statement`                                         | yes            |
+| IDBI     | `idbi_statement`                                       | yes            |
+| PAYTM_PB | `paytm_merchant`                                       | **missing**    |
+| SVC      | `svc_statement`                                        | yes            |
 
 ## Detected by name only — layout wanted
 
@@ -37,116 +37,116 @@ These banks are recognised in statement preambles and parse via the
 generic fallback, but have no dedicated layout yet. Real exports make
 them one-JSON-entry contributions.
 
-| Bank |
-| --- |
-| INDIAN_BANK |
-| BOI |
-| CENTRAL_BANK |
-| UCO |
-| BOM |
-| IOB |
-| PSB |
-| BANDHAN |
-| CSB |
-| DCB |
-| KVB |
-| KARNATAKA |
-| SIB |
-| TMB |
-| CUB |
-| EQUITAS |
-| UJJIVAN |
-| JANA |
-| ESAF |
-| SURYODAY |
-| FINCARE |
-| UTKARSH |
-| IPPB |
-| AIRTEL_PB |
-| FINO_PB |
-| JIO_PB |
-| NSDL_PB |
-| HSBC |
-| SC |
-| DEUTSCHE |
-| DBS |
-| CITI |
-| BARCLAYS |
-| ANZ |
-| BOFA |
-| JPMORGAN |
-| BNP |
-| EMIRATES_NBD |
-| FAB |
-| MASHREQ |
-| DOHA |
-| SOCGEN |
-| MIZUHO |
-| MUFG |
-| SMBC |
-| WOORI |
-| KEB_HANA |
-| SHINHAN |
-| CTBC |
-| MAYBANK |
-| UBS |
-| QNB |
-| JAKB |
-| CORP |
-| PHONEPE |
-| DHANLAXMI |
-| NAINITAL |
-| CAPITAL_SFB |
-| NESF |
-| SHIVALIK |
-| UNITY_SFB |
-| SARASWAT |
-| COSMOS |
-| NKGSB |
-| KALUPUR |
-| KGB |
-| KALYAN_JANATA |
-| TJSB |
-| BASSEIN |
-| TBSB |
-| ABHYUDAYA |
-| DOMBIVLI |
-| JANATA_SAHAKARI |
-| BMC |
-| GP_PARSIK |
-| VARACHHA |
-| RAJKOT_NAGRIK |
-| SURAT_PEOPLES |
-| MEHSANA |
-| AP_GRAMEENA |
-| TG_GRAMEENA |
-| KA_GRAMIN |
-| BARODA_UP |
-| ARYAVART |
-| PUNJAB_GRAMIN |
-| TN_GRAMA |
-| CG_GRAMIN |
-| MP_GRAMIN |
-| RMGB |
-| HARYANA_GRAMIN |
-| UBGB |
-| VKGB |
-| MAHA_GRAMIN |
-| JK_GRAMEEN |
-| PBGB |
+| Bank               |
+| ------------------ |
+| INDIAN_BANK        |
+| BOI                |
+| CENTRAL_BANK       |
+| UCO                |
+| BOM                |
+| IOB                |
+| PSB                |
+| BANDHAN            |
+| CSB                |
+| DCB                |
+| KVB                |
+| KARNATAKA          |
+| SIB                |
+| TMB                |
+| CUB                |
+| EQUITAS            |
+| UJJIVAN            |
+| JANA               |
+| ESAF               |
+| SURYODAY           |
+| FINCARE            |
+| UTKARSH            |
+| IPPB               |
+| AIRTEL_PB          |
+| FINO_PB            |
+| JIO_PB             |
+| NSDL_PB            |
+| HSBC               |
+| SC                 |
+| DEUTSCHE           |
+| DBS                |
+| CITI               |
+| BARCLAYS           |
+| ANZ                |
+| BOFA               |
+| JPMORGAN           |
+| BNP                |
+| EMIRATES_NBD       |
+| FAB                |
+| MASHREQ            |
+| DOHA               |
+| SOCGEN             |
+| MIZUHO             |
+| MUFG               |
+| SMBC               |
+| WOORI              |
+| KEB_HANA           |
+| SHINHAN            |
+| CTBC               |
+| MAYBANK            |
+| UBS                |
+| QNB                |
+| JAKB               |
+| CORP               |
+| PHONEPE            |
+| DHANLAXMI          |
+| NAINITAL           |
+| CAPITAL_SFB        |
+| NESF               |
+| SHIVALIK           |
+| UNITY_SFB          |
+| SARASWAT           |
+| COSMOS             |
+| NKGSB              |
+| KALUPUR            |
+| KGB                |
+| KALYAN_JANATA      |
+| TJSB               |
+| BASSEIN            |
+| TBSB               |
+| ABHYUDAYA          |
+| DOMBIVLI           |
+| JANATA_SAHAKARI    |
+| BMC                |
+| GP_PARSIK          |
+| VARACHHA           |
+| RAJKOT_NAGRIK      |
+| SURAT_PEOPLES      |
+| MEHSANA            |
+| AP_GRAMEENA        |
+| TG_GRAMEENA        |
+| KA_GRAMIN          |
+| BARODA_UP          |
+| ARYAVART           |
+| PUNJAB_GRAMIN      |
+| TN_GRAMA           |
+| CG_GRAMIN          |
+| MP_GRAMIN          |
+| RMGB               |
+| HARYANA_GRAMIN     |
+| UBGB               |
+| VKGB               |
+| MAHA_GRAMIN        |
+| JK_GRAMEEN         |
+| PBGB               |
 | UTTARAKHAND_GRAMIN |
-| AGVB |
-| JHARKHAND_GRAMIN |
-| ODISHA_GRAMYA |
-| SAURASHTRA_GRAMIN |
-| TRIPURA_GRAMIN |
-| MEGHALAYA_RB |
-| MANIPUR_RB |
-| MIZORAM_RB |
-| NAGALAND_RB |
-| ARUNACHAL_RB |
-| PRATHAMA |
-| HP_GRAMIN |
+| AGVB               |
+| JHARKHAND_GRAMIN   |
+| ODISHA_GRAMYA      |
+| SAURASHTRA_GRAMIN  |
+| TRIPURA_GRAMIN     |
+| MEGHALAYA_RB       |
+| MANIPUR_RB         |
+| MIZORAM_RB         |
+| NAGALAND_RB        |
+| ARUNACHAL_RB       |
+| PRATHAMA           |
+| HP_GRAMIN          |
 
 Bank not listed? A statement preamble we do not recognise reports
 `bank: null` and still parses generically — add the name to
