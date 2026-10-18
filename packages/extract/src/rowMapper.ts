@@ -38,6 +38,16 @@ function directionFromSuffix(match: RegExpExecArray | null): RowDirection {
   return null;
 }
 
+/**
+ * Card-PDF artifacts where a trailing column's value collapses into the
+ * amount cell — Axis Flipkart's cashback column ("500.00 DR 5.00"),
+ * IndusInd's trailing statement date ("508.06 DR 15/09/2026"), HDFC CC's
+ * stray currency marker ("1,234.00 l"). The leading amount + optional
+ * direction marker is kept; the tail is recorded in a warning.
+ */
+const LEADING_AMOUNT =
+  /^\s*((?:\d{1,3}(?:,\d{2,3})+|\d+)(?:\.\d{1,2})?)\s*(cr|dr|debit|credit|c|d)?[\s|]+(.+)$/i;
+
 export function findAccountMask(text: string): string | null {
   const m = ACCOUNT_RE.exec(text);
   return m?.[1] ?? null;
@@ -107,8 +117,12 @@ export function mapRow(
 
   const debit = debitRaw !== null ? parseStatementAmount(debitRaw) : null;
   const credit = creditRaw !== null ? parseStatementAmount(creditRaw) : null;
+  // HDFC CC statements carry a '+' in the Credit column on credit rows —
+  // a flag, not an amount, so it parses as null but must not warn.
+  const creditFlag = creditRaw === '+';
   if (debitRaw !== null && debit === null) warnings.push(`unparseable debit '${debitRaw}'`);
-  if (creditRaw !== null && credit === null) warnings.push(`unparseable credit '${creditRaw}'`);
+  if (creditRaw !== null && credit === null && !creditFlag)
+    warnings.push(`unparseable credit '${creditRaw}'`);
 
   // Banks routinely zero-fill the opposite column ('0.00'), so only a
   // non-zero side can carry the amount.
@@ -127,13 +141,24 @@ export function mapRow(
   } else if (debitRaw !== null) {
     direction = 'DEBIT';
   }
+  if (direction === null && creditFlag) direction = 'CREDIT';
 
   if (amountPaise === null && amountRaw !== null) {
     const suffix = DR_CR_SUFFIX.exec(amountRaw);
     const bare = suffix ? amountRaw.replace(DR_CR_SUFFIX, '').trim() : amountRaw;
     const parsed = parseStatementAmount(bare);
     if (parsed === null) {
-      warnings.push(`unparseable amount '${amountRaw}'`);
+      const lead = LEADING_AMOUNT.exec(amountRaw);
+      const leading = lead !== null ? parseStatementAmount(lead[1] ?? '') : null;
+      if (leading !== null && lead !== null) {
+        amountPaise = leading.paise;
+        direction = directionFromColumn(lead[2] ?? '') ?? direction;
+        warnings.push(
+          `trailing fragments after amount ignored ('${(lead[3] ?? '').slice(0, 40)}')`,
+        );
+      } else {
+        warnings.push(`unparseable amount '${amountRaw}'`);
+      }
     } else {
       amountPaise = parsed.paise;
       if (suffix) direction = directionFromSuffix(suffix);
@@ -163,7 +188,14 @@ export function mapRow(
     const stripped = balanceRaw.replace(DR_CR_SUFFIX, '').trim();
     const parsed = parseStatementAmount(stripped);
     if (parsed === null) {
-      warnings.push(`unparseable balance '${balanceRaw}'`);
+      const lead = LEADING_AMOUNT.exec(stripped);
+      const leading = lead !== null ? parseStatementAmount(lead[1] ?? '') : null;
+      if (leading !== null) {
+        balancePaise = leading.sign === 'neg' ? -leading.paise : leading.paise;
+        warnings.push('trailing fragments after balance ignored');
+      } else {
+        warnings.push(`unparseable balance '${balanceRaw}'`);
+      }
     } else {
       // Indian statements mark an overdrawn balance as '1,234.00 Dr' — the
       // magnitude parses positive, so re-apply the sign (also '-x' / '(x)').

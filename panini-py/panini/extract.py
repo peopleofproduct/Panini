@@ -351,6 +351,16 @@ def _direction_from_suffix(match: Optional[re.Match]) -> Optional[str]:
     return None
 
 
+# Card-PDF artifacts where a trailing column's value collapses into the
+# amount cell ("508.06 DR 15/09/2026", "1,234.00 l") — keep the leading
+# amount + marker, record the tail in a warning.
+_LEADING_AMOUNT = re.compile(
+    r"^\s*((?:\d{1,3}(?:,\d{2,3})+|\d+)(?:\.\d{1,2})?)"
+    r"\s*(cr|dr|debit|credit|c|d)?[\s|]+(.+)$",
+    re.IGNORECASE,
+)
+
+
 def _find_account_mask(text: str) -> Optional[str]:
     m = _ACCOUNT_RE.search(text)
     return m.group(1) if m else None
@@ -474,9 +484,12 @@ def map_row(
 
     debit = parse_statement_amount(debit_raw) if debit_raw is not None else None
     credit = parse_statement_amount(credit_raw) if credit_raw is not None else None
+    # HDFC CC statements carry a '+' in the Credit column on credit rows —
+    # a flag, not an amount, so it parses as null but must not warn.
+    credit_flag = credit_raw == "+"
     if debit_raw is not None and debit is None:
         warnings.append(f"unparseable debit '{debit_raw}'")
-    if credit_raw is not None and credit is None:
+    if credit_raw is not None and credit is None and not credit_flag:
         warnings.append(f"unparseable credit '{credit_raw}'")
 
     # Banks routinely zero-fill the opposite column ('0.00'), so only a
@@ -494,13 +507,28 @@ def map_row(
         warnings.append("zero amount in the debit/credit columns")
     elif debit_raw is not None:
         direction = "DEBIT"
+    if direction is None and credit_flag:
+        direction = "CREDIT"
 
     if amount_paise is None and amount_raw is not None:
         suffix = _DR_CR_SUFFIX.search(amount_raw)
         bare = _DR_CR_SUFFIX.sub("", amount_raw).strip() if suffix else amount_raw
         parsed = parse_statement_amount(bare)
         if parsed is None:
-            warnings.append(f"unparseable amount '{amount_raw}'")
+            lead = _LEADING_AMOUNT.match(amount_raw)
+            leading = (
+                parse_statement_amount(lead.group(1)) if lead is not None else None
+            )
+            if leading is not None and lead is not None:
+                amount_paise = leading[0]
+                marker = lead.group(2)
+                if marker:
+                    direction = _direction_from_column(marker) or direction
+                warnings.append(
+                    f"trailing fragments after amount ignored ('{(lead.group(3) or '')[:40]}')"
+                )
+            else:
+                warnings.append(f"unparseable amount '{amount_raw}'")
         else:
             amount_paise = parsed[0]
             if suffix:
@@ -529,7 +557,17 @@ def map_row(
         stripped = _DR_CR_SUFFIX.sub("", balance_raw).strip()
         parsed_bal = parse_statement_amount(stripped)
         if parsed_bal is None:
-            warnings.append(f"unparseable balance '{balance_raw}'")
+            lead_bal = _LEADING_AMOUNT.match(stripped)
+            leading_bal = (
+                parse_statement_amount(lead_bal.group(1)) if lead_bal else None
+            )
+            if leading_bal is not None:
+                balance_paise = (
+                    -leading_bal[0] if leading_bal[1] == "neg" else leading_bal[0]
+                )
+                warnings.append("trailing fragments after balance ignored")
+            else:
+                warnings.append(f"unparseable balance '{balance_raw}'")
         else:
             overdrawn = parsed_bal[1] == "neg" or (
                 _direction_from_suffix(bal_suffix) == "DEBIT"

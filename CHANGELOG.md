@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **RBI-licensed entity names** — `bank-names.json` now covers ~120
+  entities: all scheduled commercial banks, SFBs, payments banks,
+  major scheduled UCBs (SVC, Saraswat, Cosmos, TJSB, Abhyudaya, …),
+  Regional Rural Banks (both current and pre-amalgamation names —
+  old statements carry old names), and foreign banks with India ops.
+- **Card-PDF column-collapse quirks** — amount cells that absorb a
+  trailing column (Axis cashback `500.00 DR 5.00`, IndusInd trailing
+  statement date `508.06 DR 15/09/2026`, HDFC CC stray `l` marker)
+  keep the leading amount + direction marker and warn; HDFC CC's `+`
+  credit-flag column marks rows CREDIT.
 - **Deeper coverage wave** — layouts for **IDBI** (`CR/DR` + `Amount
 (INR)`), **Bank of Baroda .xls** (signed `Amount (INR)` — new
   `unsignedAmount` layout hint maps unsigned positives to credits),
