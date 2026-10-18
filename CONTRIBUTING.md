@@ -33,6 +33,14 @@ with the fields you expect the parser to produce. The corpus is a CI gate:
 expectation regresses. Prefer anonymized or synthetic narrations; never commit
 real account numbers, names, or VPAs.
 
+## Adding a bank statement layout
+
+CSV/Excel/PDF statement layouts are also data-driven — see
+[`docs/bank-layout-guide.md`](docs/bank-layout-guide.md). A layout is a
+JSON entry in `packages/extract/formats/csv-layouts.json` plus a corpus
+fixture in `packages/extract/formats/corpus/`. Same rule applies:
+anonymized or synthetic inputs only, expectations verified by CI.
+
 ## Entity dictionaries
 
 `packages/rules-engine/rules/entities/` holds the community dictionaries —

@@ -43,6 +43,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   parity with the TS normalizer, and a per-rules-dir cache so
   `parse_narration` no longer re-reads/re-compiles grammar JSON per call.
 
+### Added — enrichment depth pass (taxonomy, MCC, merchants, typed JSON v2)
+
+- **`@paniniapi/rules-engine` (0.2.2)** —
+  - **Governed taxonomy**: 39 → 43 categories (+Government Benefits,
+    Home & Furniture, Pet Care, Alcohol & Bars) and ~120 evidence-probed
+    keywords; new `rules/taxonomy.json` assigns every label a stable `id`
+    and rollup `group` (loadTaxonomy()/loader exclude it from grammar
+    parsing; a lockstep test fails CI if the two files drift).
+    `ipo_asba` grammar rule fixes merchant keywords stealing
+    `IPO-ASBA-<name>` narrations out of Investments.
+  - **MCC table**: 98 → 235 ISO-18245 codes — full 5960–5969 direct
+    marketing (incl. `5968` continuity/subscription), 5815–5818 digital
+    goods, apparel/retail, auto trades, home trades and furnishings,
+    5552 EV charging, 5983 fuel dealers, 0742 veterinary, 6513 rentals →
+    Housing, 4829/6050/6536-40 money movement; 5712/5813 remapped to the
+    finer categories.
+  - **Merchant dictionary**: 127 → 360 canonical entries — fills six
+    previously-empty categories (Pet Care, Postage & Courier, Donations
+    incl. temple trusts and PM relief funds, Forex, Home & Furniture,
+    Wallet Top-up) plus AMCs, hospital/diagnostic chains, state
+    electricity boards, LPG, DTH, brokerages, insurers, regional OTT,
+    news, jewellery. Ambiguous bare aliases (`CCD`, `MERU`, `KALYAN`,
+    `ISHA`) deliberately excluded so person-name narrations stay null.
+  - **Typed narration JSON v2**: `schema_version: 2` additive fields —
+    `category_source` (grammar/keyword/merchant/mcc/none),
+    `category_id`, `category_group`, `counterparty_kind`
+    (merchant/self/unknown), `ref_kind` (utr/rrn/cheque/ref/none), and
+    passthrough `bank`/`amount_paise`/`balance_paise`/`account_mask`/
+    `currency`. Exact TS↔Python parity; `setTaxonomy()` injector feeds
+    the browser bundle.
+- **`@paniniapi/extract` (0.2.3)** — **native zero-dependency XLSX
+  reader**: parses ZIP central-directory members (stored + raw deflate,
+  CRC32-verified), resolves workbook → rels → first worksheet, handles
+  sharedStrings/inlineStr/sparse cells, and renders date-formatted
+  serials (builtin + custom date numFmts, 1904 epoch) as `YYYY-MM-DD`.
+  Used automatically when no `SpreadsheetProvider` is supplied;
+  `createNativeXlsxProvider` is exported for explicit wiring, and
+  corrupt/non-workbook archives degrade to warnings — never throws.
+- **Eval infrastructure** — `eval/` gold sets (narration, category,
+  merchant, MCC) with a `baseline.json` ratchet that forbids coverage
+  regressions (`PANINI_EVAL_UPDATE=1` re-baselines deliberately);
+  `generateQuirkyCsvStatement` corruption simulator with layout×quirk
+  round-trip coverage; `check-pins` script gates devDep/lockfile drift.
+
 ### Fixed
 
 - **Narration** — `SELF`/`ECS`/`NACH` keywords removed from the category

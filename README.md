@@ -62,7 +62,7 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 | `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                                                                                                                                                                                                            |
 | `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 14 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                                                                                                                                                                                                               |
 | `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA payloads (full FI-type matrix + consent request/artefact), the complete ONDC action surface (envelope, FIS search, catalog, order lifecycle, track/cancel/update), and OCEN 4.0 loan lifecycle (13-state status, disbursement, repayment schedule, eNACH, RBI KFS).                                                                                                                        |
-| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (15 banks + generic), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams.                                                                                                                                                                                    |
+| `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (15 banks + generic), **native zero-dependency XLSX reader** (ZIP+XML internally, date serials → ISO), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and a pluggable OCR provider seam.                                                                                                       |
 | `@paniniapi/insights`         | Deterministic credit-relevant analytics — income/salary detection, recurring obligations, EMI, FOIR, cash-flow summaries, and bounce/round-trip/self-transfer risk signals. Explainable: every claim carries a rule ID + evidence indices.                                                                                                                                                                                              |
 | `@paniniapi/simulator`        | Generative sandbox producing seeded, anomaly-injected ReBIT payloads **and bank-layout statement files** — feeds the extraction round-trip corpus gate.                                                                                                                                                                                                                                                                                 |
 | `@paniniapi/fiu-client`       | Open FIU client for the AA ecosystem — consent lifecycle, X25519/ECDH ephemeral key exchange, AES-256-GCM FI decryption per the ReBIT spec (Rahasya-compatible), JWS artefact verification, **multi-AA orchestration** (community AA directory, handle→AA routing, bounded parallel fan-out), injectable transport. Zero deps; no implicit network calls. See [`docs/fiu-sandbox-certification.md`](docs/fiu-sandbox-certification.md). |
@@ -177,8 +177,13 @@ await extractStatement(pdfBytes, {
   credentials: { dob: '15-04-1990', name: 'Kapil Sharma' }, // or { passwords: ['…'] }
 });
 
-// XLSX and scanned input go through provider seams — Panini stays
-// zero-dependency; you plug in SheetJS / Tesseract / cloud OCR:
+// XLSX works out of the box — a zero-dependency reader parses
+// workbook/sharedStrings/styles internally (date serials → ISO dates).
+// Corrupt or non-workbook archives degrade to warnings, never throws:
+await extractStatement(xlsxBytes);
+
+// You can still plug in SheetJS/exceljs via the provider seam if you
+// need caller-controlled parsing, and scanned input uses the OCR seam:
 import { createSheetJsProvider, createTesseractProvider } from '@paniniapi/extract';
 await extractStatement(xlsxBytes, { spreadsheet: createSheetJsProvider(XLSX) });
 await extractStatement(scannedPdf, { ocr: createTesseractProvider(tesseractWorker) });
