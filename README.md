@@ -196,6 +196,13 @@ await extractStatement(xlsxBytes, { spreadsheet: createSheetJsProvider(XLSX) });
 await extractStatement(scannedPdf, { ocr: createTesseractProvider(tesseractWorker) });
 // Word-level OCR boxes keep column anchoring — same table pipeline as a
 // real text layer. Flat OCR text degrades to whitespace-split rows.
+
+// For scans too degraded for one engine, the router escalates across
+// tiers — local OCR → on-prem open-weight VLM → queue-priced batch TSP —
+// and every result must pass verifyStatement's deterministic arithmetic
+// gate (balance-chain, opening→closing reconciliation). Optional dual-
+// engine consensus flags the exact cells two engines disagree on.
+// See docs/ocr-playbook.md — "any eyes, proven numbers".
 ```
 
 ### Credit-relevant insights

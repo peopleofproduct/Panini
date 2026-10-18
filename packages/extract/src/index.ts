@@ -35,11 +35,32 @@ export { mapRow, findAccountMask } from './rowMapper';
 export type { SpreadsheetProvider } from './spreadsheet';
 export type { OcrFragment, OcrProvider, OcrResult } from './ocr';
 export {
+  createHttpQueueProvider,
   createNativeXlsxProvider,
+  createOpenAiVisionProvider,
   createSheetJsProvider,
   createTesseractProvider,
 } from './providers';
-export type { SheetJsLike, TesseractLike } from './providers';
+export type {
+  FetchLike,
+  HttpQueueOptions,
+  OpenAiVisionOptions,
+  SheetJsLike,
+  TesseractLike,
+} from './providers';
+export type { QueueJob, QueueOcrProvider } from './queue';
+export type { VisionPage, VisionProvider, VisionResult } from './vision';
+export { verifyStatement } from './verify';
+export type { VerificationResult, VerifyIssue } from './verify';
+export { extractWithRouter } from './router';
+export type {
+  ExtractionAttempt,
+  ExtractionRouterOptions,
+  RoutedExtraction,
+  RouterTier,
+} from './router';
+export { consensusCompare, consensusWithVerification } from './consensus';
+export type { ConsensusDisagreement, ConsensusResult, ConsensusVerdict } from './consensus';
 export { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement';
 export type { ExtractPdfOptions } from './pdf/pdfStatement';
 export { decryptPdf, passwordCandidates } from './pdf/encryption';

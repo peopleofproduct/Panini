@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@paniniapi/extract": "0.2.3",
-    "@paniniapi/insights": "0.2.1",
+    "@paniniapi/insights": "0.2.2",
     "@paniniapi/rules-engine": "0.2.3",
     "@paniniapi/forensics": "0.1.0"
   },

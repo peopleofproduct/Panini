@@ -37,7 +37,7 @@ function empty(format: ExtractedStatement['format'], warnings: string[]): Extrac
 }
 
 /** Splits OCR text into pseudo-cell rows (2+ spaces or tabs = column break). */
-function linesToRows(text: string): string[][] {
+export function linesToRows(text: string): string[][] {
   return text
     .split(/\r\n|\n|\r/)
     .map((line) => line.trim())
@@ -50,7 +50,7 @@ function linesToRows(text: string): string[][] {
  * pipeline (pixel y grows downward, so it is negated to match PDF's
  * bottom-up origin); flat text falls back to whitespace-split rows.
  */
-function statementFromOcr(
+export function statementFromOcr(
   ocr: OcrResult,
   layouts: ReturnType<typeof loadCsvLayouts>,
   format: StatementFormat,

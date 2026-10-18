@@ -8,6 +8,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Degraded-scan OCR orchestration kit** (`@paniniapi/extract`) — the
+  "any eyes, proven numbers" architecture for scans too degraded for
+  text-layer extraction:
+  - `VisionProvider` seam — structured-table vision models (on-prem
+    open-weight VLMs via any OpenAI-compatible endpoint: Ollama, vLLM).
+    `createOpenAiVisionProvider` ships ready-made (caller-owned fetch,
+    temperature 0, schema-checked output, optional raw-response audit).
+  - `QueueOcrProvider` seam — submit→poll batch/TSP extraction for
+    reduced-price queue workflows. `createHttpQueueProvider` adapts any
+    generic HTTP job API; `maxPolls`/`pollIntervalMs` bound the wait.
+  - `verifyStatement` — deterministic arithmetic gate every non-native
+    result must pass: balance-chain continuity, opening→closing
+    reconciliation, date plausibility, parse-rate floor. Hallucinated
+    rows break the chain and get flagged, not underwritten.
+  - `extractWithRouter` — tiered routing cheap→costly with
+    `minVerifyScore`, `minProviderConfidence`, per-engine attempt
+    audit trail, and `verified`/`degraded`/`failed` verdicts.
+  - `consensusCompare` / `consensusWithVerification` — dual-engine
+    field-level agreement on the same pages; differing cells are
+    evidence-listed for human review. Two independent engines cannot
+    hallucinate the same wrong number.
+  - New doc: `docs/ocr-playbook.md` — tier guide, DPDP notes for hosted
+    tiers, router policy, honest limits.
 - **`@paniniapi/forensics` (0.1.0, new)** — deterministic document-integrity
   forensics for statement files. `inspectStatement(bytes)` returns an
   explainable `IntegrityReport` (verdict + rule-Id'd signals + evidence):
