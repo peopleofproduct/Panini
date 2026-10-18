@@ -13,10 +13,10 @@
     "dist"
   ],
   "dependencies": {
-    "@paniniapi/extract": "0.5.0",
+    "@paniniapi/extract": "0.6.0",
     "@paniniapi/insights": "0.5.0",
     "@paniniapi/rules-engine": "0.2.3",
-    "@paniniapi/forensics": "0.2.2"
+    "@paniniapi/forensics": "0.2.3"
   },
   "devDependencies": {
     "@paniniapi/simulator": "0.2.2"

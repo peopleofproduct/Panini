@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import type { ExtractOptions, StatementFormat } from '@paniniapi/extract';
+import type { ExtractOptions, ParsedDocument, StatementFormat } from '@paniniapi/extract';
 import type {
   ConductMetrics,
   CounterpartyFlowReport,
@@ -69,6 +69,11 @@ export interface StatementResult {
     readonly unverifiableRows: number;
     readonly summary: string;
   } | null;
+  /**
+   * Non-statement document parse — payslip, ITR-V, or Form 26AS — when the
+   * file produced zero transactions but matched a document parser.
+   */
+  readonly document: ParsedDocument | null;
 }
 
 /** Enriched transaction — extracted row + narration intelligence merged. */

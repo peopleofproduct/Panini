@@ -24,6 +24,13 @@ from .flows import (  # noqa: F401
     detect_conduct_metrics,
     FLOW_RULE_IDS,
 )
+from .documents import (  # noqa: F401
+    detect_document_type,
+    extract_document,
+    extract_form26as,
+    extract_itrv,
+    extract_payslip,
+)
 from .drift import (  # noqa: F401
     analyze_narration_batch,
     corpus_baseline,
@@ -53,4 +60,6 @@ __all__ = [
     "consolidate_accounts", "detect_fraud_indicators",
     "detect_portfolio_indicators", "FRAUD_RULE_IDS",
     "counterparty_flows", "detect_conduct_metrics", "FLOW_RULE_IDS",
+    "detect_document_type", "extract_document", "extract_payslip",
+    "extract_itrv", "extract_form26as",
 ]

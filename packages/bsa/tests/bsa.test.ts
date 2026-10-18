@@ -205,6 +205,25 @@ describe('analyzeStatementFiles', () => {
     expect(report.fraud).toBeNull();
     expect(report.portfolio).toBeNull();
   });
+
+  it('classifies non-statement income documents instead of zero-transaction silence', async () => {
+    const payslip =
+      'ACME TECHNOLOGIES PVT LTD\nPayslip for the month of March 2024\n' +
+      'Employee Name    RAHUL SHARMA\nPAN              AXYPD1234K\n' +
+      'Basic            52,000.00\nHRA              20,800.00\n' +
+      'Gross Earnings   72,800.00\nPF               6,240.00\n' +
+      'Total Deductions 6,240.00\nNet Pay          66,560.00\n';
+    const report = await analyzeStatementFiles([{ name: 'payslip.txt', data: payslip }]);
+    const st = report.statements[0]!;
+    expect(st.document?.kind).toBe('payslip');
+    if (st.document?.kind === 'payslip') {
+      expect(st.document.netPayPaise).toBe(6656000);
+      expect(st.document.arithmeticCheck).toBe('ok');
+    }
+    const md = renderMarkdown(report);
+    expect(md).toContain('## Income Documents');
+    expect(md).toContain('payslip');
+  });
 });
 
 describe('formatInr — Indian digit grouping', () => {

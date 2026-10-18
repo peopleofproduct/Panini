@@ -52,6 +52,22 @@ export type { QueueJob, QueueOcrProvider } from './queue';
 export type { VisionPage, VisionProvider, VisionResult } from './vision';
 export { verifyStatement } from './verify';
 export type { VerificationResult, VerifyIssue } from './verify';
+export {
+  detectDocumentType,
+  extractDocument,
+  extractForm26as,
+  extractItrV,
+  extractPayslip,
+} from './documents';
+export type {
+  DocumentKind,
+  Form26asEntry,
+  ParsedDocument,
+  ParsedForm26as,
+  ParsedItrV,
+  ParsedPayslip,
+  PayslipComponent,
+} from './documents';
 export { extractWithRouter } from './router';
 export type {
   ExtractionAttempt,

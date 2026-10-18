@@ -14,6 +14,7 @@ Named after Acharya Pāṇini — the ancient architect of formal rule-based gra
 - **Normalize** every narration through community-editable grammar rules — 15 bank layouts, UPI/IMPS/NEFT/RTGS/ATM/POS/wallets, merchants, IFSC, VPA handles
 - **Analyze** deterministically — income, obligations, EMI, FOIR, cash flow, trends, bounce/round-trip/self-transfer risk signals — every claim carrying a rule ID + evidence
 - **Flag fraud** — the industry-standard indicator suite (circular flows, holiday cash deposits, RTGS-threshold gaming, round-figure clusters, gap months, salary anomalies, overdrawn days) plus **multi-account consolidation**: own-account transfers netted, A→B→A rotation cycles, inflated-turnover share. See [`docs/fraud-indicators.md`](docs/fraud-indicators.md)
+- **Parse income documents** — payslips (label-preserved components + arithmetic check), ITR-V acknowledgements, and Form 26AS TDS entries — the income-verification leg beyond bank statements. See [`docs/income-documents.md`](docs/income-documents.md)
 - **Validate** against India's open-finance standards — the only public free validators for ReBIT AA payloads, the complete ONDC action surface, and the OCEN 4.0 loan lifecycle
 - **Speak the AA protocol itself** — consent lifecycle, Rahasya-compatible X25519/HKDF/AES-256-GCM decryption, and multi-AA orchestration (handle→AA routing, bounded parallel fan-out) in ~600 auditable lines
 - **Run anywhere** — server, edge, or entirely inside the browser: statement → BSA report with zero network calls

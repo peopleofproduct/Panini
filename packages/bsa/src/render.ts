@@ -68,6 +68,37 @@ export function renderMarkdown(report: BsaReport): string {
   }
   lines.push('');
 
+  const docs = report.statements.filter((s) => s.document !== null);
+  if (docs.length > 0) {
+    lines.push('## Income Documents', '');
+    for (const s of docs) {
+      const d = s.document!;
+      if (d.kind === 'payslip') {
+        lines.push(
+          `### ${s.name} — payslip${d.employer !== null ? ` (${d.employer})` : ''}`,
+          `- Net pay: ${formatInr(d.netPayPaise)} | gross ${formatInr(d.grossPaise)} − deductions ${formatInr(d.deductionsPaise)} — arithmetic ${d.arithmeticCheck}`,
+          d.period !== null ? `- Period: ${d.period}` : '- Period: —',
+          '',
+        );
+      } else if (d.kind === 'itrv') {
+        lines.push(
+          `### ${s.name} — ITR-V${d.assessmentYear !== null ? ` AY ${d.assessmentYear}` : ''}`,
+          `- Total income: ${formatInr(d.totalIncomePaise)} | taxes paid ${formatInr(d.totalTaxesPaidPaise)} | refund ${formatInr(d.refundPaise)}`,
+          d.ackNo !== null
+            ? `- Ack: ${d.ackNo}${d.filingDate !== null ? `, filed ${d.filingDate}` : ''}`
+            : '',
+          '',
+        );
+      } else if (d.kind === 'form26as') {
+        lines.push(
+          `### ${s.name} — Form 26AS${d.assessmentYear !== null ? ` AY ${d.assessmentYear}` : ''}`,
+          `- ${d.entries.length} TDS entr${d.entries.length === 1 ? 'y' : 'ies'} | paid ${formatInr(d.totalPaidPaise)} | deducted ${formatInr(d.totalTaxDeductedPaise)}`,
+          '',
+        );
+      }
+    }
+  }
+
   const reconFlagged = report.statements.filter(
     (s) =>
       s.reconciliation !== null &&

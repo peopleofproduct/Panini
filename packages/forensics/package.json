@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/forensics",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Deterministic document-integrity forensics for bank statements \u2014 PDF structural signals, CMS/PKCS#7 signature validation, and arithmetic consistency checks. Zero runtime dependencies, fully client-side.",
   "license": "Apache-2.0",
   "author": "Kapil",
@@ -11,7 +11,7 @@
     "trust"
   ],
   "dependencies": {
-    "@paniniapi/extract": "0.5.0"
+    "@paniniapi/extract": "0.6.0"
   },
   "scripts": {
     "build": "tsc -b",

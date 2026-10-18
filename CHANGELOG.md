@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Income-document parsers** (`@paniniapi/extract` 0.6.0) — three new
+  deterministic document classes beyond statements: `extractPayslip`
+  (label-preserved components + gross−deductions=net arithmetic check +
+  PAN/UAN/PF/ESI ids), `extractItrV` (numbered-box fields: gross total
+  income, chapter VI-A, total income, taxes paid, refund, ack no.), and
+  `extractForm26as` (TAN-keyed TDS entries + totals). `detectDocumentType`
+  - `extractDocument` route text layers to the right parser; `panini-bsa`
+    renders them under "Income Documents" instead of zero-transaction
+    silence. Python parity: `extract_payslip`, `extract_itrv`,
+    `extract_form26as`, `extract_document`. See
+    `docs/income-documents.md`.
 - **Counterparty money-flow + conduct metrics** (`@paniniapi/insights`
   0.5.0) — `counterpartyFlows` aggregates every transaction into
   per-counterparty in/out/net totals with evidence indices (the

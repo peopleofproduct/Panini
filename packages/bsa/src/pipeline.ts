@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { extractStatement } from '@paniniapi/extract';
+import { extractDocument, extractStatement } from '@paniniapi/extract';
 import { inspectStatement, reconcileWithAa, transactionsFromAaData } from '@paniniapi/forensics';
 import type { AccountSlice, InsightTransaction } from '@paniniapi/insights';
 import {
@@ -47,7 +47,7 @@ export async function analyzeStatementFiles(
     options.aaData === undefined ? null : transactionsFromAaData(options.aaData);
 
   for (const [fileIndex, file] of files.entries()) {
-    const st = await extractStatement(file.data, options);
+    let st = await extractStatement(file.data, options);
     let integrity: BsaReport['statements'][number]['integrity'] = null;
     if (options.forensics !== false) {
       const report = await inspectStatement(file.data, {
@@ -76,6 +76,18 @@ export async function analyzeStatementFiles(
         summary: r.summary,
       };
     }
+    // Non-statement income documents (payslip/ITR-V/26AS) yield zero
+    // transactions — classify and parse them instead of silently passing.
+    let document: BsaReport['statements'][number]['document'] = null;
+    if (st.transactions.length === 0 && typeof file.data === 'string') {
+      const doc = extractDocument(file.data);
+      if (doc !== null) {
+        document = doc;
+        if (doc.kind === 'payslip' && doc.arithmeticCheck === 'mismatch') {
+          st = { ...st, warnings: [...st.warnings, 'payslip arithmetic mismatch'] };
+        }
+      }
+    }
     statements.push({
       name: file.name,
       format: st.format,
@@ -87,6 +99,7 @@ export async function analyzeStatementFiles(
       metadata: st.metadata,
       integrity,
       reconciliation,
+      document,
     });
     const fileRows: InsightTransaction[] = [];
     for (const t of st.transactions) {
