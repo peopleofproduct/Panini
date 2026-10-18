@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/browser",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Browser-safe Panini bundle \u2014 narration parsing, CSV/SMS statement extraction and deterministic insights with all grammar/dictionary data inlined. Zero node: imports; nothing leaves the page.",
   "license": "Apache-2.0",
   "author": "Kapil",
@@ -12,9 +12,9 @@
     "scripts"
   ],
   "dependencies": {
-    "@paniniapi/core": "0.1.2",
-    "@paniniapi/rules-engine": "0.2.1",
-    "@paniniapi/extract": "0.2.2",
+    "@paniniapi/core": "0.1.3",
+    "@paniniapi/rules-engine": "0.2.2",
+    "@paniniapi/extract": "0.2.3",
     "@paniniapi/insights": "0.2.1"
   },
   "devDependencies": {

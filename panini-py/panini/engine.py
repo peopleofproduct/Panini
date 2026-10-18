@@ -16,7 +16,12 @@ from pathlib import Path
 from typing import Any, Optional
 
 from .dates import is_plausible_date, parse_indian_date
-from .tokenizer import CHANNEL_KEYWORDS, DIRECTION_KEYWORDS, tokenize
+from .tokenizer import (
+    CHANNEL_KEYWORDS,
+    DIRECTION_KEYWORDS,
+    tokenize,
+    tokenize_pieces,
+)
 
 # ── regex translation (JS → Python) ─────────────────────────────────────────
 
@@ -113,6 +118,13 @@ _AMOUNT_BODY = re.compile(r"^\d+(?:\.\d{1,2})?$")
 
 _DIRECTION_TYPES = {"DEBIT", "CREDIT"}
 _REVERSAL_TYPES = {"REVERSAL", "REFUND"}
+
+# In clearing narrations ("MICR INWARD CLEARING", "INWARD CLG") the words
+# INWARD/OUTWARD describe the cheque's direction through the clearing
+# house — which banks use inconsistently — not whether the account was
+# debited or credited. They are ignored as direction evidence there.
+_CLEARING_CONTEXT = re.compile(r"\b(?:CLG|CLEARING|MICR)\b", re.IGNORECASE)
+_CLEARING_AMBIGUOUS = {"INWARD", "OUTWARD", "INW", "OUTW", "INBOUND", "OUTBOUND"}
 
 
 def _sanitize(text: str) -> str:
@@ -305,14 +317,19 @@ class Normalizer:
         return parsed
 
     def _heuristic(self, text: str, raw: str, bank_hint, warnings) -> NormalizedTransaction:
-        tokens = tokenize(text, is_plausible_date)
+        pieces = tokenize_pieces(text, is_plausible_date)
+        tokens = [t for piece in pieces for t in piece]
         metadata: dict[str, str] = {}
         flag_types, applied = [], []
+        clearing = bool(_CLEARING_CONTEXT.search(text))
         for t in tokens:
-            mapped = DIRECTION_KEYWORDS.get(t.value.upper())
+            upper = t.value.upper()
+            if clearing and upper in _CLEARING_AMBIGUOUS:
+                continue
+            mapped = DIRECTION_KEYWORDS.get(upper)
             if mapped:
                 flag_types.append(mapped)
-                applied.append(t.value.upper())
+                applied.append(upper)
         if applied:
             metadata["flags"] = ",".join(applied)
 
@@ -350,7 +367,26 @@ class Normalizer:
              and (channel_pos is None or t.position > channel_pos)),
             None,
         )
-        counterparty = preserve_acronym_case(cp_tok.value) if cp_tok else None
+        # A counterparty name can span whitespace ("RAMESH KUMAR") but never
+        # a field separator: extend only when the anchor is the last part of
+        # its piece, absorbing the first part of each following piece while
+        # it is name-like and stopping at the first `-`/`/` boundary,
+        # number, date, or VPA.
+        counterparty = None
+        if cp_tok:
+            words = [cp_tok.value]
+            anchor_piece = next(
+                (i for i, p in enumerate(pieces) if p[-1] is cp_tok), -1
+            )
+            if anchor_piece >= 0:
+                for piece in pieces[anchor_piece + 1:]:
+                    first = piece[0]
+                    if first.kind not in ("ALPHA", "ALNUM"):
+                        break
+                    words.append(first.value)
+                    if len(piece) > 1:
+                        break
+            counterparty = preserve_acronym_case(" ".join(words))
 
         category = self._categorize(f"{counterparty or ''} {text}") or "Uncategorized"
         warnings.append("no grammar pattern matched; applied heuristic tokenization")
@@ -472,18 +508,30 @@ def _lookup_ifsc(value: Optional[str], banks: dict) -> Optional[dict]:
     return banks.get(prefix)
 
 
+# (Normalizer, entities) are immutable once built — cache them per rules dir
+# so parse_narration doesn't re-read and re-compile every JSON file per call.
+_norm_cache: dict[Path, tuple[Normalizer, dict[str, Any]]] = {}
+
+
+def _normalizer_for(rd: Path) -> tuple[Normalizer, dict[str, Any]]:
+    key = rd.resolve()
+    hit = _norm_cache.get(key)
+    if hit is None:
+        rule_sets, categories = load_builtin_rules(key)
+        hit = (Normalizer(rule_sets, categories), _load_entities(key))
+        _norm_cache[key] = hit
+    return hit
+
+
 def parse_narration(input_: str | dict, *, enrich: bool = True,
                     rules_dir: Optional[Path] = None) -> dict[str, Any]:
     """Parse a bank narration into the flattened ParsedBankNarration shape —
     the same output contract as parseBankNarration() in TypeScript."""
-    rd = rules_dir or _RULES_DIR
-    rule_sets, categories = load_builtin_rules(rd)
-    norm = Normalizer(rule_sets, categories)
+    norm, entities = _normalizer_for(rules_dir or _RULES_DIR)
     txn = norm.normalize(input_)
 
     merchant_entry = vpa_info = ifsc_info = mcc_info = None
     if enrich:
-        entities = _load_entities(rd)
         merchant_entry = _lookup_merchant(txn.counterparty, entities["merchants"])
         if txn.vpa_handle:
             vpa_info = entities["vpa-handles"].get(txn.vpa_handle)

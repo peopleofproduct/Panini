@@ -57,6 +57,34 @@ def _check_csv(path, fixture):
     return check
 
 
+def _check_csv_cases(path, case):
+    def check(self):
+        result = extract_csv_statement(case["input"])
+        expect = case["expect"]
+        self.assertEqual(
+            len(result["transactions"]), expect["count"],
+            f"{case['id']}: row count; warnings={result['warnings']}",
+        )
+        for i, want in enumerate(expect.get("rows", [])):
+            got = result["transactions"][i]
+            for key, val in want.items():
+                self.assertEqual(
+                    got.get(key), val,
+                    f"{case['id']} row {i} field {key!r}: expected {val!r}, got {got.get(key)!r}",
+                )
+        for key, val in expect.get("metadata", {}).items():
+            self.assertEqual(result["metadata"].get(key), val, f"{case['id']} metadata {key!r}")
+        joined = " | ".join(result["warnings"])
+        for needle in expect.get("warningsContain", []):
+            self.assertIn(needle, joined, f"{case['id']} warnings")
+        for i, needles in enumerate(expect.get("rowWarningsContain", [])):
+            row_warnings = " | ".join(result["transactions"][i]["warnings"])
+            for needle in needles:
+                self.assertIn(needle, row_warnings, f"{case['id']} row {i} warnings")
+
+    return check
+
+
 def _check_sms(path, sample, idx):
     def check(self):
         result = extract_sms(sample["input"])
@@ -83,6 +111,10 @@ for _path, _fixture in _fixtures():
     _name = Path(_path).stem
     if _fixture.get("format") == "csv":
         setattr(ExtractConformance, f"test_{_name}", _check_csv(_path, _fixture))
+    elif _fixture.get("format") == "csv-cases":
+        for _c in _fixture.get("cases", []):
+            _slug = "".join(ch if ch.isalnum() else "_" for ch in _c["id"])
+            setattr(ExtractConformance, f"test_{_name}_{_slug}", _check_csv_cases(_path, _c))
     elif _fixture.get("format") == "sms":
         for _i, _s in enumerate(_fixture.get("samples", [])):
             setattr(ExtractConformance, f"test_{_name}_{_i}", _check_sms(_path, _s, _i))

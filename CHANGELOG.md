@@ -6,6 +6,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] — 2026-10-18 — Phase 0 defect sweep (extraction + narration)
+
+### Added
+
+- **`@paniniapi/rules-engine` (0.2.2)** — three new grammar patterns:
+  `upi_slashed_payment_remark` and `upi_slashed_name_vpa` for the
+  `UPI/RRN/remark-or-name/user@handle/bank` shape (the VPA user is the
+  counterparty when segment 3 is a generic "Payment from …" remark), and
+  `chq_paid` for `CHQ PAID …` narrations; `hdfc_upi_name_vpa` for the
+  HDFC `UPI-name-vpa@handle-IFSC-RRN-note` shape; `icici_bil_payment` now
+  skips `BIL/{BPAY|INFT|ONL|…}` channel codes and captures the reference
+  number; `bank_charges` accepts `CHRGS`. Category keywords: `TO SELF` /
+  `OWN ACCOUNT` → Transfers; `CHRGS` / `ANNUAL FEE` / `JOINING FEE` →
+  Bank Charges; `FD CLOSURE`/`FD MATURITY`/`FD PREMATURE`/`RD INSTALMENT`/
+  `RD MATURITY` → Investments; `TOPUP`/`TOP UP` → Wallet Top-up. Merchant
+  dictionary grows 115 → 127 with the major NBFC lenders (Tata Capital,
+  Bajaj Finance, HDB Financial, Aditya Birla Finance, Mahindra Finance,
+  Cholamandalam, LIC Housing Finance, Poonawalla, Shriram, Muthoot,
+  Manappuram, SMFG) mapped to Loan & EMI. Corpus grows 76 → 84 samples.
+- **`@paniniapi/extract` (0.2.3)** — exact decimal amount parser
+  (`statementAmount.ts`): `Rs/-`, parentheses, trailing minus, signed and
+  Indian-grouped forms; UTF-16LE/UTF-16BE/UTF-8 BOM decoding; continuation
+  narration rows appended to the previous transaction (bounded, footer-safe);
+  opening/closing and B/F–C/F rows surface as statement metadata instead of
+  phantom transactions; D/C indicator columns; zero-filled debit/credit
+  cells no longer mask the real amount; single-digit and timestamp-bearing
+  date cells parse; month-first dates warn instead of guessing. All fixes
+  shared with `panini-py` via the new `formats/corpus/quirks-csv.json`
+  fixture (14 cases, run by both runtimes).
+- **`@paniniapi/core` (0.1.3)** — `tokenizePieces()` export; `INB` channel
+  keyword (net banking).
+- **`@paniniapi/standards-schema` (0.3.2)** — `balancePaise` accepts
+  negative values (overdrawn accounts are legitimate).
+- **`panini-py` (0.3.2)** — `tokenize_pieces`, `INB` keyword, heuristic
+  parity with the TS normalizer, and a per-rules-dir cache so
+  `parse_narration` no longer re-reads/re-compiles grammar JSON per call.
+
+### Fixed
+
+- **Narration** — `SELF`/`ECS`/`NACH` keywords removed from the category
+  table: `IB FUNDS TRANSFER TO SELF` was mislabelled Cash Withdrawal (now
+  Transfers), `NACH-DR-SOMEBILLER` was mislabelled Loan & EMI purely for
+  riding the NACH rail (now Uncategorized unless EMI/LOAN wording or a
+  lender dictionary entry applies); `CHQ PAID-MICR INWARD CLEARING` parsed
+  as a CREDIT because INWARD was read as a remittance direction — clearing
+  narrations now suppress INWARD/OUTWARD evidence (ambiguous across banks);
+  heuristic counterparty extraction kept only the first name token —
+  `RAMESH KUMAR` was reported as `Ramesh` (now spans whitespace-separated
+  name words, stopping at field separators); `UPI/…/Payment from PhonePe/
+user@ybl/…` took the remark as counterparty (now the VPA user);
+  `BIL/BPAY/123456/BESCOM/…` took `BPAY` as the biller (now skips the
+  channel code and captures the reference).
+- Golden-diff guardrail: a snapshot of 108 corpus+probe narrations was
+  diffed before/after — every changed field is an intended fix listed
+  above; no unintended `category`/`type`/`counterparty` drift.
+
 ## [0.3.0] — 2026-10-17
 
 ### Added

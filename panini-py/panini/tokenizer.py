@@ -14,6 +14,7 @@ CHANNEL_KEYWORDS = {
     "ATM": "ATM", "CASH": "ATM", "WDL": "ATM", "POS": "POS",
     "CHQ": "CHEQUE", "CHEQUE": "CHEQUE", "CLG": "CHEQUE",
     "NETBANKING": "NETBANKING", "INET": "NETBANKING", "IB": "NETBANKING",
+    "INB": "NETBANKING",
     "PAYTM": "WALLET", "PHONEPE": "WALLET", "GPAY": "WALLET",
     "GOOGLEPAY": "WALLET", "BHIM": "WALLET", "MOBIKWIK": "WALLET",
     "FREECHARGE": "WALLET", "AMAZONPAY": "WALLET", "WALLET": "WALLET",
@@ -69,17 +70,31 @@ def _classify(raw: str, is_plausible_date) -> str:
     return "SYMBOL"
 
 
-def tokenize(text: str, is_plausible_date) -> list[Token]:
-    """Mirror of the TS tokenizer: whitespace outer split, `-/|:;` inner."""
-    tokens: list[Token] = []
+def tokenize_pieces(text: str, is_plausible_date) -> list[list[Token]]:
+    """Same pass as tokenize() but tokens stay grouped by whitespace piece.
+    The piece boundary is where a multi-word name legitimately continues —
+    the `-/|:;` splits inside a piece are field separators and must not be
+    joined across."""
+    pieces: list[list[Token]] = []
+    position = 0
     for piece in text.strip().split():
         if not piece:
             continue
+        group: list[Token] = []
         if _DATE_CANDIDATE_RE.match(piece) and is_plausible_date(piece):
-            tokens.append(Token("DATE", piece, len(tokens)))
-            continue
-        for part in _TOKEN_SPLIT.split(piece):
-            if not part:
-                continue
-            tokens.append(Token(_classify(part, is_plausible_date), part, len(tokens)))
-    return tokens
+            group.append(Token("DATE", piece, position))
+            position += 1
+        else:
+            for part in _TOKEN_SPLIT.split(piece):
+                if not part:
+                    continue
+                group.append(Token(_classify(part, is_plausible_date), part, position))
+                position += 1
+        if group:
+            pieces.append(group)
+    return pieces
+
+
+def tokenize(text: str, is_plausible_date) -> list[Token]:
+    """Mirror of the TS tokenizer: whitespace outer split, `-/|:;` inner."""
+    return [t for piece in tokenize_pieces(text, is_plausible_date) for t in piece]

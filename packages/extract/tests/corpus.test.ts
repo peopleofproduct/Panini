@@ -30,8 +30,21 @@ interface CsvExpectRow {
   readonly refNo?: string;
 }
 
+interface QuirkCase {
+  readonly id: string;
+  readonly input: string;
+  readonly expect: {
+    readonly count: number;
+    readonly rows?: readonly Record<string, unknown>[];
+    readonly metadata?: Readonly<Record<string, string>>;
+    readonly warningsContain?: readonly string[];
+    readonly rowWarningsContain?: readonly (readonly string[])[];
+  };
+}
+
 interface Fixture {
   readonly id: string;
+  readonly cases?: readonly QuirkCase[];
   readonly format: string;
   readonly input?: string;
   readonly expect?: {
@@ -76,6 +89,30 @@ describe('formats corpus', () => {
           if (want.refNo !== undefined) expect(got.refNo).toBe(want.refNo);
         });
       });
+    }
+
+    if (fixture.format === 'csv-cases' && fixture.cases) {
+      for (const c of fixture.cases) {
+        it(`${name}: ${c.id}`, () => {
+          const result = extractCsvStatement(c.input, layouts);
+          expect(result.transactions.length).toBe(c.expect.count);
+          (c.expect.rows ?? []).forEach((want, i) => {
+            const got = result.transactions[i] as unknown as Record<string, unknown> | undefined;
+            if (!got) throw new Error(`missing row ${i}`);
+            for (const [key, val] of Object.entries(want)) expect(got[key]).toEqual(val);
+          });
+          for (const [key, val] of Object.entries(c.expect.metadata ?? {})) {
+            expect(result.metadata[key]).toBe(val);
+          }
+          for (const needle of c.expect.warningsContain ?? []) {
+            expect(result.warnings.join(' | ')).toContain(needle);
+          }
+          (c.expect.rowWarningsContain ?? []).forEach((needles, i) => {
+            const rowWarnings = result.transactions[i]?.warnings.join(' | ') ?? '';
+            for (const needle of needles) expect(rowWarnings).toContain(needle);
+          });
+        });
+      }
     }
 
     if (fixture.format === 'sms' && fixture.samples) {

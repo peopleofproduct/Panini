@@ -26,6 +26,44 @@ function startsWith(data: Uint8Array, magic: readonly number[]): boolean {
 }
 
 /**
+ * Decodes statement bytes to text, honouring byte-order marks — Excel's
+ * "CSV UTF-8" adds an EF BB BF prefix and "Unicode text" saves UTF-16.
+ * Without a BOM the bytes are read as UTF-8.
+ */
+export function decodeBytes(data: Uint8Array): string {
+  if (data[0] === 0xff && data[1] === 0xfe) {
+    return new TextDecoder('utf-16le').decode(data.subarray(2));
+  }
+  if (data[0] === 0xfe && data[1] === 0xff) {
+    return new TextDecoder('utf-16be').decode(data.subarray(2));
+  }
+  if (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf) {
+    return new TextDecoder('utf-8').decode(data.subarray(3));
+  }
+  return new TextDecoder('utf-8').decode(data);
+}
+
+const HEAD_BYTES = 512;
+
+function hasBom(data: Uint8Array): boolean {
+  return (
+    (data[0] === 0xff && data[1] === 0xfe) ||
+    (data[0] === 0xfe && data[1] === 0xff) ||
+    (data[0] === 0xef && data[1] === 0xbb && data[2] === 0xbf)
+  );
+}
+
+/** True when the leading bytes look like UTF-8 text (no control bytes, valid sequences). */
+function looksLikeText(data: Uint8Array): boolean {
+  const head = data.subarray(0, HEAD_BYTES);
+  for (const b of head) {
+    if (b === 0x7f || (b < 0x20 && b !== 0x09 && b !== 0x0a && b !== 0x0d)) return false;
+  }
+  // Drop the final char: the slice may cut a multi-byte sequence in half.
+  return !new TextDecoder('utf-8').decode(head).slice(0, -1).includes('\uFFFD');
+}
+
+/**
  * Sniffs the input format from magic bytes (binary) or text shape
  * (multi-line with delimiters → csv; single-line alert → sms).
  */
@@ -34,9 +72,8 @@ export function sniffFormat(input: string | Uint8Array): StatementFormat {
     if (startsWith(input, PDF_MAGIC)) return 'pdf';
     if (startsWith(input, ZIP_MAGIC)) return 'xlsx';
     if (startsWith(input, PNG_MAGIC) || startsWith(input, JPEG_MAGIC)) return 'image';
-    const head = input.slice(0, 64);
-    if (head.every((b) => b === 0x09 || b === 0x0a || b === 0x0d || (b >= 0x20 && b < 0x7f))) {
-      input = new TextDecoder().decode(input);
+    if (hasBom(input) || looksLikeText(input)) {
+      input = decodeBytes(input);
     } else {
       return 'unknown';
     }

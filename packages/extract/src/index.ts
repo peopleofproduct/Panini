@@ -22,7 +22,8 @@ export type {
   StatementFormat,
 } from './types';
 export { extractStatement } from './extract';
-export { sniffFormat } from './sniff';
+export { sniffFormat, decodeBytes } from './sniff';
+export { parseStatementAmount, type StatementAmount } from './statementAmount';
 export { extractCsvStatement, statementFromRows } from './csv/csvStatement';
 export { parseCsv, detectDelimiter } from './csv/csvParser';
 export { detectTable, normalizeHeaderCell } from './csv/layouts';

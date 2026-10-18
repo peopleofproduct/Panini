@@ -25,7 +25,7 @@
       "type": "DEBIT",
       "category": "Utilities",
       "media": "narration",
-      "regex": "^BIL[\\/](?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$"
+      "regex": "^BIL[\\/](?:(?:BPAY|INFT|ONL|BBPS|INB|MB|IB)[\\/](?<txnId>\\d{4,16})[\\/])?(?<counterparty>[^\\/]+)(?:[\\/](?<tail>.*))?$"
     },
     {
       "name": "icici_inf_transfer",

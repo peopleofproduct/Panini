@@ -39,6 +39,20 @@ function rowPlausible(
   return true;
 }
 
+const MAX_CONTINUATION_ROWS = 3;
+const MAX_CONTINUATION_LENGTH = 120;
+/** Footer / boilerplate lines that must never be glued onto a narration. */
+const FOOTER_RE =
+  /^(?:page\s+\d|statement\s+(?:summary|of)|total\b|closing\s+balance|opening\s+balance|this\s+is\s+a\s+computer|registered\s+office|\*|disclaimer|note\b|end\s+of\s+statement)/i;
+/** A row that only states a balance carried into / out of the period. */
+const BALANCE_MARKER_RE =
+  /^(?:(opening)\s+bal(?:ance)?|(b\/f)|(brought\s+forward)|(closing)\s+bal(?:ance)?|(c\/f)|(carried\s+forward))[\s:.-]*$/i;
+const NUMERIC_DATE_RE = /^(\d{1,2})[-/.](\d{1,2})[-/.]\d{2,4}/;
+
+function cellText(cells: readonly string[], idx: number | undefined): string {
+  return idx === undefined ? '' : (cells[idx] ?? '').trim();
+}
+
 /**
  * Turns cell rows (from CSV text, a spreadsheet provider, or OCR output)
  * into a statement. Shared by every tabular tier — layout detection is
@@ -79,16 +93,88 @@ export function statementFromRows(
   }
 
   const headerWidth = (rows[table.headerRowIndex] ?? []).length;
+  const cols = table.columns;
   const transactions: ExtractedTransaction[] = [];
+  let lastBaseWarnings: readonly string[] = [];
+  let continuationRows = 0;
+  let canContinue = false;
+  let firstGt12 = false;
+  let secondGt12 = false;
+
   for (let i = table.headerRowIndex + 1; i < rows.length; i += 1) {
     const cells = rows[i];
-    if (!cells || cells.every((c) => c.trim() === '')) continue;
-    if (!rowPlausible(cells, table.columns, headerWidth)) {
+    if (!cells || cells.every((c) => c.trim() === '')) {
+      canContinue = false;
+      continue;
+    }
+
+    const dateText = cellText(cells, cols.date);
+    const dm = NUMERIC_DATE_RE.exec(dateText);
+    if (dm) {
+      if (Number(dm[1]) > 12) firstGt12 = true;
+      if (Number(dm[2]) > 12) secondGt12 = true;
+    }
+
+    const narrationText = cellText(cells, cols.narration);
+    const noAmounts =
+      cellText(cells, cols.debit) === '' &&
+      cellText(cells, cols.credit) === '' &&
+      cellText(cells, cols.amount) === '';
+    const noBalance = cellText(cells, cols.balance) === '';
+
+    // Opening / closing balance marker rows are statement metadata, not
+    // transactions.
+    const marker = BALANCE_MARKER_RE.exec(narrationText);
+    if (marker !== null && noAmounts && !noBalance) {
+      const mapped = mapRow(cells, cols);
+      if (mapped.balancePaise !== null) {
+        const isOpening =
+          marker[1] !== undefined || marker[2] !== undefined || marker[3] !== undefined;
+        const key = isOpening ? 'openingBalancePaise' : 'closingBalancePaise';
+        metadata[key] ??= String(mapped.balancePaise);
+        canContinue = false;
+        continue;
+      }
+    }
+
+    if (!rowPlausible(cells, cols, headerWidth)) {
+      const isContinuation =
+        canContinue &&
+        continuationRows < MAX_CONTINUATION_ROWS &&
+        dateText === '' &&
+        noAmounts &&
+        noBalance &&
+        narrationText !== '' &&
+        narrationText.length <= MAX_CONTINUATION_LENGTH &&
+        !FOOTER_RE.test(narrationText);
+      if (isContinuation) {
+        const prev = transactions[transactions.length - 1]!;
+        continuationRows += 1;
+        transactions[transactions.length - 1] = {
+          ...prev,
+          narration: `${prev.narration} ${narrationText}`.trim(),
+          raw: `${prev.raw} ${cells.join(' ').trim()}`.trim(),
+          warnings: [...lastBaseWarnings, `narration continued across ${continuationRows} row(s)`],
+        };
+        continue;
+      }
+      canContinue = false;
       const preview = cells.join(' ').trim();
       if (preview) warnings.push(`skipped non-transaction row ${i + 1}: '${preview.slice(0, 60)}'`);
       continue;
     }
-    transactions.push(mapRow(cells, table.columns));
+
+    const mapped = mapRow(cells, cols);
+    transactions.push(mapped);
+    lastBaseWarnings = mapped.warnings;
+    continuationRows = 0;
+    canContinue = true;
+  }
+
+  if (secondGt12 && !firstGt12) {
+    warnings.push(
+      'date column looks month-first (MM/DD/YYYY) — values were read day-first (DD/MM/YYYY); rows with an impossible day-first date were skipped, not guessed',
+    );
   }
 
   if (transactions.length === 0) {

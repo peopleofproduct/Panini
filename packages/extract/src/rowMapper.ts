@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { parsePaise } from '@paniniapi/core';
+import { parseStatementAmount } from './statementAmount';
 import { parseStatementDate } from './statementDate';
 import type { ColumnField } from './csv/layouts';
 import type { ExtractedTransaction, RowDirection } from './types';
@@ -50,6 +50,18 @@ function directionFromText(value: string): RowDirection {
 }
 
 /**
+ * Direction from a dedicated type column. Unlike free text, a column cell
+ * may be a bare `D` / `C` indicator (`D`, `C.`), which is unambiguous only
+ * because the whole cell is the indicator.
+ */
+function directionFromColumn(value: string): RowDirection {
+  const t = value.trim().toUpperCase();
+  if (/^D\.?$/.test(t)) return 'DEBIT';
+  if (/^C\.?$/.test(t)) return 'CREDIT';
+  return directionFromText(value);
+}
+
+/**
  * Maps one table row to an ExtractedTransaction. Never throws: rows that
  * fail to produce a date or an amount are still returned with warnings
  * so callers can audit every skipped cent.
@@ -80,43 +92,46 @@ export function mapRow(
   const amountRaw = cellOf(cells, columns, 'amount');
   const directionRaw = cellOf(cells, columns, 'direction');
 
-  if (debitRaw !== null) {
-    amountPaise = parsePaise(debitRaw);
+  const debit = debitRaw !== null ? parseStatementAmount(debitRaw) : null;
+  const credit = creditRaw !== null ? parseStatementAmount(creditRaw) : null;
+  if (debitRaw !== null && debit === null) warnings.push(`unparseable debit '${debitRaw}'`);
+  if (creditRaw !== null && credit === null) warnings.push(`unparseable credit '${creditRaw}'`);
+
+  // Banks routinely zero-fill the opposite column ('0.00'), so only a
+  // non-zero side can carry the amount.
+  const debitValue = debit !== null && debit.paise > 0 ? debit.paise : null;
+  const creditValue = credit !== null && credit.paise > 0 ? credit.paise : null;
+  if (debitValue !== null) {
+    amountPaise = debitValue;
     direction = 'DEBIT';
-    if (amountPaise === null) warnings.push(`unparseable debit '${debitRaw}'`);
+    if (creditValue !== null) warnings.push('row carries both debit and credit; debit kept');
+  } else if (creditValue !== null) {
+    amountPaise = creditValue;
+    direction = 'CREDIT';
+  } else if (debit !== null || credit !== null) {
+    amountPaise = 0;
+    warnings.push('zero amount in the debit/credit columns');
+  } else if (debitRaw !== null) {
+    direction = 'DEBIT';
   }
-  if (creditRaw !== null) {
-    const credit = parsePaise(creditRaw);
-    if (credit === null) {
-      warnings.push(`unparseable credit '${creditRaw}'`);
-    } else if (amountPaise === null) {
-      amountPaise = credit;
-      direction = 'CREDIT';
-    } else {
-      warnings.push('row carries both debit and credit; debit kept');
-    }
-  }
+
   if (amountPaise === null && amountRaw !== null) {
     const suffix = DR_CR_SUFFIX.exec(amountRaw);
     const bare = suffix ? amountRaw.replace(DR_CR_SUFFIX, '').trim() : amountRaw;
-    const parsed = parsePaise(bare);
+    const parsed = parseStatementAmount(bare);
     if (parsed === null) {
       warnings.push(`unparseable amount '${amountRaw}'`);
     } else {
-      amountPaise = parsed;
-      direction = suffix ? directionFromText(suffix[1] ?? '') : direction;
+      amountPaise = parsed.paise;
+      if (suffix) direction = directionFromText(suffix[1] ?? '');
+      else if (directionRaw !== null) direction = directionFromColumn(directionRaw);
+      if (direction === null && !suffix) {
+        direction = parsed.sign === 'neg' ? 'DEBIT' : parsed.sign === 'pos' ? 'CREDIT' : null;
+      }
     }
   }
   if (direction === null && directionRaw !== null) {
-    direction = directionFromText(directionRaw);
-  }
-  if (
-    direction === null &&
-    amountPaise !== null &&
-    amountRaw !== null &&
-    !DR_CR_SUFFIX.test(amountRaw)
-  ) {
-    direction = amountRaw.trim().startsWith('-') ? 'DEBIT' : null;
+    direction = directionFromColumn(directionRaw);
   }
 
   const balanceRaw = cellOf(cells, columns, 'balance');
@@ -124,12 +139,17 @@ export function mapRow(
   if (balanceRaw !== null) {
     const suffix = DR_CR_SUFFIX.exec(balanceRaw);
     const stripped = balanceRaw.replace(DR_CR_SUFFIX, '').trim();
-    balancePaise = parsePaise(stripped);
-    // Indian statements mark an overdrawn balance as '1,234.00 Dr' — the
-    // magnitude parses positive, so re-apply the sign.
-    if (balancePaise !== null && suffix !== null && directionFromText(suffix[1] ?? '') === 'DEBIT')
-      balancePaise = -balancePaise;
-    if (balancePaise === null) warnings.push(`unparseable balance '${balanceRaw}'`);
+    const parsed = parseStatementAmount(stripped);
+    if (parsed === null) {
+      warnings.push(`unparseable balance '${balanceRaw}'`);
+    } else {
+      // Indian statements mark an overdrawn balance as '1,234.00 Dr' — the
+      // magnitude parses positive, so re-apply the sign (also '-x' / '(x)').
+      const overdrawn =
+        parsed.sign === 'neg' ||
+        (suffix !== null && directionFromText(suffix[1] ?? '') === 'DEBIT');
+      balancePaise = overdrawn && parsed.paise !== 0 ? -parsed.paise : parsed.paise;
+    }
   }
 
   if (!narration && !refNo && amountPaise === null) {

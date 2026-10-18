@@ -400,6 +400,66 @@
       "aliases": ["SWIGGY GENIE", "GENIE"],
       "category": "Professional Services"
     },
-    { "canonical": "Dunzo", "aliases": ["DUNZO"], "category": "Groceries" }
+    { "canonical": "Dunzo", "aliases": ["DUNZO"], "category": "Groceries" },
+    {
+      "canonical": "Tata Capital",
+      "aliases": ["TATA CAPITAL", "TATA CAPITAL FINANCIAL", "TCFSL", "TATA CAPITAL LTD"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Bajaj Finance",
+      "aliases": ["BAJAJ FINANCE", "BAJAJ FINANCE LTD", "BAJAJ FINSV", "BAJAJFIN"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "HDB Financial Services",
+      "aliases": ["HDB FINANCIAL", "HDB FINANCIAL SERVICES", "HDBFS"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Aditya Birla Finance",
+      "aliases": ["ADITYA BIRLA FINANCE", "ABFL", "ADITYA BIRLA CAPITAL"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Mahindra Finance",
+      "aliases": ["MAHINDRA FINANCE", "MAHINDRA AND MAHINDRA FINANCIAL", "MMFSL"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Cholamandalam",
+      "aliases": ["CHOLAMANDALAM", "CHOLAMANDALAM INVESTMENT", "CHOLA"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "LIC Housing Finance",
+      "aliases": ["LIC HOUSING FINANCE", "LICHF", "LIC HFL"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Poonawalla Fincorp",
+      "aliases": ["POONAWALLA", "POONAWALLA FINCORP", "MAGMA FINCORP"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Shriram Finance",
+      "aliases": ["SHRIRAM FINANCE", "SHRIRAM TRANSPORT", "SHRIRAM CITY"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Muthoot Finance",
+      "aliases": ["MUTHOOT", "MUTHOOT FINANCE"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "Manappuram Finance",
+      "aliases": ["MANAPPURAM", "MANAPPURAM FINANCE"],
+      "category": "Loan & EMI"
+    },
+    {
+      "canonical": "SMFG India Credit",
+      "aliases": ["SMFG", "FULLERTON", "FULLERTON INDIA", "SMFG INDIA"],
+      "category": "Loan & EMI"
+    }
   ]
 }

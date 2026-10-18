@@ -32,7 +32,7 @@
     "category": { "type": "string", "minLength": 1 },
     "date": { "type": ["string", "null"], "format": "date" },
     "amountPaise": { "type": ["integer", "null"], "minimum": 0 },
-    "balancePaise": { "type": ["integer", "null"], "minimum": 0 },
+    "balancePaise": { "type": ["integer", "null"] },
     "currency": { "type": "string", "const": "INR" },
     "accountMask": { "type": ["string", "null"], "pattern": "^\\d{3,4}$" },
     "raw": { "type": "string" },

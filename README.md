@@ -60,7 +60,7 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 | Package                       | Role                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                                                                                                                                                                                                            |
-| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 13 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                                                                                                                                                                                                               |
+| `@paniniapi/rules-engine`     | Community-extendable JSON grammars — 14 Indian banks + wallet formats + generic archetypes — plus entity dictionaries (merchants, 90+ UPI handles, IFSC→bank) and a corpus coverage gate.                                                                                                                                                                                                                                               |
 | `@paniniapi/standards-schema` | Zero-dependency validators for ReBIT v2.0 AA payloads (full FI-type matrix + consent request/artefact), the complete ONDC action surface (envelope, FIS search, catalog, order lifecycle, track/cancel/update), and OCEN 4.0 loan lifecycle (13-state status, disbursement, repayment schedule, eNACH, RBI KFS).                                                                                                                        |
 | `@paniniapi/extract`          | Statement extraction — data-driven CSV/Excel layouts (15 banks + generic), **password-protected PDF unlock** (RC4/AES Standard handler, per-bank password patterns), PDF text-layer parsing, bank SMS alerts, and pluggable XLSX/OCR provider seams.                                                                                                                                                                                    |
 | `@paniniapi/insights`         | Deterministic credit-relevant analytics — income/salary detection, recurring obligations, EMI, FOIR, cash-flow summaries, and bounce/round-trip/self-transfer risk signals. Explainable: every claim carries a rule ID + evidence indices.                                                                                                                                                                                              |
@@ -101,7 +101,7 @@ India's Digital Personal Data Protection Act makes the _processor_ question expe
 ```bash
 npm install
 npm run build   # tsc -b (project references)
-npm test        # jest — 329 tests across 22 suites
+npm test        # jest — 662 tests across 35 suites
 ```
 
 ### Parse a narration
@@ -234,7 +234,7 @@ npm run parse -- 'UPI/P2M/123456789012/JOHN DOE@axisb/DR'
 ### Python port (`panini-py/`)
 
 The Python engine shares the **same grammar JSONs and corpus fixtures** as the
-TypeScript packages — parity is enforced by the conformance suite (76/76),
+TypeScript packages — parity is enforced by the conformance suite (84/84),
 not assumed:
 
 ```python

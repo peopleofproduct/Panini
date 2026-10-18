@@ -32,6 +32,33 @@
       }
     },
     {
+      "name": "upi_slashed_payment_remark",
+      "priority": 32,
+      "channel": "UPI",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^UPI[\\/](?<txnId>\\d{9,18})[\\/]PAYMENT\\s+(?:FROM|TO|FOR|OF|TOWARDS)\\b[^\\/]*[\\/](?<counterparty>[A-Za-z0-9._-]+)@(?<vpaHandle>[A-Za-z0-9]+)(?:[\\/](?<tail>.*))?$",
+      "flags": {
+        "REV": "REVERSAL",
+        "RTN": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
+    },
+    {
+      "name": "upi_slashed_name_vpa",
+      "priority": 30,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[\\/](?<txnId>\\d{9,18})[\\/](?<counterparty>[^\\/@]+?)[\\/](?<vpaUser>[A-Za-z0-9._-]+)@(?<vpaHandle>[A-Za-z0-9]+)(?:[\\/](?<tail>.*))?$",
+      "flags": {
+        "REV": "REVERSAL",
+        "RTN": "REVERSAL",
+        "DR": "DEBIT",
+        "CR": "CREDIT"
+      }
+    },
+    {
       "name": "upi_slashed_plain",
       "priority": 8,
       "channel": "UPI",
@@ -88,6 +115,15 @@
       "regex": "^POS[-/ ](?:(?<cardMask>[\\dX*]{4,19})[-/ ])?(?<counterparty>[^-/]+)(?<tail>\\s*[-/ ].*)?$"
     },
     {
+      "name": "chq_paid",
+      "priority": 12,
+      "channel": "CHEQUE",
+      "type": "DEBIT",
+      "media": "narration",
+      "regexFlags": "i",
+      "regex": "^(?:CHQ|CHEQUE)[-/ ]PAID\\b(?<tail>.*?)(?:[-/ ](?<txnId>\\d{4,8}))?\\s*$"
+    },
+    {
       "name": "nach_emi",
       "priority": 7,
       "channel": "NACH",
@@ -132,7 +168,7 @@
       "category": "Bank Charges",
       "media": "narration",
       "regexFlags": "i",
-      "regex": "^(?:(?:IMPS|NEFT|RTGS|UPI|ATM|SMS|AMB|DP|AMC|MAB)[-/ ])?(?:CHRG|CHARGES?|CHG|STCHG|SWCHG|SMSCHG|DPC|IPCH|AMC|PENAL(?:TY)?)[-/ ](?<tail>.*)$"
+      "regex": "^(?:(?:IMPS|NEFT|RTGS|UPI|ATM|SMS|AMB|DP|AMC|MAB)[-/ ])?(?:CHRGS?|CHARGES?|CHG|STCHG|SWCHG|SMSCHG|DPC|IPCH|AMC|PENAL(?:TY)?)[-/ ](?<tail>.*)$"
     },
     {
       "name": "bbps_billpay",

@@ -5,6 +5,19 @@
   "description": "HDFC Bank narration quirks: NWD network withdrawals, MMT/IMPS mobile transfers, CHQ PAID cheque narration.",
   "patterns": [
     {
+      "name": "hdfc_upi_name_vpa",
+      "priority": 30,
+      "channel": "UPI",
+      "media": "narration",
+      "regex": "^UPI[-/](?<counterparty>[A-Za-z][A-Za-z0-9 .&']*?)[-/](?<vpaUser>[A-Za-z0-9._-]+)@(?<vpaHandle>[A-Za-z0-9]+)[-/](?<bankCode>[A-Z]{4}0[A-Z0-9]{6})[-/](?<txnId>\\d{9,16})(?<tail>[-/ ].*)?$",
+      "flags": {
+        "DR": "DEBIT",
+        "CR": "CREDIT",
+        "REV": "REVERSAL",
+        "RTN": "REVERSAL"
+      }
+    },
+    {
       "name": "hdfc_nwd_withdrawal",
       "priority": 30,
       "channel": "ATM",

@@ -72,4 +72,15 @@ describe('normalized-transaction schema', () => {
     const result = validateAgainst('normalized-transaction', txn);
     expect(result.valid).toBe(true);
   });
+
+  it('accepts a negative (overdrawn) closing balance', () => {
+    const normalizer = new Normalizer({ ruleSets: loadBuiltinRuleSets() });
+    const txn = normalizer.normalize('totally opaque input');
+    const result = validateAgainst('normalized-transaction', {
+      ...txn,
+      balancePaise: -152050,
+    });
+    expect(result.errors).toEqual([]);
+    expect(result.valid).toBe(true);
+  });
 });

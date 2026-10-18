@@ -1,0 +1,149 @@
+{
+  "id": "quirks_csv",
+  "format": "csv-cases",
+  "description": "Real-world CSV quirks (zero-filled columns, short dates, timestamps, signed amounts, D/C columns, wrapped narration, balance marker rows). Run by BOTH the TypeScript and Python extractors — identical expectations.",
+  "cases": [
+    {
+      "id": "zero-filled debit column carries a credit",
+      "input": "Date,Narration,Withdrawal Amt.,Deposit Amt.,Closing Balance\n05/01/26,UPI-SALARY,0.00,50000.00,60000.00\n06/01/26,UPI-SWIGGY,500.00,0.00,59500.00",
+      "expect": {
+        "count": 2,
+        "rows": [
+          {
+            "date": "2026-01-05",
+            "direction": "CREDIT",
+            "amountPaise": 5000000,
+            "balancePaise": 6000000
+          },
+          {
+            "date": "2026-01-06",
+            "direction": "DEBIT",
+            "amountPaise": 50000,
+            "balancePaise": 5950000
+          }
+        ]
+      }
+    },
+    {
+      "id": "both columns zero",
+      "input": "Date,Narration,Withdrawal Amt.,Deposit Amt.,Closing Balance\n05/01/26,UPI-NOOP,0.00,0.00,60000.00",
+      "expect": {
+        "count": 1,
+        "rows": [{ "direction": null, "amountPaise": 0 }],
+        "rowWarningsContain": [["zero amount"]]
+      }
+    },
+    {
+      "id": "single-digit day and month",
+      "input": "Date,Narration,Debit,Credit,Balance\n5/1/2026,UPI-A,100,,900\n6-1-26,UPI-B,,50,950",
+      "expect": {
+        "count": 2,
+        "rows": [
+          { "date": "2026-01-05", "direction": "DEBIT", "amountPaise": 10000 },
+          { "date": "2026-01-06", "direction": "CREDIT", "amountPaise": 5000 }
+        ]
+      }
+    },
+    {
+      "id": "month-first column warns and never guesses",
+      "input": "Date,Narration,Debit,Credit,Balance\n1/5/2026,UPI-A,100,,900\n1/25/2026,UPI-B,,50,950",
+      "expect": {
+        "count": 1,
+        "rows": [{ "date": "2026-05-01" }],
+        "warningsContain": ["month-first"]
+      }
+    },
+    {
+      "id": "timestamps in the date cell",
+      "input": "Date,Narration,Debit,Credit,Balance\n2026-01-05 10:30:00,UPI-A,100,,900\n05/01/2026 1:05 PM,UPI-B,,50,950\n2026-01-07T09:00:00Z,UPI-C,10,,940",
+      "expect": {
+        "count": 3,
+        "rows": [{ "date": "2026-01-05" }, { "date": "2026-01-05" }, { "date": "2026-01-07" }]
+      }
+    },
+    {
+      "id": "single-letter D/C type column",
+      "input": "Date,Narration,Amount,Type,Balance\n05-01-2026,UPI-A,100,D,900\n06-01-2026,UPI-B,50,C,950",
+      "expect": {
+        "count": 2,
+        "rows": [
+          { "direction": "DEBIT", "amountPaise": 10000 },
+          { "direction": "CREDIT", "amountPaise": 5000 }
+        ]
+      }
+    },
+    {
+      "id": "signed, parenthesis and trailing-minus amounts",
+      "input": "Date,Narration,Amount,Balance\n05-01-2026,UPI-A,-100,900\n06-01-2026,UPI-B,+50,950\n07-01-2026,UPI-C,(20.00),930\n08-01-2026,UPI-D,25.00-,905\n09-01-2026,UPI-E,50,955",
+      "expect": {
+        "count": 5,
+        "rows": [
+          { "direction": "DEBIT", "amountPaise": 10000 },
+          { "direction": "CREDIT", "amountPaise": 5000 },
+          { "direction": "DEBIT", "amountPaise": 2000 },
+          { "direction": "DEBIT", "amountPaise": 2500 },
+          { "direction": null, "amountPaise": 5000 }
+        ]
+      }
+    },
+    {
+      "id": "Rs and slash-dash amount cells",
+      "input": "Date,Narration,Debit,Credit,Balance\n05-01-2026,UPI-A,\"Rs. 1,000/-\",,\"9,000.00\"",
+      "expect": {
+        "count": 1,
+        "rows": [{ "direction": "DEBIT", "amountPaise": 100000, "balancePaise": 900000 }]
+      }
+    },
+    {
+      "id": "negative balances in every notation",
+      "input": "Date,Narration,Amount,Balance\n05-01-2026,UPI-A,+50,-950\n06-01-2026,UPI-B,+50,(900.00)\n07-01-2026,UPI-C,+50,850.00 Dr\n08-01-2026,UPI-D,+50,800.00 Cr",
+      "expect": {
+        "count": 4,
+        "rows": [
+          { "balancePaise": -95000 },
+          { "balancePaise": -90000 },
+          { "balancePaise": -85000 },
+          { "balancePaise": 80000 }
+        ]
+      }
+    },
+    {
+      "id": "wrapped narration continuation row",
+      "input": "Date,Narration,Debit,Credit,Balance\n05-01-2026,UPI-AMAZON PAY INDIA PRIVATE,100,,900\n,LIMITED/REF123,,,\n06-01-2026,UPI-B,,50,950",
+      "expect": {
+        "count": 2,
+        "rows": [
+          { "narration": "UPI-AMAZON PAY INDIA PRIVATE LIMITED/REF123" },
+          { "narration": "UPI-B" }
+        ],
+        "rowWarningsContain": [["narration continued across 1 row(s)"], []]
+      }
+    },
+    {
+      "id": "footer text is never absorbed into a narration",
+      "input": "Date,Narration,Debit,Credit,Balance\n05-01-2026,A,100,,900\n,Page 1 of 2,,,\n,B,,,",
+      "expect": { "count": 1, "rows": [{ "narration": "A" }] }
+    },
+    {
+      "id": "opening and closing balance rows become metadata",
+      "input": "Date,Narration,Debit,Credit,Balance\n01-01-2026,Opening Balance,,,1000\n05-01-2026,UPI-A,100,,900\n31-01-2026,Closing Balance,,,900",
+      "expect": {
+        "count": 1,
+        "metadata": { "openingBalancePaise": "100000", "closingBalancePaise": "90000" }
+      }
+    },
+    {
+      "id": "B/F and C/F markers",
+      "input": "Date,Narration,Debit,Credit,Balance\n01-01-2026,B/F,,,1000\n05-01-2026,UPI-A,100,,900\n31-01-2026,C/F,,,900",
+      "expect": {
+        "count": 1,
+        "metadata": { "openingBalancePaise": "100000", "closingBalancePaise": "90000" }
+      }
+    },
+    {
+      "id": "a real transaction that merely mentions the marker words is kept",
+      "input": "Date,Narration,Debit,Credit,Balance\n05-01-2026,Opening Balance Transfer fee,10,,990",
+      "expect": { "count": 1, "rows": [{ "amountPaise": 1000 }] }
+    }
+  ]
+}

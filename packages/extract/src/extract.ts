@@ -20,7 +20,7 @@ import type { OcrResult } from './ocr';
 import { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement';
 import type { PdfFragment } from './pdf/pdfText';
 import { extractSms } from './sms';
-import { sniffFormat } from './sniff';
+import { decodeBytes, sniffFormat } from './sniff';
 import type { ExtractedStatement, ExtractOptions, StatementFormat } from './types';
 
 function empty(format: ExtractedStatement['format'], warnings: string[]): ExtractedStatement {
@@ -94,9 +94,10 @@ export async function extractStatement(
     ...(options.layoutId !== undefined ? { layoutId: options.layoutId } : {}),
   };
   const layouts = loadCsvLayouts(options.formatsDir);
-  // sniffFormat decodes printable-ASCII byte input to decide csv/sms — the
-  // text pipelines then need the decoded string, not the raw bytes.
-  const textInput = input instanceof Uint8Array ? new TextDecoder().decode(input) : input;
+  // sniffFormat decodes text-like byte input (UTF-8 / BOM-marked UTF-16) to
+  // decide csv/sms — the text pipelines then need the decoded string, not
+  // the raw bytes.
+  const textInput = input instanceof Uint8Array ? decodeBytes(input) : input;
 
   switch (format) {
     case 'csv':

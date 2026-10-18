@@ -17,7 +17,13 @@
 import { parsePaise } from './amounts';
 import { parseIndianDate } from './dates';
 import { compileRuleSets, type CompiledPattern, type GrammarRuleSet } from './grammar';
-import { CHANNEL_KEYWORDS, DIRECTION_KEYWORDS, tokenize, type Token } from './tokenizer';
+import {
+  CHANNEL_KEYWORDS,
+  DIRECTION_KEYWORDS,
+  tokenize,
+  tokenizePieces,
+  type Token,
+} from './tokenizer';
 import type {
   InputSource,
   NormalizedTransaction,
@@ -42,6 +48,22 @@ export interface NormalizerOptions {
 const SMS_SIGNAL = /\b(debited|credited|avl\s*bal|a\/c\s*(?:no|xx|\*+))/i;
 const REVERSAL_TYPES: ReadonlySet<TransactionType> = new Set(['REVERSAL', 'REFUND']);
 const DIRECTION_TYPES: ReadonlySet<TransactionType> = new Set(['DEBIT', 'CREDIT']);
+
+/**
+ * In clearing narrations ("MICR INWARD CLEARING", "INWARD CLG") the words
+ * INWARD/OUTWARD describe the cheque's direction through the clearing
+ * house — which banks use inconsistently — not whether the account was
+ * debited or credited. They are ignored as direction evidence there.
+ */
+const CLEARING_CONTEXT = /\b(?:CLG|CLEARING|MICR)\b/i;
+const CLEARING_AMBIGUOUS: ReadonlySet<string> = new Set([
+  'INWARD',
+  'OUTWARD',
+  'INW',
+  'OUTW',
+  'INBOUND',
+  'OUTBOUND',
+]);
 
 const AA_MODE_TO_CHANNEL: Readonly<Record<string, TransactionChannel>> = {
   UPI: 'UPI',
@@ -435,15 +457,19 @@ export class Normalizer {
     bankHint: string | undefined,
     warnings: string[],
   ): NormalizedTransaction {
-    const tokens = tokenize(text);
+    const pieces = tokenizePieces(text);
+    const tokens = pieces.flat();
     const metadata: Record<string, string> = {};
     const flagTypes: TransactionType[] = [];
     const appliedFlags: string[] = [];
+    const clearing = CLEARING_CONTEXT.test(text);
     for (const token of tokens) {
-      const mapped = DIRECTION_KEYWORDS[token.value.toUpperCase()];
+      const upper = token.value.toUpperCase();
+      if (clearing && CLEARING_AMBIGUOUS.has(upper)) continue;
+      const mapped = DIRECTION_KEYWORDS[upper];
       if (mapped !== undefined) {
         flagTypes.push(mapped);
-        appliedFlags.push(token.value.toUpperCase());
+        appliedFlags.push(upper);
       }
     }
     if (appliedFlags.length > 0) metadata['flags'] = appliedFlags.join(',');
@@ -483,7 +509,26 @@ export class Normalizer {
         DIRECTION_KEYWORDS[t.value.toUpperCase()] === undefined &&
         (channelPosition === undefined || t.position > channelPosition),
     );
-    const counterparty = counterpartyToken ? this.displayCase(counterpartyToken.value) : null;
+    // A counterparty name can span whitespace ("RAMESH KUMAR") but never a
+    // field separator: extend only when the anchor is the last part of its
+    // piece, absorbing the first part of each following piece while it is
+    // name-like and stopping at the first `-`/`/` boundary, number, date,
+    // or VPA.
+    let counterparty: string | null = null;
+    if (counterpartyToken) {
+      const words = [counterpartyToken.value];
+      const anchorPiece = pieces.findIndex((p) => p[p.length - 1] === counterpartyToken);
+      if (anchorPiece >= 0) {
+        for (let i = anchorPiece + 1; i < pieces.length; i++) {
+          const piece = pieces[i]!;
+          const first = piece[0]!;
+          if (first.kind !== 'ALPHA' && first.kind !== 'ALNUM') break;
+          words.push(first.value);
+          if (piece.length > 1) break;
+        }
+      }
+      counterparty = this.displayCase(words.join(' '));
+    }
 
     const category = this.categorize(`${counterparty ?? ''} ${text}`) ?? 'Uncategorized';
 

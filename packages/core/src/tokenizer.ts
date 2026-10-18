@@ -55,6 +55,7 @@ export const CHANNEL_KEYWORDS: Readonly<Record<string, TransactionChannel>> = {
   NETBANKING: 'NETBANKING',
   INET: 'NETBANKING',
   IB: 'NETBANKING',
+  INB: 'NETBANKING',
   PAYTM: 'WALLET',
   PHONEPE: 'WALLET',
   GPAY: 'WALLET',
@@ -131,6 +132,31 @@ function classifyToken(raw: string): TokenKind {
 }
 
 /**
+ * Same pass as {@link tokenize} but returns the tokens grouped by
+ * whitespace-separated piece. The piece boundary is where a multi-word
+ * name legitimately continues — the `-/|:;` splits inside a piece are
+ * field separators, so callers must not join across them.
+ */
+export function tokenizePieces(input: string): readonly (readonly Token[])[] {
+  const pieces: Token[][] = [];
+  let position = 0;
+  for (const piece of input.trim().split(/\s+/)) {
+    if (piece.length === 0) continue;
+    const group: Token[] = [];
+    if (DATE_CANDIDATE_RE.test(piece) && isPlausibleDate(piece)) {
+      group.push({ kind: 'DATE', value: piece, position: position++ });
+    } else {
+      for (const part of piece.split(TOKEN_SPLIT)) {
+        if (part.length === 0) continue;
+        group.push({ kind: classifyToken(part), value: part, position: position++ });
+      }
+    }
+    if (group.length > 0) pieces.push(group);
+  }
+  return pieces;
+}
+
+/**
  * Splits a narration/SMS string into classified tokens. Whitespace is the
  * outer delimiter; each resulting piece that is itself a plausible date
  * (e.g. `15-10-26`) is kept whole. All other pieces are then split on
@@ -138,17 +164,5 @@ function classifyToken(raw: string): TokenKind {
  * survive intact.
  */
 export function tokenize(input: string): readonly Token[] {
-  const tokens: Token[] = [];
-  for (const piece of input.trim().split(/\s+/)) {
-    if (piece.length === 0) continue;
-    if (DATE_CANDIDATE_RE.test(piece) && isPlausibleDate(piece)) {
-      tokens.push({ kind: 'DATE', value: piece, position: tokens.length });
-      continue;
-    }
-    for (const part of piece.split(TOKEN_SPLIT)) {
-      if (part.length === 0) continue;
-      tokens.push({ kind: classifyToken(part), value: part, position: tokens.length });
-    }
-  }
-  return tokens;
+  return tokenizePieces(input).flat();
 }

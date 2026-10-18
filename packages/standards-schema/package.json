@@ -1,6 +1,6 @@
 {
   "name": "@paniniapi/standards-schema",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Strict, zero-dependency validation schemas for Indian DPI data formats (Account Aggregator, OCEN-style payloads).",
   "license": "Apache-2.0",
   "author": "Kapil",

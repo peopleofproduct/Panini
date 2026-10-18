@@ -47,13 +47,29 @@ _MONTHS = {
 }
 
 _NAMED_DATE = re.compile(r"^(\d{1,2})[-/. ]([A-Za-z]{3,9})[-/. ](\d{2,4})$")
+# Day-first numeric dates with 1-2 digit day/month: 5/1/2026, 5-1-26.
+_SHORT_DMY = re.compile(r"^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2}|\d{4})$")
+# A trailing clock time (24h or 12h) with optional fraction and zone.
+_TIME_SUFFIX = re.compile(
+    r"[ T]\d{1,2}:\d{2}(?::\d{2}(?:\.\d+)?)?\s*(?:[AP]M)?\s*(?:Z|[+-]\d{2}:?\d{2})?$",
+    re.IGNORECASE,
+)
 
 
 def parse_statement_date(value: str) -> Optional[str]:
-    direct = parse_indian_date(value)
+    """Statement dates: everything parse_indian_date handles plus month-name
+    shapes, single-digit day/month (read day-first) and date-times whose
+    clock part is discarded."""
+    v = _TIME_SUFFIX.sub("", value.strip()).strip()
+    direct = parse_indian_date(v)
     if direct:
         return direct
-    m = _NAMED_DATE.match(value.strip())
+    short = _SHORT_DMY.match(v)
+    if short:
+        return parse_indian_date(
+            f"{int(short.group(1)):02d}-{int(short.group(2)):02d}-{short.group(3)}"
+        )
+    m = _NAMED_DATE.match(v)
     if not m:
         return None
     month = _MONTHS.get(m.group(2).lower())
@@ -62,11 +78,70 @@ def parse_statement_date(value: str) -> Optional[str]:
     return parse_indian_date(f"{int(m.group(1)):02d}-{month:02d}-{m.group(3)}")
 
 
-_AMOUNT_BODY = re.compile(r"^-?\d+(?:\.\d{1,2})?$")
+_BODY = re.compile(r"^(?:(\d+(?:,\d+)*)(?:\.(\d{1,2}))?|\.(\d{1,2}))$")
 _CURRENCY_PREFIX = re.compile(r"^(?:rs\.?|inr|₹)\s*", re.IGNORECASE)
+_MAX_INTEGER_DIGITS = 13
+
+
+def parse_statement_amount(value: str) -> Optional[tuple[int, Optional[str]]]:
+    """Statement-cell amount -> (magnitude paise, sign) or None.
+
+    sign is 'neg' for -x, (x), x-; 'pos' for an explicit +x; None when
+    unsigned. Handles Rs./INR/rupee prefixes, a '/-' suffix and '.50'.
+    Pure decimal-string arithmetic, so paise are exact."""
+    s = value.strip()
+    if s == "":
+        return None
+    neg = pos = False
+    paren = re.match(r"^\((.*)\)$", s)
+    if paren:
+        neg = True
+        s = paren.group(1).strip()
+
+    def take_leading_sign(text: str) -> Optional[str]:
+        nonlocal neg, pos
+        if text[:1] not in ("-", "+"):
+            return text
+        if neg or pos:
+            return None
+        if text[0] == "-":
+            neg = True
+        else:
+            pos = True
+        return text[1:].strip()
+
+    t = take_leading_sign(s)
+    if t is None:
+        return None
+    t = _CURRENCY_PREFIX.sub("", t)
+    t = take_leading_sign(t)
+    if t is None:
+        return None
+    if t.endswith("/-"):
+        t = t[:-2].strip()
+    if t.endswith("-"):
+        if neg or pos:
+            return None
+        neg = True
+        t = t[:-1].strip()
+
+    m = _BODY.match(t)
+    if not m:
+        return None
+    int_part = (m.group(1) or "").replace(",", "")
+    frac = (m.group(2) or m.group(3) or "").ljust(2, "0")
+    if len(int_part) > _MAX_INTEGER_DIGITS:
+        return None
+    paise = int(int_part or "0") * 100 + int(frac)
+    return paise, ("neg" if neg else "pos" if pos else None)
+
+
+_AMOUNT_BODY = re.compile(r"^-?\d+(?:\.\d{1,2})?$")
 
 
 def _parse_paise(value: str) -> Optional[int]:
+    """Plain amount parser used by the SMS tier (CSV cells use
+    parse_statement_amount)."""
     stripped = _CURRENCY_PREFIX.sub("", value.strip()).replace(",", "")
     if not _AMOUNT_BODY.match(stripped):
         return None
@@ -99,6 +174,16 @@ def _direction_from_text(value: str) -> Optional[str]:
     if re.search(r"\b(CR|CREDIT|DEPOSIT|DEP)\b", upper):
         return "CREDIT"
     return None
+
+
+def _direction_from_column(value: str) -> Optional[str]:
+    """A dedicated type column may hold a bare D / C indicator."""
+    t = value.strip().upper()
+    if re.fullmatch(r"D\.?", t):
+        return "DEBIT"
+    if re.fullmatch(r"C\.?", t):
+        return "CREDIT"
+    return _direction_from_text(value)
 
 
 # ── CSV parsing ──────────────────────────────────────────────────────────────
@@ -191,45 +276,61 @@ def map_row(cells: list[str], columns: dict[str, int]) -> dict[str, Any]:
     debit_raw, credit_raw = cell("debit"), cell("credit")
     amount_raw, direction_raw = cell("amount"), cell("direction")
 
-    if debit_raw is not None:
-        amount_paise = _parse_paise(debit_raw)
-        direction = "DEBIT"
-        if amount_paise is None:
-            warnings.append(f"unparseable debit '{debit_raw}'")
-    if credit_raw is not None:
-        credit = _parse_paise(credit_raw)
-        if credit is None:
-            warnings.append(f"unparseable credit '{credit_raw}'")
-        elif amount_paise is None:
-            amount_paise = credit
-            direction = "CREDIT"
-        else:
+    debit = parse_statement_amount(debit_raw) if debit_raw is not None else None
+    credit = parse_statement_amount(credit_raw) if credit_raw is not None else None
+    if debit_raw is not None and debit is None:
+        warnings.append(f"unparseable debit '{debit_raw}'")
+    if credit_raw is not None and credit is None:
+        warnings.append(f"unparseable credit '{credit_raw}'")
+
+    # Banks routinely zero-fill the opposite column ('0.00'), so only a
+    # non-zero side can carry the amount.
+    debit_value = debit[0] if debit is not None and debit[0] > 0 else None
+    credit_value = credit[0] if credit is not None and credit[0] > 0 else None
+    if debit_value is not None:
+        amount_paise, direction = debit_value, "DEBIT"
+        if credit_value is not None:
             warnings.append("row carries both debit and credit; debit kept")
+    elif credit_value is not None:
+        amount_paise, direction = credit_value, "CREDIT"
+    elif debit is not None or credit is not None:
+        amount_paise = 0
+        warnings.append("zero amount in the debit/credit columns")
+    elif debit_raw is not None:
+        direction = "DEBIT"
+
     if amount_paise is None and amount_raw is not None:
         suffix = _DR_CR_SUFFIX.search(amount_raw)
         bare = _DR_CR_SUFFIX.sub("", amount_raw).strip() if suffix else amount_raw
-        parsed = _parse_paise(bare)
+        parsed = parse_statement_amount(bare)
         if parsed is None:
             warnings.append(f"unparseable amount '{amount_raw}'")
         else:
-            amount_paise = parsed
-            direction = _direction_from_text(suffix.group(1)) if suffix else direction
+            amount_paise = parsed[0]
+            if suffix:
+                direction = _direction_from_text(suffix.group(1))
+            elif direction_raw is not None:
+                direction = _direction_from_column(direction_raw)
+            if direction is None and not suffix:
+                direction = (
+                    "DEBIT" if parsed[1] == "neg" else "CREDIT" if parsed[1] == "pos" else None
+                )
     if direction is None and direction_raw is not None:
-        direction = _direction_from_text(direction_raw)
-    if direction is None and amount_paise is not None and amount_raw is not None:
-        if not _DR_CR_SUFFIX.search(amount_raw) and amount_raw.strip().startswith("-"):
-            direction = "DEBIT"
+        direction = _direction_from_column(direction_raw)
 
     balance_paise = None
     balance_raw = cell("balance")
     if balance_raw is not None:
         bal_suffix = _DR_CR_SUFFIX.search(balance_raw)
         stripped = _DR_CR_SUFFIX.sub("", balance_raw).strip()
-        balance_paise = _parse_paise(stripped)
-        if balance_paise is not None and bal_suffix and _direction_from_text(bal_suffix.group(1)) == "DEBIT":
-            balance_paise = -balance_paise
-        if balance_paise is None:
+        parsed_bal = parse_statement_amount(stripped)
+        if parsed_bal is None:
             warnings.append(f"unparseable balance '{balance_raw}'")
+        else:
+            overdrawn = parsed_bal[1] == "neg" or (
+                bal_suffix is not None and _direction_from_text(bal_suffix.group(1)) == "DEBIT"
+            )
+            balance_paise = -parsed_bal[0] if overdrawn and parsed_bal[0] != 0 else parsed_bal[0]
 
     return {
         "date": date,
@@ -241,6 +342,28 @@ def map_row(cells: list[str], columns: dict[str, int]) -> dict[str, Any]:
         "raw": " ".join(cells).strip(),
         "warnings": warnings,
     }
+
+
+_MAX_CONTINUATION_ROWS = 3
+_MAX_CONTINUATION_LENGTH = 120
+# Footer / boilerplate lines that must never be glued onto a narration.
+_FOOTER_RE = re.compile(
+    r"^(?:page\s+\d|statement\s+(?:summary|of)|total\b|closing\s+balance|"
+    r"opening\s+balance|this\s+is\s+a\s+computer|registered\s+office|\*|"
+    r"disclaimer|note\b|end\s+of\s+statement)",
+    re.IGNORECASE,
+)
+# A row that only states a balance carried into / out of the period.
+_BALANCE_MARKER_RE = re.compile(
+    r"^(?:(opening)\s+bal(?:ance)?|(b/f)|(brought\s+forward)|"
+    r"(closing)\s+bal(?:ance)?|(c/f)|(carried\s+forward))[\s:.-]*$",
+    re.IGNORECASE,
+)
+_NUMERIC_DATE_RE = re.compile(r"^(\d{1,2})[-/.](\d{1,2})[-/.]\d{2,4}")
+
+
+def _cell_text(cells: list[str], idx: Optional[int]) -> str:
+    return "" if idx is None or idx >= len(cells) else cells[idx].strip()
 
 
 def extract_csv_statement(
@@ -269,19 +392,89 @@ def extract_csv_statement(
 
     columns = table["columns"]
     header_width = len(rows[table["headerRowIndex"]])
-    transactions = []
+    transactions: list[dict[str, Any]] = []
+    metadata: dict[str, str] = {}
+    last_base_warnings: list[str] = []
+    continuation_rows = 0
+    can_continue = False
+    first_gt12 = second_gt12 = False
+
     for i in range(table["headerRowIndex"] + 1, len(rows)):
         cells = rows[i]
         if not cells or all(c.strip() == "" for c in cells):
+            can_continue = False
             continue
+
+        date_text = _cell_text(cells, columns.get("date"))
+        dm = _NUMERIC_DATE_RE.match(date_text)
+        if dm:
+            if int(dm.group(1)) > 12:
+                first_gt12 = True
+            if int(dm.group(2)) > 12:
+                second_gt12 = True
+
+        narration_text = _cell_text(cells, columns.get("narration"))
+        no_amounts = all(
+            _cell_text(cells, columns.get(f)) == "" for f in ("debit", "credit", "amount")
+        )
+        no_balance = _cell_text(cells, columns.get("balance")) == ""
+
+        # Opening / closing balance marker rows are statement metadata, not
+        # transactions.
+        marker = _BALANCE_MARKER_RE.match(narration_text)
+        if marker is not None and no_amounts and not no_balance:
+            mapped = map_row(cells, columns)
+            if mapped["balancePaise"] is not None:
+                is_opening = any(marker.group(g) for g in (1, 2, 3))
+                key = "openingBalancePaise" if is_opening else "closingBalancePaise"
+                metadata.setdefault(key, str(mapped["balancePaise"]))
+                can_continue = False
+                continue
+
         date_idx = columns.get("date")
-        date_cell = cells[date_idx].strip() if date_idx is not None and date_idx < len(cells) else None
-        if not date_cell or not parse_statement_date(date_cell) or len(cells) > header_width + 2:
+        plausible = (
+            date_idx is not None
+            and date_text != ""
+            and parse_statement_date(date_text) is not None
+            and len(cells) <= header_width + 2
+        )
+        if not plausible:
+            is_continuation = (
+                can_continue
+                and continuation_rows < _MAX_CONTINUATION_ROWS
+                and date_text == ""
+                and no_amounts
+                and no_balance
+                and narration_text != ""
+                and len(narration_text) <= _MAX_CONTINUATION_LENGTH
+                and not _FOOTER_RE.match(narration_text)
+            )
+            if is_continuation:
+                prev = transactions[-1]
+                continuation_rows += 1
+                prev["narration"] = f"{prev['narration']} {narration_text}".strip()
+                prev["raw"] = f"{prev['raw']} {' '.join(cells).strip()}".strip()
+                prev["warnings"] = last_base_warnings + [
+                    f"narration continued across {continuation_rows} row(s)"
+                ]
+                continue
+            can_continue = False
             preview = " ".join(cells).strip()
             if preview:
                 warnings.append(f"skipped non-transaction row {i + 1}: '{preview[:60]}'")
             continue
-        transactions.append(map_row(cells, columns))
+
+        mapped = map_row(cells, columns)
+        transactions.append(mapped)
+        last_base_warnings = list(mapped["warnings"])
+        continuation_rows = 0
+        can_continue = True
+
+    if second_gt12 and not first_gt12:
+        warnings.append(
+            "date column looks month-first (MM/DD/YYYY) — values were read day-first "
+            "(DD/MM/YYYY); rows with an impossible day-first date were skipped, not guessed"
+        )
 
     if not transactions:
         warnings.append("header detected but no transaction rows parsed")
@@ -294,7 +487,7 @@ def extract_csv_statement(
         "accountMask": account_mask,
         "transactions": transactions,
         "warnings": warnings,
-        "metadata": {},
+        "metadata": metadata,
     }
 
 

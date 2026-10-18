@@ -44,16 +44,31 @@ const MONTHS: Readonly<Record<string, number>> = {
 };
 
 const NAMED = /^(\d{1,2})[-/. ]([A-Za-z]{3,9})[-/. ](\d{2,4})$/;
+/** Day-first numeric dates with 1–2 digit day/month: `5/1/2026`, `5-1-26`. */
+const SHORT_DMY = /^(\d{1,2})[-/.](\d{1,2})[-/.](\d{2}|\d{4})$/;
+/** A trailing clock time (24h or 12h) with optional fraction and zone. */
+const TIME_SUFFIX =
+  /[ T]\d{1,2}:\d{2}(?::\d{2}(?:\.\d+)?)?\s*(?:[AP]M)?\s*(?:Z|[+-]\d{2}:?\d{2})?$/i;
 
 /**
  * Statement-date parser: everything `parseIndianDate` handles plus the
  * month-name shapes statement exports use (`15 Oct 2026`, `15-Oct-26`,
- * `15.Oct.2026`). Returns ISO `YYYY-MM-DD` or null.
+ * `15.Oct.2026`), single-digit day/month shapes (read **day-first**, the
+ * Indian convention) and date-times whose clock part is discarded
+ * (`2026-01-05 10:30:00`, `05/01/2026 10:30 AM`). Returns ISO
+ * `YYYY-MM-DD` or null.
  */
 export function parseStatementDate(value: string): string | null {
-  const direct = parseIndianDate(value);
+  const v = value.trim().replace(TIME_SUFFIX, '').trim();
+  const direct = parseIndianDate(v);
   if (direct !== null) return direct;
-  const m = NAMED.exec(value.trim());
+  const short = SHORT_DMY.exec(v);
+  if (short) {
+    const dd = (short[1] ?? '').padStart(2, '0');
+    const mm = (short[2] ?? '').padStart(2, '0');
+    return parseIndianDate(`${dd}-${mm}-${short[3]}`);
+  }
+  const m = NAMED.exec(v);
   if (!m) return null;
   const month = MONTHS[(m[2] ?? '').toLowerCase()];
   if (month === undefined) return null;

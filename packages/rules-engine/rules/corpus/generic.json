@@ -148,6 +148,68 @@
         "type": "CREDIT",
         "ref_no": "00123456"
       }
+    },
+    {
+      "input": "NACH-DR-NETFLIX-99887",
+      "expect": {
+        "channel": "NACH",
+        "type": "DEBIT",
+        "category": "Subscriptions",
+        "merchant": "Netflix"
+      }
+    },
+    {
+      "input": "CHQ PAID-MICR INWARD CLEARING-000123",
+      "expect": {
+        "channel": "CHEQUE",
+        "type": "DEBIT",
+        "ref_no": "000123"
+      }
+    },
+    {
+      "input": "IB FUNDS TRANSFER TO SELF 1234",
+      "expect": {
+        "category": "Transfers"
+      }
+    },
+    {
+      "input": "CASH DEPOSIT BY SELF",
+      "expect": {
+        "category": "Cash Deposit"
+      }
+    },
+    {
+      "input": "BIL/BPAY/000123456/BSES RAJDHANI/CRN12345",
+      "expect": {
+        "type": "DEBIT",
+        "category": "Utilities",
+        "counterparty": "BSES Rajdhani",
+        "ref_no": "000123456"
+      }
+    },
+    {
+      "input": "UPI/123456789012/Payment from PhonePe/user@ybl/YES BANK",
+      "expect": {
+        "channel": "UPI",
+        "counterparty": "User",
+        "vpa": "ybl",
+        "ref_no": "123456789012"
+      }
+    },
+    {
+      "input": "UPI-RAMESH KUMAR-ramesh@okhdfcbank-HDFC0001234-123456789012-Sent via UPI",
+      "expect": {
+        "channel": "UPI",
+        "counterparty": "Ramesh KUMAR",
+        "vpa": "okhdfcbank",
+        "ref_no": "123456789012"
+      }
+    },
+    {
+      "input": "FD CLOSURE PROCEEDS 123",
+      "expect": {
+        "category": "Investments"
+      }
     }
   ]
 }
