@@ -327,6 +327,78 @@
         "category": "Investments",
         "mcc": "6282"
       }
+    },
+    {
+      "input": "VED VIGNAN MAHA VIDYA PEETH",
+      "expect": {
+        "canonical": "Art of Living",
+        "category": "Donations",
+        "mcc": "8661"
+      }
+    },
+    {
+      "input": "TTDEVASTHANAM",
+      "expect": {
+        "canonical": "Tirumala Tirupati Devasthanams",
+        "category": "Donations",
+        "mcc": "8661"
+      }
+    },
+    {
+      "input": "PM CARES",
+      "expect": {
+        "canonical": "PM CARES Fund",
+        "category": "Donations",
+        "mcc": "8398"
+      }
+    },
+    {
+      "input": "KALYAN JEWELLERS",
+      "expect": {
+        "canonical": "Kalyan Jewellers",
+        "category": "Jewellery",
+        "mcc": "5944"
+      }
+    },
+    {
+      "input": "ICICI DIRECT",
+      "expect": {
+        "canonical": "ICICI Direct",
+        "category": "Investments",
+        "mcc": "6211"
+      }
+    },
+    {
+      "input": "ARHA MEDIA",
+      "expect": {
+        "canonical": "aha",
+        "category": "Subscriptions",
+        "mcc": "4899"
+      }
+    },
+    {
+      "input": "TIMES OF INDIA",
+      "expect": {
+        "canonical": "Times of India",
+        "category": "Subscriptions",
+        "mcc": "5968"
+      }
+    },
+    {
+      "input": "PNB METLIFE",
+      "expect": {
+        "canonical": "PNB MetLife",
+        "category": "Insurance",
+        "mcc": "6300"
+      }
+    },
+    {
+      "input": "NATURALS SALON",
+      "expect": {
+        "canonical": "Naturals Salon",
+        "category": "Personal Care",
+        "mcc": "7230"
+      }
     }
   ]
 }

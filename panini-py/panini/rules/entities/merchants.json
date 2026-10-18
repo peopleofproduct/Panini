@@ -2409,6 +2409,776 @@
       ],
       "category": "Legal & Compliance",
       "mcc": "8999"
+    },
+    {
+      "canonical": "Art of Living",
+      "aliases": [
+        "ART OF LIVING",
+        "VED VIGNAN",
+        "VYAKTI VIKAS KENDRA"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Tirumala Tirupati Devasthanams",
+      "aliases": [
+        "TIRUMALA TIRUPATI DEVASTHANAM",
+        "TTDEVASTHANAM",
+        "TIRUPATI BALAJI",
+        "TTD SEVA"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Siddhivinayak Temple",
+      "aliases": [
+        "SIDDHIVINAYAK",
+        "SIDDHI VINAYAK",
+        "SHREE SIDDHIVINAYAK"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Shirdi Sai Sansthan",
+      "aliases": [
+        "SHIRDI SAI",
+        "SAIBABA SANSTHAN",
+        "SAI SANSTHAN"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "BAPS Swaminarayan",
+      "aliases": [
+        "BAPS",
+        "BAPS SWAMINARAYAN",
+        "SWAMINARAYAN SANSTHA"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Ramakrishna Mission",
+      "aliases": [
+        "RAMAKRISHNA MISSION",
+        "RAMAKRISHNA MATH",
+        "RK MISSION"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Mata Amritanandamayi Math",
+      "aliases": [
+        "AMRITANANDAMAYI",
+        "EMBRACING THE WORLD"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Brahma Kumaris",
+      "aliases": [
+        "BRAHMA KUMARIS",
+        "BRAHMAKUMARIS",
+        "PRAJAPITA BRAHMA"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Isha Foundation",
+      "aliases": [
+        "ISHA FOUNDATION",
+        "ISHA YOGA",
+        "ISHA VIDHYA"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Chinmaya Mission",
+      "aliases": [
+        "CHINMAYA MISSION"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Sathya Sai Trust",
+      "aliases": [
+        "SATHYA SAI",
+        "SRI SATHYA SAI"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "Vipassana",
+      "aliases": [
+        "VIPASSANA",
+        "VIPASSANA MEDITATION"
+      ],
+      "category": "Donations",
+      "mcc": "8661"
+    },
+    {
+      "canonical": "PM CARES Fund",
+      "aliases": [
+        "PM CARES",
+        "PMCARES"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "PMNRF",
+      "aliases": [
+        "PMNRF",
+        "PRIME MINISTER NATIONAL RELIEF"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "GiveIndia",
+      "aliases": [
+        "GIVE INDIA",
+        "GIVEINDIA",
+        "GIVE FOUNDATION"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "CRY",
+      "aliases": [
+        "CRY",
+        "CHILD RIGHTS AND YOU"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "Goonj",
+      "aliases": [
+        "GOONJ"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "HelpAge India",
+      "aliases": [
+        "HELP AGE",
+        "HELPAGE INDIA"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "Smile Foundation",
+      "aliases": [
+        "SMILE FOUNDATION"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "World Vision India",
+      "aliases": [
+        "WORLD VISION"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "SOS Children's Villages",
+      "aliases": [
+        "SOS CHILDRENS VILLAGES",
+        "SOS CHILDREN"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "Impact Guru",
+      "aliases": [
+        "IMPACT GURU"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "Teach for India",
+      "aliases": [
+        "TEACH FOR INDIA"
+      ],
+      "category": "Donations",
+      "mcc": "8398"
+    },
+    {
+      "canonical": "Tanishq",
+      "aliases": [
+        "TANISHQ"
+      ],
+      "category": "Jewellery",
+      "mcc": "5094"
+    },
+    {
+      "canonical": "Kalyan Jewellers",
+      "aliases": [
+        "KALYAN JEWELLERS",
+        "KALYAN JEWELERS"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "Malabar Gold",
+      "aliases": [
+        "MALABAR GOLD",
+        "MALABAR GOLD AND DIAMONDS"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "Joyalukkas",
+      "aliases": [
+        "JOYALUKKAS",
+        "JOY ALUKKAS"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "CaratLane",
+      "aliases": [
+        "CARATLANE",
+        "CARAT LANE"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "BlueStone",
+      "aliases": [
+        "BLUESTONE",
+        "BLUE STONE"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "Giva",
+      "aliases": [
+        "GIVA",
+        "GIVA JEWELS"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "PC Jeweller",
+      "aliases": [
+        "PC JEWELLER",
+        "PCJ"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "Senco Gold",
+      "aliases": [
+        "SENCO GOLD"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "TBZ",
+      "aliases": [
+        "TBZ",
+        "TRIBHOVANDAS BHIMJI"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "Reliance Jewels",
+      "aliases": [
+        "RELIANCE JEWELS"
+      ],
+      "category": "Jewellery",
+      "mcc": "5944"
+    },
+    {
+      "canonical": "Naturals Salon",
+      "aliases": [
+        "NATURALS SALON",
+        "NATURALS UNISEX"
+      ],
+      "category": "Personal Care",
+      "mcc": "7230"
+    },
+    {
+      "canonical": "Lakme Salon",
+      "aliases": [
+        "LAKME SALON",
+        "LAKME"
+      ],
+      "category": "Personal Care",
+      "mcc": "7230"
+    },
+    {
+      "canonical": "VLCC",
+      "aliases": [
+        "VLCC"
+      ],
+      "category": "Personal Care",
+      "mcc": "7298"
+    },
+    {
+      "canonical": "Jawed Habib",
+      "aliases": [
+        "JAWED HABIB"
+      ],
+      "category": "Personal Care",
+      "mcc": "7230"
+    },
+    {
+      "canonical": "Toni&Guy",
+      "aliases": [
+        "TONI GUY",
+        "TONIGUY"
+      ],
+      "category": "Personal Care",
+      "mcc": "7230"
+    },
+    {
+      "canonical": "Looks Salon",
+      "aliases": [
+        "LOOKS SALON"
+      ],
+      "category": "Personal Care",
+      "mcc": "7230"
+    },
+    {
+      "canonical": "Bharat Matrimony",
+      "aliases": [
+        "BHARAT MATRIMONY",
+        "BHARATMATRIMONY"
+      ],
+      "category": "Personal Care",
+      "mcc": "7299"
+    },
+    {
+      "canonical": "Shaadi.com",
+      "aliases": [
+        "SHAADI",
+        "SHAADI COM",
+        "PEOPLE INTERACTIVE"
+      ],
+      "category": "Personal Care",
+      "mcc": "7299"
+    },
+    {
+      "canonical": "Jeevansathi",
+      "aliases": [
+        "JEEVANSATHI"
+      ],
+      "category": "Personal Care",
+      "mcc": "7299"
+    },
+    {
+      "canonical": "Dhan",
+      "aliases": [
+        "DHAN",
+        "RAISE FINANCIAL"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "Fyers",
+      "aliases": [
+        "FYERS"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "5paisa",
+      "aliases": [
+        "5PAISA"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "Motilal Oswal",
+      "aliases": [
+        "MOTILAL OSWAL",
+        "MOSL"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "ICICI Direct",
+      "aliases": [
+        "ICICI DIRECT",
+        "ICICI SECURITIES",
+        "ICICIDIRECT"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "HDFC Securities",
+      "aliases": [
+        "HDFC SECURITIES",
+        "HDFC SEC"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "Kotak Securities",
+      "aliases": [
+        "KOTAK SECURITIES"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "Sharekhan",
+      "aliases": [
+        "SHAREKHAN",
+        "SHAREKHAN BY BNP"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "SBI Securities",
+      "aliases": [
+        "SBI SECURITIES",
+        "SBICAP SECURITIES"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "Axis Direct",
+      "aliases": [
+        "AXIS DIRECT",
+        "AXIS SECURITIES"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "Geojit",
+      "aliases": [
+        "GEOJIT"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "IIFL Securities",
+      "aliases": [
+        "IIFL SECURITIES",
+        "IIFLSEC"
+      ],
+      "category": "Investments",
+      "mcc": "6211"
+    },
+    {
+      "canonical": "PNB MetLife",
+      "aliases": [
+        "PNB METLIFE",
+        "METLIFE"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Royal Sundaram",
+      "aliases": [
+        "ROYAL SUNDARAM"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "National Insurance",
+      "aliases": [
+        "NATIONAL INSURANCE"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "United India Insurance",
+      "aliases": [
+        "UNITED INDIA INSURANCE",
+        "UIIC"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Oriental Insurance",
+      "aliases": [
+        "ORIENTAL INSURANCE"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Aditya Birla Health",
+      "aliases": [
+        "ADITYA BIRLA HEALTH"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "ManipalCigna",
+      "aliases": [
+        "MANIPALCIGNA",
+        "MANIPAL CIGNA"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Cholamandalam MS",
+      "aliases": [
+        "CHOLAMANDALAM MS",
+        "CHOLA MS"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Bharti AXA",
+      "aliases": [
+        "BHARTI AXA"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Tata AIA",
+      "aliases": [
+        "TATA AIA",
+        "TATAAIA"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Future Generali",
+      "aliases": [
+        "FUTURE GENERALI"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "SBI General",
+      "aliases": [
+        "SBI GENERAL INSURANCE",
+        "SBI GENERAL"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "Kotak Life",
+      "aliases": [
+        "KOTAK LIFE",
+        "KOTAK LIFE INSURANCE"
+      ],
+      "category": "Insurance",
+      "mcc": "6300"
+    },
+    {
+      "canonical": "aha",
+      "aliases": [
+        "ARHA MEDIA",
+        "AHA VIDEO",
+        "AHA OTT"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "Sun NXT",
+      "aliases": [
+        "SUN NXT",
+        "SUNNXT"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "hoichoi",
+      "aliases": [
+        "HOICHOI"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "ManoramaMAX",
+      "aliases": [
+        "MANORAMA MAX",
+        "MANORAMAMAX"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "ETV Win",
+      "aliases": [
+        "ETV WIN",
+        "ETVWIN"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "JioCinema",
+      "aliases": [
+        "JIOCINEMA",
+        "JIO CINEMA"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "ALTBalaji",
+      "aliases": [
+        "ALTBALAJI",
+        "ALT BALAJI"
+      ],
+      "category": "Subscriptions",
+      "mcc": "4899"
+    },
+    {
+      "canonical": "Times of India",
+      "aliases": [
+        "TIMES OF INDIA",
+        "TOI PLUS",
+        "TIMES PRIME"
+      ],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    {
+      "canonical": "The Hindu",
+      "aliases": [
+        "THE HINDU",
+        "THEHINDU"
+      ],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    {
+      "canonical": "The Economic Times",
+      "aliases": [
+        "ECONOMIC TIMES",
+        "ET PRIME"
+      ],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    {
+      "canonical": "Indian Express",
+      "aliases": [
+        "INDIAN EXPRESS"
+      ],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    {
+      "canonical": "Hindustan Times",
+      "aliases": [
+        "HINDUSTAN TIMES",
+        "HT MEDIA"
+      ],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    {
+      "canonical": "Dainik Bhaskar",
+      "aliases": [
+        "DAINIK BHASKAR",
+        "DB CORP"
+      ],
+      "category": "Subscriptions",
+      "mcc": "5968"
+    },
+    {
+      "canonical": "Wellness Forever",
+      "aliases": [
+        "WELLNESS FOREVER"
+      ],
+      "category": "Healthcare",
+      "mcc": "5912"
+    },
+    {
+      "canonical": "Apollo Diagnostics",
+      "aliases": [
+        "APOLLO DIAGNOSTICS"
+      ],
+      "category": "Healthcare",
+      "mcc": "8071"
+    },
+    {
+      "canonical": "SRL Diagnostics",
+      "aliases": [
+        "SRL DIAGNOSTICS",
+        "SRL LIMITED"
+      ],
+      "category": "Healthcare",
+      "mcc": "8071"
+    },
+    {
+      "canonical": "Vijaya Diagnostic",
+      "aliases": [
+        "VIJAYA DIAGNOSTIC",
+        "VIJAYA DIAGNOSTICS"
+      ],
+      "category": "Healthcare",
+      "mcc": "8071"
+    },
+    {
+      "canonical": "JustDial",
+      "aliases": [
+        "JUSTDIAL",
+        "JUST DIAL"
+      ],
+      "category": "Professional Services",
+      "mcc": "7399"
+    },
+    {
+      "canonical": "IndiaMART",
+      "aliases": [
+        "INDIAMART",
+        "INDIA MART"
+      ],
+      "category": "Professional Services",
+      "mcc": "7399"
     }
   ]
 }
