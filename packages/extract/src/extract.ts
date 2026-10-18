@@ -21,6 +21,7 @@ import { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement'
 import type { PdfFragment } from './pdf/pdfText';
 import { extractSms } from './sms';
 import { decodeBytes, sniffFormat } from './sniff';
+import { readXlsxSheet } from './xlsx/xlsx';
 import type { ExtractedStatement, ExtractOptions, StatementFormat } from './types';
 
 function empty(format: ExtractedStatement['format'], warnings: string[]): ExtractedStatement {
@@ -78,7 +79,8 @@ function statementFromOcr(
  *
  *   string / UTF-8 text  → csv (multi-line delimited) or sms (alert body)
  *   %PDF bytes           → pdf text-layer extraction
- *   PK zip bytes         → xlsx via the caller's SpreadsheetProvider
+ *   PK zip bytes         → xlsx via the built-in reader (or a caller's
+ *                          SpreadsheetProvider when supplied)
  *   PNG/JPEG bytes       → image via the caller's OcrProvider → rows
  *
  * Never throws for malformed input — warnings carry the details.
@@ -132,28 +134,29 @@ export async function extractStatement(
       return result;
     }
     case 'xlsx': {
-      if (!options.spreadsheet) {
-        return empty('xlsx', [
-          'spreadsheet input requires options.spreadsheet — plug in SheetJS/exceljs via the SpreadsheetProvider seam',
-        ]);
-      }
+      // A caller-supplied provider wins; the zero-dep native reader is the
+      // built-in default so .xlsx works with no SheetJS install.
+      const spreadsheet = options.spreadsheet ?? {
+        name: 'panini-native-xlsx',
+        readSheet: readXlsxSheet,
+      };
       let rows: string[][];
       try {
-        rows = options.spreadsheet.readSheet(input as Uint8Array).map((r) => [...r]);
+        rows = spreadsheet.readSheet(input as Uint8Array).map((r) => [...r]);
       } catch (err) {
         return empty('xlsx', [
-          `spreadsheet provider '${options.spreadsheet.name}' failed: ${err instanceof Error ? err.message : String(err)}`,
+          `spreadsheet reader '${spreadsheet.name}' failed: ${err instanceof Error ? err.message : String(err)}`,
         ]);
       }
       if (!Array.isArray(rows) || rows.some((r) => !Array.isArray(r))) {
         return empty('xlsx', [
-          `spreadsheet provider '${options.spreadsheet.name}' returned a non-tabular result`,
+          `spreadsheet reader '${spreadsheet.name}' returned a non-tabular result`,
         ]);
       }
       const mined = statementFromRows(rows, layouts, 'xlsx', withLayout);
       return {
         ...mined,
-        metadata: { ...mined.metadata, spreadsheetProvider: options.spreadsheet.name },
+        metadata: { ...mined.metadata, spreadsheetProvider: spreadsheet.name },
       };
     }
     case 'image': {

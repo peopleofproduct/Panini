@@ -76,12 +76,12 @@ describe('extractStatement', () => {
     expect(result.transactions[0]?.amountPaise).toBe(32050);
   });
 
-  it('xlsx without a provider returns a documented warning, not a throw', async () => {
+  it('xlsx without a provider falls back to the native reader and warns on bad bytes', async () => {
     const fakeZip = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x00]);
     const result = await extractStatement(fakeZip);
     expect(result.format).toBe('xlsx');
     expect(result.transactions).toEqual([]);
-    expect(result.warnings.join(' ')).toMatch(/SpreadsheetProvider/);
+    expect(result.warnings.join(' ')).toMatch(/panini-native-xlsx/);
   });
 
   it('xlsx rows flow through the SpreadsheetProvider seam', async () => {

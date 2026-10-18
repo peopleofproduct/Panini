@@ -31,26 +31,25 @@ Determinism: all inputs are seeded (`mulberry32`), so identical commits produce 
 ## Latest results
 
 <!-- BEGIN RESULTS -->
+_Generated 2026-10-18T09:12:52.756Z · commit 1d6ae39 · node v24.15.0_
 
-_Generated 2026-10-17T20:03:03.971Z · commit c2a9c39 · node v24.15.0_
+| Layout | Rows | Exact % | Amount % | Date % | Dir % | Balance % | Layout detect % |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| hdfc_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| icici_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| sbi_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| axis_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| kotak_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| pnb_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| bob_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| yes_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| indusind_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| union_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| idfc_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| canara_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| federal_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| rbl_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
+| au_statement | 200 | 100 | 100 | 100 | 100 | 100 | 100 |
 
-| Layout             | Rows | Exact % | Amount % | Date % | Dir % | Balance % | Layout detect % |
-| ------------------ | ---- | ------- | -------- | ------ | ----- | --------- | --------------- |
-| hdfc_statement     | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| icici_statement    | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| sbi_statement      | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| axis_statement     | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| kotak_statement    | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| pnb_statement      | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| bob_statement      | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| yes_statement      | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| indusind_statement | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| union_statement    | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| idfc_statement     | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| canara_statement   | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| federal_statement  | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| rbl_statement      | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-| au_statement       | 200  | 100     | 100      | 100    | 100   | 100       | 100             |
-
-Narration corpus: **100%** of 76 samples pass field-level checks; 90.79% resolve a counterparty/merchant; 64.47% categorize. Anomaly safety: 0 crashes, 0 over-extractions across 45 corrupted statements. Insights: deterministic=true.
+Narration corpus: **100%** of 84 samples pass field-level checks; 90.48% resolve a counterparty/merchant; 65.48% categorize. Anomaly safety: 0 crashes, 0 over-extractions across 45 corrupted statements. Insights: deterministic=true.
 <!-- END RESULTS -->

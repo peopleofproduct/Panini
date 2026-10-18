@@ -34,7 +34,11 @@ export type { PdfFragment, PdfLine } from './pdf/pdfText';
 export { mapRow, findAccountMask } from './rowMapper';
 export type { SpreadsheetProvider } from './spreadsheet';
 export type { OcrFragment, OcrProvider, OcrResult } from './ocr';
-export { createSheetJsProvider, createTesseractProvider } from './providers';
+export {
+  createNativeXlsxProvider,
+  createSheetJsProvider,
+  createTesseractProvider,
+} from './providers';
 export type { SheetJsLike, TesseractLike } from './providers';
 export { extractPdfStatement, statementFromFragments } from './pdf/pdfStatement';
 export type { ExtractPdfOptions } from './pdf/pdfStatement';

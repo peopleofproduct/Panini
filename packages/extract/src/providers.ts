@@ -16,6 +16,7 @@
 
 import type { OcrFragment, OcrProvider } from './ocr';
 import type { SpreadsheetProvider } from './spreadsheet';
+import { readXlsxSheet } from './xlsx/xlsx';
 
 /**
  * Ready-made provider adapters. The heavy libraries stay caller-owned —
@@ -63,6 +64,16 @@ export function createSheetJsProvider(xlsx: SheetJsLike, sheetIndex = 0): Spread
       );
     },
   };
+}
+
+/**
+ * The bundled zero-dependency XLSX reader — ZIP + sharedStrings + styles
+ * (date-formatted serials render as ISO dates). `extractStatement` uses
+ * this automatically when `options.spreadsheet` is not supplied; this
+ * factory exists for callers who want to pass it explicitly.
+ */
+export function createNativeXlsxProvider(): SpreadsheetProvider {
+  return { name: 'panini-native-xlsx', readSheet: readXlsxSheet };
 }
 
 /** Minimal structural shape of a tesseract.js worker. */

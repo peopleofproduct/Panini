@@ -1,15 +1,15 @@
 {
   "meta": {
-    "generated_at": "2026-10-17T20:03:03.971Z",
-    "git_sha": "c2a9c39",
+    "generated_at": "2026-10-18T09:12:52.756Z",
+    "git_sha": "1d6ae39",
     "node": "v24.15.0",
     "packages": {
-      "core": "0.1.1",
-      "rules-engine": "0.2.0",
-      "standards-schema": "0.2.0",
-      "extract": "0.2.0",
-      "insights": "0.1.1",
-      "simulator": "0.2.0"
+      "core": "0.1.3",
+      "rules-engine": "0.2.2",
+      "standards-schema": "0.3.2",
+      "extract": "0.2.3",
+      "insights": "0.2.1",
+      "simulator": "0.2.2"
     }
   },
   "extraction": [
@@ -232,10 +232,10 @@
   },
   "narration": {
     "corpus_files": 14,
-    "samples": 76,
+    "samples": 84,
     "sample_pass_pct": 100,
-    "counterparty_or_merchant_pct": 90.79,
-    "categorized_pct": 64.47,
+    "counterparty_or_merchant_pct": 90.48,
+    "categorized_pct": 65.48,
     "per_bank": [
       {
         "bank": "AXIS",
@@ -267,10 +267,10 @@
       },
       {
         "bank": "GENERIC",
-        "samples": 19,
-        "matched": 19,
-        "passed": 19,
-        "avg_confidence": 0.9
+        "samples": 27,
+        "matched": 24,
+        "passed": 27,
+        "avg_confidence": 0.861
       },
       {
         "bank": "IDFC",
@@ -341,6 +341,6 @@
     "transactions": 60,
     "deterministic": true,
     "rule_hits": 2,
-    "runtime_ms": 6.1
+    "runtime_ms": 5.6
   }
 }
