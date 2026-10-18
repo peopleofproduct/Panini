@@ -92,6 +92,13 @@ const narrationSet = runGoldSet('narration', (input) => {
     vpa: r.vpa,
     confidence: r.confidence,
     matched_rule: r.matched_rule,
+    schema_version: r.schema_version,
+    category_id: r.category_id,
+    category_group: r.category_group,
+    category_source: r.category_source,
+    counterparty_kind: r.counterparty_kind,
+    ref_kind: r.ref_kind,
+    mcc: r.mcc,
   };
 });
 

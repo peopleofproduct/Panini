@@ -22,7 +22,7 @@
  */
 
 import type { ParseBankNarrationOptions } from '@paniniapi/rules-engine';
-import { parseBankNarration, setDictionaries } from '@paniniapi/rules-engine';
+import { parseBankNarration, setDictionaries, setTaxonomy } from '@paniniapi/rules-engine';
 // Leaf-module imports keep the bundle free of extract's Node-only PDF/zlib
 // path — esbuild inlines these sources; consumers never resolve them.
 import { extractCsvStatement } from '../../extract/src/csv/csvStatement';
@@ -30,7 +30,14 @@ import { extractSms } from '../../extract/src/sms';
 import type { ExtractedStatement } from '@paniniapi/extract';
 import type { InsightTransaction, InsightsReport } from '@paniniapi/insights';
 import { analyzeTransactions } from '@paniniapi/insights';
-import { CATEGORIES, CSV_LAYOUTS, DICTIONARIES, RULE_SETS, SMS_PATTERNS } from './data.gen';
+import {
+  CATEGORIES,
+  CSV_LAYOUTS,
+  DICTIONARIES,
+  RULE_SETS,
+  SMS_PATTERNS,
+  TAXONOMY,
+} from './data.gen';
 
 let initialised = false;
 
@@ -38,6 +45,7 @@ let initialised = false;
 export function initPaniniBrowser(): void {
   if (initialised) return;
   setDictionaries(DICTIONARIES);
+  setTaxonomy(TAXONOMY);
   initialised = true;
 }
 initPaniniBrowser();

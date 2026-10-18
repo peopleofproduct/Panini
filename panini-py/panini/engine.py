@@ -440,7 +440,11 @@ def _load_entities(rules_dir: Path) -> dict[str, Any]:
     ent = rules_dir / "entities"
     out: dict[str, Any] = {
         "merchants": [], "vpa-handles": {}, "ifsc-codes": {}, "mcc-codes": {},
+        "taxonomy": {},
     }
+    tax = rules_dir / "taxonomy.json"
+    if tax.exists():
+        out["taxonomy"] = json.loads(tax.read_text()).get("categories", {})
     for name in ("merchants", "vpa-handles", "ifsc-codes", "mcc-codes"):
         p = ent / f"{name}.json"
         if p.exists():
@@ -524,6 +528,26 @@ def _normalizer_for(rd: Path) -> tuple[Normalizer, dict[str, Any]]:
     return hit
 
 
+_SELF_REF_RE = re.compile(
+    r"\b(?:SELF|OWN\s+A/?C|OWN\s+ACCOUNT|OWN\s+BANK)\b", re.IGNORECASE
+)
+_SELF_CATEGORIES = {"Transfers", "Cash Withdrawal"}
+_REF_KIND_BY_CHANNEL = {
+    "NEFT": "utr", "RTGS": "utr", "UPI": "rrn", "IMPS": "rrn", "CHEQUE": "cheque",
+}
+
+
+def _grammar_assigned(matched_rule: Optional[str], patterns: list) -> bool:
+    """True when the matched grammar pattern carries an explicit category."""
+    if not matched_rule or ":" not in matched_rule:
+        return False
+    rs_id, name = matched_rule.split(":", 1)
+    return any(
+        p.rule_set_id == rs_id and p.name == name and p.category is not None
+        for p in patterns
+    )
+
+
 def parse_narration(input_: str | dict, *, enrich: bool = True,
                     rules_dir: Optional[Path] = None) -> dict[str, Any]:
     """Parse a bank narration into the flattened ParsedBankNarration shape —
@@ -549,6 +573,31 @@ def parse_narration(input_: str | dict, *, enrich: bool = True,
         category = merchant_entry["category"]
     elif txn.category == "Uncategorized" and mcc_info:
         category = mcc_info["category"]
+
+    # Category provenance: the mechanism that produced the final label.
+    if txn.category != "Uncategorized":
+        category_source = (
+            "grammar" if _grammar_assigned(txn.matched_rule, norm.patterns)
+            else "keyword"
+        )
+    elif merchant_entry:
+        category_source = "merchant"
+    elif mcc_info:
+        category_source = "mcc"
+    else:
+        category_source = "none"
+
+    tax_entry = entities["taxonomy"].get(category) or {}
+    if merchant_entry:
+        counterparty_kind = "merchant"
+    elif category in _SELF_CATEGORIES and _SELF_REF_RE.search(txn.raw):
+        counterparty_kind = "self"
+    else:
+        counterparty_kind = "unknown"
+    ref_kind = (
+        "none" if txn.transaction_id is None
+        else _REF_KIND_BY_CHANNEL.get(txn.channel, "ref")
+    )
     return {
         "channel": txn.channel,
         "type": txn.type,
@@ -569,4 +618,15 @@ def parse_narration(input_: str | dict, *, enrich: bool = True,
         "mcc": (_extract_mcc_token(txn.raw) if enrich else None)
         or (merchant_entry or {}).get("mcc"),
         "mcc_description": (mcc_info or {}).get("description"),
+        "schema_version": 2,
+        "bank": txn.bank,
+        "amount_paise": txn.amount_paise,
+        "balance_paise": txn.balance_paise,
+        "account_mask": txn.account_mask,
+        "currency": "INR",
+        "category_id": tax_entry.get("id"),
+        "category_group": tax_entry.get("group"),
+        "category_source": category_source,
+        "counterparty_kind": counterparty_kind,
+        "ref_kind": ref_kind,
     }

@@ -21,8 +21,9 @@ import {
   type TransactionChannel,
   type TransactionType,
 } from '@paniniapi/core';
-import { loadBuiltinRuleSets, loadCategories } from './loader';
+import { loadBuiltinRuleSets, loadCategories, loadTaxonomy } from './loader';
 import { lookupIfscBank, lookupMcc, lookupMerchant, lookupVpaHandle } from './dictionary';
+import type { MerchantEntry } from './dictionary';
 
 /**
  * Structured output of {@link parseBankNarration}. Field names follow the
@@ -61,6 +62,30 @@ export interface ParsedBankNarration {
   readonly mcc: string | null;
   /** Human-readable MCC description (e.g. 'Grocery stores and supermarkets'). */
   readonly mcc_description: string | null;
+  // ── schema v2 fields (additive) ─────────────────────────────────────────
+  /** Output contract version. */
+  readonly schema_version: 2;
+  /** Bank whose grammar set matched, or null. */
+  readonly bank: string | null;
+  /** Amount in paise when the source carries it (SMS/auto inputs), else null. */
+  readonly amount_paise: number | null;
+  /** Reported post-transaction balance in paise, or null. */
+  readonly balance_paise: number | null;
+  /** Masked account suffix when the source reveals it, else null. */
+  readonly account_mask: string | null;
+  readonly currency: 'INR';
+  /** Stable taxonomy id for `category` (e.g. 'food_dining'); null when Uncategorized. */
+  readonly category_id: string | null;
+  /** Taxonomy rollup group for `category` (e.g. 'Essentials'); null when Uncategorized. */
+  readonly category_group: string | null;
+  /** Which mechanism produced `category` — grammar override, keyword table,
+   *  merchant dictionary, MCC dictionary, or nothing. */
+  readonly category_source: 'grammar' | 'keyword' | 'merchant' | 'mcc' | 'none';
+  /** What the counterparty resolves to: dictionary merchant, the account
+   *  holder themselves (self-transfer), or unidentified. */
+  readonly counterparty_kind: 'merchant' | 'self' | 'unknown';
+  /** What `ref_no` semantically is, derived from the channel. */
+  readonly ref_kind: 'utr' | 'rrn' | 'cheque' | 'ref' | 'none';
 }
 
 export interface ParseBankNarrationOptions {
@@ -121,25 +146,75 @@ export function preserveAcronymCase(value: string): string {
     .join(' ');
 }
 
-let defaultNormalizer: Normalizer | undefined;
+interface NormalizerContext {
+  readonly normalizer: Normalizer;
+  readonly ruleSets: readonly GrammarRuleSet[];
+}
 
-function buildNormalizer(options?: ParseBankNarrationOptions): Normalizer {
+let defaultContext: NormalizerContext | undefined;
+
+function buildContext(options?: ParseBankNarrationOptions): NormalizerContext {
   if (options === undefined) {
-    defaultNormalizer ??= new Normalizer({
-      ruleSets: loadBuiltinRuleSets(),
-      categories: loadCategories(),
-      displayCase: preserveAcronymCase,
-    });
-    return defaultNormalizer;
+    if (defaultContext === undefined) {
+      const ruleSets = loadBuiltinRuleSets();
+      defaultContext = {
+        ruleSets,
+        normalizer: new Normalizer({
+          ruleSets,
+          categories: loadCategories(),
+          displayCase: preserveAcronymCase,
+        }),
+      };
+    }
+    return defaultContext;
   }
-  return new Normalizer({
-    ruleSets: [
-      ...(options.bare === true ? [] : loadBuiltinRuleSets()),
-      ...(options.ruleSets ?? []),
-    ],
-    categories: options.categories ?? loadCategories(),
-    displayCase: preserveAcronymCase,
-  });
+  const ruleSets = [
+    ...(options.bare === true ? [] : loadBuiltinRuleSets()),
+    ...(options.ruleSets ?? []),
+  ];
+  return {
+    ruleSets,
+    normalizer: new Normalizer({
+      ruleSets,
+      categories: options.categories ?? loadCategories(),
+      displayCase: preserveAcronymCase,
+    }),
+  };
+}
+
+/** True when the matched grammar pattern carries an explicit `category`. */
+function grammarAssignedCategory(
+  matchedRule: string | null,
+  ruleSets: readonly GrammarRuleSet[],
+): boolean {
+  if (matchedRule === null) return false;
+  const sep = matchedRule.indexOf(':');
+  if (sep < 0) return false;
+  const ruleSetId = matchedRule.slice(0, sep);
+  const patternName = matchedRule.slice(sep + 1);
+  const set = ruleSets.find((rs) => rs.id === ruleSetId);
+  return set?.patterns.some((p) => p.name === patternName && p.category !== undefined) ?? false;
+}
+
+const SELF_REF_RE = /\b(?:SELF|OWN\s+A\/?C|OWN\s+ACCOUNT|OWN\s+BANK)\b/i;
+const SELF_CATEGORIES: ReadonlySet<string> = new Set(['Transfers', 'Cash Withdrawal']);
+
+function counterpartyKind(
+  merchantEntry: MerchantEntry | null,
+  category: string,
+  raw: string,
+): 'merchant' | 'self' | 'unknown' {
+  if (merchantEntry !== null) return 'merchant';
+  if (SELF_CATEGORIES.has(category) && SELF_REF_RE.test(raw)) return 'self';
+  return 'unknown';
+}
+
+function refKind(channel: string, refNo: string | null): 'utr' | 'rrn' | 'cheque' | 'ref' | 'none' {
+  if (refNo === null) return 'none';
+  if (channel === 'NEFT' || channel === 'RTGS') return 'utr';
+  if (channel === 'UPI' || channel === 'IMPS') return 'rrn';
+  if (channel === 'CHEQUE') return 'cheque';
+  return 'ref';
 }
 
 /**
@@ -151,7 +226,8 @@ export function parseBankNarration(
   input: string | RawInput,
   options?: ParseBankNarrationOptions,
 ): ParsedBankNarration {
-  const txn = buildNormalizer(options).normalize(input);
+  const { normalizer, ruleSets } = buildContext(options);
+  const txn = normalizer.normalize(input);
   const doEnrich = options?.enrich !== false;
 
   // Dictionary enrichment: canonical merchant identity, VPA handle
@@ -179,6 +255,20 @@ export function parseBankNarration(
         ? mccEntry.category
         : txn.category;
 
+  // Category provenance: the mechanism that produced the final label.
+  const categorySource: ParsedBankNarration['category_source'] =
+    txn.category !== 'Uncategorized'
+      ? grammarAssignedCategory(txn.matchedRule, ruleSets)
+        ? 'grammar'
+        : 'keyword'
+      : merchantEntry !== null
+        ? 'merchant'
+        : mccEntry !== null
+          ? 'mcc'
+          : 'none';
+
+  const taxEntry = loadTaxonomy().categories[category];
+
   return {
     channel: txn.channel,
     type: txn.type,
@@ -198,6 +288,17 @@ export function parseBankNarration(
     ifsc_bank: ifscInfo?.name ?? null,
     mcc: extractMccToken(mccToken) ?? merchantEntry?.mcc ?? null,
     mcc_description: mccEntry?.description ?? null,
+    schema_version: 2,
+    bank: txn.bank,
+    amount_paise: txn.amountPaise,
+    balance_paise: txn.balancePaise,
+    account_mask: txn.accountMask,
+    currency: 'INR',
+    category_id: taxEntry?.id ?? null,
+    category_group: taxEntry?.group ?? null,
+    category_source: categorySource,
+    counterparty_kind: counterpartyKind(merchantEntry, category, txn.raw),
+    ref_kind: refKind(txn.channel, txn.transactionId),
   };
 }
 

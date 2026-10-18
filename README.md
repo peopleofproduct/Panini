@@ -131,6 +131,12 @@ parseBankNarration('UPI/20261015/DR/826384910234/SWIGGY@okaxis/Cooking/');
 //   vpa_bank: 'Axis Bank',        // enrichment: sponsor bank
 //   merchant_canonical: 'Swiggy',
 //   category: 'Food & Dining',
+//   category_id: 'food_dining',      // stable taxonomy id
+//   category_group: 'Essentials',    // taxonomy rollup group
+//   category_source: 'keyword',      // grammar | keyword | merchant | mcc | none
+//   counterparty_kind: 'merchant',   // merchant | self | unknown
+//   ref_kind: 'rrn',                 // utr | rrn | cheque | ref | none
+//   schema_version: 2,
 //   confidence: 0.95,
 //   ...
 // }

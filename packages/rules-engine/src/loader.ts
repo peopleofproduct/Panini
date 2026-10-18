@@ -102,8 +102,19 @@ export interface Taxonomy {
   readonly categories: Readonly<Record<string, TaxonomyEntry>>;
 }
 
+let taxonomyCache: Taxonomy | undefined;
+
+/**
+ * Injects taxonomy data without touching the filesystem — required for
+ * browser/edge runtimes which bundle `taxonomy.json` at build time.
+ */
+export function setTaxonomy(data: Taxonomy): void {
+  taxonomyCache = data;
+}
+
 /** Loads the governed taxonomy (label → stable id + group). */
 export function loadTaxonomy(dir?: string): Taxonomy {
+  if (dir === undefined && taxonomyCache !== undefined) return taxonomyCache;
   const rulesDir = dir ?? resolveRulesDir();
   const file = join(rulesDir, TAXONOMY_FILE);
   if (!existsSync(file)) return { version: 0, categories: {} };

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "description": "Gold narration \u2192 ParsedBankNarration evaluation set. Every case is hand-verified against public documentation of Indian bank narration shapes; `expect` fields are exact-match assertions. Cases must be correct by definition \u2014 if the engine regresses on one, the test fails. Add cases only for shapes you have evidence for; never assert a field you have not verified.",
+  "description": "Gold narration → ParsedBankNarration evaluation set. Every case is hand-verified against public documentation of Indian bank narration shapes; `expect` fields are exact-match assertions. Cases must be correct by definition — if the engine regresses on one, the test fails. Add cases only for shapes you have evidence for; never assert a field you have not verified.",
   "cases": [
     {
       "input": "UPI-DR-402512345678-SWIGGY-okaxis",
@@ -11,7 +11,13 @@
         "merchant": "Swiggy",
         "category": "Food & Dining",
         "ref_no": "402512345678",
-        "vpa": "okaxis"
+        "vpa": "okaxis",
+        "category_id": "food_dining",
+        "category_group": "Essentials",
+        "category_source": "keyword",
+        "counterparty_kind": "merchant",
+        "ref_kind": "rrn",
+        "schema_version": 2
       }
     },
     {
@@ -326,7 +332,40 @@
       "expect": {
         "category": "Investments",
         "matched_rule": "generic-indian-banks:ipo_asba",
-        "merchant": null
+        "merchant": null,
+        "category_source": "grammar",
+        "category_id": "investments"
+      }
+    },
+    {
+      "input": "POS 4455 SUPERTAILS",
+      "expect": {
+        "category": "Pet Care",
+        "category_source": "merchant",
+        "counterparty_kind": "merchant"
+      }
+    },
+    {
+      "input": "POS PURCHASE MCC-5995",
+      "expect": {
+        "category": "Pet Care",
+        "category_source": "mcc",
+        "mcc": "5995"
+      }
+    },
+    {
+      "input": "IB FUNDS TRANSFER TO SELF 1234",
+      "expect": {
+        "category": "Transfers",
+        "counterparty_kind": "self"
+      }
+    },
+    {
+      "input": "RTGS-SBINR120260105-EMPLOYER-RENT",
+      "expect": {
+        "category": "Housing",
+        "ref_kind": "utr",
+        "category_id": "housing"
       }
     }
   ]

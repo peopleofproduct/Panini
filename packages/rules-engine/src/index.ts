@@ -19,6 +19,7 @@ export {
   loadCategories,
   loadRuleSets,
   loadTaxonomy,
+  setTaxonomy,
 } from './loader';
 export type { Taxonomy, TaxonomyEntry } from './loader';
 export {

@@ -4,3179 +4,2065 @@
   "merchants": [
     {
       "canonical": "Swiggy",
-      "aliases": [
-        "SWIGGY",
-        "SWIGGY LIMITED",
-        "BUNDL TECHNOLOGIES",
-        "BUNDL"
-      ],
+      "aliases": ["SWIGGY", "SWIGGY LIMITED", "BUNDL TECHNOLOGIES", "BUNDL"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Zomato",
-      "aliases": [
-        "ZOMATO",
-        "ZOMATO LTD",
-        "ZOMATO LIMITED"
-      ],
+      "aliases": ["ZOMATO", "ZOMATO LTD", "ZOMATO LIMITED"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Domino's",
-      "aliases": [
-        "DOMINOS",
-        "DOMINOS PIZZA",
-        "JUBILANT FOODWORKS"
-      ],
+      "aliases": ["DOMINOS", "DOMINOS PIZZA", "JUBILANT FOODWORKS"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "McDonald's",
-      "aliases": [
-        "MCDONALD",
-        "MCDONALDS",
-        "MCD INDIA"
-      ],
+      "aliases": ["MCDONALD", "MCDONALDS", "MCD INDIA"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "KFC",
-      "aliases": [
-        "KFC",
-        "KFC INDIA"
-      ],
+      "aliases": ["KFC", "KFC INDIA"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Burger King",
-      "aliases": [
-        "BURGER KING",
-        "BURGERKING",
-        "BK INDIA"
-      ],
+      "aliases": ["BURGER KING", "BURGERKING", "BK INDIA"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Pizza Hut",
-      "aliases": [
-        "PIZZA HUT",
-        "PIZZAHUT"
-      ],
+      "aliases": ["PIZZA HUT", "PIZZAHUT"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Subway",
-      "aliases": [
-        "SUBWAY"
-      ],
+      "aliases": ["SUBWAY"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Starbucks",
-      "aliases": [
-        "STARBUCKS",
-        "TATA STARBUCKS"
-      ],
+      "aliases": ["STARBUCKS", "TATA STARBUCKS"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Cafe Coffee Day",
-      "aliases": [
-        "CAFE COFFEE DAY",
-        "COFFEE DAY",
-        "CCD CAFE"
-      ],
+      "aliases": ["CAFE COFFEE DAY", "COFFEE DAY", "CCD CAFE"],
       "category": "Food & Dining"
     },
     {
       "canonical": "EatFit",
-      "aliases": [
-        "EATFIT",
-        "CUREFIT"
-      ],
+      "aliases": ["EATFIT", "CUREFIT"],
       "category": "Food & Dining"
     },
     {
       "canonical": "Behrouz Biryani",
-      "aliases": [
-        "BEHROUZ",
-        "BEHROUZ BIRYANI",
-        "REBEL FOODS"
-      ],
+      "aliases": ["BEHROUZ", "BEHROUZ BIRYANI", "REBEL FOODS"],
       "category": "Food & Dining"
     },
     {
       "canonical": "Faasos",
-      "aliases": [
-        "FAASOS"
-      ],
+      "aliases": ["FAASOS"],
       "category": "Food & Dining"
     },
     {
       "canonical": "Haldiram's",
-      "aliases": [
-        "HALDIRAM",
-        "HALDIRAMS"
-      ],
+      "aliases": ["HALDIRAM", "HALDIRAMS"],
       "category": "Food & Dining"
     },
     {
       "canonical": "Chai Point",
-      "aliases": [
-        "CHAI POINT",
-        "CHAIPOINT"
-      ],
+      "aliases": ["CHAI POINT", "CHAIPOINT"],
       "category": "Food & Dining"
     },
     {
       "canonical": "Third Wave Coffee",
-      "aliases": [
-        "THIRD WAVE",
-        "THIRDWAVE"
-      ],
+      "aliases": ["THIRD WAVE", "THIRDWAVE"],
       "category": "Food & Dining"
     },
     {
       "canonical": "Blinkit",
-      "aliases": [
-        "BLINKIT",
-        "GROFERS",
-        "BLINK COMMERCE"
-      ],
+      "aliases": ["BLINKIT", "GROFERS", "BLINK COMMERCE"],
       "category": "Groceries"
     },
     {
       "canonical": "Zepto",
-      "aliases": [
-        "ZEPTO",
-        "KIRANAKART"
-      ],
+      "aliases": ["ZEPTO", "KIRANAKART"],
       "category": "Groceries"
     },
     {
       "canonical": "BigBasket",
-      "aliases": [
-        "BIGBASKET",
-        "BIG BASKET",
-        "BB DAILY",
-        "INNOVATIVE RETAIL"
-      ],
+      "aliases": ["BIGBASKET", "BIG BASKET", "BB DAILY", "INNOVATIVE RETAIL"],
       "category": "Groceries"
     },
     {
       "canonical": "Swiggy Instamart",
-      "aliases": [
-        "INSTAMART",
-        "SWIGGY INSTAMART"
-      ],
+      "aliases": ["INSTAMART", "SWIGGY INSTAMART"],
       "category": "Groceries"
     },
     {
       "canonical": "DMart",
-      "aliases": [
-        "DMART",
-        "D MART",
-        "AVENUE SUPERMARTS"
-      ],
+      "aliases": ["DMART", "D MART", "AVENUE SUPERMARTS"],
       "category": "Groceries"
     },
     {
       "canonical": "JioMart",
-      "aliases": [
-        "JIOMART",
-        "JIO MART"
-      ],
+      "aliases": ["JIOMART", "JIO MART"],
       "category": "Groceries"
     },
     {
       "canonical": "Country Delight",
-      "aliases": [
-        "COUNTRY DELIGHT",
-        "COUNTRYDELIGHT"
-      ],
+      "aliases": ["COUNTRY DELIGHT", "COUNTRYDELIGHT"],
       "category": "Groceries"
     },
     {
       "canonical": "Milkbasket",
-      "aliases": [
-        "MILKBASKET"
-      ],
+      "aliases": ["MILKBASKET"],
       "category": "Groceries"
     },
     {
       "canonical": "Uber",
-      "aliases": [
-        "UBER",
-        "UBER INDIA",
-        "UBER B V"
-      ],
+      "aliases": ["UBER", "UBER INDIA", "UBER B V"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "Ola",
-      "aliases": [
-        "OLA",
-        "OLA CABS",
-        "ANI TECHNOLOGIES"
-      ],
+      "aliases": ["OLA", "OLA CABS", "ANI TECHNOLOGIES"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "Rapido",
-      "aliases": [
-        "RAPIDO",
-        "ROPEN TRANSPORTATION"
-      ],
+      "aliases": ["RAPIDO", "ROPEN TRANSPORTATION"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "Namma Yatri",
-      "aliases": [
-        "NAMMA YATRI",
-        "NAMMAYATRI"
-      ],
+      "aliases": ["NAMMA YATRI", "NAMMAYATRI"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "BluSmart",
-      "aliases": [
-        "BLUSMART",
-        "BLU SMART"
-      ],
+      "aliases": ["BLUSMART", "BLU SMART"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "Meru Cabs",
-      "aliases": [
-        "MERU CABS",
-        "MERUCABS"
-      ],
+      "aliases": ["MERU CABS", "MERUCABS"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "HP Petrol",
-      "aliases": [
-        "HP PETROL",
-        "HPCL",
-        "HINDUSTAN PETROLEUM",
-        "HP PETRO"
-      ],
+      "aliases": ["HP PETROL", "HPCL", "HINDUSTAN PETROLEUM", "HP PETRO"],
       "category": "Fuel",
       "mcc": "5541"
     },
     {
       "canonical": "IndianOil",
-      "aliases": [
-        "IOCL",
-        "INDIAN OIL",
-        "INDIANOIL",
-        "IOCL PETROL"
-      ],
+      "aliases": ["IOCL", "INDIAN OIL", "INDIANOIL", "IOCL PETROL"],
       "category": "Fuel",
       "mcc": "5541"
     },
     {
       "canonical": "BPCL",
-      "aliases": [
-        "BPCL",
-        "BHARAT PETROLEUM",
-        "BP PETROL"
-      ],
+      "aliases": ["BPCL", "BHARAT PETROLEUM", "BP PETROL"],
       "category": "Fuel",
       "mcc": "5541"
     },
     {
       "canonical": "Shell",
-      "aliases": [
-        "SHELL",
-        "SHELL PETROL"
-      ],
+      "aliases": ["SHELL", "SHELL PETROL"],
       "category": "Fuel",
       "mcc": "5541"
     },
     {
       "canonical": "IRCTC",
-      "aliases": [
-        "IRCTC",
-        "IRCTC LTD"
-      ],
+      "aliases": ["IRCTC", "IRCTC LTD"],
       "category": "Travel",
       "mcc": "4112"
     },
     {
       "canonical": "RedBus",
-      "aliases": [
-        "REDBUS",
-        "RED BUS"
-      ],
+      "aliases": ["REDBUS", "RED BUS"],
       "category": "Travel"
     },
     {
       "canonical": "MakeMyTrip",
-      "aliases": [
-        "MAKEMYTRIP",
-        "MAKE MY TRIP",
-        "MMT"
-      ],
+      "aliases": ["MAKEMYTRIP", "MAKE MY TRIP", "MMT"],
       "category": "Travel"
     },
     {
       "canonical": "Goibibo",
-      "aliases": [
-        "GOIBIBO",
-        "GO IBIBO"
-      ],
+      "aliases": ["GOIBIBO", "GO IBIBO"],
       "category": "Travel"
     },
     {
       "canonical": "OYO",
-      "aliases": [
-        "OYO",
-        "OYOROOMS",
-        "OYO ROOMS",
-        "ORAVEL STAYS"
-      ],
+      "aliases": ["OYO", "OYOROOMS", "OYO ROOMS", "ORAVEL STAYS"],
       "category": "Travel"
     },
     {
       "canonical": "IndiGo",
-      "aliases": [
-        "INDIGO",
-        "INTERGLOBE AVIATION"
-      ],
+      "aliases": ["INDIGO", "INTERGLOBE AVIATION"],
       "category": "Travel",
       "mcc": "3000"
     },
     {
       "canonical": "Air India",
-      "aliases": [
-        "AIR INDIA",
-        "AIRINDIA",
-        "VISTARA",
-        "AIRASIA INDIA"
-      ],
+      "aliases": ["AIR INDIA", "AIRINDIA", "VISTARA", "AIRASIA INDIA"],
       "category": "Travel",
       "mcc": "3001"
     },
     {
       "canonical": "Amazon",
-      "aliases": [
-        "AMAZON",
-        "AMAZON PAY",
-        "AMZN",
-        "AMAZON SELLER SERVICES",
-        "AMAZON PAY INDIA"
-      ],
+      "aliases": ["AMAZON", "AMAZON PAY", "AMZN", "AMAZON SELLER SERVICES", "AMAZON PAY INDIA"],
       "category": "Shopping",
       "mcc": "5399"
     },
     {
       "canonical": "Flipkart",
-      "aliases": [
-        "FLIPKART",
-        "FKART",
-        "FLIPKART INTERNET"
-      ],
+      "aliases": ["FLIPKART", "FKART", "FLIPKART INTERNET"],
       "category": "Shopping"
     },
     {
       "canonical": "Myntra",
-      "aliases": [
-        "MYNTRA",
-        "MYNTRA DESIGNS"
-      ],
+      "aliases": ["MYNTRA", "MYNTRA DESIGNS"],
       "category": "Shopping"
     },
     {
       "canonical": "Ajio",
-      "aliases": [
-        "AJIO",
-        "AJIO.COM",
-        "RELIANCE RETAIL AJIO"
-      ],
+      "aliases": ["AJIO", "AJIO.COM", "RELIANCE RETAIL AJIO"],
       "category": "Shopping"
     },
     {
       "canonical": "Meesho",
-      "aliases": [
-        "MEESHO",
-        "FASHNEAR"
-      ],
+      "aliases": ["MEESHO", "FASHNEAR"],
       "category": "Shopping"
     },
     {
       "canonical": "Nykaa",
-      "aliases": [
-        "NYKAA",
-        "FSN E COMMERCE"
-      ],
+      "aliases": ["NYKAA", "FSN E COMMERCE"],
       "category": "Shopping"
     },
     {
       "canonical": "Tata CLiQ",
-      "aliases": [
-        "TATACLIQ",
-        "TATA CLIQ",
-        "TATA UNISTORE"
-      ],
+      "aliases": ["TATACLIQ", "TATA CLIQ", "TATA UNISTORE"],
       "category": "Shopping"
     },
     {
       "canonical": "Snapdeal",
-      "aliases": [
-        "SNAPDEAL"
-      ],
+      "aliases": ["SNAPDEAL"],
       "category": "Shopping"
     },
     {
       "canonical": "FirstCry",
-      "aliases": [
-        "FIRSTCRY",
-        "BRAINBEES"
-      ],
+      "aliases": ["FIRSTCRY", "BRAINBEES"],
       "category": "Shopping"
     },
     {
       "canonical": "Decathlon",
-      "aliases": [
-        "DECATHLON"
-      ],
+      "aliases": ["DECATHLON"],
       "category": "Shopping"
     },
     {
       "canonical": "IKEA",
-      "aliases": [
-        "IKEA"
-      ],
+      "aliases": ["IKEA"],
       "category": "Shopping"
     },
     {
       "canonical": "Netflix",
-      "aliases": [
-        "NETFLIX",
-        "NETFLIX.COM"
-      ],
+      "aliases": ["NETFLIX", "NETFLIX.COM"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "Spotify",
-      "aliases": [
-        "SPOTIFY"
-      ],
+      "aliases": ["SPOTIFY"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "JioHotstar",
-      "aliases": [
-        "HOTSTAR",
-        "JIOHOTSTAR",
-        "DISNEY HOTSTAR",
-        "DISNEY+ HOTSTAR"
-      ],
+      "aliases": ["HOTSTAR", "JIOHOTSTAR", "DISNEY HOTSTAR", "DISNEY+ HOTSTAR"],
       "category": "Subscriptions"
     },
     {
       "canonical": "Prime Video",
-      "aliases": [
-        "PRIME VIDEO",
-        "AMAZON PRIME"
-      ],
+      "aliases": ["PRIME VIDEO", "AMAZON PRIME"],
       "category": "Subscriptions"
     },
     {
       "canonical": "ZEE5",
-      "aliases": [
-        "ZEE5"
-      ],
+      "aliases": ["ZEE5"],
       "category": "Subscriptions"
     },
     {
       "canonical": "Sony LIV",
-      "aliases": [
-        "SONYLIV",
-        "SONY LIV"
-      ],
+      "aliases": ["SONYLIV", "SONY LIV"],
       "category": "Subscriptions"
     },
     {
       "canonical": "YouTube Premium",
-      "aliases": [
-        "YOUTUBE",
-        "YOUTUBE PREMIUM",
-        "GOOGLE YOUTUBE"
-      ],
+      "aliases": ["YOUTUBE", "YOUTUBE PREMIUM", "GOOGLE YOUTUBE"],
       "category": "Subscriptions"
     },
     {
       "canonical": "Gaana",
-      "aliases": [
-        "GAANA"
-      ],
+      "aliases": ["GAANA"],
       "category": "Subscriptions"
     },
     {
       "canonical": "BookMyShow",
-      "aliases": [
-        "BOOKMYSHOW",
-        "BMS",
-        "BIGTREE ENTERTAINMENT"
-      ],
+      "aliases": ["BOOKMYSHOW", "BMS", "BIGTREE ENTERTAINMENT"],
       "category": "Entertainment",
       "mcc": "7832"
     },
     {
       "canonical": "PVR INOX",
-      "aliases": [
-        "PVR",
-        "INOX",
-        "PVR CINEMAS",
-        "PVR INOX"
-      ],
+      "aliases": ["PVR", "INOX", "PVR CINEMAS", "PVR INOX"],
       "category": "Entertainment",
       "mcc": "7832"
     },
     {
       "canonical": "Paytm Insider",
-      "aliases": [
-        "INSIDER",
-        "PAYTM INSIDER"
-      ],
+      "aliases": ["INSIDER", "PAYTM INSIDER"],
       "category": "Entertainment"
     },
     {
       "canonical": "Jio",
-      "aliases": [
-        "JIO",
-        "RELIANCE JIO",
-        "JIO PREPAID"
-      ],
+      "aliases": ["JIO", "RELIANCE JIO", "JIO PREPAID"],
       "category": "Telecom",
       "mcc": "4814"
     },
     {
       "canonical": "Airtel",
-      "aliases": [
-        "AIRTEL",
-        "BHARTI AIRTEL",
-        "AIRTEL PREPAID"
-      ],
+      "aliases": ["AIRTEL", "BHARTI AIRTEL", "AIRTEL PREPAID"],
       "category": "Telecom",
       "mcc": "4814"
     },
     {
       "canonical": "Vi",
-      "aliases": [
-        "VI",
-        "VODAFONE",
-        "VODAFONE IDEA",
-        "IDEA CELLULAR"
-      ],
+      "aliases": ["VI", "VODAFONE", "VODAFONE IDEA", "IDEA CELLULAR"],
       "category": "Telecom",
       "mcc": "4814"
     },
     {
       "canonical": "BSNL",
-      "aliases": [
-        "BSNL"
-      ],
+      "aliases": ["BSNL"],
       "category": "Telecom",
       "mcc": "4814"
     },
     {
       "canonical": "BESCOM",
-      "aliases": [
-        "BESCOM",
-        "BANGALORE ELECTRICITY"
-      ],
+      "aliases": ["BESCOM", "BANGALORE ELECTRICITY"],
       "category": "Utilities"
     },
     {
       "canonical": "Tata Power",
-      "aliases": [
-        "TATA POWER",
-        "TATAPOWER"
-      ],
+      "aliases": ["TATA POWER", "TATAPOWER"],
       "category": "Utilities"
     },
     {
       "canonical": "Adani Electricity",
-      "aliases": [
-        "ADANI ELECTRICITY",
-        "ADANI ELEC"
-      ],
+      "aliases": ["ADANI ELECTRICITY", "ADANI ELEC"],
       "category": "Utilities"
     },
     {
       "canonical": "Mahanagar Gas",
-      "aliases": [
-        "MAHANAGAR GAS",
-        "MGL"
-      ],
+      "aliases": ["MAHANAGAR GAS", "MGL"],
       "category": "Utilities"
     },
     {
       "canonical": "Indraprastha Gas",
-      "aliases": [
-        "IGL",
-        "INDRAPRASTHA GAS"
-      ],
+      "aliases": ["IGL", "INDRAPRASTHA GAS"],
       "category": "Utilities"
     },
     {
       "canonical": "Apollo Pharmacy",
-      "aliases": [
-        "APOLLO",
-        "APOLLO PHARMACY",
-        "APOLLO HOSPITALS"
-      ],
+      "aliases": ["APOLLO", "APOLLO PHARMACY", "APOLLO HOSPITALS"],
       "category": "Healthcare"
     },
     {
       "canonical": "Tata 1mg",
-      "aliases": [
-        "1MG",
-        "TATA 1MG",
-        "TATA1MG"
-      ],
+      "aliases": ["1MG", "TATA 1MG", "TATA1MG"],
       "category": "Healthcare"
     },
     {
       "canonical": "PharmEasy",
-      "aliases": [
-        "PHARMEASY",
-        "API HOLDINGS"
-      ],
+      "aliases": ["PHARMEASY", "API HOLDINGS"],
       "category": "Healthcare"
     },
     {
       "canonical": "Netmeds",
-      "aliases": [
-        "NETMEDS"
-      ],
+      "aliases": ["NETMEDS"],
       "category": "Healthcare"
     },
     {
       "canonical": "MedPlus",
-      "aliases": [
-        "MEDPLUS"
-      ],
+      "aliases": ["MEDPLUS"],
       "category": "Healthcare"
     },
     {
       "canonical": "Practo",
-      "aliases": [
-        "PRACTO"
-      ],
+      "aliases": ["PRACTO"],
       "category": "Healthcare"
     },
     {
       "canonical": "Groww",
-      "aliases": [
-        "GROWW",
-        "NEXTBILLION TECHNOLOGY"
-      ],
+      "aliases": ["GROWW", "NEXTBILLION TECHNOLOGY"],
       "category": "Investments"
     },
     {
       "canonical": "Zerodha",
-      "aliases": [
-        "ZERODHA",
-        "ZERODHA BROKING"
-      ],
+      "aliases": ["ZERODHA", "ZERODHA BROKING"],
       "category": "Investments"
     },
     {
       "canonical": "Upstox",
-      "aliases": [
-        "UPSTOX",
-        "RKSV SECURITIES"
-      ],
+      "aliases": ["UPSTOX", "RKSV SECURITIES"],
       "category": "Investments"
     },
     {
       "canonical": "Angel One",
-      "aliases": [
-        "ANGEL ONE",
-        "ANGEL BROKING",
-        "ANGELONE"
-      ],
+      "aliases": ["ANGEL ONE", "ANGEL BROKING", "ANGELONE"],
       "category": "Investments"
     },
     {
       "canonical": "ET Money",
-      "aliases": [
-        "ET MONEY",
-        "ETMONEY"
-      ],
+      "aliases": ["ET MONEY", "ETMONEY"],
       "category": "Investments"
     },
     {
       "canonical": "Kuvera",
-      "aliases": [
-        "KUVERA"
-      ],
+      "aliases": ["KUVERA"],
       "category": "Investments"
     },
     {
       "canonical": "Paytm Money",
-      "aliases": [
-        "PAYTM MONEY"
-      ],
+      "aliases": ["PAYTM MONEY"],
       "category": "Investments"
     },
     {
       "canonical": "CAMS",
-      "aliases": [
-        "CAMS",
-        "COMPUTER AGE MANAGEMENT"
-      ],
+      "aliases": ["CAMS", "COMPUTER AGE MANAGEMENT"],
       "category": "Investments"
     },
     {
       "canonical": "LIC",
-      "aliases": [
-        "LIC",
-        "LIFE INSURANCE CORPORATION"
-      ],
+      "aliases": ["LIC", "LIFE INSURANCE CORPORATION"],
       "category": "Insurance"
     },
     {
       "canonical": "HDFC Life",
-      "aliases": [
-        "HDFC LIFE",
-        "HDFCLIFE"
-      ],
+      "aliases": ["HDFC LIFE", "HDFCLIFE"],
       "category": "Insurance"
     },
     {
       "canonical": "ICICI Prudential",
-      "aliases": [
-        "ICICI PRUDENTIAL",
-        "ICICI PRLIFE",
-        "ICICIPRULIFE"
-      ],
+      "aliases": ["ICICI PRUDENTIAL", "ICICI PRLIFE", "ICICIPRULIFE"],
       "category": "Insurance"
     },
     {
       "canonical": "Star Health",
-      "aliases": [
-        "STAR HEALTH"
-      ],
+      "aliases": ["STAR HEALTH"],
       "category": "Insurance"
     },
     {
       "canonical": "Niva Bupa",
-      "aliases": [
-        "NIVA BUPA",
-        "MAX BUPA"
-      ],
+      "aliases": ["NIVA BUPA", "MAX BUPA"],
       "category": "Insurance"
     },
     {
       "canonical": "ACKO",
-      "aliases": [
-        "ACKO",
-        "ACKO GENERAL"
-      ],
+      "aliases": ["ACKO", "ACKO GENERAL"],
       "category": "Insurance"
     },
     {
       "canonical": "Digit Insurance",
-      "aliases": [
-        "GO DIGIT",
-        "DIGIT INSURANCE"
-      ],
+      "aliases": ["GO DIGIT", "DIGIT INSURANCE"],
       "category": "Insurance"
     },
     {
       "canonical": "LazyPay",
-      "aliases": [
-        "LAZYPAY",
-        "LAZY PAY",
-        "PAYU LAZYPAY"
-      ],
+      "aliases": ["LAZYPAY", "LAZY PAY", "PAYU LAZYPAY"],
       "category": "BNPL"
     },
     {
       "canonical": "Simpl",
-      "aliases": [
-        "SIMPL",
-        "GET SIMPL"
-      ],
+      "aliases": ["SIMPL", "GET SIMPL"],
       "category": "BNPL"
     },
     {
       "canonical": "ZestMoney",
-      "aliases": [
-        "ZESTMONEY",
-        "ZEST MONEY"
-      ],
+      "aliases": ["ZESTMONEY", "ZEST MONEY"],
       "category": "BNPL"
     },
     {
       "canonical": "Uni Cards",
-      "aliases": [
-        "UNI CARDS",
-        "UNICARDS"
-      ],
+      "aliases": ["UNI CARDS", "UNICARDS"],
       "category": "BNPL"
     },
     {
       "canonical": "Slice",
-      "aliases": [
-        "SLICE",
-        "SLICEIT"
-      ],
+      "aliases": ["SLICE", "SLICEIT"],
       "category": "BNPL"
     },
     {
       "canonical": "OneCard",
-      "aliases": [
-        "ONECARD",
-        "ONE CARD"
-      ],
+      "aliases": ["ONECARD", "ONE CARD"],
       "category": "BNPL"
     },
     {
       "canonical": "Dream11",
-      "aliases": [
-        "DREAM11",
-        "SPORTA TECHNOLOGIES"
-      ],
+      "aliases": ["DREAM11", "SPORTA TECHNOLOGIES"],
       "category": "Gaming"
     },
     {
       "canonical": "MPL",
-      "aliases": [
-        "MPL",
-        "MOBILE PREMIER LEAGUE"
-      ],
+      "aliases": ["MPL", "MOBILE PREMIER LEAGUE"],
       "category": "Gaming"
     },
     {
       "canonical": "Winzo",
-      "aliases": [
-        "WINZO"
-      ],
+      "aliases": ["WINZO"],
       "category": "Gaming"
     },
     {
       "canonical": "Unacademy",
-      "aliases": [
-        "UNACADEMY"
-      ],
+      "aliases": ["UNACADEMY"],
       "category": "Education"
     },
     {
       "canonical": "upGrad",
-      "aliases": [
-        "UPGRAD",
-        "UPGRAD EDUCATION"
-      ],
+      "aliases": ["UPGRAD", "UPGRAD EDUCATION"],
       "category": "Education"
     },
     {
       "canonical": "Udemy",
-      "aliases": [
-        "UDEMY"
-      ],
+      "aliases": ["UDEMY"],
       "category": "Education"
     },
     {
       "canonical": "Coursera",
-      "aliases": [
-        "COURSERA"
-      ],
+      "aliases": ["COURSERA"],
       "category": "Education"
     },
     {
       "canonical": "Physics Wallah",
-      "aliases": [
-        "PHYSICS WALLAH",
-        "PHYSICSWALLAH"
-      ],
+      "aliases": ["PHYSICS WALLAH", "PHYSICSWALLAH"],
       "category": "Education"
     },
     {
       "canonical": "Razorpay",
-      "aliases": [
-        "RAZORPAY"
-      ],
+      "aliases": ["RAZORPAY"],
       "category": "Professional Services"
     },
     {
       "canonical": "Khatabook",
-      "aliases": [
-        "KHATABOOK"
-      ],
+      "aliases": ["KHATABOOK"],
       "category": "Professional Services"
     },
     {
       "canonical": "Urban Company",
-      "aliases": [
-        "URBAN COMPANY",
-        "URBANCLAP"
-      ],
+      "aliases": ["URBAN COMPANY", "URBANCLAP"],
       "category": "Personal Care"
     },
     {
       "canonical": "Tira",
-      "aliases": [
-        "TIRA"
-      ],
+      "aliases": ["TIRA"],
       "category": "Personal Care"
     },
     {
       "canonical": "Licious",
-      "aliases": [
-        "LICIOUS"
-      ],
+      "aliases": ["LICIOUS"],
       "category": "Groceries"
     },
     {
       "canonical": "FreshToHome",
-      "aliases": [
-        "FRESHTOHOME"
-      ],
+      "aliases": ["FRESHTOHOME"],
       "category": "Groceries"
     },
     {
       "canonical": "Swiggy Genie",
-      "aliases": [
-        "SWIGGY GENIE",
-        "GENIE"
-      ],
+      "aliases": ["SWIGGY GENIE", "GENIE"],
       "category": "Professional Services"
     },
     {
       "canonical": "Dunzo",
-      "aliases": [
-        "DUNZO"
-      ],
+      "aliases": ["DUNZO"],
       "category": "Groceries"
     },
     {
       "canonical": "Tata Capital",
-      "aliases": [
-        "TATA CAPITAL",
-        "TATA CAPITAL FINANCIAL",
-        "TCFSL",
-        "TATA CAPITAL LTD"
-      ],
+      "aliases": ["TATA CAPITAL", "TATA CAPITAL FINANCIAL", "TCFSL", "TATA CAPITAL LTD"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Bajaj Finance",
-      "aliases": [
-        "BAJAJ FINANCE",
-        "BAJAJ FINANCE LTD",
-        "BAJAJ FINSV",
-        "BAJAJFIN"
-      ],
+      "aliases": ["BAJAJ FINANCE", "BAJAJ FINANCE LTD", "BAJAJ FINSV", "BAJAJFIN"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "HDB Financial Services",
-      "aliases": [
-        "HDB FINANCIAL",
-        "HDB FINANCIAL SERVICES",
-        "HDBFS"
-      ],
+      "aliases": ["HDB FINANCIAL", "HDB FINANCIAL SERVICES", "HDBFS"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Aditya Birla Finance",
-      "aliases": [
-        "ADITYA BIRLA FINANCE",
-        "ABFL",
-        "ADITYA BIRLA CAPITAL"
-      ],
+      "aliases": ["ADITYA BIRLA FINANCE", "ABFL", "ADITYA BIRLA CAPITAL"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Mahindra Finance",
-      "aliases": [
-        "MAHINDRA FINANCE",
-        "MAHINDRA AND MAHINDRA FINANCIAL",
-        "MMFSL"
-      ],
+      "aliases": ["MAHINDRA FINANCE", "MAHINDRA AND MAHINDRA FINANCIAL", "MMFSL"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Cholamandalam",
-      "aliases": [
-        "CHOLAMANDALAM",
-        "CHOLAMANDALAM INVESTMENT",
-        "CHOLA"
-      ],
+      "aliases": ["CHOLAMANDALAM", "CHOLAMANDALAM INVESTMENT", "CHOLA"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "LIC Housing Finance",
-      "aliases": [
-        "LIC HOUSING FINANCE",
-        "LICHF",
-        "LIC HFL"
-      ],
+      "aliases": ["LIC HOUSING FINANCE", "LICHF", "LIC HFL"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Poonawalla Fincorp",
-      "aliases": [
-        "POONAWALLA",
-        "POONAWALLA FINCORP",
-        "MAGMA FINCORP"
-      ],
+      "aliases": ["POONAWALLA", "POONAWALLA FINCORP", "MAGMA FINCORP"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Shriram Finance",
-      "aliases": [
-        "SHRIRAM FINANCE",
-        "SHRIRAM TRANSPORT",
-        "SHRIRAM CITY"
-      ],
+      "aliases": ["SHRIRAM FINANCE", "SHRIRAM TRANSPORT", "SHRIRAM CITY"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Muthoot Finance",
-      "aliases": [
-        "MUTHOOT",
-        "MUTHOOT FINANCE"
-      ],
+      "aliases": ["MUTHOOT", "MUTHOOT FINANCE"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Manappuram Finance",
-      "aliases": [
-        "MANAPPURAM",
-        "MANAPPURAM FINANCE"
-      ],
+      "aliases": ["MANAPPURAM", "MANAPPURAM FINANCE"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "SMFG India Credit",
-      "aliases": [
-        "SMFG",
-        "FULLERTON",
-        "FULLERTON INDIA",
-        "SMFG INDIA"
-      ],
+      "aliases": ["SMFG", "FULLERTON", "FULLERTON INDIA", "SMFG INDIA"],
       "category": "Loan & EMI"
     },
     {
       "canonical": "Barbeque Nation",
-      "aliases": [
-        "BARBEQUE NATION",
-        "BARBEQUE NATION HOSPITALITY"
-      ],
+      "aliases": ["BARBEQUE NATION", "BARBEQUE NATION HOSPITALITY"],
       "category": "Food & Dining",
       "mcc": "5812"
     },
     {
       "canonical": "Wow Momo",
-      "aliases": [
-        "WOW MOMO",
-        "WOW MOMO FOODS"
-      ],
+      "aliases": ["WOW MOMO", "WOW MOMO FOODS"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "FreshMenu",
-      "aliases": [
-        "FRESHMENU",
-        "FRESH MENU"
-      ],
+      "aliases": ["FRESHMENU", "FRESH MENU"],
       "category": "Food & Dining",
       "mcc": "5812"
     },
     {
       "canonical": "Box8",
-      "aliases": [
-        "BOX8",
-        "BOX 8"
-      ],
+      "aliases": ["BOX8", "BOX 8"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Chaayos",
-      "aliases": [
-        "CHAAYOS",
-        "SUNSHINE TEAHOUSE"
-      ],
+      "aliases": ["CHAAYOS", "SUNSHINE TEAHOUSE"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Blue Tokai",
-      "aliases": [
-        "BLUE TOKAI",
-        "BLUE TOKAI COFFEE"
-      ],
+      "aliases": ["BLUE TOKAI", "BLUE TOKAI COFFEE"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Burger Singh",
-      "aliases": [
-        "BURGER SINGH",
-        "BURGERSINGH"
-      ],
+      "aliases": ["BURGER SINGH", "BURGERSINGH"],
       "category": "Food & Dining",
       "mcc": "5814"
     },
     {
       "canonical": "Theobroma",
-      "aliases": [
-        "THEOBROMA",
-        "THEOBROMA FOODS"
-      ],
+      "aliases": ["THEOBROMA", "THEOBROMA FOODS"],
       "category": "Food & Dining",
       "mcc": "5462"
     },
     {
       "canonical": "Dineout",
-      "aliases": [
-        "DINEOUT",
-        "TIMES INTERNET"
-      ],
+      "aliases": ["DINEOUT", "TIMES INTERNET"],
       "category": "Food & Dining",
       "mcc": "5812"
     },
     {
       "canonical": "Supr Daily",
-      "aliases": [
-        "SUPR DAILY",
-        "SUPRDAILY"
-      ],
+      "aliases": ["SUPR DAILY", "SUPRDAILY"],
       "category": "Groceries",
       "mcc": "5499"
     },
     {
       "canonical": "Otipy",
-      "aliases": [
-        "OTIPY",
-        "CROFARMS"
-      ],
+      "aliases": ["OTIPY", "CROFARMS"],
       "category": "Groceries",
       "mcc": "5499"
     },
     {
       "canonical": "DealShare",
-      "aliases": [
-        "DEALSHARE",
-        "DEALSHARE INDIA"
-      ],
+      "aliases": ["DEALSHARE", "DEALSHARE INDIA"],
       "category": "Groceries",
       "mcc": "5411"
     },
     {
       "canonical": "Porter",
-      "aliases": [
-        "PORTER",
-        "PORTER LOGISTICS",
-        "SMARTSHIFT LOGISTICS"
-      ],
+      "aliases": ["PORTER", "PORTER LOGISTICS", "SMARTSHIFT LOGISTICS"],
       "category": "Transport",
       "mcc": "4215"
     },
     {
       "canonical": "Vogo",
-      "aliases": [
-        "VOGO",
-        "VOGO RENTALS"
-      ],
+      "aliases": ["VOGO", "VOGO RENTALS"],
       "category": "Transport",
       "mcc": "4111"
     },
     {
       "canonical": "Yulu",
-      "aliases": [
-        "YULU",
-        "YULU BIKES"
-      ],
+      "aliases": ["YULU", "YULU BIKES"],
       "category": "Transport",
       "mcc": "4111"
     },
     {
       "canonical": "inDrive",
-      "aliases": [
-        "INDRIVE",
-        "IN DRIVE"
-      ],
+      "aliases": ["INDRIVE", "IN DRIVE"],
       "category": "Transport",
       "mcc": "4121"
     },
     {
       "canonical": "Chalo",
-      "aliases": [
-        "CHALO",
-        "ZOPLINK"
-      ],
+      "aliases": ["CHALO", "ZOPLINK"],
       "category": "Transport",
       "mcc": "4131"
     },
     {
       "canonical": "Nayara Energy",
-      "aliases": [
-        "NAYARA",
-        "NAYARA ENERGY",
-        "ESSAR OIL"
-      ],
+      "aliases": ["NAYARA", "NAYARA ENERGY", "ESSAR OIL"],
       "category": "Fuel",
       "mcc": "5541"
     },
     {
       "canonical": "Jio-bp",
-      "aliases": [
-        "JIOBP",
-        "JIO BP",
-        "RELIANCE BP MOBILITY"
-      ],
+      "aliases": ["JIOBP", "JIO BP", "RELIANCE BP MOBILITY"],
       "category": "Fuel",
       "mcc": "5541"
     },
     {
       "canonical": "Yatra",
-      "aliases": [
-        "YATRA",
-        "YATRA ONLINE"
-      ],
+      "aliases": ["YATRA", "YATRA ONLINE"],
       "category": "Travel",
       "mcc": "4722"
     },
     {
       "canonical": "Cleartrip",
-      "aliases": [
-        "CLEARTRIP",
-        "CLEAR TRIP"
-      ],
+      "aliases": ["CLEARTRIP", "CLEAR TRIP"],
       "category": "Travel",
       "mcc": "4722"
     },
     {
       "canonical": "EaseMyTrip",
-      "aliases": [
-        "EASEMYTRIP",
-        "EASE MY TRIP",
-        "EASY TRIP PLANNERS"
-      ],
+      "aliases": ["EASEMYTRIP", "EASE MY TRIP", "EASY TRIP PLANNERS"],
       "category": "Travel",
       "mcc": "4722"
     },
     {
       "canonical": "ixigo",
-      "aliases": [
-        "IXIGO",
-        "LE TRAVENUES"
-      ],
+      "aliases": ["IXIGO", "LE TRAVENUES"],
       "category": "Travel",
       "mcc": "4722"
     },
     {
       "canonical": "ConfirmTkt",
-      "aliases": [
-        "CONFIRMTKT",
-        "CONFIRM TKT"
-      ],
+      "aliases": ["CONFIRMTKT", "CONFIRM TKT"],
       "category": "Travel",
       "mcc": "4722"
     },
     {
       "canonical": "AbhiBus",
-      "aliases": [
-        "ABHIBUS",
-        "ABHI BUS"
-      ],
+      "aliases": ["ABHIBUS", "ABHI BUS"],
       "category": "Travel",
       "mcc": "4722"
     },
     {
       "canonical": "Airbnb",
-      "aliases": [
-        "AIRBNB"
-      ],
+      "aliases": ["AIRBNB"],
       "category": "Travel",
       "mcc": "7011"
     },
     {
       "canonical": "Treebo",
-      "aliases": [
-        "TREEBO",
-        "TREEBO HOTELS"
-      ],
+      "aliases": ["TREEBO", "TREEBO HOTELS"],
       "category": "Travel",
       "mcc": "7011"
     },
     {
       "canonical": "FabHotels",
-      "aliases": [
-        "FABHOTELS",
-        "FAB HOTELS",
-        "CASAFELIZ"
-      ],
+      "aliases": ["FABHOTELS", "FAB HOTELS", "CASAFELIZ"],
       "category": "Travel",
       "mcc": "7011"
     },
     {
       "canonical": "SpiceJet",
-      "aliases": [
-        "SPICEJET",
-        "SPICEJET LTD"
-      ],
+      "aliases": ["SPICEJET", "SPICEJET LTD"],
       "category": "Travel",
       "mcc": "4511"
     },
     {
       "canonical": "Akasa Air",
-      "aliases": [
-        "AKASA AIR",
-        "AKASA"
-      ],
+      "aliases": ["AKASA AIR", "AKASA"],
       "category": "Travel",
       "mcc": "4511"
     },
     {
       "canonical": "Lenskart",
-      "aliases": [
-        "LENSKART",
-        "LENSKART SOLUTIONS"
-      ],
+      "aliases": ["LENSKART", "LENSKART SOLUTIONS"],
       "category": "Shopping",
       "mcc": "8043"
     },
     {
       "canonical": "Croma",
-      "aliases": [
-        "CROMA",
-        "INFINITI RETAIL"
-      ],
+      "aliases": ["CROMA", "INFINITI RETAIL"],
       "category": "Shopping",
       "mcc": "5732"
     },
     {
       "canonical": "Reliance Digital",
-      "aliases": [
-        "RELIANCE DIGITAL",
-        "RELIANCE RETAIL"
-      ],
+      "aliases": ["RELIANCE DIGITAL", "RELIANCE RETAIL"],
       "category": "Shopping",
       "mcc": "5732"
     },
     {
       "canonical": "Vijay Sales",
-      "aliases": [
-        "VIJAY SALES",
-        "VIJAYSALES"
-      ],
+      "aliases": ["VIJAY SALES", "VIJAYSALES"],
       "category": "Shopping",
       "mcc": "5732"
     },
     {
       "canonical": "Westside",
-      "aliases": [
-        "WESTSIDE",
-        "TRENT LTD",
-        "TRENT LIMITED"
-      ],
+      "aliases": ["WESTSIDE", "TRENT LTD", "TRENT LIMITED"],
       "category": "Shopping",
       "mcc": "5651"
     },
     {
       "canonical": "Zudio",
-      "aliases": [
-        "ZUDIO"
-      ],
+      "aliases": ["ZUDIO"],
       "category": "Shopping",
       "mcc": "5651"
     },
     {
       "canonical": "Shoppers Stop",
-      "aliases": [
-        "SHOPPERS STOP",
-        "SHOPPERSTOP"
-      ],
+      "aliases": ["SHOPPERS STOP", "SHOPPERSTOP"],
       "category": "Shopping",
       "mcc": "5311"
     },
     {
       "canonical": "Lifestyle",
-      "aliases": [
-        "LIFESTYLE INTERNATIONAL",
-        "LIFESTYLE STORES"
-      ],
+      "aliases": ["LIFESTYLE INTERNATIONAL", "LIFESTYLE STORES"],
       "category": "Shopping",
       "mcc": "5311"
     },
     {
       "canonical": "Max Fashion",
-      "aliases": [
-        "MAX FASHION",
-        "LANDMARK GROUP"
-      ],
+      "aliases": ["MAX FASHION", "LANDMARK GROUP"],
       "category": "Shopping",
       "mcc": "5651"
     },
     {
       "canonical": "FabIndia",
-      "aliases": [
-        "FABINDIA",
-        "FAB INDIA"
-      ],
+      "aliases": ["FABINDIA", "FAB INDIA"],
       "category": "Shopping",
       "mcc": "5651"
     },
     {
       "canonical": "Zara",
-      "aliases": [
-        "ZARA",
-        "INDITEX"
-      ],
+      "aliases": ["ZARA", "INDITEX"],
       "category": "Shopping",
       "mcc": "5691"
     },
     {
       "canonical": "H&M",
-      "aliases": [
-        "H M",
-        "HENNES MAURITZ"
-      ],
+      "aliases": ["H M", "HENNES MAURITZ"],
       "category": "Shopping",
       "mcc": "5651"
     },
     {
       "canonical": "Uniqlo",
-      "aliases": [
-        "UNIQLO",
-        "FAST RETAILING"
-      ],
+      "aliases": ["UNIQLO", "FAST RETAILING"],
       "category": "Shopping",
       "mcc": "5651"
     },
     {
       "canonical": "Pepperfry",
-      "aliases": [
-        "PEPPERFRY",
-        "PEPPERFRY COM",
-        "TRENDSUTRA"
-      ],
+      "aliases": ["PEPPERFRY", "PEPPERFRY COM", "TRENDSUTRA"],
       "category": "Home & Furniture",
       "mcc": "5712"
     },
     {
       "canonical": "Urban Ladder",
-      "aliases": [
-        "URBAN LADDER",
-        "URBANLADDER"
-      ],
+      "aliases": ["URBAN LADDER", "URBANLADDER"],
       "category": "Home & Furniture",
       "mcc": "5712"
     },
     {
       "canonical": "Wakefit",
-      "aliases": [
-        "WAKEFIT",
-        "WAKEFIT MATTRESS"
-      ],
+      "aliases": ["WAKEFIT", "WAKEFIT MATTRESS"],
       "category": "Home & Furniture",
       "mcc": "5712"
     },
     {
       "canonical": "Home Centre",
-      "aliases": [
-        "HOME CENTRE",
-        "HOMECENTRE"
-      ],
+      "aliases": ["HOME CENTRE", "HOMECENTRE"],
       "category": "Home & Furniture",
       "mcc": "5712"
     },
     {
       "canonical": "Apple Services",
-      "aliases": [
-        "APPLE SERVICES",
-        "APPLE COM BILL",
-        "ITUNES",
-        "ITUNES COM",
-        "APPLE COM"
-      ],
+      "aliases": ["APPLE SERVICES", "APPLE COM BILL", "ITUNES", "ITUNES COM", "APPLE COM"],
       "category": "Subscriptions",
       "mcc": "5815"
     },
     {
       "canonical": "Google One",
-      "aliases": [
-        "GOOGLE ONE",
-        "GOOGLE STORAGE",
-        "GOOGLE SERVICES"
-      ],
+      "aliases": ["GOOGLE ONE", "GOOGLE STORAGE", "GOOGLE SERVICES"],
       "category": "Subscriptions",
       "mcc": "5817"
     },
     {
       "canonical": "Canva",
-      "aliases": [
-        "CANVA"
-      ],
+      "aliases": ["CANVA"],
       "category": "Subscriptions",
       "mcc": "5817"
     },
     {
       "canonical": "Notion",
-      "aliases": [
-        "NOTION",
-        "NOTION LABS"
-      ],
+      "aliases": ["NOTION", "NOTION LABS"],
       "category": "Subscriptions",
       "mcc": "5817"
     },
     {
       "canonical": "LinkedIn",
-      "aliases": [
-        "LINKEDIN"
-      ],
+      "aliases": ["LINKEDIN"],
       "category": "Subscriptions",
       "mcc": "7375"
     },
     {
       "canonical": "Microsoft 365",
-      "aliases": [
-        "MICROSOFT 365",
-        "MICROSOFT STORE",
-        "MSFT",
-        "MICROSOFT"
-      ],
+      "aliases": ["MICROSOFT 365", "MICROSOFT STORE", "MSFT", "MICROSOFT"],
       "category": "Subscriptions",
       "mcc": "5734"
     },
     {
       "canonical": "OpenAI",
-      "aliases": [
-        "OPENAI",
-        "CHATGPT"
-      ],
+      "aliases": ["OPENAI", "CHATGPT"],
       "category": "Subscriptions",
       "mcc": "5817"
     },
     {
       "canonical": "Audible",
-      "aliases": [
-        "AUDIBLE",
-        "AUDIBLE COM"
-      ],
+      "aliases": ["AUDIBLE", "AUDIBLE COM"],
       "category": "Subscriptions",
       "mcc": "5815"
     },
     {
       "canonical": "Kindle",
-      "aliases": [
-        "KINDLE",
-        "AMAZON KINDLE"
-      ],
+      "aliases": ["KINDLE", "AMAZON KINDLE"],
       "category": "Subscriptions",
       "mcc": "5815"
     },
     {
       "canonical": "Sony Pictures",
-      "aliases": [
-        "SONY PICTURES",
-        "CULVER MAX"
-      ],
+      "aliases": ["SONY PICTURES", "CULVER MAX"],
       "category": "Entertainment",
       "mcc": "4899"
     },
     {
       "canonical": "Steam",
-      "aliases": [
-        "STEAM",
-        "STEAMGAMES",
-        "STEAM GAMES",
-        "VALVE"
-      ],
+      "aliases": ["STEAM", "STEAMGAMES", "STEAM GAMES", "VALVE"],
       "category": "Gaming",
       "mcc": "5816"
     },
     {
       "canonical": "RummyCircle",
-      "aliases": [
-        "RUMMYCIRCLE",
-        "RUMMY CIRCLE",
-        "GAMES24X7"
-      ],
+      "aliases": ["RUMMYCIRCLE", "RUMMY CIRCLE", "GAMES24X7"],
       "category": "Gaming",
       "mcc": "7995"
     },
     {
       "canonical": "A23",
-      "aliases": [
-        "A23",
-        "HEAD DIGITAL WORKS"
-      ],
+      "aliases": ["A23", "HEAD DIGITAL WORKS"],
       "category": "Gaming",
       "mcc": "7995"
     },
     {
       "canonical": "Junglee Rummy",
-      "aliases": [
-        "JUNGLEE RUMMY",
-        "JUNGLEE GAMES"
-      ],
+      "aliases": ["JUNGLEE RUMMY", "JUNGLEE GAMES"],
       "category": "Gaming",
       "mcc": "7995"
     },
     {
       "canonical": "Zupee",
-      "aliases": [
-        "ZUPEE"
-      ],
+      "aliases": ["ZUPEE"],
       "category": "Gaming",
       "mcc": "7995"
     },
     {
       "canonical": "Tata Play",
-      "aliases": [
-        "TATA PLAY",
-        "TATA SKY",
-        "TATAPLAY"
-      ],
+      "aliases": ["TATA PLAY", "TATA SKY", "TATAPLAY"],
       "category": "Telecom",
       "mcc": "4899"
     },
     {
       "canonical": "Dish TV",
-      "aliases": [
-        "DISH TV",
-        "DISHTV",
-        "D2H"
-      ],
+      "aliases": ["DISH TV", "DISHTV", "D2H"],
       "category": "Telecom",
       "mcc": "4899"
     },
     {
       "canonical": "Sun Direct",
-      "aliases": [
-        "SUN DIRECT",
-        "SUNDIRECT"
-      ],
+      "aliases": ["SUN DIRECT", "SUNDIRECT"],
       "category": "Telecom",
       "mcc": "4899"
     },
     {
       "canonical": "Hathway",
-      "aliases": [
-        "HATHWAY",
-        "HATHWAY CABLE"
-      ],
+      "aliases": ["HATHWAY", "HATHWAY CABLE"],
       "category": "Telecom",
       "mcc": "4899"
     },
     {
       "canonical": "ACT Fibernet",
-      "aliases": [
-        "ACT FIBERNET",
-        "ACT BROADBAND",
-        "ATRIA CONVERGENCE"
-      ],
+      "aliases": ["ACT FIBERNET", "ACT BROADBAND", "ATRIA CONVERGENCE"],
       "category": "Telecom",
       "mcc": "4899"
     },
     {
       "canonical": "Mahadiscom",
-      "aliases": [
-        "MAHADISCOM",
-        "MSEB",
-        "MAHAVITARAN",
-        "MSEDCL"
-      ],
+      "aliases": ["MAHADISCOM", "MSEB", "MAHAVITARAN", "MSEDCL"],
       "category": "Utilities",
       "mcc": "4900"
     },
     {
       "canonical": "TANGEDCO",
-      "aliases": [
-        "TANGEDCO",
-        "TNEB"
-      ],
+      "aliases": ["TANGEDCO", "TNEB"],
       "category": "Utilities",
       "mcc": "4900"
     },
     {
       "canonical": "KSEB",
-      "aliases": [
-        "KSEB",
-        "KERALA STATE ELECTRICITY"
-      ],
+      "aliases": ["KSEB", "KERALA STATE ELECTRICITY"],
       "category": "Utilities",
       "mcc": "4900"
     },
     {
       "canonical": "BSES",
-      "aliases": [
-        "BSES",
-        "BSES RAJDHANI",
-        "BSES YAMUNA"
-      ],
+      "aliases": ["BSES", "BSES RAJDHANI", "BSES YAMUNA"],
       "category": "Utilities",
       "mcc": "4900"
     },
     {
       "canonical": "Torrent Power",
-      "aliases": [
-        "TORRENT POWER"
-      ],
+      "aliases": ["TORRENT POWER"],
       "category": "Utilities",
       "mcc": "4900"
     },
     {
       "canonical": "CESC",
-      "aliases": [
-        "CESC",
-        "CESC LTD"
-      ],
+      "aliases": ["CESC", "CESC LTD"],
       "category": "Utilities",
       "mcc": "4900"
     },
     {
       "canonical": "Indane",
-      "aliases": [
-        "INDANE",
-        "INDANE GAS",
-        "INDIAN OIL LPG"
-      ],
+      "aliases": ["INDANE", "INDANE GAS", "INDIAN OIL LPG"],
       "category": "Utilities",
       "mcc": "5983"
     },
     {
       "canonical": "Bharat Gas",
-      "aliases": [
-        "BHARAT GAS",
-        "BHARATGAS",
-        "BPCL LPG"
-      ],
+      "aliases": ["BHARAT GAS", "BHARATGAS", "BPCL LPG"],
       "category": "Utilities",
       "mcc": "5983"
     },
     {
       "canonical": "HP Gas",
-      "aliases": [
-        "HP GAS",
-        "HPGAS",
-        "HPCL LPG"
-      ],
+      "aliases": ["HP GAS", "HPGAS", "HPCL LPG"],
       "category": "Utilities",
       "mcc": "5983"
     },
     {
       "canonical": "Narayana Health",
-      "aliases": [
-        "NARAYANA HEALTH",
-        "NARAYANA HRUDAYALAYA"
-      ],
+      "aliases": ["NARAYANA HEALTH", "NARAYANA HRUDAYALAYA"],
       "category": "Healthcare",
       "mcc": "8062"
     },
     {
       "canonical": "Manipal Hospitals",
-      "aliases": [
-        "MANIPAL HOSPITAL",
-        "MANIPAL HEALTH"
-      ],
+      "aliases": ["MANIPAL HOSPITAL", "MANIPAL HEALTH"],
       "category": "Healthcare",
       "mcc": "8062"
     },
     {
       "canonical": "Fortis",
-      "aliases": [
-        "FORTIS",
-        "FORTIS HEALTHCARE",
-        "FORTIS HOSPITAL"
-      ],
+      "aliases": ["FORTIS", "FORTIS HEALTHCARE", "FORTIS HOSPITAL"],
       "category": "Healthcare",
       "mcc": "8062"
     },
     {
       "canonical": "Max Healthcare",
-      "aliases": [
-        "MAX HEALTHCARE",
-        "MAX HOSPITAL"
-      ],
+      "aliases": ["MAX HEALTHCARE", "MAX HOSPITAL"],
       "category": "Healthcare",
       "mcc": "8062"
     },
     {
       "canonical": "Metropolis",
-      "aliases": [
-        "METROPOLIS",
-        "METROPOLIS HEALTHCARE"
-      ],
+      "aliases": ["METROPOLIS", "METROPOLIS HEALTHCARE"],
       "category": "Healthcare",
       "mcc": "8071"
     },
     {
       "canonical": "Thyrocare",
-      "aliases": [
-        "THYROCARE",
-        "THYROCARE TECHNOLOGIES"
-      ],
+      "aliases": ["THYROCARE", "THYROCARE TECHNOLOGIES"],
       "category": "Healthcare",
       "mcc": "8071"
     },
     {
       "canonical": "Dr Lal PathLabs",
-      "aliases": [
-        "LAL PATHLABS",
-        "DR LAL PATHLABS",
-        "LALPATHLABS"
-      ],
+      "aliases": ["LAL PATHLABS", "DR LAL PATHLABS", "LALPATHLABS"],
       "category": "Healthcare",
       "mcc": "8071"
     },
     {
       "canonical": "Apollo 24",
-      "aliases": [
-        "APOLLO 24",
-        "APOLLO247"
-      ],
+      "aliases": ["APOLLO 24", "APOLLO247"],
       "category": "Healthcare",
       "mcc": "5912"
     },
     {
       "canonical": "Cult.fit",
-      "aliases": [
-        "CULTFIT",
-        "CULT FIT",
-        "CULTFIT FITNESS"
-      ],
+      "aliases": ["CULTFIT", "CULT FIT", "CULTFIT FITNESS"],
       "category": "Fitness",
       "mcc": "7997"
     },
     {
       "canonical": "Gold's Gym",
-      "aliases": [
-        "GOLDS GYM",
-        "GOLD S GYM"
-      ],
+      "aliases": ["GOLDS GYM", "GOLD S GYM"],
       "category": "Fitness",
       "mcc": "7997"
     },
     {
       "canonical": "Anytime Fitness",
-      "aliases": [
-        "ANYTIME FITNESS"
-      ],
+      "aliases": ["ANYTIME FITNESS"],
       "category": "Fitness",
       "mcc": "7997"
     },
     {
       "canonical": "BYJU'S",
-      "aliases": [
-        "BYJUS",
-        "BYJU S",
-        "THINK AND LEARN"
-      ],
+      "aliases": ["BYJUS", "BYJU S", "THINK AND LEARN"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "Vedantu",
-      "aliases": [
-        "VEDANTU"
-      ],
+      "aliases": ["VEDANTU"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "Allen Career",
-      "aliases": [
-        "ALLEN CAREER",
-        "ALLEN CAREER INSTITUTE"
-      ],
+      "aliases": ["ALLEN CAREER", "ALLEN CAREER INSTITUTE"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "Aakash",
-      "aliases": [
-        "AAKASH",
-        "AESL",
-        "AAKASH EDUCATIONAL"
-      ],
+      "aliases": ["AAKASH", "AESL", "AAKASH EDUCATIONAL"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "FIITJEE",
-      "aliases": [
-        "FIITJEE"
-      ],
+      "aliases": ["FIITJEE"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "Simplilearn",
-      "aliases": [
-        "SIMPLILEARN"
-      ],
+      "aliases": ["SIMPLILEARN"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "Scaler",
-      "aliases": [
-        "SCALER",
-        "INTERVIEWBIT"
-      ],
+      "aliases": ["SCALER", "INTERVIEWBIT"],
       "category": "Education",
       "mcc": "8299"
     },
     {
       "canonical": "KFintech",
-      "aliases": [
-        "KFINTECH",
-        "KFIN TECHNOLOGIES",
-        "KARVY"
-      ],
+      "aliases": ["KFINTECH", "KFIN TECHNOLOGIES", "KARVY"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "INDmoney",
-      "aliases": [
-        "INDMONEY",
-        "IND WEALTH"
-      ],
+      "aliases": ["INDMONEY", "IND WEALTH"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "Smallcase",
-      "aliases": [
-        "SMALLCASE"
-      ],
+      "aliases": ["SMALLCASE"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "PPFAS Mutual Fund",
-      "aliases": [
-        "PPFAS",
-        "PARAG PARIKH",
-        "PPFAS MUTUAL FUND"
-      ],
+      "aliases": ["PPFAS", "PARAG PARIKH", "PPFAS MUTUAL FUND"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "Mirae Asset",
-      "aliases": [
-        "MIRAE ASSET",
-        "MIRAE ASSET MF"
-      ],
+      "aliases": ["MIRAE ASSET", "MIRAE ASSET MF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "Nippon India MF",
-      "aliases": [
-        "NIPPON INDIA",
-        "NIPPON INDIA MF"
-      ],
+      "aliases": ["NIPPON INDIA", "NIPPON INDIA MF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "HDFC Mutual Fund",
-      "aliases": [
-        "HDFC MUTUAL FUND",
-        "HDFC MF"
-      ],
+      "aliases": ["HDFC MUTUAL FUND", "HDFC MF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "SBI Mutual Fund",
-      "aliases": [
-        "SBI MUTUAL FUND",
-        "SBI MF",
-        "SBIMF"
-      ],
+      "aliases": ["SBI MUTUAL FUND", "SBI MF", "SBIMF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "ICICI Prudential MF",
-      "aliases": [
-        "ICICI PRUDENTIAL MUTUAL FUND",
-        "ICICI PRU MF"
-      ],
+      "aliases": ["ICICI PRUDENTIAL MUTUAL FUND", "ICICI PRU MF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "Axis Mutual Fund",
-      "aliases": [
-        "AXIS MUTUAL FUND",
-        "AXIS MF"
-      ],
+      "aliases": ["AXIS MUTUAL FUND", "AXIS MF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "Kotak Mutual Fund",
-      "aliases": [
-        "KOTAK MUTUAL FUND",
-        "KOTAK MF"
-      ],
+      "aliases": ["KOTAK MUTUAL FUND", "KOTAK MF"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "NSE",
-      "aliases": [
-        "NSE",
-        "NATIONAL STOCK EXCHANGE"
-      ],
+      "aliases": ["NSE", "NATIONAL STOCK EXCHANGE"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Coin by Zerodha",
-      "aliases": [
-        "COIN ZERODHA",
-        "ZERODHA COIN"
-      ],
+      "aliases": ["COIN ZERODHA", "ZERODHA COIN"],
       "category": "Investments",
       "mcc": "6282"
     },
     {
       "canonical": "Bajaj Allianz",
-      "aliases": [
-        "BAJAJ ALLIANZ",
-        "BAJAJ ALLIANZ LIFE",
-        "BAJAJ ALLIANZ GENERAL"
-      ],
+      "aliases": ["BAJAJ ALLIANZ", "BAJAJ ALLIANZ LIFE", "BAJAJ ALLIANZ GENERAL"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "HDFC Ergo",
-      "aliases": [
-        "HDFC ERGO"
-      ],
+      "aliases": ["HDFC ERGO"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Tata AIG",
-      "aliases": [
-        "TATA AIG",
-        "TATAAIG"
-      ],
+      "aliases": ["TATA AIG", "TATAAIG"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "SBI Life",
-      "aliases": [
-        "SBI LIFE",
-        "SBILIFE"
-      ],
+      "aliases": ["SBI LIFE", "SBILIFE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Max Life",
-      "aliases": [
-        "MAX LIFE",
-        "MAX LIFE INSURANCE"
-      ],
+      "aliases": ["MAX LIFE", "MAX LIFE INSURANCE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "ICICI Lombard",
-      "aliases": [
-        "ICICI LOMBARD"
-      ],
+      "aliases": ["ICICI LOMBARD"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Care Health",
-      "aliases": [
-        "CARE HEALTH",
-        "RELIGARE"
-      ],
+      "aliases": ["CARE HEALTH", "RELIGARE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "New India Assurance",
-      "aliases": [
-        "NEW INDIA ASSURANCE",
-        "NIACL"
-      ],
+      "aliases": ["NEW INDIA ASSURANCE", "NIACL"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Home Credit",
-      "aliases": [
-        "HOME CREDIT",
-        "HOME CREDIT INDIA"
-      ],
+      "aliases": ["HOME CREDIT", "HOME CREDIT INDIA"],
       "category": "Loan & EMI",
       "mcc": "6012"
     },
     {
       "canonical": "KreditBee",
-      "aliases": [
-        "KREDITBEE",
-        "KREDIT BEE",
-        "FINNOVATION"
-      ],
+      "aliases": ["KREDITBEE", "KREDIT BEE", "FINNOVATION"],
       "category": "Loan & EMI",
       "mcc": "6012"
     },
     {
       "canonical": "Fibe",
-      "aliases": [
-        "FIBE",
-        "EARLYSALARY",
-        "EARLY SALARY",
-        "SOCIALWORTH"
-      ],
+      "aliases": ["FIBE", "EARLYSALARY", "EARLY SALARY", "SOCIALWORTH"],
       "category": "Loan & EMI",
       "mcc": "6012"
     },
     {
       "canonical": "MoneyView",
-      "aliases": [
-        "MONEYVIEW",
-        "MONEY VIEW",
-        "WHIZDM"
-      ],
+      "aliases": ["MONEYVIEW", "MONEY VIEW", "WHIZDM"],
       "category": "Loan & EMI",
       "mcc": "6012"
     },
     {
       "canonical": "Navi Finserv",
-      "aliases": [
-        "NAVI FINSERV",
-        "NAVI TECHNOLOGIES"
-      ],
+      "aliases": ["NAVI FINSERV", "NAVI TECHNOLOGIES"],
       "category": "Loan & EMI",
       "mcc": "6012"
     },
     {
       "canonical": "Kissht",
-      "aliases": [
-        "KISSHT"
-      ],
+      "aliases": ["KISSHT"],
       "category": "Loan & EMI",
       "mcc": "6012"
     },
     {
       "canonical": "Axio",
-      "aliases": [
-        "AXIO",
-        "CAPITAL FLOAT"
-      ],
+      "aliases": ["AXIO", "CAPITAL FLOAT"],
       "category": "BNPL",
       "mcc": "6012"
     },
     {
       "canonical": "Amazon Pay Later",
-      "aliases": [
-        "AMAZON PAY LATER",
-        "AMAZON PAYLATER"
-      ],
+      "aliases": ["AMAZON PAY LATER", "AMAZON PAYLATER"],
       "category": "BNPL",
       "mcc": "6012"
     },
     {
       "canonical": "PostPe",
-      "aliases": [
-        "POSTPE",
-        "BHARATPE POSTPE"
-      ],
+      "aliases": ["POSTPE", "BHARATPE POSTPE"],
       "category": "BNPL",
       "mcc": "6012"
     },
     {
       "canonical": "ePayLater",
-      "aliases": [
-        "EPAYLATER",
-        "EPAY LATER"
-      ],
+      "aliases": ["EPAYLATER", "EPAY LATER"],
       "category": "BNPL",
       "mcc": "6012"
     },
     {
       "canonical": "DTDC",
-      "aliases": [
-        "DTDC",
-        "DTDC EXPRESS"
-      ],
+      "aliases": ["DTDC", "DTDC EXPRESS"],
       "category": "Postage & Courier",
       "mcc": "4215"
     },
     {
       "canonical": "BlueDart",
-      "aliases": [
-        "BLUE DART",
-        "BLUEDART"
-      ],
+      "aliases": ["BLUE DART", "BLUEDART"],
       "category": "Postage & Courier",
       "mcc": "4215"
     },
     {
       "canonical": "Delhivery",
-      "aliases": [
-        "DELHIVERY"
-      ],
+      "aliases": ["DELHIVERY"],
       "category": "Postage & Courier",
       "mcc": "4215"
     },
     {
       "canonical": "India Post",
-      "aliases": [
-        "INDIA POST",
-        "SPEEDPOST",
-        "SPEED POST"
-      ],
+      "aliases": ["INDIA POST", "SPEEDPOST", "SPEED POST"],
       "category": "Postage & Courier",
       "mcc": "9402"
     },
     {
       "canonical": "XpressBees",
-      "aliases": [
-        "XPRESSBEES",
-        "XPRESS BEES"
-      ],
+      "aliases": ["XPRESSBEES", "XPRESS BEES"],
       "category": "Postage & Courier",
       "mcc": "4215"
     },
     {
       "canonical": "Heads Up For Tails",
-      "aliases": [
-        "HUFT",
-        "HEADS UP FOR TAILS"
-      ],
+      "aliases": ["HUFT", "HEADS UP FOR TAILS"],
       "category": "Pet Care",
       "mcc": "5995"
     },
     {
       "canonical": "Supertails",
-      "aliases": [
-        "SUPERTAILS"
-      ],
+      "aliases": ["SUPERTAILS"],
       "category": "Pet Care",
       "mcc": "5995"
     },
     {
       "canonical": "Akshaya Patra",
-      "aliases": [
-        "AKSHAYA PATRA",
-        "AKSHAYAPATRA"
-      ],
+      "aliases": ["AKSHAYA PATRA", "AKSHAYAPATRA"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "ISKCON",
-      "aliases": [
-        "ISKCON"
-      ],
+      "aliases": ["ISKCON"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Ketto",
-      "aliases": [
-        "KETTO"
-      ],
+      "aliases": ["KETTO"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Milaap",
-      "aliases": [
-        "MILAAP"
-      ],
+      "aliases": ["MILAAP"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Wise",
-      "aliases": [
-        "WISE",
-        "TRANSFERWISE"
-      ],
+      "aliases": ["WISE", "TRANSFERWISE"],
       "category": "Forex",
       "mcc": "4829"
     },
     {
       "canonical": "Remitly",
-      "aliases": [
-        "REMITLY"
-      ],
+      "aliases": ["REMITLY"],
       "category": "Forex",
       "mcc": "4829"
     },
     {
       "canonical": "Western Union",
-      "aliases": [
-        "WESTERN UNION"
-      ],
+      "aliases": ["WESTERN UNION"],
       "category": "Forex",
       "mcc": "4829"
     },
     {
       "canonical": "Xoom",
-      "aliases": [
-        "XOOM"
-      ],
+      "aliases": ["XOOM"],
       "category": "Forex",
       "mcc": "4829"
     },
     {
       "canonical": "GoMechanic",
-      "aliases": [
-        "GOMECHANIC",
-        "GO MECHANIC"
-      ],
+      "aliases": ["GOMECHANIC", "GO MECHANIC"],
       "category": "Auto & Vehicle",
       "mcc": "7538"
     },
     {
       "canonical": "Paytm Wallet",
-      "aliases": [
-        "PAYTM WALLET",
-        "PAYTM PAYMENTS BANK"
-      ],
+      "aliases": ["PAYTM WALLET", "PAYTM PAYMENTS BANK"],
       "category": "Wallet Top-up",
       "mcc": "6540"
     },
     {
       "canonical": "MobiKwik",
-      "aliases": [
-        "MOBIKWIK",
-        "MOBIKWIK WALLET"
-      ],
+      "aliases": ["MOBIKWIK", "MOBIKWIK WALLET"],
       "category": "Wallet Top-up",
       "mcc": "6540"
     },
     {
       "canonical": "Freecharge",
-      "aliases": [
-        "FREECHARGE"
-      ],
+      "aliases": ["FREECHARGE"],
       "category": "Wallet Top-up",
       "mcc": "6540"
     },
     {
       "canonical": "ClearTax",
-      "aliases": [
-        "CLEARTAX",
-        "CLEAR TAX"
-      ],
+      "aliases": ["CLEARTAX", "CLEAR TAX"],
       "category": "Professional Services",
       "mcc": "8931"
     },
     {
       "canonical": "Vakilsearch",
-      "aliases": [
-        "VAKILSEARCH"
-      ],
+      "aliases": ["VAKILSEARCH"],
       "category": "Legal & Compliance",
       "mcc": "8999"
     },
     {
       "canonical": "Art of Living",
-      "aliases": [
-        "ART OF LIVING",
-        "VED VIGNAN",
-        "VYAKTI VIKAS KENDRA"
-      ],
+      "aliases": ["ART OF LIVING", "VED VIGNAN", "VYAKTI VIKAS KENDRA"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Tirumala Tirupati Devasthanams",
-      "aliases": [
-        "TIRUMALA TIRUPATI DEVASTHANAM",
-        "TTDEVASTHANAM",
-        "TIRUPATI BALAJI",
-        "TTD SEVA"
-      ],
+      "aliases": ["TIRUMALA TIRUPATI DEVASTHANAM", "TTDEVASTHANAM", "TIRUPATI BALAJI", "TTD SEVA"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Siddhivinayak Temple",
-      "aliases": [
-        "SIDDHIVINAYAK",
-        "SIDDHI VINAYAK",
-        "SHREE SIDDHIVINAYAK"
-      ],
+      "aliases": ["SIDDHIVINAYAK", "SIDDHI VINAYAK", "SHREE SIDDHIVINAYAK"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Shirdi Sai Sansthan",
-      "aliases": [
-        "SHIRDI SAI",
-        "SAIBABA SANSTHAN",
-        "SAI SANSTHAN"
-      ],
+      "aliases": ["SHIRDI SAI", "SAIBABA SANSTHAN", "SAI SANSTHAN"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "BAPS Swaminarayan",
-      "aliases": [
-        "BAPS",
-        "BAPS SWAMINARAYAN",
-        "SWAMINARAYAN SANSTHA"
-      ],
+      "aliases": ["BAPS", "BAPS SWAMINARAYAN", "SWAMINARAYAN SANSTHA"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Ramakrishna Mission",
-      "aliases": [
-        "RAMAKRISHNA MISSION",
-        "RAMAKRISHNA MATH",
-        "RK MISSION"
-      ],
+      "aliases": ["RAMAKRISHNA MISSION", "RAMAKRISHNA MATH", "RK MISSION"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Mata Amritanandamayi Math",
-      "aliases": [
-        "AMRITANANDAMAYI",
-        "EMBRACING THE WORLD"
-      ],
+      "aliases": ["AMRITANANDAMAYI", "EMBRACING THE WORLD"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Brahma Kumaris",
-      "aliases": [
-        "BRAHMA KUMARIS",
-        "BRAHMAKUMARIS",
-        "PRAJAPITA BRAHMA"
-      ],
+      "aliases": ["BRAHMA KUMARIS", "BRAHMAKUMARIS", "PRAJAPITA BRAHMA"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Isha Foundation",
-      "aliases": [
-        "ISHA FOUNDATION",
-        "ISHA YOGA",
-        "ISHA VIDHYA"
-      ],
+      "aliases": ["ISHA FOUNDATION", "ISHA YOGA", "ISHA VIDHYA"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Chinmaya Mission",
-      "aliases": [
-        "CHINMAYA MISSION"
-      ],
+      "aliases": ["CHINMAYA MISSION"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Sathya Sai Trust",
-      "aliases": [
-        "SATHYA SAI",
-        "SRI SATHYA SAI"
-      ],
+      "aliases": ["SATHYA SAI", "SRI SATHYA SAI"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "Vipassana",
-      "aliases": [
-        "VIPASSANA",
-        "VIPASSANA MEDITATION"
-      ],
+      "aliases": ["VIPASSANA", "VIPASSANA MEDITATION"],
       "category": "Donations",
       "mcc": "8661"
     },
     {
       "canonical": "PM CARES Fund",
-      "aliases": [
-        "PM CARES",
-        "PMCARES"
-      ],
+      "aliases": ["PM CARES", "PMCARES"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "PMNRF",
-      "aliases": [
-        "PMNRF",
-        "PRIME MINISTER NATIONAL RELIEF"
-      ],
+      "aliases": ["PMNRF", "PRIME MINISTER NATIONAL RELIEF"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "GiveIndia",
-      "aliases": [
-        "GIVE INDIA",
-        "GIVEINDIA",
-        "GIVE FOUNDATION"
-      ],
+      "aliases": ["GIVE INDIA", "GIVEINDIA", "GIVE FOUNDATION"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "CRY",
-      "aliases": [
-        "CRY",
-        "CHILD RIGHTS AND YOU"
-      ],
+      "aliases": ["CRY", "CHILD RIGHTS AND YOU"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Goonj",
-      "aliases": [
-        "GOONJ"
-      ],
+      "aliases": ["GOONJ"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "HelpAge India",
-      "aliases": [
-        "HELP AGE",
-        "HELPAGE INDIA"
-      ],
+      "aliases": ["HELP AGE", "HELPAGE INDIA"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Smile Foundation",
-      "aliases": [
-        "SMILE FOUNDATION"
-      ],
+      "aliases": ["SMILE FOUNDATION"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "World Vision India",
-      "aliases": [
-        "WORLD VISION"
-      ],
+      "aliases": ["WORLD VISION"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "SOS Children's Villages",
-      "aliases": [
-        "SOS CHILDRENS VILLAGES",
-        "SOS CHILDREN"
-      ],
+      "aliases": ["SOS CHILDRENS VILLAGES", "SOS CHILDREN"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Impact Guru",
-      "aliases": [
-        "IMPACT GURU"
-      ],
+      "aliases": ["IMPACT GURU"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Teach for India",
-      "aliases": [
-        "TEACH FOR INDIA"
-      ],
+      "aliases": ["TEACH FOR INDIA"],
       "category": "Donations",
       "mcc": "8398"
     },
     {
       "canonical": "Tanishq",
-      "aliases": [
-        "TANISHQ"
-      ],
+      "aliases": ["TANISHQ"],
       "category": "Jewellery",
       "mcc": "5094"
     },
     {
       "canonical": "Kalyan Jewellers",
-      "aliases": [
-        "KALYAN JEWELLERS",
-        "KALYAN JEWELERS"
-      ],
+      "aliases": ["KALYAN JEWELLERS", "KALYAN JEWELERS"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "Malabar Gold",
-      "aliases": [
-        "MALABAR GOLD",
-        "MALABAR GOLD AND DIAMONDS"
-      ],
+      "aliases": ["MALABAR GOLD", "MALABAR GOLD AND DIAMONDS"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "Joyalukkas",
-      "aliases": [
-        "JOYALUKKAS",
-        "JOY ALUKKAS"
-      ],
+      "aliases": ["JOYALUKKAS", "JOY ALUKKAS"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "CaratLane",
-      "aliases": [
-        "CARATLANE",
-        "CARAT LANE"
-      ],
+      "aliases": ["CARATLANE", "CARAT LANE"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "BlueStone",
-      "aliases": [
-        "BLUESTONE",
-        "BLUE STONE"
-      ],
+      "aliases": ["BLUESTONE", "BLUE STONE"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "Giva",
-      "aliases": [
-        "GIVA",
-        "GIVA JEWELS"
-      ],
+      "aliases": ["GIVA", "GIVA JEWELS"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "PC Jeweller",
-      "aliases": [
-        "PC JEWELLER",
-        "PCJ"
-      ],
+      "aliases": ["PC JEWELLER", "PCJ"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "Senco Gold",
-      "aliases": [
-        "SENCO GOLD"
-      ],
+      "aliases": ["SENCO GOLD"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "TBZ",
-      "aliases": [
-        "TBZ",
-        "TRIBHOVANDAS BHIMJI"
-      ],
+      "aliases": ["TBZ", "TRIBHOVANDAS BHIMJI"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "Reliance Jewels",
-      "aliases": [
-        "RELIANCE JEWELS"
-      ],
+      "aliases": ["RELIANCE JEWELS"],
       "category": "Jewellery",
       "mcc": "5944"
     },
     {
       "canonical": "Naturals Salon",
-      "aliases": [
-        "NATURALS SALON",
-        "NATURALS UNISEX"
-      ],
+      "aliases": ["NATURALS SALON", "NATURALS UNISEX"],
       "category": "Personal Care",
       "mcc": "7230"
     },
     {
       "canonical": "Lakme Salon",
-      "aliases": [
-        "LAKME SALON",
-        "LAKME"
-      ],
+      "aliases": ["LAKME SALON", "LAKME"],
       "category": "Personal Care",
       "mcc": "7230"
     },
     {
       "canonical": "VLCC",
-      "aliases": [
-        "VLCC"
-      ],
+      "aliases": ["VLCC"],
       "category": "Personal Care",
       "mcc": "7298"
     },
     {
       "canonical": "Jawed Habib",
-      "aliases": [
-        "JAWED HABIB"
-      ],
+      "aliases": ["JAWED HABIB"],
       "category": "Personal Care",
       "mcc": "7230"
     },
     {
       "canonical": "Toni&Guy",
-      "aliases": [
-        "TONI GUY",
-        "TONIGUY"
-      ],
+      "aliases": ["TONI GUY", "TONIGUY"],
       "category": "Personal Care",
       "mcc": "7230"
     },
     {
       "canonical": "Looks Salon",
-      "aliases": [
-        "LOOKS SALON"
-      ],
+      "aliases": ["LOOKS SALON"],
       "category": "Personal Care",
       "mcc": "7230"
     },
     {
       "canonical": "Bharat Matrimony",
-      "aliases": [
-        "BHARAT MATRIMONY",
-        "BHARATMATRIMONY"
-      ],
+      "aliases": ["BHARAT MATRIMONY", "BHARATMATRIMONY"],
       "category": "Personal Care",
       "mcc": "7299"
     },
     {
       "canonical": "Shaadi.com",
-      "aliases": [
-        "SHAADI",
-        "SHAADI COM",
-        "PEOPLE INTERACTIVE"
-      ],
+      "aliases": ["SHAADI", "SHAADI COM", "PEOPLE INTERACTIVE"],
       "category": "Personal Care",
       "mcc": "7299"
     },
     {
       "canonical": "Jeevansathi",
-      "aliases": [
-        "JEEVANSATHI"
-      ],
+      "aliases": ["JEEVANSATHI"],
       "category": "Personal Care",
       "mcc": "7299"
     },
     {
       "canonical": "Dhan",
-      "aliases": [
-        "DHAN",
-        "RAISE FINANCIAL"
-      ],
+      "aliases": ["DHAN", "RAISE FINANCIAL"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Fyers",
-      "aliases": [
-        "FYERS"
-      ],
+      "aliases": ["FYERS"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "5paisa",
-      "aliases": [
-        "5PAISA"
-      ],
+      "aliases": ["5PAISA"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Motilal Oswal",
-      "aliases": [
-        "MOTILAL OSWAL",
-        "MOSL"
-      ],
+      "aliases": ["MOTILAL OSWAL", "MOSL"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "ICICI Direct",
-      "aliases": [
-        "ICICI DIRECT",
-        "ICICI SECURITIES",
-        "ICICIDIRECT"
-      ],
+      "aliases": ["ICICI DIRECT", "ICICI SECURITIES", "ICICIDIRECT"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "HDFC Securities",
-      "aliases": [
-        "HDFC SECURITIES",
-        "HDFC SEC"
-      ],
+      "aliases": ["HDFC SECURITIES", "HDFC SEC"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Kotak Securities",
-      "aliases": [
-        "KOTAK SECURITIES"
-      ],
+      "aliases": ["KOTAK SECURITIES"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Sharekhan",
-      "aliases": [
-        "SHAREKHAN",
-        "SHAREKHAN BY BNP"
-      ],
+      "aliases": ["SHAREKHAN", "SHAREKHAN BY BNP"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "SBI Securities",
-      "aliases": [
-        "SBI SECURITIES",
-        "SBICAP SECURITIES"
-      ],
+      "aliases": ["SBI SECURITIES", "SBICAP SECURITIES"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Axis Direct",
-      "aliases": [
-        "AXIS DIRECT",
-        "AXIS SECURITIES"
-      ],
+      "aliases": ["AXIS DIRECT", "AXIS SECURITIES"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "Geojit",
-      "aliases": [
-        "GEOJIT"
-      ],
+      "aliases": ["GEOJIT"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "IIFL Securities",
-      "aliases": [
-        "IIFL SECURITIES",
-        "IIFLSEC"
-      ],
+      "aliases": ["IIFL SECURITIES", "IIFLSEC"],
       "category": "Investments",
       "mcc": "6211"
     },
     {
       "canonical": "PNB MetLife",
-      "aliases": [
-        "PNB METLIFE",
-        "METLIFE"
-      ],
+      "aliases": ["PNB METLIFE", "METLIFE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Royal Sundaram",
-      "aliases": [
-        "ROYAL SUNDARAM"
-      ],
+      "aliases": ["ROYAL SUNDARAM"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "National Insurance",
-      "aliases": [
-        "NATIONAL INSURANCE"
-      ],
+      "aliases": ["NATIONAL INSURANCE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "United India Insurance",
-      "aliases": [
-        "UNITED INDIA INSURANCE",
-        "UIIC"
-      ],
+      "aliases": ["UNITED INDIA INSURANCE", "UIIC"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Oriental Insurance",
-      "aliases": [
-        "ORIENTAL INSURANCE"
-      ],
+      "aliases": ["ORIENTAL INSURANCE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Aditya Birla Health",
-      "aliases": [
-        "ADITYA BIRLA HEALTH"
-      ],
+      "aliases": ["ADITYA BIRLA HEALTH"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "ManipalCigna",
-      "aliases": [
-        "MANIPALCIGNA",
-        "MANIPAL CIGNA"
-      ],
+      "aliases": ["MANIPALCIGNA", "MANIPAL CIGNA"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Cholamandalam MS",
-      "aliases": [
-        "CHOLAMANDALAM MS",
-        "CHOLA MS"
-      ],
+      "aliases": ["CHOLAMANDALAM MS", "CHOLA MS"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Bharti AXA",
-      "aliases": [
-        "BHARTI AXA"
-      ],
+      "aliases": ["BHARTI AXA"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Tata AIA",
-      "aliases": [
-        "TATA AIA",
-        "TATAAIA"
-      ],
+      "aliases": ["TATA AIA", "TATAAIA"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Future Generali",
-      "aliases": [
-        "FUTURE GENERALI"
-      ],
+      "aliases": ["FUTURE GENERALI"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "SBI General",
-      "aliases": [
-        "SBI GENERAL INSURANCE",
-        "SBI GENERAL"
-      ],
+      "aliases": ["SBI GENERAL INSURANCE", "SBI GENERAL"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "Kotak Life",
-      "aliases": [
-        "KOTAK LIFE",
-        "KOTAK LIFE INSURANCE"
-      ],
+      "aliases": ["KOTAK LIFE", "KOTAK LIFE INSURANCE"],
       "category": "Insurance",
       "mcc": "6300"
     },
     {
       "canonical": "aha",
-      "aliases": [
-        "ARHA MEDIA",
-        "AHA VIDEO",
-        "AHA OTT"
-      ],
+      "aliases": ["ARHA MEDIA", "AHA VIDEO", "AHA OTT"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "Sun NXT",
-      "aliases": [
-        "SUN NXT",
-        "SUNNXT"
-      ],
+      "aliases": ["SUN NXT", "SUNNXT"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "hoichoi",
-      "aliases": [
-        "HOICHOI"
-      ],
+      "aliases": ["HOICHOI"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "ManoramaMAX",
-      "aliases": [
-        "MANORAMA MAX",
-        "MANORAMAMAX"
-      ],
+      "aliases": ["MANORAMA MAX", "MANORAMAMAX"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "ETV Win",
-      "aliases": [
-        "ETV WIN",
-        "ETVWIN"
-      ],
+      "aliases": ["ETV WIN", "ETVWIN"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "JioCinema",
-      "aliases": [
-        "JIOCINEMA",
-        "JIO CINEMA"
-      ],
+      "aliases": ["JIOCINEMA", "JIO CINEMA"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "ALTBalaji",
-      "aliases": [
-        "ALTBALAJI",
-        "ALT BALAJI"
-      ],
+      "aliases": ["ALTBALAJI", "ALT BALAJI"],
       "category": "Subscriptions",
       "mcc": "4899"
     },
     {
       "canonical": "Times of India",
-      "aliases": [
-        "TIMES OF INDIA",
-        "TOI PLUS",
-        "TIMES PRIME"
-      ],
+      "aliases": ["TIMES OF INDIA", "TOI PLUS", "TIMES PRIME"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "The Hindu",
-      "aliases": [
-        "THE HINDU",
-        "THEHINDU"
-      ],
+      "aliases": ["THE HINDU", "THEHINDU"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "The Economic Times",
-      "aliases": [
-        "ECONOMIC TIMES",
-        "ET PRIME"
-      ],
+      "aliases": ["ECONOMIC TIMES", "ET PRIME"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "Indian Express",
-      "aliases": [
-        "INDIAN EXPRESS"
-      ],
+      "aliases": ["INDIAN EXPRESS"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "Hindustan Times",
-      "aliases": [
-        "HINDUSTAN TIMES",
-        "HT MEDIA"
-      ],
+      "aliases": ["HINDUSTAN TIMES", "HT MEDIA"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "Dainik Bhaskar",
-      "aliases": [
-        "DAINIK BHASKAR",
-        "DB CORP"
-      ],
+      "aliases": ["DAINIK BHASKAR", "DB CORP"],
       "category": "Subscriptions",
       "mcc": "5968"
     },
     {
       "canonical": "Wellness Forever",
-      "aliases": [
-        "WELLNESS FOREVER"
-      ],
+      "aliases": ["WELLNESS FOREVER"],
       "category": "Healthcare",
       "mcc": "5912"
     },
     {
       "canonical": "Apollo Diagnostics",
-      "aliases": [
-        "APOLLO DIAGNOSTICS"
-      ],
+      "aliases": ["APOLLO DIAGNOSTICS"],
       "category": "Healthcare",
       "mcc": "8071"
     },
     {
       "canonical": "SRL Diagnostics",
-      "aliases": [
-        "SRL DIAGNOSTICS",
-        "SRL LIMITED"
-      ],
+      "aliases": ["SRL DIAGNOSTICS", "SRL LIMITED"],
       "category": "Healthcare",
       "mcc": "8071"
     },
     {
       "canonical": "Vijaya Diagnostic",
-      "aliases": [
-        "VIJAYA DIAGNOSTIC",
-        "VIJAYA DIAGNOSTICS"
-      ],
+      "aliases": ["VIJAYA DIAGNOSTIC", "VIJAYA DIAGNOSTICS"],
       "category": "Healthcare",
       "mcc": "8071"
     },
     {
       "canonical": "JustDial",
-      "aliases": [
-        "JUSTDIAL",
-        "JUST DIAL"
-      ],
+      "aliases": ["JUSTDIAL", "JUST DIAL"],
       "category": "Professional Services",
       "mcc": "7399"
     },
     {
       "canonical": "IndiaMART",
-      "aliases": [
-        "INDIAMART",
-        "INDIA MART"
-      ],
+      "aliases": ["INDIAMART", "INDIA MART"],
       "category": "Professional Services",
       "mcc": "7399"
     }
