@@ -45,6 +45,12 @@ class TestDetectBankId(unittest.TestCase):
         text = "\n".join(["noise line"] * 25) + "\nNEFT CREDIT FROM HDFC BANK"
         self.assertIsNone(detect_bank_id(text, _NAMES))
 
+    def test_ampersand_names_detect(self):
+        # Input text is normalized before matching ('&' -> ' '), so names
+        # stored with punctuation must still hit.
+        self.assertEqual(detect_bank_id("Jammu & Kashmir Bank Ltd\n", _NAMES), "JAKB")
+        self.assertEqual(detect_bank_id("Punjab & Sind Bank\n", _NAMES), "PSB")
+
 
 class TestExtractionBankDetection(unittest.TestCase):
     def test_uncovered_bank_names_itself_on_generic_parse(self):

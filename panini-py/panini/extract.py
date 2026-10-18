@@ -202,7 +202,11 @@ def detect_bank_id(text: str, names_file: dict[str, Any]) -> Optional[str]:
         best: Optional[str] = None
         best_len = 0
         for bank in names_file.get("banks", []):
-            for name in bank.get("names", []):
+            for raw in bank.get("names", []):
+                # Input text is normalized before matching, so names must
+                # be too — 'j&k bank' only ever sees 'j k bank' in text.
+                name = re.sub(r"[^a-z0-9]+", " ", raw.lower()).strip()
+                name = re.sub(r"\s+", " ", name)
                 if len(name) > best_len and f" {name} " in padded:
                     best, best_len = bank["id"], len(name)
         if best is not None:

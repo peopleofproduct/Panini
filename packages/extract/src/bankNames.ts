@@ -43,7 +43,10 @@ export function detectBankId(text: string, dict: BankNamesFile): string | null {
     let best: string | null = null;
     let bestLen = 0;
     for (const bank of dict.banks) {
-      for (const name of bank.names) {
+      for (const raw of bank.names) {
+        // Input text is normalized before matching, so names must be too —
+        // 'j&k bank' in the dictionary only ever sees 'j k bank' in text.
+        const name = normalize(raw);
         if (name.length > bestLen && padded.includes(` ${name} `)) {
           best = bank.id;
           bestLen = name.length;
