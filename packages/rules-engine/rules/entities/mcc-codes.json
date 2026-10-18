@@ -2,25 +2,118 @@
   "version": "1.0.0",
   "description": "Merchant Category Codes seen in Indian card/POS narrations mapped to Panini category names. Extend by PR — ISO 18245 codes only; keep category values aligned with rules/categories.json.",
   "codes": {
-    "3000": { "description": "Airlines — domestic carriers", "category": "Travel" },
-    "3001": { "description": "Airlines — Indian Airlines / legacy codes", "category": "Travel" },
-    "3351": { "description": "Car rental agencies", "category": "Transport" },
-    "4011": { "description": "Railways — freight/passenger", "category": "Transport" },
+    "0742": {
+      "description": "Veterinary services",
+      "category": "Pet Care"
+    },
+    "0780": {
+      "description": "Landscaping and horticultural services",
+      "category": "Home Services"
+    },
+    "1520": {
+      "description": "General contractors — residential and commercial",
+      "category": "Home Services"
+    },
+    "1711": {
+      "description": "Heating, plumbing and air-conditioning contractors",
+      "category": "Home Services"
+    },
+    "1731": {
+      "description": "Electrical contractors",
+      "category": "Home Services"
+    },
+    "1740": {
+      "description": "Masonry, stonework, tile setting, insulation",
+      "category": "Home Services"
+    },
+    "1750": {
+      "description": "Carpentry contractors",
+      "category": "Home Services"
+    },
+    "1761": {
+      "description": "Roofing, siding and sheet metal contractors",
+      "category": "Home Services"
+    },
+    "1771": {
+      "description": "Concrete work contractors",
+      "category": "Home Services"
+    },
+    "1799": {
+      "description": "Special trade contractors — not elsewhere classified",
+      "category": "Home Services"
+    },
+    "3000": {
+      "description": "Airlines — domestic carriers",
+      "category": "Travel"
+    },
+    "3001": {
+      "description": "Airlines — Indian Airlines / legacy codes",
+      "category": "Travel"
+    },
+    "3351": {
+      "description": "Car rental agencies",
+      "category": "Transport"
+    },
+    "4011": {
+      "description": "Railways — freight/passenger",
+      "category": "Transport"
+    },
     "4111": {
       "description": "Local/suburban commuter transport, ferries",
       "category": "Transport"
     },
-    "4112": { "description": "Passenger railways", "category": "Transport" },
+    "4112": {
+      "description": "Passenger railways",
+      "category": "Transport"
+    },
+    "4119": {
+      "description": "Ambulance services",
+      "category": "Healthcare"
+    },
     "4121": {
       "description": "Taxicabs and limousines — includes ride-hailing",
       "category": "Transport"
     },
-    "4131": { "description": "Bus lines", "category": "Transport" },
-    "4511": { "description": "Airlines and air carriers", "category": "Travel" },
-    "4722": { "description": "Travel agencies and tour operators", "category": "Travel" },
-    "4784": { "description": "Tolls and bridge fees — FASTag", "category": "Transport" },
-    "4812": { "description": "Telecom equipment and phone sales", "category": "Telecom" },
-    "4813": { "description": "Telecom — key-entry merchant services", "category": "Telecom" },
+    "4131": {
+      "description": "Bus lines",
+      "category": "Transport"
+    },
+    "4215": {
+      "description": "Courier services — air and ground, freight forwarders",
+      "category": "Postage & Courier"
+    },
+    "4411": {
+      "description": "Cruise lines and steamships",
+      "category": "Travel"
+    },
+    "4511": {
+      "description": "Airlines and air carriers",
+      "category": "Travel"
+    },
+    "4582": {
+      "description": "Airports, airport terminals, flying fields",
+      "category": "Travel"
+    },
+    "4722": {
+      "description": "Travel agencies and tour operators",
+      "category": "Travel"
+    },
+    "4784": {
+      "description": "Tolls and bridge fees — FASTag",
+      "category": "Transport"
+    },
+    "4789": {
+      "description": "Transportation services — not elsewhere classified",
+      "category": "Transport"
+    },
+    "4812": {
+      "description": "Telecom equipment and phone sales",
+      "category": "Telecom"
+    },
+    "4813": {
+      "description": "Telecom — key-entry merchant services",
+      "category": "Telecom"
+    },
     "4814": {
       "description": "Telecommunication services — recharge/billing",
       "category": "Telecom"
@@ -28,6 +121,10 @@
     "4816": {
       "description": "Computer network / information services",
       "category": "Subscriptions"
+    },
+    "4829": {
+      "description": "Wire transfers and money orders",
+      "category": "Transfers"
     },
     "4899": {
       "description": "Cable, satellite, and other pay TV/streaming",
@@ -49,42 +146,366 @@
       "description": "Books, periodicals, newspapers — wholesale",
       "category": "Books & Stationery"
     },
-    "5211": { "description": "Lumber and building materials", "category": "Home Services" },
-    "5251": { "description": "Hardware stores", "category": "Home Services" },
-    "5310": { "description": "Discount stores", "category": "Shopping" },
-    "5311": { "description": "Department stores", "category": "Shopping" },
-    "5331": { "description": "Variety stores", "category": "Shopping" },
-    "5399": { "description": "Miscellaneous general merchandise", "category": "Shopping" },
-    "5411": { "description": "Grocery stores and supermarkets", "category": "Groceries" },
-    "5422": { "description": "Meat and fish markets", "category": "Groceries" },
-    "5441": { "description": "Candy, nut, confectionery stores", "category": "Groceries" },
-    "5451": { "description": "Dairy products stores", "category": "Groceries" },
-    "5462": { "description": "Bakeries", "category": "Food & Dining" },
+    "5211": {
+      "description": "Lumber and building materials",
+      "category": "Home Services"
+    },
+    "5251": {
+      "description": "Hardware stores",
+      "category": "Home Services"
+    },
+    "5261": {
+      "description": "Marketplaces",
+      "category": "Shopping"
+    },
+    "5300": {
+      "description": "Wholesale clubs",
+      "category": "Shopping"
+    },
+    "5309": {
+      "description": "Duty-free stores",
+      "category": "Shopping"
+    },
+    "5310": {
+      "description": "Discount stores",
+      "category": "Shopping"
+    },
+    "5311": {
+      "description": "Department stores",
+      "category": "Shopping"
+    },
+    "5331": {
+      "description": "Variety stores",
+      "category": "Shopping"
+    },
+    "5399": {
+      "description": "Miscellaneous general merchandise",
+      "category": "Shopping"
+    },
+    "5411": {
+      "description": "Grocery stores and supermarkets",
+      "category": "Groceries"
+    },
+    "5422": {
+      "description": "Meat and fish markets",
+      "category": "Groceries"
+    },
+    "5441": {
+      "description": "Candy, nut, confectionery stores",
+      "category": "Groceries"
+    },
+    "5451": {
+      "description": "Dairy products stores",
+      "category": "Groceries"
+    },
+    "5462": {
+      "description": "Bakeries",
+      "category": "Food & Dining"
+    },
     "5499": {
       "description": "Miscellaneous food stores — convenience, specialty",
       "category": "Groceries"
     },
-    "5511": { "description": "Auto and truck dealers — new/used", "category": "Auto & Vehicle" },
-    "5533": { "description": "Auto parts and accessories", "category": "Auto & Vehicle" },
-    "5541": { "description": "Service stations — with or without services", "category": "Fuel" },
-    "5542": { "description": "Automated fuel dispensers", "category": "Fuel" },
-    "5651": { "description": "Family clothing stores", "category": "Shopping" },
-    "5655": { "description": "Sports and riding apparel", "category": "Shopping" },
-    "5661": { "description": "Shoe stores", "category": "Shopping" },
-    "5691": { "description": "Men's and women's clothing", "category": "Shopping" },
-    "5712": { "description": "Furniture and home furnishings", "category": "Home Services" },
-    "5732": { "description": "Electronics stores", "category": "Shopping" },
-    "5734": { "description": "Computer software stores", "category": "Shopping" },
-    "5735": { "description": "Record shops — music/media", "category": "Entertainment" },
-    "5812": { "description": "Eating places and restaurants", "category": "Food & Dining" },
-    "5813": { "description": "Drinking places — bars, taverns", "category": "Food & Dining" },
-    "5814": { "description": "Fast food restaurants", "category": "Food & Dining" },
-    "5912": { "description": "Drug stores and pharmacies", "category": "Healthcare" },
-    "5942": { "description": "Book stores", "category": "Books & Stationery" },
-    "5944": { "description": "Jewellery, watch, and silverware stores", "category": "Jewellery" },
-    "5945": { "description": "Hobby, toy, and game shops", "category": "Gaming" },
-    "5977": { "description": "Cosmetic stores", "category": "Personal Care" },
-    "5999": { "description": "Miscellaneous and specialty retail", "category": "Shopping" },
+    "5511": {
+      "description": "Auto and truck dealers — new/used",
+      "category": "Auto & Vehicle"
+    },
+    "5533": {
+      "description": "Auto parts and accessories",
+      "category": "Auto & Vehicle"
+    },
+    "5541": {
+      "description": "Service stations — with or without services",
+      "category": "Fuel"
+    },
+    "5542": {
+      "description": "Automated fuel dispensers",
+      "category": "Fuel"
+    },
+    "5552": {
+      "description": "Electric vehicle charging",
+      "category": "Fuel"
+    },
+    "5561": {
+      "description": "Camper, recreational and utility trailer dealers",
+      "category": "Auto & Vehicle"
+    },
+    "5571": {
+      "description": "Motorcycle shops and dealers",
+      "category": "Auto & Vehicle"
+    },
+    "5592": {
+      "description": "Motor home dealers",
+      "category": "Auto & Vehicle"
+    },
+    "5599": {
+      "description": "Miscellaneous auto, aircraft and farm equipment dealers",
+      "category": "Auto & Vehicle"
+    },
+    "5611": {
+      "description": "Men's and boys' clothing and accessories stores",
+      "category": "Shopping"
+    },
+    "5621": {
+      "description": "Women's ready-to-wear stores",
+      "category": "Shopping"
+    },
+    "5631": {
+      "description": "Women's accessory and specialty shops",
+      "category": "Shopping"
+    },
+    "5641": {
+      "description": "Children's and infants' wear stores",
+      "category": "Shopping"
+    },
+    "5651": {
+      "description": "Family clothing stores",
+      "category": "Shopping"
+    },
+    "5655": {
+      "description": "Sports and riding apparel",
+      "category": "Shopping"
+    },
+    "5661": {
+      "description": "Shoe stores",
+      "category": "Shopping"
+    },
+    "5681": {
+      "description": "Furriers and fur shops",
+      "category": "Shopping"
+    },
+    "5691": {
+      "description": "Men's and women's clothing",
+      "category": "Shopping"
+    },
+    "5697": {
+      "description": "Tailors, seamstresses, alterations",
+      "category": "Shopping"
+    },
+    "5698": {
+      "description": "Wig and toupee stores",
+      "category": "Shopping"
+    },
+    "5699": {
+      "description": "Miscellaneous apparel and accessory shops",
+      "category": "Shopping"
+    },
+    "5712": {
+      "description": "Furniture, home furnishings, and equipment stores",
+      "category": "Home & Furniture"
+    },
+    "5713": {
+      "description": "Floor covering stores",
+      "category": "Home & Furniture"
+    },
+    "5714": {
+      "description": "Drapery, window covering and upholstery stores",
+      "category": "Home & Furniture"
+    },
+    "5718": {
+      "description": "Fireplace, fireplace screens and accessories",
+      "category": "Home & Furniture"
+    },
+    "5719": {
+      "description": "Miscellaneous home furnishing specialty stores",
+      "category": "Home & Furniture"
+    },
+    "5722": {
+      "description": "Household appliance stores",
+      "category": "Home & Furniture"
+    },
+    "5732": {
+      "description": "Electronics stores",
+      "category": "Shopping"
+    },
+    "5733": {
+      "description": "Music stores — instruments, pianos, sheet music",
+      "category": "Shopping"
+    },
+    "5734": {
+      "description": "Computer software stores",
+      "category": "Shopping"
+    },
+    "5735": {
+      "description": "Record shops — music/media",
+      "category": "Entertainment"
+    },
+    "5811": {
+      "description": "Caterers",
+      "category": "Food & Dining"
+    },
+    "5812": {
+      "description": "Eating places and restaurants",
+      "category": "Food & Dining"
+    },
+    "5813": {
+      "description": "Drinking places — bars, taverns, nightclubs",
+      "category": "Alcohol & Bars"
+    },
+    "5814": {
+      "description": "Fast food restaurants",
+      "category": "Food & Dining"
+    },
+    "5815": {
+      "description": "Digital goods — media, books, movies, music",
+      "category": "Entertainment"
+    },
+    "5816": {
+      "description": "Digital goods — games",
+      "category": "Gaming"
+    },
+    "5817": {
+      "description": "Digital goods — software applications (excl. games)",
+      "category": "Subscriptions"
+    },
+    "5818": {
+      "description": "Digital goods — large multi-category merchants",
+      "category": "Shopping"
+    },
+    "5912": {
+      "description": "Drug stores and pharmacies",
+      "category": "Healthcare"
+    },
+    "5940": {
+      "description": "Bicycle shops",
+      "category": "Shopping"
+    },
+    "5941": {
+      "description": "Sporting goods stores",
+      "category": "Shopping"
+    },
+    "5942": {
+      "description": "Book stores",
+      "category": "Books & Stationery"
+    },
+    "5943": {
+      "description": "Stationery, office and school supply stores",
+      "category": "Books & Stationery"
+    },
+    "5944": {
+      "description": "Jewellery, watch, and silverware stores",
+      "category": "Jewellery"
+    },
+    "5945": {
+      "description": "Hobby, toy, and game shops",
+      "category": "Gaming"
+    },
+    "5946": {
+      "description": "Camera and photographic supply stores",
+      "category": "Shopping"
+    },
+    "5947": {
+      "description": "Gift, card, novelty and souvenir shops",
+      "category": "Shopping"
+    },
+    "5948": {
+      "description": "Luggage and leather goods stores",
+      "category": "Shopping"
+    },
+    "5949": {
+      "description": "Sewing, needlework and fabric stores",
+      "category": "Shopping"
+    },
+    "5950": {
+      "description": "Glassware and crystal stores",
+      "category": "Shopping"
+    },
+    "5962": {
+      "description": "Direct marketing — travel-related arrangement services",
+      "category": "Travel"
+    },
+    "5963": {
+      "description": "Door-to-door sales",
+      "category": "Shopping"
+    },
+    "5964": {
+      "description": "Direct marketing — catalog merchants",
+      "category": "Shopping"
+    },
+    "5965": {
+      "description": "Direct marketing — combination catalog and retail",
+      "category": "Shopping"
+    },
+    "5966": {
+      "description": "Direct marketing — outbound telemarketing",
+      "category": "Shopping"
+    },
+    "5967": {
+      "description": "Direct marketing — inbound teleservices",
+      "category": "Shopping"
+    },
+    "5968": {
+      "description": "Direct marketing — continuity/subscription merchants",
+      "category": "Subscriptions"
+    },
+    "5969": {
+      "description": "Direct marketing — other, not elsewhere classified",
+      "category": "Shopping"
+    },
+    "5970": {
+      "description": "Artist's supply and craft shops",
+      "category": "Shopping"
+    },
+    "5971": {
+      "description": "Art dealers and galleries",
+      "category": "Shopping"
+    },
+    "5972": {
+      "description": "Stamp and coin stores",
+      "category": "Shopping"
+    },
+    "5973": {
+      "description": "Religious goods stores",
+      "category": "Shopping"
+    },
+    "5975": {
+      "description": "Hearing aids — sales, service, supply",
+      "category": "Healthcare"
+    },
+    "5976": {
+      "description": "Orthopedic goods and prosthetic devices",
+      "category": "Healthcare"
+    },
+    "5977": {
+      "description": "Cosmetic stores",
+      "category": "Personal Care"
+    },
+    "5978": {
+      "description": "Typewriter stores — sales, service, rentals",
+      "category": "Shopping"
+    },
+    "5983": {
+      "description": "Fuel dealers — fuel oil, wood, coal, LPG",
+      "category": "Fuel"
+    },
+    "5993": {
+      "description": "Cigar stores and stands",
+      "category": "Shopping"
+    },
+    "5994": {
+      "description": "News dealers and newsstands",
+      "category": "Books & Stationery"
+    },
+    "5995": {
+      "description": "Pet shops — pet food and supplies",
+      "category": "Pet Care"
+    },
+    "5996": {
+      "description": "Swimming pools — sales and service",
+      "category": "Home Services"
+    },
+    "5997": {
+      "description": "Electric razor stores — sales and service",
+      "category": "Shopping"
+    },
+    "5998": {
+      "description": "Tent and awning shops",
+      "category": "Shopping"
+    },
+    "5999": {
+      "description": "Miscellaneous and specialty retail",
+      "category": "Shopping"
+    },
     "6010": {
       "description": "Financial institutions — manual cash disbursement",
       "category": "Cash Withdrawal"
@@ -97,79 +518,389 @@
       "description": "Financial institutions — merchandise and services",
       "category": "Transfers"
     },
+    "6050": {
+      "description": "Quasi-cash — cryptocurrency, money orders",
+      "category": "Forex"
+    },
     "6051": {
       "description": "Non-financial institutions — FX, money orders, wallets",
       "category": "Wallet Top-up"
     },
-    "6211": { "description": "Securities brokers and dealers", "category": "Investments" },
+    "6211": {
+      "description": "Securities brokers and dealers",
+      "category": "Investments"
+    },
     "6282": {
       "description": "Investment services — mutual funds, advisory",
       "category": "Investments"
     },
-    "6300": { "description": "Insurance sales, underwriting, premiums", "category": "Insurance" },
-    "7011": { "description": "Hotels, motels, resorts", "category": "Travel" },
+    "6300": {
+      "description": "Insurance sales, underwriting, premiums",
+      "category": "Insurance"
+    },
+    "6513": {
+      "description": "Real estate agents and managers — rentals",
+      "category": "Housing"
+    },
+    "6536": {
+      "description": "MoneySend — intracountry",
+      "category": "Transfers"
+    },
+    "6537": {
+      "description": "MoneySend — intercountry",
+      "category": "Forex"
+    },
+    "6540": {
+      "description": "Non-financial institutions — stored value card purchase/load",
+      "category": "Wallet Top-up"
+    },
+    "7011": {
+      "description": "Hotels, motels, resorts",
+      "category": "Travel"
+    },
+    "7012": {
+      "description": "Timeshares",
+      "category": "Travel"
+    },
+    "7032": {
+      "description": "Sporting and recreational camps",
+      "category": "Entertainment"
+    },
+    "7033": {
+      "description": "Trailer parks and campgrounds",
+      "category": "Travel"
+    },
+    "7210": {
+      "description": "Laundry, cleaning and garment services",
+      "category": "Home Services"
+    },
+    "7211": {
+      "description": "Laundries — family and commercial",
+      "category": "Home Services"
+    },
+    "7216": {
+      "description": "Dry cleaners",
+      "category": "Home Services"
+    },
+    "7217": {
+      "description": "Carpet and upholstery cleaning",
+      "category": "Home Services"
+    },
+    "7230": {
+      "description": "Beauty and barber shops",
+      "category": "Personal Care"
+    },
+    "7251": {
+      "description": "Shoe repair and shoeshine shops",
+      "category": "Home Services"
+    },
+    "7276": {
+      "description": "Tax preparation services",
+      "category": "Professional Services"
+    },
     "7277": {
       "description": "Debt counselling / debt advisory",
       "category": "Professional Services"
     },
-    "7299": { "description": "Miscellaneous personal services", "category": "Personal Care" },
-    "7311": { "description": "Advertising services", "category": "Professional Services" },
+    "7278": {
+      "description": "Buying and shopping services",
+      "category": "Shopping"
+    },
+    "7295": {
+      "description": "Babysitting services",
+      "category": "Home Services"
+    },
+    "7296": {
+      "description": "Clothing rental — costumes, uniforms, formal wear",
+      "category": "Shopping"
+    },
+    "7297": {
+      "description": "Massage parlors",
+      "category": "Personal Care"
+    },
+    "7298": {
+      "description": "Health and beauty spas",
+      "category": "Personal Care"
+    },
+    "7299": {
+      "description": "Miscellaneous personal services",
+      "category": "Personal Care"
+    },
+    "7311": {
+      "description": "Advertising services",
+      "category": "Professional Services"
+    },
+    "7321": {
+      "description": "Consumer credit reporting agencies",
+      "category": "Professional Services"
+    },
+    "7333": {
+      "description": "Commercial photography, art and graphics",
+      "category": "Professional Services"
+    },
+    "7338": {
+      "description": "Quick copy, reproduction and blueprinting services",
+      "category": "Professional Services"
+    },
+    "7342": {
+      "description": "Exterminating and disinfecting services",
+      "category": "Home Services"
+    },
     "7349": {
       "description": "Cleaning, maintenance, and janitorial services",
       "category": "Home Services"
+    },
+    "7361": {
+      "description": "Employment agencies and temporary help",
+      "category": "Professional Services"
     },
     "7372": {
       "description": "Computer programming, data processing, software services",
       "category": "Subscriptions"
     },
+    "7375": {
+      "description": "Information retrieval services",
+      "category": "Subscriptions"
+    },
+    "7379": {
+      "description": "Computer maintenance, repair and services",
+      "category": "Professional Services"
+    },
+    "7392": {
+      "description": "Management, consulting and public relations",
+      "category": "Professional Services"
+    },
+    "7393": {
+      "description": "Detective agencies, protective and security services",
+      "category": "Professional Services"
+    },
+    "7394": {
+      "description": "Equipment, tool, furniture and appliance rental",
+      "category": "Professional Services"
+    },
+    "7395": {
+      "description": "Photofinishing laboratories and photo studios",
+      "category": "Professional Services"
+    },
     "7399": {
       "description": "Business services — not elsewhere classified",
       "category": "Professional Services"
     },
+    "7513": {
+      "description": "Truck and utility trailer rentals",
+      "category": "Auto & Vehicle"
+    },
+    "7519": {
+      "description": "Motor home and recreational vehicle rentals",
+      "category": "Travel"
+    },
+    "7523": {
+      "description": "Parking lots, garages, meters",
+      "category": "Transport"
+    },
+    "7531": {
+      "description": "Automotive body repair shops",
+      "category": "Auto & Vehicle"
+    },
+    "7534": {
+      "description": "Tire retreading and repair shops",
+      "category": "Auto & Vehicle"
+    },
+    "7535": {
+      "description": "Automotive paint shops",
+      "category": "Auto & Vehicle"
+    },
+    "7538": {
+      "description": "Automotive service shops — non-dealer",
+      "category": "Auto & Vehicle"
+    },
+    "7542": {
+      "description": "Car washes",
+      "category": "Auto & Vehicle"
+    },
+    "7549": {
+      "description": "Towing services",
+      "category": "Auto & Vehicle"
+    },
+    "7622": {
+      "description": "Electronics repair shops",
+      "category": "Home Services"
+    },
+    "7623": {
+      "description": "Air-conditioning and refrigeration repair",
+      "category": "Home Services"
+    },
+    "7629": {
+      "description": "Electrical and small appliance repair",
+      "category": "Home Services"
+    },
+    "7631": {
+      "description": "Watch, clock and jewelry repair",
+      "category": "Jewellery"
+    },
+    "7641": {
+      "description": "Furniture repair, refinishing and reupholstery",
+      "category": "Home & Furniture"
+    },
+    "7692": {
+      "description": "Welding repair",
+      "category": "Home Services"
+    },
+    "7699": {
+      "description": "Miscellaneous repair shops and related services",
+      "category": "Home Services"
+    },
+    "7832": {
+      "description": "Motion picture theaters",
+      "category": "Entertainment"
+    },
     "7841": {
       "description": "Video tape/streaming rentals and subscriptions",
+      "category": "Entertainment"
+    },
+    "7911": {
+      "description": "Dance halls, studios and schools",
       "category": "Entertainment"
     },
     "7922": {
       "description": "Theatrical producers and ticket agencies",
       "category": "Entertainment"
     },
-    "7994": { "description": "Video game arcades", "category": "Gaming" },
-    "7995": { "description": "Betting — casino gaming, lottery, wagers", "category": "Gaming" },
-    "7996": { "description": "Amusement parks, carnivals, circuses", "category": "Entertainment" },
+    "7929": {
+      "description": "Bands, orchestras and entertainers — not elsewhere classified",
+      "category": "Entertainment"
+    },
+    "7932": {
+      "description": "Billiard and pool establishments",
+      "category": "Entertainment"
+    },
+    "7933": {
+      "description": "Bowling alleys",
+      "category": "Entertainment"
+    },
+    "7941": {
+      "description": "Commercial sports, athletic fields, professional sport clubs",
+      "category": "Entertainment"
+    },
+    "7991": {
+      "description": "Tourist attractions and exhibits",
+      "category": "Entertainment"
+    },
+    "7992": {
+      "description": "Public golf courses",
+      "category": "Fitness"
+    },
+    "7993": {
+      "description": "Video amusement game supplies",
+      "category": "Gaming"
+    },
+    "7994": {
+      "description": "Video game arcades",
+      "category": "Gaming"
+    },
+    "7995": {
+      "description": "Betting — casino gaming, lottery, wagers",
+      "category": "Gaming"
+    },
+    "7996": {
+      "description": "Amusement parks, carnivals, circuses",
+      "category": "Entertainment"
+    },
     "7997": {
       "description": "Membership clubs — sports, recreation, country clubs",
       "category": "Fitness"
     },
-    "8011": { "description": "Doctors and physicians", "category": "Healthcare" },
-    "8021": { "description": "Dentists and orthodontists", "category": "Healthcare" },
-    "8049": { "description": "Podiatrists and chiropodists", "category": "Healthcare" },
-    "8062": { "description": "Hospitals", "category": "Healthcare" },
+    "7998": {
+      "description": "Aquariums, seaquariums, dolphinariums, zoos",
+      "category": "Entertainment"
+    },
+    "7999": {
+      "description": "Recreation services — not elsewhere classified",
+      "category": "Entertainment"
+    },
+    "8011": {
+      "description": "Doctors and physicians",
+      "category": "Healthcare"
+    },
+    "8021": {
+      "description": "Dentists and orthodontists",
+      "category": "Healthcare"
+    },
+    "8043": {
+      "description": "Opticians, optometrists and optical goods",
+      "category": "Healthcare"
+    },
+    "8049": {
+      "description": "Podiatrists and chiropodists",
+      "category": "Healthcare"
+    },
+    "8050": {
+      "description": "Nursing and personal care facilities",
+      "category": "Healthcare"
+    },
+    "8062": {
+      "description": "Hospitals",
+      "category": "Healthcare"
+    },
+    "8071": {
+      "description": "Medical and dental laboratories",
+      "category": "Healthcare"
+    },
     "8099": {
       "description": "Medical and health services — not elsewhere classified",
       "category": "Healthcare"
     },
-    "8211": { "description": "Elementary and secondary schools", "category": "Education" },
+    "8211": {
+      "description": "Elementary and secondary schools",
+      "category": "Education"
+    },
     "8220": {
       "description": "Colleges, universities, professional schools",
       "category": "Education"
     },
-    "8241": { "description": "Correspondence schools", "category": "Education" },
-    "8244": { "description": "Business and secretarial schools", "category": "Education" },
-    "8249": { "description": "Vocational and trade schools", "category": "Education" },
+    "8241": {
+      "description": "Correspondence schools",
+      "category": "Education"
+    },
+    "8244": {
+      "description": "Business and secretarial schools",
+      "category": "Education"
+    },
+    "8249": {
+      "description": "Vocational and trade schools",
+      "category": "Education"
+    },
     "8299": {
       "description": "Educational services — not elsewhere classified",
       "category": "Education"
+    },
+    "8351": {
+      "description": "Child care services",
+      "category": "Home Services"
     },
     "8398": {
       "description": "Charitable and social service organizations",
       "category": "Donations"
     },
-    "8641": { "description": "Civic, social, and fraternal associations", "category": "Donations" },
-    "8661": { "description": "Religious organizations", "category": "Donations" },
+    "8641": {
+      "description": "Civic, social, and fraternal associations",
+      "category": "Donations"
+    },
+    "8661": {
+      "description": "Religious organizations",
+      "category": "Donations"
+    },
+    "8675": {
+      "description": "Automobile associations",
+      "category": "Auto & Vehicle"
+    },
     "8699": {
       "description": "Membership organizations — not elsewhere classified",
       "category": "Subscriptions"
+    },
+    "8734": {
+      "description": "Testing laboratories — non-medical",
+      "category": "Professional Services"
     },
     "8911": {
       "description": "Architectural, engineering, and surveying services",
@@ -187,14 +918,29 @@
       "description": "Court costs, alimony, child support",
       "category": "Legal & Compliance"
     },
-    "9222": { "description": "Fines", "category": "Government & Fees" },
-    "9223": { "description": "Bail and bond payments", "category": "Legal & Compliance" },
-    "9311": { "description": "Tax payments", "category": "Taxes" },
+    "9222": {
+      "description": "Fines",
+      "category": "Government & Fees"
+    },
+    "9223": {
+      "description": "Bail and bond payments",
+      "category": "Legal & Compliance"
+    },
+    "9311": {
+      "description": "Tax payments",
+      "category": "Taxes"
+    },
     "9399": {
       "description": "Government services — not elsewhere classified",
       "category": "Government & Fees"
     },
-    "9402": { "description": "Postal services — government only", "category": "Postage & Courier" },
-    "9405": { "description": "Intra-government purchases", "category": "Government & Fees" }
+    "9402": {
+      "description": "Postal services — government only",
+      "category": "Postage & Courier"
+    },
+    "9405": {
+      "description": "Intra-government purchases",
+      "category": "Government & Fees"
+    }
   }
 }

@@ -12,11 +12,17 @@
     },
     {
       "input": "MCC 5814 ZOMATO",
-      "expect": { "mcc": "5814", "mcc_description": "Fast food restaurants" }
+      "expect": {
+        "mcc": "5814",
+        "mcc_description": "Fast food restaurants"
+      }
     },
     {
       "input": "TXN MCC-5999 PAY",
-      "expect": { "mcc": "5999", "mcc_description": "Miscellaneous and specialty retail" }
+      "expect": {
+        "mcc": "5999",
+        "mcc_description": "Miscellaneous and specialty retail"
+      }
     },
     {
       "input": "UPI MCC-4121 OLA",
@@ -48,23 +54,113 @@
     },
     {
       "input": "MCC-4900 UTIL",
-      "expect": { "mcc": "4900", "mcc_description": "Utilities — electric, gas, water, sanitary" }
+      "expect": {
+        "mcc": "4900",
+        "mcc_description": "Utilities — electric, gas, water, sanitary"
+      }
     },
     {
       "input": "MCC-8021 DENTIST",
-      "expect": { "mcc": "8021", "mcc_description": "Dentists and orthodontists" }
+      "expect": {
+        "mcc": "8021",
+        "mcc_description": "Dentists and orthodontists"
+      }
     },
     {
       "input": "MCC-7011 HOTEL",
-      "expect": { "mcc": "7011", "mcc_description": "Hotels, motels, resorts" }
+      "expect": {
+        "mcc": "7011",
+        "mcc_description": "Hotels, motels, resorts"
+      }
     },
     {
       "input": "MCC-5812 RESTAURANT",
-      "expect": { "mcc": "5812", "mcc_description": "Eating places and restaurants" }
+      "expect": {
+        "mcc": "5812",
+        "mcc_description": "Eating places and restaurants"
+      }
     },
-    { "input": "MCC-9999 UNKNOWN", "expect": { "mcc": "9999", "mcc_description": null } },
-    { "input": "MCC-0000", "expect": { "mcc": "0000", "mcc_description": null } },
-    { "input": "MCC-123 SHORT", "expect": { "mcc": null } },
-    { "input": "NARRATION NO CODE", "expect": { "mcc": null } }
+    {
+      "input": "MCC-9999 UNKNOWN",
+      "expect": {
+        "mcc": "9999",
+        "mcc_description": null
+      }
+    },
+    {
+      "input": "MCC-0000",
+      "expect": {
+        "mcc": "0000",
+        "mcc_description": null
+      }
+    },
+    {
+      "input": "MCC-123 SHORT",
+      "expect": {
+        "mcc": null
+      }
+    },
+    {
+      "input": "NARRATION NO CODE",
+      "expect": {
+        "mcc": null
+      }
+    },
+    {
+      "input": "MCC-5968 NETFLIX",
+      "expect": {
+        "mcc": "5968",
+        "mcc_description": "Direct marketing — continuity/subscription merchants",
+        "category": "Subscriptions"
+      }
+    },
+    {
+      "input": "MCC-5815 STREAMCO",
+      "expect": {
+        "mcc": "5815",
+        "mcc_description": "Digital goods — media, books, movies, music",
+        "category": "Entertainment"
+      }
+    },
+    {
+      "input": "MCC-5817 NOTION APP",
+      "expect": {
+        "mcc": "5817",
+        "mcc_description": "Digital goods — software applications (excl. games)",
+        "category": "Subscriptions"
+      }
+    },
+    {
+      "input": "POS PURCHASE MCC-5995",
+      "expect": {
+        "mcc": "5995",
+        "mcc_description": "Pet shops — pet food and supplies",
+        "category": "Pet Care"
+      }
+    },
+    {
+      "input": "MCC-5552 EV CHARGE",
+      "expect": {
+        "mcc": "5552",
+        "mcc_description": "Electric vehicle charging",
+        "category": "Fuel"
+      }
+    },
+    {
+      "input": "MCC-5813 PUB",
+      "expect": {
+        "mcc": "5813",
+        "mcc_description": "Drinking places — bars, taverns, nightclubs",
+        "category": "Alcohol & Bars"
+      }
+    },
+    {
+      "input": "MCC-6513 RENT",
+      "expect": {
+        "mcc": "6513",
+        "mcc_description": "Real estate agents and managers — rentals",
+        "category": "Housing"
+      }
+    }
   ]
 }

@@ -23,8 +23,8 @@
       "ruleMatchRate": 0
     },
     "mcc": {
-      "total": 15,
-      "passed": 15,
+      "total": 22,
+      "passed": 22,
       "passRate": 1,
       "avgConfidence": 0,
       "ruleMatchRate": 0
