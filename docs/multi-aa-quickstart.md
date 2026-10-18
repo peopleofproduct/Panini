@@ -94,7 +94,7 @@ for (const r of data) {
 ## 6. What's intentionally NOT here
 
 - **Hosted failover / SLA routing** — that's an _operated service_ property
-  (Finarkein Smart Switch territory), not a library. Your fan-out results
+  (hosted multi-AA gateway territory), not a library. Your fan-out results
   carry per-AA latency + errors, so _your_ ops layer can make routing calls.
 - **AA onboarding** — each fintech registers with each AA (regulatory step,
   not a technical one). This module removes the integration bill, not the

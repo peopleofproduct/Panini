@@ -1,8 +1,8 @@
 # Scorecards — transparent, lender-owned scoring
 
 Panini deliberately does **not** ship a calibrated credit score. Scores
-like a "Precisa Score" are trained on millions of historical defaults —
-data we don't have and can't fake. And under RBI's accountable-lender
+like the ones vendors market are trained on millions of historical
+defaults — data we don't have and can't fake. And under RBI's accountable-lender
 framework, the regulated entity must own its risk model anyway; a
 vendor's score is an input, never the decision.
 

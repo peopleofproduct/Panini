@@ -106,7 +106,7 @@ the upgrade when both channels exist, not a precondition.
   account still reconciles — identity binding is the consent layer's
   job, which is why AA-sourced data remains the preferred channel).
 
-## The Finarkein comparison
+## vs hosted TSP analytics
 
 Hosted TSPs can in principle run the same diff — they see both
 channels. The difference: Panini's reconciliation is **deterministic,

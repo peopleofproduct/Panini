@@ -43,7 +43,7 @@ Real maintenance tasks and their true weight:
   your existing process.
 
 Honest total: **hours per quarter of a developer you already employ** —
-versus ₹49/statement (StatementIQ's published floor) at, say, 5,000
+versus ₹49/statement (the cheapest published BSA floor) at, say, 5,000
 statements/month = ₹2.45 lakh/month, or quote-priced enterprise tiers
 materially above that. The "you need a backend dev" objection assumes
 maintenance is a full-time job; it isn't — and even a full-time engineer
