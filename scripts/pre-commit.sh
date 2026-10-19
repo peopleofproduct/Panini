@@ -16,6 +16,9 @@ node scripts/check-pins.mjs
 echo "pre-commit: running lint…"
 npm run lint
 
+echo "pre-commit: checking formatting…"
+npm run format:check
+
 echo "pre-commit: running test suite…"
 npm run test
 

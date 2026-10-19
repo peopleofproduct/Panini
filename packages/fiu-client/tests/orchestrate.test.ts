@@ -119,7 +119,9 @@ describe('createMultiFiuClient', () => {
         finvu: {
           baseUrl: 'https://finvu.example.com',
           dataConsumerId: 'dc-1',
-          fetch: recordingFetch(calls, (_u, b) => consentOk('h1', (b as { txnid?: string } | undefined)?.txnid)),
+          fetch: recordingFetch(calls, (_u, b) =>
+            consentOk('h1', (b as { txnid?: string } | undefined)?.txnid),
+          ),
         },
       },
     });
@@ -146,7 +148,9 @@ describe('createMultiFiuClient', () => {
         finvu: {
           baseUrl: 'https://a.example.com',
           dataConsumerId: 'dc',
-          fetch: recordingFetch([], (_u, b) => consentOk('h-a', (b as { txnid?: string } | undefined)?.txnid)),
+          fetch: recordingFetch([], (_u, b) =>
+            consentOk('h-a', (b as { txnid?: string } | undefined)?.txnid),
+          ),
         },
         onemoney: {
           baseUrl: 'https://b.example.com',
@@ -172,7 +176,9 @@ describe('createMultiFiuClient', () => {
         finvu: {
           baseUrl: 'https://a.example.com',
           dataConsumerId: 'dc',
-          fetch: recordingFetch([], (_u, b) => consentOk('h', (b as { txnid?: string } | undefined)?.txnid)),
+          fetch: recordingFetch([], (_u, b) =>
+            consentOk('h', (b as { txnid?: string } | undefined)?.txnid),
+          ),
         },
       },
     });
