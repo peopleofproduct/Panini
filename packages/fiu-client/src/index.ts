@@ -41,6 +41,15 @@ export {
 export { xorNonces, deriveSessionKey, decryptFi, encryptFi } from './crypto';
 export { decodeJws, verifyJws, type DecodedJws } from './jws';
 export { buildConsentRequest, parseConsentArtefact } from './consent';
+export {
+  validateConsentNotification,
+  consentNotificationAck,
+  type ConsentNotification,
+  type NotificationValidatorOpts,
+  type NotificationVerdict,
+  type NotificationRejection,
+  type NotificationErrorCode,
+} from './notify';
 export { consentStatus, sweepConsents } from './consentTrack';
 export type {
   ConsentLifecycle,

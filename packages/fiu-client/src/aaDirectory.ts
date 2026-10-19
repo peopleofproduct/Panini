@@ -189,4 +189,6 @@ export interface AaClientConfig {
   readonly timeoutMs?: number;
   /** AA's JWS verification key (PEM or JWK) for artefact verification. */
   readonly aaPublicKey?: string | JsonWebKey;
+  /** AA spec revision to send in request envelopes (default '2.0.0'). */
+  readonly specVersion?: string;
 }

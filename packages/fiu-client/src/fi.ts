@@ -29,6 +29,7 @@ export function buildFiRequest(
   digitalSignature: string,
   fiDataRange: { readonly from: string; readonly to: string },
   keyMaterial: FiuKeyMaterial,
+  specVersion = '2.0.0',
 ): FiRequestBody {
   if (!consentId) throw new FiuError('CONFIG', 'consentId is required');
   if (!digitalSignature)
@@ -37,7 +38,7 @@ export function buildFiRequest(
     throw new FiuError('CONFIG', 'FIDataRange.from must be before FIDataRange.to');
   }
   return {
-    ver: '2.0.0',
+    ver: specVersion,
     timestamp: new Date().toISOString(),
     txnid: crypto.randomUUID(),
     FIDataRange: fiDataRange,

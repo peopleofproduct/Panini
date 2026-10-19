@@ -130,6 +130,8 @@ export function makeMockAa(opts?: { sessionId?: string; fiJson?: string }) {
     const path = new URL(url).pathname;
     requests.push({ url, body: init.body ? JSON.parse(init.body) : undefined });
     if (path === '/Consent') {
+      // Per spec the response txnid echoes the request's.
+      const reqTxn = (JSON.parse(init.body ?? '{}') as { txnid?: string }).txnid ?? 'x';
       return {
         status: 200,
         json: async () => ({
@@ -137,7 +139,7 @@ export function makeMockAa(opts?: { sessionId?: string; fiJson?: string }) {
           ConsentStatus: { id: 'c-42', status: 'PENDING' },
           ver: '2.0.0',
           timestamp: '',
-          txnid: 'x',
+          txnid: reqTxn,
         }),
       };
     }
@@ -147,6 +149,7 @@ export function makeMockAa(opts?: { sessionId?: string; fiJson?: string }) {
     if (path === '/FI/request') {
       const body = JSON.parse(init.body ?? '{}') as {
         KeyMaterial: { DHPublicKey: { KeyValue: string }; Nonce: string };
+        txnid?: string;
       };
       lastEncrypted = fipEncrypt(
         fiJson,
@@ -162,7 +165,7 @@ export function makeMockAa(opts?: { sessionId?: string; fiJson?: string }) {
           ConsentId: 'c-42',
           ver: '2.0.0',
           timestamp: '',
-          txnid: 'x',
+          txnid: body.txnid ?? 'x',
         }),
       };
     }

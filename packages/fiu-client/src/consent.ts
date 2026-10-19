@@ -22,6 +22,7 @@ import {
 export function buildConsentRequest(
   input: ConsentRequestInput,
   dataConsumerId: string,
+  specVersion = '2.0.0',
 ): ConsentRequestBody {
   if (!input.customerId) throw new FiuError('CONFIG', 'customerId is required');
   if (!dataConsumerId) throw new FiuError('CONFIG', 'dataConsumerId is required');
@@ -34,7 +35,7 @@ export function buildConsentRequest(
   if (input.fiTypes.length === 0) throw new FiuError('CONFIG', 'at least one fiType is required');
 
   return {
-    ver: '2.0.0',
+    ver: specVersion,
     timestamp: new Date().toISOString(),
     txnid: crypto.randomUUID(),
     ConsentDetail: {

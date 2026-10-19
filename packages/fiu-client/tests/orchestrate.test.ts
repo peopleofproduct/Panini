@@ -27,21 +27,25 @@ import { makeMockAa } from './mockAa';
 
 function recordingFetch(
   calls: string[],
-  respond: (url: string) => { status: number; body: unknown },
+  respond: (url: string, body?: unknown) => { status: number; body: unknown },
 ): FetchLike {
-  return async (url) => {
+  return async (url, init) => {
     calls.push(url);
-    const r = respond(url);
+    const r = respond(url, init.body ? JSON.parse(init.body) : undefined);
     return { status: r.status, json: async () => r.body };
   };
 }
 
-const consentOk = (handle: string): { status: number; body: ConsentHandleResponse } => ({
+// Per spec the response txnid echoes the request's.
+const consentOk = (
+  handle: string,
+  reqTxn = 'txn-1',
+): { status: number; body: ConsentHandleResponse } => ({
   status: 200,
   body: {
     ver: '1',
     timestamp: '2026-01-01T00:00:00Z',
-    txnid: 'txn-1',
+    txnid: reqTxn,
     ConsentHandle: handle,
     ConsentStatus: { id: 'c1', status: 'PENDING' },
     Customer: { id: 'user' },
@@ -115,7 +119,7 @@ describe('createMultiFiuClient', () => {
         finvu: {
           baseUrl: 'https://finvu.example.com',
           dataConsumerId: 'dc-1',
-          fetch: recordingFetch(calls, () => consentOk('h1')),
+          fetch: recordingFetch(calls, (_u, b) => consentOk('h1', (b as { txnid?: string } | undefined)?.txnid)),
         },
       },
     });
@@ -142,7 +146,7 @@ describe('createMultiFiuClient', () => {
         finvu: {
           baseUrl: 'https://a.example.com',
           dataConsumerId: 'dc',
-          fetch: recordingFetch([], () => consentOk('h-a')),
+          fetch: recordingFetch([], (_u, b) => consentOk('h-a', (b as { txnid?: string } | undefined)?.txnid)),
         },
         onemoney: {
           baseUrl: 'https://b.example.com',
@@ -168,7 +172,7 @@ describe('createMultiFiuClient', () => {
         finvu: {
           baseUrl: 'https://a.example.com',
           dataConsumerId: 'dc',
-          fetch: recordingFetch([], () => consentOk('h')),
+          fetch: recordingFetch([], (_u, b) => consentOk('h', (b as { txnid?: string } | undefined)?.txnid)),
         },
       },
     });
@@ -179,12 +183,13 @@ describe('createMultiFiuClient', () => {
   it('bounds concurrency in fan-out', async () => {
     let inFlight = 0;
     let peak = 0;
-    const slow: FetchLike = async () => {
+    const slow: FetchLike = async (_url, init) => {
       inFlight++;
       peak = Math.max(peak, inFlight);
       await new Promise((r) => setTimeout(r, 10));
       inFlight--;
-      return { status: 200, json: async () => consentOk('h') };
+      const reqTxn = init.body ? (JSON.parse(init.body) as { txnid?: string }).txnid : undefined;
+      return { status: 200, json: async () => consentOk('h', reqTxn) };
     };
     const multi = createMultiFiuClient({
       maxConcurrency: 2,
@@ -310,7 +315,10 @@ describe('createMultiFiuClient', () => {
   });
 
   it('treats NaN maxConcurrency as the default instead of an empty worker pool', async () => {
-    const okFetch = async () => ({ status: 200, json: async () => consentOk('h').body });
+    const okFetch: FetchLike = async (_url, init) => {
+      const reqTxn = init.body ? (JSON.parse(init.body) as { txnid?: string }).txnid : undefined;
+      return { status: 200, json: async () => consentOk('h', reqTxn).body };
+    };
     const multi = createMultiFiuClient({
       clients: {
         finvu: { baseUrl: 'https://a.x', dataConsumerId: 'dc', fetch: okFetch },

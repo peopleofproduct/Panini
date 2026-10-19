@@ -48,6 +48,9 @@ export interface FiuClientConfig {
   readonly fetch?: FetchLike;
   /** Per-request timeout in ms (default 30_000). */
   readonly timeoutMs?: number;
+  /** AA spec version sent in request envelopes (default '2.0.0'). Set to
+   *  the revision your AA onboarding specifies — e.g. '2.1.0'. */
+  readonly specVersion?: string;
 }
 
 export interface FiuClient {
@@ -91,6 +94,8 @@ export interface FiuClient {
     sessionId: string,
     opts?: { intervalMs?: number; maxAttempts?: number },
   ): Promise<FiFetchResponse>;
+  /** GET /Heartbeat — liveness probe for AA preflight checks. */
+  heartbeat(): Promise<unknown>;
 }
 
 export function createFiuClient(config: FiuClientConfig): FiuClient {
@@ -101,6 +106,7 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
   if (!resolvedFetch) throw new FiuError('CONFIG', 'no fetch implementation — pass config.fetch');
   const doFetch: FetchLike = resolvedFetch;
   const timeoutMs = config.timeoutMs ?? 30_000;
+  const specVersion = config.specVersion ?? '2.0.0';
 
   // sessionId → FIU key material used in the matching /FI/request.
   const sessionKeys = new Map<string, FiuKeyMaterial>();
@@ -147,12 +153,29 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
     return parsed as T;
   }
 
+  /**
+   * Per spec the response `txnid` echoes the request `txnid`. A mismatch
+   * means the response isn't ours — discard it (cert scenario: response
+   * handling).
+   */
+  function checkTxnId(sent: string, received: unknown, path: string): void {
+    if (typeof received === 'string' && received !== sent) {
+      throw new FiuError(
+        'SCHEMA',
+        `${path} response txnid '${received}' does not echo request txnid — response discarded`,
+      );
+    }
+  }
+
   const fetchFi = (sessionId: string): Promise<FiFetchResponse> =>
     call('GET', `/FI/fetch/${encodeURIComponent(sessionId)}`);
 
   return {
-    requestConsent(input) {
-      return call('POST', '/Consent', buildConsentRequest(input, config.dataConsumerId));
+    async requestConsent(input) {
+      const body = buildConsentRequest(input, config.dataConsumerId, specVersion);
+      const res = await call<ConsentHandleResponse>('POST', '/Consent', body);
+      checkTxnId(body.txnid, res.txnid, '/Consent');
+      return res;
     },
 
     async consentStatus(handle) {
@@ -189,11 +212,15 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
         );
       }
       const km = generateFiuKeyMaterial();
-      const res = await call<FiRequestResponse>(
-        'POST',
-        '/FI/request',
-        buildFiRequest(artefact.consentId, signedConsentB64, fiDataRange, km),
+      const body = buildFiRequest(
+        artefact.consentId,
+        signedConsentB64,
+        fiDataRange,
+        km,
+        specVersion,
       );
+      const res = await call<FiRequestResponse>('POST', '/FI/request', body);
+      checkTxnId(body.txnid, res.txnid, '/FI/request');
       if (!res.sessionId) throw new FiuError('SCHEMA', 'FI/request response missing sessionId');
       sessionKeys.set(res.sessionId, km);
       return { sessionId: res.sessionId };
@@ -249,6 +276,10 @@ export function createFiuClient(config: FiuClientConfig): FiuClient {
         'STATE',
         `FI session ${sessionId} not ready after ${maxAttempts} attempts`,
       );
+    },
+
+    heartbeat() {
+      return call('GET', '/Heartbeat');
     },
   };
 }

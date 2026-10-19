@@ -92,7 +92,9 @@ export interface ConsentRequestInput {
 
 /** POST /Consent request body (AA v2 envelope). */
 export interface ConsentRequestBody {
-  readonly ver: '2.0.0';
+  /** AA spec version — '2.0.0' by default; AAs on newer ReBIT revisions
+   *  negotiate their own. */
+  readonly ver: string;
   readonly timestamp: string;
   readonly txnid: string;
   readonly ConsentDetail: {
@@ -151,7 +153,7 @@ export interface ParsedConsent {
 
 /** POST /FI/request body. */
 export interface FiRequestBody {
-  readonly ver: '2.0.0';
+  readonly ver: string;
   readonly timestamp: string;
   readonly txnid: string;
   readonly FIDataRange: { readonly from: string; readonly to: string };

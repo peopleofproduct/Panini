@@ -122,6 +122,7 @@ export function createMultiFiuClient(config: MultiFiuConfig): MultiFiuClient {
       ...(cfg.headers !== undefined ? { headers: cfg.headers } : {}),
       ...(cfg.fetch !== undefined ? { fetch: cfg.fetch } : {}),
       ...(cfg.timeoutMs !== undefined ? { timeoutMs: cfg.timeoutMs } : {}),
+      ...(cfg.specVersion !== undefined ? { specVersion: cfg.specVersion } : {}),
     });
     clients.set(aaId, client);
     return client;

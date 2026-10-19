@@ -22,6 +22,8 @@ import {
   generateFiuKeyMaterial,
   parseConsentArtefact,
   suggestAas,
+  validateConsentNotification,
+  consentNotificationAck,
   toWireKeyMaterial,
   verifyJws,
   xorNonces,
@@ -471,5 +473,135 @@ describe('audit-fix regressions', () => {
     expect(suggestAas('')).toEqual([]);
     expect(suggestAas('   ')).toEqual([]);
     expect(suggestAas('@').length).toBe(0);
+  });
+});
+
+describe('certification-surface hardening', () => {
+  const now = new Date('2026-10-20T10:00:00.000Z');
+
+  function notification(over: Record<string, unknown> = {}) {
+    return {
+      ver: '2.0.0',
+      timestamp: now.toISOString(),
+      txnid: 'txn-notify-1',
+      Notifier: { type: 'AA', id: 'finvu' },
+      ConsentStatusNotification: {
+        consentId: 'c-1',
+        consentHandle: 'h-1',
+        consentStatus: 'ACTIVE',
+      },
+      ...over,
+    };
+  }
+
+  it('accepts a well-formed notification and extracts the fields', () => {
+    const v = validateConsentNotification(notification(), {
+      allowedNotifierIds: ['finvu'],
+      now,
+    });
+    expect(v.ok).toBe(true);
+    expect(v.consentId).toBe('c-1');
+    expect(v.consentStatus).toBe('ACTIVE');
+    const ack = consentNotificationAck(v.txnid!);
+    expect(ack.txnid).toBe('txn-notify-1');
+    expect(ack.response).toBe('OK');
+  });
+
+  it('rejects wrong spec version with NoSuchVersion (404)', () => {
+    const v = validateConsentNotification(notification({ ver: '9.9.9' }), { now });
+    expect(v.rejection).toMatchObject({ httpStatus: 404, errorCode: 'NoSuchVersion' });
+  });
+
+  it('rejects stale timestamps — replay window is 15 min', () => {
+    const stale = notification({ timestamp: '2026-10-20T09:30:00.000Z' });
+    const v = validateConsentNotification(stale, { now });
+    expect(v.rejection).toMatchObject({ errorCode: 'InvalidRequest' });
+  });
+
+  it('rejects non-AA notifier types and unlisted notifier ids', () => {
+    const fip = validateConsentNotification(notification({ Notifier: { type: 'FIP', id: 'x' } }), {
+      now,
+    });
+    expect(fip.rejection).toMatchObject({ errorCode: 'InvalidNotifier' });
+    const rogue = validateConsentNotification(notification(), {
+      allowedNotifierIds: ['onemoney'],
+      now,
+    });
+    expect(rogue.rejection).toMatchObject({ errorCode: 'InvalidNotifier' });
+  });
+
+  it('rejects missing consentId / handle / unknown status', () => {
+    const noId = notification({
+      ConsentStatusNotification: { consentHandle: 'h', consentStatus: 'ACTIVE' },
+    });
+    expect(validateConsentNotification(noId, { now }).rejection).toMatchObject({
+      errorCode: 'InvalidConsentId',
+    });
+    const noHandle = notification({
+      ConsentStatusNotification: { consentId: 'c', consentStatus: 'ACTIVE' },
+    });
+    expect(validateConsentNotification(noHandle, { now }).rejection).toMatchObject({
+      errorCode: 'InvalidConsentHandle',
+    });
+    const badStatus = notification({
+      ConsentStatusNotification: { consentId: 'c', consentHandle: 'h', consentStatus: 'MAYBE' },
+    });
+    expect(validateConsentNotification(badStatus, { now }).rejection).toMatchObject({
+      errorCode: 'InvalidConsentStatus',
+    });
+  });
+
+  it('discards responses whose txnid does not echo the request', async () => {
+    const client = createFiuClient({
+      baseUrl: 'https://aa.test',
+      dataConsumerId: 'fiu-1',
+      fetch: async () => ({
+        status: 200,
+        json: async () => ({ ver: '2.0.0', txnid: 'not-ours', ConsentHandle: 'h' }),
+      }),
+    });
+    await expect(
+      client.requestConsent({
+        customerId: 'u@finvu',
+        consentStart: '2026-01-01T00:00:00Z',
+        consentExpiry: '2028-01-01T00:00:00Z',
+        fiDataRange: { from: '2024-01-01', to: '2026-01-01' },
+        consentMode: 'STORE',
+        fetchType: 'ONETIME',
+        consentTypes: ['TRANSACTIONS'],
+        fiTypes: ['DEPOSIT'],
+        purpose: { code: '101' },
+        dataLife: { unit: 'MONTH', value: 6 },
+        frequency: { unit: 'MONTH', value: 1 },
+      }),
+    ).rejects.toThrow(/does not echo request txnid/);
+  });
+
+  it('sends the configured specVersion and probes heartbeat', async () => {
+    let capturedBody = '';
+    const client = createFiuClient({
+      baseUrl: 'https://aa.test',
+      dataConsumerId: 'fiu-1',
+      specVersion: '2.1.0',
+      fetch: async (url, init) => {
+        capturedBody = init.body ?? '';
+        return { status: 200, json: async () => ({ Status: 'UP' }) };
+      },
+    });
+    await client.requestConsent({
+      customerId: 'u@finvu',
+      consentStart: '2026-01-01T00:00:00Z',
+      consentExpiry: '2028-01-01T00:00:00Z',
+      fiDataRange: { from: '2024-01-01', to: '2026-01-01' },
+      consentMode: 'STORE',
+      fetchType: 'ONETIME',
+      consentTypes: ['TRANSACTIONS'],
+      fiTypes: ['DEPOSIT'],
+      purpose: { code: '101' },
+      dataLife: { unit: 'MONTH', value: 6 },
+      frequency: { unit: 'MONTH', value: 1 },
+    });
+    expect(JSON.parse(capturedBody).ver).toBe('2.1.0');
+    expect(await client.heartbeat()).toEqual({ Status: 'UP' });
   });
 });

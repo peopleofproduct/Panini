@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **AA-certification hardening** (`@paniniapi/fiu-client` 0.4.0) — the
+  certification-surface gaps are closed: `validateConsentNotification`
+  validates FIU-hosted `POST /Consent/Notification` bodies against the
+  Sahamati scenarios (version → timestamp ±15 min replay window →
+  notifier id/type → consentId/handle → status enum, returning spec error
+  codes `NoSuchVersion`/`InvalidNotifier`/`InvalidConsentId`/…), plus
+  `consentNotificationAck` for the 200 body. `specVersion` is now
+  configurable per AA (`FiuClientConfig`/`AaClientConfig`), response
+  `txnid` must echo the request's, and `client.heartbeat()` probes
+  `GET /Heartbeat`. See `docs/aa-partner-readiness.md` — a conformance
+  matrix + integration checklist for AA pilots.
 - **Income-document parsers** (`@paniniapi/extract` 0.6.0) — three new
   deterministic document classes beyond statements: `extractPayslip`
   (label-preserved components + gross−deductions=net arithmetic check +
