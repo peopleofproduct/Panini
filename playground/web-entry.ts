@@ -19,10 +19,11 @@
  */
 
 import type { InputSource } from '@paniniapi/core';
-import { parseBankNarration, setDictionaries } from '@paniniapi/rules-engine';
-import { CATEGORIES, DICTIONARIES, RULE_SETS } from '../packages/browser/src/data.gen';
+import { parseBankNarration, setDictionaries, setTaxonomy } from '@paniniapi/rules-engine';
+import { CATEGORIES, DICTIONARIES, RULE_SETS, TAXONOMY } from '../packages/browser/src/data.gen';
 
 setDictionaries(DICTIONARIES);
+setTaxonomy(TAXONOMY);
 
 export interface PaniniWindow {
   paniniParse: (text: string, bankHint?: string, source?: InputSource) => unknown;

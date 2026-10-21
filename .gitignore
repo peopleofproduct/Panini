@@ -14,3 +14,6 @@ playground/panini-web.js
 *.egg-info/
 panini-py/build/
 panini-py/dist/
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
