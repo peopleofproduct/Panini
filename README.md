@@ -38,39 +38,9 @@ Named after Acharya Pāṇini — the ancient architect of formal rule-based gra
 
 ## 🏗️ Core Architecture & Operational Topology
 
-The platform isolates the parsing core from the optional self-hosted ops layer (rate limiting, metering, telemetry) to guarantee absolute privacy data sandboxing — everything is free and runs in memory on your host.
+The platform isolates the parsing core from the optional self-hosted ops layer (rate limiting, metering, telemetry) to guarantee absolute privacy data sandboxing — everything is free and runs in memory on your host. Package-level topology lives in [`docs/operating-panini.md`](docs/operating-panini.md).
 
-```
-                 ┌─────────────────────────────────────────────────────┐
-                 │                Client / Host Server / Browser        │
-                 │                                                     │
-   statements ──►│  @paniniapi/extract  (CSV · XLSX · PDF · SMS · OCR)  │
-                 │                       │                             │
-   narrations ──►│  @paniniapi/rules-engine ──► @paniniapi/core         │
-   AA payloads ─►│     (JSON grammars)          (Normalizer)            │
-                 │            │                                        │
-                 │            ▼                                        │
-                 │     NormalizedTransaction / AAProfile               │
-                 │            │                                        │
-                 │            ├──────────────► @paniniapi/insights      │
-                 │            │     (income · FOIR · trends · signals)  │
-                 │            │                                        │
-                 │            ▼                                        │
-                 │  @paniniapi/standards-schema (ReBIT · ONDC · OCEN)   │
-                 │                                                     │
-   AA consent ──►│  @paniniapi/fiu-client (consent→decrypt, multi-AA)   │
-   files ───────►│  @paniniapi/bsa  (statement files → BSA report)      │
-   browser ─────►│  @paniniapi/browser (ESM/CJS/IIFE, all data inlined) │
-                 └───────────┬─────────────────────────────────────────┘
-                             │  (optional, self-hosted ops layer)
-                 ┌───────────▼────────────────────────────────────┐
-                 │  OpsProxy + HTTP adapter                        │
-                 │  rate-limit • usage meter • opt-in telemetry    │
-                 │  (PII-free by construction — no raw narrations) │
-                 └────────────────────────────────────────────────┘
-```
-
-The same pipeline as a process view — document in, auditable credit-file out:
+Document in → auditable credit-file out:
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-pipeline-dark.svg">

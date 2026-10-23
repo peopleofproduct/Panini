@@ -19,6 +19,41 @@ There is no database, no queue, no JVM, no licence server. Production
 operation is the same lifecycle as `lodash` or `zod`: pin a version,
 upgrade deliberately, let CI prove nothing regressed.
 
+## Where the pieces live
+
+Package-level topology — everything runs inside the host process; the ops
+layer is optional and self-hosted:
+
+```
+                 ┌─────────────────────────────────────────────────────┐
+                 │                Client / Host Server / Browser        │
+                 │                                                     │
+   statements ──►│  @paniniapi/extract  (CSV · XLSX · PDF · SMS · OCR)  │
+                 │                       │                             │
+   narrations ──►│  @paniniapi/rules-engine ──► @paniniapi/core         │
+   AA payloads ─►│     (JSON grammars)          (Normalizer)            │
+                 │            │                                        │
+                 │            ▼                                        │
+                 │     NormalizedTransaction / AAProfile               │
+                 │            │                                        │
+                 │            ├──────────────► @paniniapi/insights      │
+                 │            │     (income · FOIR · trends · signals)  │
+                 │            │                                        │
+                 │            ▼                                        │
+                 │  @paniniapi/standards-schema (ReBIT · ONDC · OCEN)   │
+                 │                                                     │
+   AA consent ──►│  @paniniapi/fiu-client (consent→decrypt, multi-AA)   │
+   files ───────►│  @paniniapi/bsa  (statement files → BSA report)      │
+   browser ─────►│  @paniniapi/browser (ESM/CJS/IIFE, all data inlined) │
+                 └───────────┬─────────────────────────────────────────┘
+                             │  (optional, self-hosted ops layer)
+                 ┌───────────▼────────────────────────────────────┐
+                 │  OpsProxy + HTTP adapter                        │
+                 │  rate-limit • usage meter • opt-in telemetry    │
+                 │  (PII-free by construction — no raw narrations) │
+                 └────────────────────────────────────────────────┘
+```
+
 ## What maintenance actually looks like
 
 | Event                                         | Vendor path                                       | Panini path                                                                                                                    |
