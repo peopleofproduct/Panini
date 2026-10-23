@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "node api.js && tsc -b",
+    "build": "tsc -b",
     "clean": "tsc -b --clean",
     "test": "jest",
     "typecheck": "tsc -b --pretty",
