@@ -6,8 +6,8 @@ variant matching the reader's theme:
 
 ```html
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/NAME-dark.svg">
-  <img alt="…" src="docs/assets/NAME-light.svg" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/NAME-dark.svg" />
+  <img alt="…" src="docs/assets/NAME-light.svg" width="100%" />
 </picture>
 ```
 
