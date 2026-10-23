@@ -32,6 +32,11 @@ Named after Acharya Pāṇini — the ancient architect of formal rule-based gra
 | :--------------: | :-----------------------------------: | :---------------------------: | :-----------------------------: | :------------------: |
 | banks detectable | bank layouts (CSV · XLSX · PDF · SMS) | tests (1,122 TS + 213 Python) | fraud indicators, with evidence | runtime dependencies |
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-before-after-dark.svg">
+  <img alt="Before and after Panini. Today: a lender, a fintech, an expense app, a reconciliation engine and an FIU each send data to per-report vendor APIs, paying per report, with data leaving their systems and flags they can't audit. With Panini: each runs Panini in-process on a shared community grammar corpus, so fixes propagate to everyone, there is no per-report fee, data never moves, and every flag has evidence rows." src="docs/assets/panini-before-after-light.svg" width="100%">
+</picture>
+
 ---
 
 ---
@@ -45,6 +50,11 @@ Document in → auditable credit-file out:
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-pipeline-dark.svg">
   <img alt="Six-stage pipeline: extract, forensics, rules-engine, insights, standards-schema, and bsa report. Entry points are browser, fiu-client, simulator and panini-py. Every claim carries a rule_id and evidence indices." src="docs/assets/panini-pipeline-light.svg" width="100%">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-credit-file-stack-dark.svg">
+  <img alt="The credit-file stack: application and UX, then the lender's own decisioning, then the Panini normalization band (extract, forensics, fraud suite, consolidation, conduct, income docs, report), then data rails (AA, bank documents, SMS). Vendors sell the normalization band per report; Panini provides open equivalents." src="docs/assets/panini-credit-file-stack-light.svg" width="100%">
 </picture>
 
 | Package                       | Role                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
