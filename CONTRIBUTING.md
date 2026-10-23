@@ -33,6 +33,17 @@ with the fields you expect the parser to produce. The corpus is a CI gate:
 expectation regresses. Prefer anonymized or synthetic narrations; never commit
 real account numbers, names, or VPAs.
 
+```mermaid
+flowchart LR
+    A["A team hits an<br/>unparsed bank format"] --> B["Opens a <b>Bank grammar request</b><br/>with an anonymized sample"]
+    B --> C["Grammar JSON<br/>written"]
+    C --> D["Corpus tests<br/>pass in CI"]
+    D --> E["Release ships —<br/>every adopter gets the fix"]
+    E -.-> A
+```
+
+_The person who hits the edge case is the person who fixes it — once, for everyone._
+
 ## Adding a bank statement layout
 
 CSV/Excel/PDF statement layouts are also data-driven — see

@@ -5,6 +5,11 @@ named checks proprietary BSA platforms market (circular transactions,
 holiday cash deposits, threshold gaming, gap months) — but every flag is
 a **rule ID + evidence indices** you can audit, not a black-box score.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/panini-evidence-chain-dark.svg">
+  <img alt="Evidence chain: a risk signal about a same-amount in/out pair (medium severity) traces to rule PANINI-FRD-CIRC-001, then to two transactions (txn 12 debit, txn 31 credit, same counterparty), then to page 2 of the source statement with the balance chain verified." src="assets/panini-evidence-chain-light.svg" width="100%">
+</picture>
+
 Entry points (`@paniniapi/insights`):
 
 ```ts

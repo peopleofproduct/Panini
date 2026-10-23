@@ -3,7 +3,7 @@
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178c6)](./tsconfig.base.json)
 [![Runtime deps](https://img.shields.io/badge/runtime%20deps-0-brightgreen)](./package.json)
-[![Tests](https://img.shields.io/badge/tests-530%2B%20passing-brightgreen)](#-development)
+[![Tests](https://img.shields.io/badge/tests-1%2C335%20passing-brightgreen)](#-development)
 [![Maintained by People of Product™](https://img.shields.io/badge/maintained%20by-People%20of%20Product%E2%84%A2-orange)](#-maintained-by-people-of-product)
 
 > **Bank statements in — credit decisions out. Free, deterministic, and it never phones home.**
@@ -20,6 +20,17 @@ Named after Acharya Pāṇini — the ancient architect of formal rule-based gra
 - **Run anywhere** — server, edge, or entirely inside the browser: statement → BSA report with zero network calls
 
 > Just as Pāṇini's Aṣṭādhyāyī reduced a language to deterministic rules ~2500 years ago, Panini treats bank narrations as a grammar — not an AI problem. Fully free under Apache-2.0, forever.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-ecosystem-dark.svg">
+    <img alt="Diagram: bank statements, payslips, ITR-V and 26AS, bank SMS and Account Aggregator data flow into Panini, an open-source normalization layer (extraction, integrity forensics, narration grammar engine, insights and fraud indicators), which outputs clean typed data with evidence to lenders, expense apps, reconciliation engines, FIUs and audit teams." src="docs/assets/panini-ecosystem-light.svg" width="100%">
+  </picture>
+</p>
+
+|       126        |                  28                   |             1,335             |               13                |          0           |
+| :--------------: | :-----------------------------------: | :---------------------------: | :-----------------------------: | :------------------: |
+| banks detectable | bank layouts (CSV · XLSX · PDF · SMS) | tests (1,122 TS + 213 Python) | fraud indicators, with evidence | runtime dependencies |
 
 ---
 
@@ -59,6 +70,13 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
                  └────────────────────────────────────────────────┘
 ```
 
+The same pipeline as a process view — document in, auditable credit-file out:
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-pipeline-dark.svg">
+  <img alt="Six-stage pipeline: extract, forensics, rules-engine, insights, standards-schema, and bsa report. Entry points are browser, fiu-client, simulator and panini-py. Every claim carries a rule_id and evidence indices." src="docs/assets/panini-pipeline-light.svg" width="100%">
+</picture>
+
 | Package                       | Role                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `@paniniapi/core`             | Deterministic tokenizer + grammar-driven normalizer; optional self-hosted ops layer (rate limiting, metering, HTTP adapter).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
@@ -84,6 +102,11 @@ The platform isolates the parsing core from the optional self-hosted ops layer (
 ## � Security, Privacy & DPDP
 
 Panini is architected so that **sensitive financial data never has to leave your boundary** — and that isn't a privacy policy promise, it's a code property:
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/assets/panini-privacy-boundary-dark.svg">
+  <img alt="Comparison: with a hosted parsing API the customer statement leaves your perimeter; with Panini running in-process the statement, the library and the output all stay inside your perimeter. Core packages contain no networking code." src="docs/assets/panini-privacy-boundary-light.svg" width="100%">
+</picture>
 
 - **Zero network calls, anywhere in the stack.** No `fetch`/`axios`/socket in any library code path — the FIU client's transport is _injected by you_, so every outbound call is one you wrote. A `grep -r "fetch\|http" packages/*/src` is an audit a security team can run in a minute.
 - **Zero runtime dependencies → near-zero supply-chain surface.** No third-party code executes on your data. Every line that touches a bank statement is in this repo, in the open.

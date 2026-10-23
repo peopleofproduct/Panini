@@ -40,6 +40,36 @@ scope, and gives the concrete integration checklist.
 - **Directory**: `aaDirectory.ts` — a community-maintained handle→AA
   registry (Finvu included: `user@finvu` resolves automatically).
 
+## Consent & data flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Customer
+    participant F as FIU (your system)
+    participant P as Panini fiu-client
+    participant A as Account Aggregator
+    participant B as FIP (bank)
+
+    F->>P: requestConsent(customer AA handle)
+    P->>A: POST /Consent
+    A->>C: Consent request
+    C->>A: Approve
+    A->>F: POST /Consent/Notification
+    F->>P: Validate notification
+    P->>A: GET consent artefact
+    Note over P: Verify JWS signature
+    P->>A: POST /FI/request (ephemeral X25519 key)
+    A->>B: Fetch FI data
+    B-->>A: Encrypted FI data
+    P->>A: POST /FI/fetch
+    A-->>P: Encrypted FI data
+    rect rgba(79, 70, 229, 0.15)
+    Note over P: Decrypt in-process: ECDH → HKDF → AES-256-GCM<br/>keys never persisted
+    end
+    P-->>F: Typed records + validateFiData()
+```
+
 ## Certification-scenario conformance matrix
 
 Mapped against `Sahamati/certification-framework` FIU scenarios
